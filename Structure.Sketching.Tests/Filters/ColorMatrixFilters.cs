@@ -44,6 +44,15 @@ namespace Structure.Sketching.Tests.Filters
             { "Saturation--50", new Saturation(-.5f),default(Rectangle) },
             { "Sepiatone", new Sepiatone(),default(Rectangle) },
             { "MatrixMultiplication", new PolaroidColorMatrix() * new Brightness(.1f) ,default(Rectangle)},
+            { "Temperature--Twilight", new Temperature(Temperature.Temperatures.Twilight), default },
+            { "Temperature--Moonlight", new Temperature(Temperature.Temperatures.Moonlight), default },
+            { "Temperature--SunAtNoon", new Temperature(Temperature.Temperatures.SunAtNoon), default },
+            { "Temperature--CloudySky", new Temperature(Temperature.Temperatures.CloudySky), default },
+            { "Temperature--OutdoorShade", new Temperature(Temperature.Temperatures.OutdoorShade), default },
+            { "Temperature--ClearBlueSky", new Temperature(Temperature.Temperatures.ClearBlueSky), default },
+            { "Temperature--15000", new Temperature(15000), default },
+            { "Temperature--25000", new Temperature(25000), default },
+            { "Temperature--40000", new Temperature(40000), default },
             { "ColorMatrix", new Sketching.Filters.ColorMatrix.ColorMatrix(new Matrix5x5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),default(Rectangle) },
 
             { "Alpha-50-Partial", new Alpha(.5f),new Rectangle(100,100,500,500) },
@@ -75,7 +84,7 @@ namespace Structure.Sketching.Tests.Filters
             { "MatrixMultiplication-Partial", new PolaroidColorMatrix() * new Brightness(.1f) ,new Rectangle(100,100,500,500)},
             { "Contrast-50-Partial", new Contrast(1.5f),new Rectangle(100,100,500,500) },
             { "Contrast--50-Partial", new Contrast(0.5f),new Rectangle(100,100,500,500) },
-            { "ColorMatrix-Partial", new Sketching.Filters.ColorMatrix.ColorMatrix(new Matrix5x5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),new Rectangle(100,100,500,500) }
+            { "ColorMatrix-Partial", new ColorMatrix(new Matrix5x5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),new Rectangle(100,100,500,500) },
         };
 
         [Theory]
