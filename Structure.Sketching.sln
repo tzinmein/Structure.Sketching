@@ -1,15 +1,15 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Structure.Sketching", "Structure.Sketching\Structure.Sketching.csproj", "{5015FCD4-4171-4BE1-82D9-8D0884A8B952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Structure.Sketching", "Structure.Sketching\Structure.Sketching.csproj", "{5015FCD4-4171-4BE1-82D9-8D0884A8B952}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{856069D5-295C-4318-BFCF-3A3B5B5114FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Structure.Sketching.Tests", "Structure.Sketching.Tests\Structure.Sketching.Tests.csproj", "{D4A62377-7297-4C51-BC2B-F12C7CA4745D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Structure.Sketching.Tests", "Structure.Sketching.Tests\Structure.Sketching.Tests.csproj", "{D4A62377-7297-4C51-BC2B-F12C7CA4745D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Structure.Sketching.Benchmarks", "Structure.Sketching.Benchmarks\Structure.Sketching.Benchmarks.csproj", "{833D8FC0-BF52-477D-B44C-F6A4083AA076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Structure.Sketching.Benchmarks", "Structure.Sketching.Benchmarks\Structure.Sketching.Benchmarks.csproj", "{833D8FC0-BF52-477D-B44C-F6A4083AA076}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

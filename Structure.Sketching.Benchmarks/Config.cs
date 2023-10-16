@@ -14,7 +14,7 @@ namespace Structure.Sketching.Benchmarks
         /// </summary>
         public Config()
         {
-            Add(new MemoryDiagnoser());
+            AddDiagnoser(new MemoryDiagnoser(new MemoryDiagnoserConfig()));
         }
     }
 }

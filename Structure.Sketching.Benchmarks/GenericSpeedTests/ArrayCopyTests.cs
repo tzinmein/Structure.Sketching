@@ -37,7 +37,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests
             }
         }
 
-        [Setup]
+        [IterationSetup]
         public void SetUp()
         {
             source = new byte[Count];

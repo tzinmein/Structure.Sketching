@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <Description>Tests for Structure.Sketching</Description>
     <AssemblyTitle>Structure.Sketching.Tests</AssemblyTitle>
     <Authors>James Craig</Authors>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Structure.Sketching.Tests</AssemblyName>
     <PackageId>Structure.Sketching.Tests</PackageId>
@@ -12,14 +11,12 @@
     <PackageTags>Image Picture Gif Jpg Jpeg Bitmap Png Processing</PackageTags>
     <PackageProjectUrl>https://github.com/JaCraig/Structure.Sketching</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <RuntimeIdentifiers>win7-x64;osx.10.10-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net45+win8</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
+    <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
+	  <RuntimeFrameworkVersion>6.0.0</RuntimeFrameworkVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="ExpectedResults\EncodingTest.bmp" />
     <None Remove="ExpectedResults\Filters\BitmapFilter-Achromatomaly-Partial.bmp" />
@@ -341,7 +338,6 @@
     <None Remove="TestImages\Formats\Png\splash.png" />
     <None Remove="TestImages\Formats\Png\splashbw.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="ExpectedResults\EncodingTest.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1301,19 +1297,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Structure.Sketching\Structure.Sketching.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="xunit" Version="2.5.2" />
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-
 </Project>
