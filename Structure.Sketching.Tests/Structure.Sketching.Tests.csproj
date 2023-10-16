@@ -1321,6 +1321,9 @@
     <None Update="ExpectedResults\Filters\BitmapFilter-Temperature--40000.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ExpectedResults\Filters\BitmapFilter-Temperature--CandleLight.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ExpectedResults\Filters\BitmapFilter-Temperature--ClearBlueSky.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
