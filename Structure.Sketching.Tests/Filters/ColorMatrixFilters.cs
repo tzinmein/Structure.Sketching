@@ -44,6 +44,7 @@ namespace Structure.Sketching.Tests.Filters
             { "Saturation--50", new Saturation(-.5f),default(Rectangle) },
             { "Sepiatone", new Sepiatone(),default(Rectangle) },
             { "MatrixMultiplication", new PolaroidColorMatrix() * new Brightness(.1f) ,default(Rectangle)},
+            { "Temperature--CandleLight", new Temperature(Temperature.Temperatures.CandleLight), default },
             { "Temperature--Twilight", new Temperature(Temperature.Temperatures.Twilight), default },
             { "Temperature--Moonlight", new Temperature(Temperature.Temperatures.Moonlight), default },
             { "Temperature--SunAtNoon", new Temperature(Temperature.Temperatures.SunAtNoon), default },

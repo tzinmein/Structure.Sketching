@@ -28,6 +28,8 @@ namespace Structure.Sketching.Filters.ColorMatrix
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Temperature"/> class.
+        /// Original implementation https://tannerhelland.com/2012/09/18/convert-temperature-rgb-algorithm-code.html
+        /// C# port https://gist.github.com/ibober/6b5a6e1dea888c01c0af175e71b15fa4
         /// </summary>
         /// <param name="value">The temperature value (1000 to 40000).</param>
         public Temperature(double value)
@@ -115,15 +117,12 @@ namespace Structure.Sketching.Filters.ColorMatrix
         /// <summary>
         /// The matrix backing field
         /// </summary>
-        private Matrix5x5 _Matrix = new Matrix5x5
-        (
-            1f, 0f, 0f, 0f, 0f,
-            0f, 1f, 0f, 0f, 0f,
-            0f, 0f, 1f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0f, 0f, 0f, 0f, 1f
-        );
+        private Matrix5x5 _Matrix;
 
+        /// <summary>
+        /// Temperature presets
+        /// https://expertphotography.com/color-temperature/
+        /// </summary>
         public struct Temperatures
         {
             public const double CandleLight = 1800;
