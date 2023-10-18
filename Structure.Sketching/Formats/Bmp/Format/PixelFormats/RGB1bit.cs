@@ -16,9 +16,6 @@ limitations under the License.
 
 using Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses;
 using Structure.Sketching.IO;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
 {
