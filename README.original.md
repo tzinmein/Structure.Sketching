@@ -1,10 +1,10 @@
 # Structure.Sketching
 
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/csn8dbhtmujay5v2?svg=true)](https://ci.appveyor.com/project/tzinmein/structure-sketching)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/2v806lb18724mr1t?svg=true)](https://ci.appveyor.com/project/JaCraig/structure-sketching)
 
-[![Linux Build Status](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml)
+[![Linux Build Status](https://travis-ci.org/JaCraig/Structure.Sketching.svg?branch=master)](https://travis-ci.org/JaCraig/Structure.Sketching)
 
-Structure.Sketching is an image processing library for use with platforms supporting .NET Standard 2.1. While currently in beta, the library is fairly usable at this stage. The namespaces may change for individual classes as it is cleaned up for production but otherwise it should be fairly safe to use.
+Structure.Sketching is an image processing library for use with .Net Core and .Net 4.6. Since System.Drawing is not really a thing in .Net Core there was a need for a very simple image processing library. This library is in response to that fact and supports .Net Core, .Net 4.6, Mono, and UWP. While currently in beta, the library is fairly usable at this stage. The namespaces may change for individual classes as it is cleaned up for production but otherwise it should be fairly safe to use.
 
 ## Supported Formats/Filters
 
@@ -88,7 +88,6 @@ There are also a number of filters within the library for a number of different 
 - Kodachrome
 - Saturation
 - Sepia Tone
-- Temperature
 - Color blindness filters including: Achromatomaly, Achromatopsia, Deuteranomaly, Deuteranopia, Protanomaly, Protanopia, Tritanomaly, and Tritanopia
 - Adaptive Threshold
 - Non Maximal Suppression
@@ -118,13 +117,13 @@ That said hopefully the list will grow with time.
 
 ## Usage
 
-The library is fairly simple to use:
+Generally speaking the library is fairly simple to use:
 
-	new Image("ExampleImage.jpg")
-		.Apply(new CannyEdgeDetection(Color.Black, Color.White, .9f, .1f))
-		.Save("ExampleImage2.jpg");
+    new Image("ExampleImage.jpg")
+        .Apply(new CannyEdgeDetection(Color.Black, Color.White, .9f, .1f))
+        .Save("ExampleImage2.jpg");
 		
-The Image class has a Fluent interface and can accept a string pointing to the file to load, a stream, or a byte array along with a width and height if you want a blank image. The Apply function applies a filter to the image, however you can specify a rectangle as the second parameter if you want it on only a portion of the image. The save function takes either a file name or a stream and an enum specifying the format to save it as.
+The Image class itself has a Fluent interface and can accept a string pointing to the file to load, a stream, or a byte array along with a width and height if you want a blank image. The Apply function applies a filter to the image, however you can specify a rectangle as the second parameter if you want it on only a portion of the image. The save function takes either a file name or a stream and an enum specifying the format to save it as.
 
 For further explanation of the filters, please see the wiki documentation... Once I've written it.
 
@@ -138,7 +137,7 @@ Install-Package structure.sketching
 
 In order to build the library you will require the following:
 
-1. Visual Studio 2022
-2. .Net 6.0 SDK
+1. Visual Studio 2015 with Update 3
+2. .Net Core 1.0 SDK
 
 Other than that, just clone the project and you should be able to load the solution and build without too much effort.
