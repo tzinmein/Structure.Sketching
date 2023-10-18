@@ -2,7 +2,7 @@
 
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/csn8dbhtmujay5v2?svg=true)](https://ci.appveyor.com/project/tzinmein/structure-sketching)
 
-[![Linux Build Status](https://travis-ci.org/JaCraig/Structure.Sketching.svg?branch=master)](https://travis-ci.org/JaCraig/Structure.Sketching)
+[![Linux Build Status](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml)
 
 Structure.Sketching is an image processing library for use with all platforms supporting .NET Standard 2.1. Since System.Drawing is not really a thing in .Net Core there was a need for a very simple image processing library. While currently in beta, the library is fairly usable at this stage. The namespaces may change for individual classes as it is cleaned up for production but otherwise it should be fairly safe to use.
 
