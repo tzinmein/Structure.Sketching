@@ -86,7 +86,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
             }
 
 
-            _Matrix = new Matrix5x5
+            Matrix = new Matrix5x5
             {
                 M11 = red / 255f,
                 M12 = 0,
@@ -106,18 +106,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
         /// Gets the matrix.
         /// </summary>
         /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => _Matrix;
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <value>The value.</value>
-        public float Value { get; }
-
-        /// <summary>
-        /// The matrix backing field
-        /// </summary>
-        private Matrix5x5 _Matrix;
+        public override Matrix5x5 Matrix { get; }
 
         /// <summary>
         /// Temperature presets
@@ -125,6 +114,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
         /// </summary>
         public struct Temperatures
         {
+#pragma warning disable CS1591
             public const double CandleLight = 1800;
             public const double Twilight = 2500;
             public const double Moonlight = 4000;
@@ -132,6 +122,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
             public const double CloudySky = 6500;
             public const double OutdoorShade = 7000;
             public const double ClearBlueSky = 10000;
+#pragma warning restore CS1591
         }
     }
 }
