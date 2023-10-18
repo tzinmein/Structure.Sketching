@@ -30,7 +30,7 @@ namespace Structure.Sketching.Tests.Formats.Png
         }
 
         [Theory]
-        [MemberData("InputFileNames")]
+        [MemberData(nameof(InputFileNames))]
         public void Encode(string fileName)
         {
             using (var TempFile = File.OpenRead(InputDirectory + fileName))

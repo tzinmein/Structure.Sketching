@@ -34,7 +34,7 @@ namespace Structure.Sketching.Tests.Colors.ColorSpaces
         };
 
         [Theory]
-        [MemberData("ConversionTestData")]
+        [MemberData(nameof(ConversionTestData))]
         public void CheckCorrect(Func<Sketching.Colors.Color, IColorSpace> conversionFunc, IColorSpace expected)
         {
             var Actual = conversionFunc(new Sketching.Colors.Color(132, 140, 25, 51));
@@ -42,7 +42,7 @@ namespace Structure.Sketching.Tests.Colors.ColorSpaces
         }
 
         [Theory]
-        [MemberData("ConversionTestData2")]
+        [MemberData(nameof(ConversionTestData2))]
         public void CheckCorrectToRGB(Func<IColorSpace, Sketching.Colors.Color> conversionFunction, IColorSpace value)
         {
             var Actual = conversionFunction(value);

@@ -75,7 +75,7 @@ namespace Structure.Sketching.Tests.Filters
         };
 
         [Theory]
-        [MemberData("Filters")]
+        [MemberData(nameof(Filters))]
         public void Run(string name, IFilter filter, Rectangle target)
         {
             CheckCorrect(name, filter, target);

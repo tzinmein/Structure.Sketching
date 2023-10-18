@@ -1,6 +1,6 @@
 # Structure.Sketching
 
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/2v806lb18724mr1t?svg=true)](https://ci.appveyor.com/project/tzinmein/structure-sketching)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/csn8dbhtmujay5v2?svg=true)](https://ci.appveyor.com/project/tzinmein/structure-sketching)
 
 [![Linux Build Status](https://travis-ci.org/JaCraig/Structure.Sketching.svg?branch=master)](https://travis-ci.org/JaCraig/Structure.Sketching)
 

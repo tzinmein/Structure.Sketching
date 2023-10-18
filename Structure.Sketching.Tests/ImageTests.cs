@@ -37,7 +37,7 @@ namespace Structure.Sketching.Tests
         }
 
         [Theory]
-        [MemberData("ShiftOperations")]
+        [MemberData(nameof(ShiftOperations))]
         public void CheckShiftOperators(string name, Func<Image, int, Image> operation, int value)
         {
             foreach (var file in Files)
@@ -55,7 +55,7 @@ namespace Structure.Sketching.Tests
         }
 
         [Theory]
-        [MemberData("UnaryOperations")]
+        [MemberData(nameof(UnaryOperations))]
         public void CheckUnaryOperators(string name, Func<Image, Image> operation)
         {
             foreach (var file in Files)

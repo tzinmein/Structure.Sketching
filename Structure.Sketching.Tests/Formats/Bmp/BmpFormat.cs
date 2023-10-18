@@ -76,7 +76,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp
         }
 
         [Theory]
-        [MemberData("InputFileNames")]
+        [MemberData(nameof(InputFileNames))]
         public void Encode(string fileName)
         {
             using (var TempFile = File.OpenRead(InputDirectory + fileName))
