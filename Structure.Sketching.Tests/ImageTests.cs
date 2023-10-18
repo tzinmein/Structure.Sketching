@@ -95,7 +95,8 @@ namespace Structure.Sketching.Tests
                 229, 255, 25, 51,
                 76, 102, 127, 153,
                 178, 204, 229, 255 });
-            Assert.Equal("#\r\n.\r\n-\r\n*\r\n=\r\n", TestImage.ToASCIIArt());
+            var s = Environment.NewLine;
+            Assert.Equal($"#{s}.{s}-{s}*{s}={s}", TestImage.ToASCIIArt());
         }
 
         [Fact]
