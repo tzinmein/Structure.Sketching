@@ -6,7 +6,7 @@ namespace Structure.Sketching.Colors
     /// Color definitions
     /// </summary>
     /// <seealso cref="IEquatable{Color}" />
-    public partial struct Color : IEquatable<Color>
+    public partial struct Color
     {
         /// <summary>
         /// The alice blue

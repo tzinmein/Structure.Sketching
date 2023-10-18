@@ -26,6 +26,29 @@ namespace Structure.Sketching.Tests.Formats.BaseClasses
             }
         }
 
+
+        protected bool CheckDecodedPngCorrect(string fileName)
+        {
+            using FileStream expectedStream = File.OpenRead(ExpectedDirectory + fileName);
+            using FileStream outputStream = File.OpenRead(OutputDirectory + fileName);
+
+            var ImageFormat = new Structure.Sketching.Formats.Png.PngFormat();
+            var expectedImage = ImageFormat.Decode(expectedStream);
+            var outputImage = ImageFormat.Decode(outputStream);
+
+            var dimensionsOk = outputImage.Width == expectedImage.Width && outputImage.Height == expectedImage.Height;
+            if (!dimensionsOk) return false;
+
+            var pixelsOk = true;
+            for (var index = 0; index < outputImage.Pixels.Length; index++)
+            {
+                if (!outputImage.Pixels[index].Equals(expectedImage.Pixels[index]))
+                    pixelsOk = false;
+            }
+
+            return pixelsOk;
+        }
+
         protected byte[] ReadBinary(FileStream stream)
         {
             byte[] Buffer = new byte[1024];

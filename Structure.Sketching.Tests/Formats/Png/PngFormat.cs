@@ -13,18 +13,20 @@ namespace Structure.Sketching.Tests.Formats.Png
 
         public override string OutputDirectory => "./TestOutput/Formats/Png/";
 
-        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
-            {"splash.png"},
-            {"48bit.png"},
-            {"blur.png"},
-            {"indexed.png"},
-            {"splashbw.png"}
+        public static readonly TheoryData<string> InputFileNames = new TheoryData<string>
+        {
+            { "splash.png" },
+            { "48bit.png" },
+            { "blur.png" },
+            { "indexed.png" },
+            { "splashbw.png" }
         };
 
         [Fact]
         public void CanDecodeByteArray()
         {
-            byte[] Header = {
+            byte[] Header =
+            {
                 0x89,
                 0x50,
                 0x4E,
@@ -53,7 +55,8 @@ namespace Structure.Sketching.Tests.Formats.Png
         [Fact]
         public void CanDecodeStream()
         {
-            byte[] Header = {
+            byte[] Header =
+            {
                 0x89,
                 0x50,
                 0x4E,
@@ -64,8 +67,12 @@ namespace Structure.Sketching.Tests.Formats.Png
                 0x0A
             };
             Assert.True(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(new MemoryStream(Header)));
-            Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19777))));
-            Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19779))));
+            Assert.False(
+                new Structure.Sketching.Formats.Png.PngFormat().CanDecode(
+                    new MemoryStream(BitConverter.GetBytes((int)19777))));
+            Assert.False(
+                new Structure.Sketching.Formats.Png.PngFormat().CanDecode(
+                    new MemoryStream(BitConverter.GetBytes((int)19779))));
         }
 
         [Fact]
@@ -99,12 +106,11 @@ namespace Structure.Sketching.Tests.Formats.Png
             {
                 var ImageFormat = new Sketching.Formats.Png.PngFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
-                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
-                {
-                    Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
-                }
+                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
+                Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
             }
-            Assert.True(CheckFileCorrect(fileName));
+
+            Assert.True(CheckDecodedPngCorrect(fileName));
         }
     }
 }
