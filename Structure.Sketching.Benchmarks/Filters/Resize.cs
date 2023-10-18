@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Runtime.Versioning;
 
 namespace Structure.Sketching.Benchmarks.Filters
 {
@@ -14,6 +15,7 @@ namespace Structure.Sketching.Benchmarks.Filters
             Filter.Apply(TestImage);
         }
 
+        [SupportedOSPlatform("windows")]
         [Benchmark(Baseline = true, Description = "System.Drawing Resize")]
         public void ResizeSystemDrawing()
         {

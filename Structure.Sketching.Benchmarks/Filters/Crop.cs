@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Structure.Sketching.Benchmarks.Filters.TestClasses;
 using System.Drawing;
+using System.Runtime.Versioning;
 
 namespace Structure.Sketching.Benchmarks.Filters
 {
@@ -28,6 +29,7 @@ namespace Structure.Sketching.Benchmarks.Filters
             TestCropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, Count, Count));
         }
 
+        [SupportedOSPlatform("windows")]
         [Benchmark(Baseline = true, Description = "System.Drawing Crop")]
         public void CropSystemDrawing()
         {
