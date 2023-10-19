@@ -90,9 +90,9 @@ namespace Structure.Sketching.Numerics
                 PreviousR += R[x];
                 PreviousG += G[x];
                 PreviousB += B[x];
-                R[x] = ((PreviousR - R[RMin]) / (TotalPixels - R[RMin])) * 255;
-                G[x] = ((PreviousG - G[GMin]) / (TotalPixels - G[GMin])) * 255;
-                B[x] = ((PreviousB - B[BMin]) / (TotalPixels - B[BMin])) * 255;
+                R[x] = (PreviousR - R[RMin]) / (TotalPixels - R[RMin]) * 255;
+                G[x] = (PreviousG - G[GMin]) / (TotalPixels - G[GMin]) * 255;
+                B[x] = (PreviousB - B[BMin]) / (TotalPixels - B[BMin]) * 255;
             }
             Width = 256;
             Height = 1;

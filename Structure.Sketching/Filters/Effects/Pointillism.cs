@@ -77,7 +77,7 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x);
+                                var Offset = (y * image.Width) + x;
                                 RValue += Copy[Offset].Red;
                                 GValue += Copy[Offset].Green;
                                 BValue += Copy[Offset].Blue;
@@ -112,7 +112,7 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x);
+                                var Offset = (y * image.Width) + x;
                                 RValue += Copy[Offset].Red;
                                 GValue += Copy[Offset].Green;
                                 BValue += Copy[Offset].Blue;
@@ -149,7 +149,7 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x);
+                                var Offset = (y * image.Width) + x;
                                 RValue += Copy[Offset].Red;
                                 GValue += Copy[Offset].Green;
                                 BValue += Copy[Offset].Blue;

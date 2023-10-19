@@ -42,7 +42,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width / 2) % 4)) % 4;
+            int alignment = (4 - (width / 2 % 4)) % 4;
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
             {

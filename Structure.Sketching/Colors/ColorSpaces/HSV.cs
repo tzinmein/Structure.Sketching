@@ -66,7 +66,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
             }
             else
             {
-                double a = (color.Hue / 360d) * 6;
+                double a = color.Hue / 360d * 6;
                 var b = Math.Floor(a);
                 double e = color.Value * (1 - color.Saturation);
                 double f = color.Value * (1 - color.Saturation * (a - b));

@@ -246,7 +246,7 @@ namespace Structure.Sketching.IO
                     throw new EndOfStreamException();
                 }
 
-                ret |= ((b & 0x7f) << shift);
+                ret |= (b & 0x7f) << shift;
                 if ((b & 0x80) == 0)
                 {
                     return ret;

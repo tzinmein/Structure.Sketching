@@ -40,7 +40,9 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests
         [Benchmark(Description = "File.ReadAllBytes")]
         public void ReadAllBytes()
         {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var Data = File.ReadAllBytes("../../../../TestImage/BitmapFilter.bmp");
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
     }
 }

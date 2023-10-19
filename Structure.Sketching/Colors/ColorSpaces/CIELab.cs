@@ -129,7 +129,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
             var z3 = z * z * z;
 
             return new XYZ(white.X * (x3 > XYZEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
-                    white.Y * (color.L > (Kappa * XYZEpsilon) ? Math.Pow(((color.L + 16.0) / 116.0), 3) : color.L / Kappa),
+                    white.Y * (color.L > (Kappa * XYZEpsilon) ? Math.Pow((color.L + 16.0) / 116.0, 3) : color.L / Kappa),
                     white.Z * (z3 > XYZEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787));
         }
 

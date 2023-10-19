@@ -101,7 +101,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <returns>The result of the conversion.</returns>
         public static implicit operator XYZ(HunterLAB color)
         {
-            var x = (color.A / 17.5) * (color.L / 10.0);
+            var x = color.A / 17.5 * (color.L / 10.0);
             var itemL_10 = color.L / 10.0;
             var y = itemL_10 * itemL_10;
             var z = color.B / 7.0 * color.L / 10.0;

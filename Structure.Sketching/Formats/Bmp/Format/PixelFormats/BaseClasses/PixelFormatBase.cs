@@ -63,7 +63,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                 int width = header.Width;
                 int height = header.Height;
                 int dataWidth = width;
-                int alignment = (int)(4 - ((width * BPP) % 4)) % 4;
+                int alignment = (int)(4 - (width * BPP % 4)) % 4;
                 int size = (int)((dataWidth * BPP) + alignment) * height;
                 if (size < header.ImageSize)
                     size = header.ImageSize;
@@ -76,7 +76,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                 int width = header.Width;
                 int height = header.Height;
                 int dataWidth = width;
-                int alignment = (int)(4 - ((width * BPP) % 4)) % 4;
+                int alignment = (int)(4 - (width * BPP % 4)) % 4;
                 byte[] TempData = new byte[2048];
                 using (MemoryStream MemStream = new MemoryStream())
                 {
@@ -113,7 +113,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                                 default:
                                     int RunLength = TempData[x];
                                     ++x;
-                                    int AbsoluteAlignment = (2 - ((RunLength) % 2)) % 2;
+                                    int AbsoluteAlignment = (2 - (RunLength % 2)) % 2;
                                     for (int y = 0; y < RunLength; ++y, ++x)
                                     {
                                         MemStream.WriteByte(TempData[x]);

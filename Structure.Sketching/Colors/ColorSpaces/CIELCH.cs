@@ -91,8 +91,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
         {
             var h = Math.Atan2(color.B, color.A);
             h = h > 0 ?
-                (h / Math.PI) * 180.0 :
-                360 - (Math.Abs(h) / Math.PI) * 180.0;
+                h / Math.PI * 180.0 :
+                360 - Math.Abs(h) / Math.PI * 180.0;
             if (h < 0)
             {
                 h += 360.0;
