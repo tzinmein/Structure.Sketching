@@ -14,8 +14,8 @@ namespace Structure.Sketching.Tests.Filters
 
         public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
         {
-            { "Dilate", new Dilate(1),default(Rectangle) },
-            { "Constrict", new Constrict(1),default(Rectangle) },
+            { "Dilate", new Dilate(1),default },
+            { "Constrict", new Constrict(1),default },
             { "Dilate-Partial", new Dilate(1),new Rectangle(100,100,500,500) },
             { "Constrict-Partial", new Constrict(1),new Rectangle(100,100,500,500) }
         };

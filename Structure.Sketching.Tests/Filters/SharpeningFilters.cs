@@ -14,7 +14,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
         {
-            { "Unsharp", new Unsharp(3,0.2f),default(Rectangle) },
+            { "Unsharp", new Unsharp(3,0.2f),default },
             { "Unsharp-Partial", new Unsharp(3,0.2f),new Rectangle(100,100,500,500) }
         };
 

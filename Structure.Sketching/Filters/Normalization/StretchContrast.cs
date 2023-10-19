@@ -35,9 +35,9 @@ namespace Structure.Sketching.Filters.Normalization
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             byte[] MinValue = new byte[3];
             byte[] MaxValue = new byte[3];
             GetMinMaxPixel(MinValue, MaxValue, image);

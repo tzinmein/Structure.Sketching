@@ -30,7 +30,7 @@ namespace Structure.Sketching.Filters.Drawing.BaseClasses
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The resulting image</returns>
-        public abstract Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle));
+        public abstract Image Apply(Image image, Numerics.Rectangle targetLocation = default);
 
         /// <summary>
         /// Gets the fractional part of a number

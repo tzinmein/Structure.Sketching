@@ -67,9 +67,9 @@ namespace Structure.Sketching.Filters.Effects
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var Result = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, Result, Result.Length);
             var XNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);

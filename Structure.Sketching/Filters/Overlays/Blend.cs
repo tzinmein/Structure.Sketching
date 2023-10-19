@@ -33,14 +33,14 @@ namespace Structure.Sketching.Filters.Overlays
         /// <param name="image">The image to apply.</param>
         /// <param name="alpha">The alpha value for the image.</param>
         /// <param name="sourceLocation">The source location.</param>
-        public Blend(Image image, float alpha, Rectangle sourceLocation = default(Rectangle))
+        public Blend(Image image, float alpha, Rectangle sourceLocation = default)
         {
             Alpha = alpha;
             image = image.Copy();
             new Alpha(alpha).Apply(image);
             Image = image;
             SourceLocation = sourceLocation;
-            SourceLocation = SourceLocation == default(Rectangle) ? new Rectangle(0, 0, Image.Width, Image.Height) : SourceLocation.Clamp(Image);
+            SourceLocation = SourceLocation == default ? new Rectangle(0, 0, Image.Width, Image.Height) : SourceLocation.Clamp(Image);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace Structure.Sketching.Filters.Overlays
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y1 = targetLocation.Bottom, y2 = SourceLocation.Bottom; y1 < targetLocation.Top && y2 < SourceLocation.Top; ++y1, ++y2)
             {
                 fixed (Color* TargetPointer = &image.Pixels[(y1 * image.Width) + targetLocation.Left])

@@ -14,13 +14,13 @@ namespace Structure.Sketching.Tests.Filters
 
         public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
         {
-            { "Logarithm", new Logarithm(),default(Rectangle) },
-            { "Gamma", new Gamma(.2f),default(Rectangle) },
-            { "AdaptiveEqualize", new AdaptiveEqualize(5),default(Rectangle) },
-            { "AdaptiveHSVEqualize", new AdaptiveEqualize(5,()=>new HSVHistogram()),default(Rectangle) },
-            { "HSVEqualize", new Equalize(new HSVHistogram()),default(Rectangle) },
-            { "Equalize", new Equalize(),default(Rectangle) },
-            { "StretchContrast", new StretchContrast(),default(Rectangle) },
+            { "Logarithm", new Logarithm(),default },
+            { "Gamma", new Gamma(.2f),default },
+            { "AdaptiveEqualize", new AdaptiveEqualize(5),default },
+            { "AdaptiveHSVEqualize", new AdaptiveEqualize(5,()=>new HSVHistogram()),default },
+            { "HSVEqualize", new Equalize(new HSVHistogram()),default },
+            { "Equalize", new Equalize(),default },
+            { "StretchContrast", new StretchContrast(),default },
 
             { "Logarithm-Partial", new Logarithm(),new Rectangle(100,100,500,500) },
             { "Gamma-Partial", new Gamma(.2f),new Rectangle(100,100,500,500) },

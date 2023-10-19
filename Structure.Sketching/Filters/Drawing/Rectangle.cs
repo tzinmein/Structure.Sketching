@@ -57,9 +57,9 @@ namespace Structure.Sketching.Filters.Drawing
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns></returns>
-        public override unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle))
+        public override unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Numerics.Rectangle) ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Bounds = Bounds.Clamp(targetLocation);
             return Fill ? DrawFilledRectangle(image, Bounds)
                         : DrawRectangleOutline(image, targetLocation);

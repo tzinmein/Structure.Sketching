@@ -50,9 +50,9 @@ namespace Structure.Sketching.Filters.Effects
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle))
+        public unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Numerics.Rectangle) ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var PointSize2 = PointSize * 2;
             var Copy = new Color[image.Pixels.Length];
             Array.Copy(image.Pixels, Copy, Copy.Length);

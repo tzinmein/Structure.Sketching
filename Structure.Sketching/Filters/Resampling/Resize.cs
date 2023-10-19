@@ -103,7 +103,7 @@ namespace Structure.Sketching.Filters.Resampling
         /// <param name="image">The image to resize.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public Image Apply(Image image, Rectangle targetLocation = default)
         {
             double XScale = (double)Width / image.Width;
             double YScale = (double)Height / image.Height;

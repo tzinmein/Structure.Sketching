@@ -87,7 +87,7 @@ namespace Structure.Sketching.Filters.Pipelines.BaseClasses
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The resulting image</returns>
-        public Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public Image Apply(Image image, Rectangle targetLocation = default)
         {
             for (int x = 0; x < Filters.Count; ++x)
             {

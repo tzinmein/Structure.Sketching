@@ -65,7 +65,7 @@ namespace Structure.Sketching.Filters.Resampling
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
         {
             var Final = new Color[Width * Height];
             var XOffset = 0;

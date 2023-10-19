@@ -73,9 +73,9 @@ namespace Structure.Sketching.Filters.Drawing
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns></returns>
-        public override Image Apply(Image image, Numerics.Rectangle targetLocation = default(Numerics.Rectangle))
+        public override Image Apply(Image image, Numerics.Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Numerics.Rectangle) ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             if (Fill)
             {
                 DrawFilledEllipse(image, targetLocation);

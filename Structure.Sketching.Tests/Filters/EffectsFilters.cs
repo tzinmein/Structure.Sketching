@@ -16,14 +16,14 @@ namespace Structure.Sketching.Tests.Filters
 
         public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
         {
-            { "Pointillism", new Pointillism(5),default(Rectangle) },
-            { "Posterize", new Posterize(10),default(Rectangle) },
-            { "Solarize", new Solarize(1f),default(Rectangle) },
-            { "Replace-Black-For-White", new Replace(Color.Black,Color.White,0.2f),default(Rectangle) },
-            { "Invert", new Invert(),default(Rectangle) },
-            { "Turbulence", new Turbulence(),default(Rectangle) },
-            { "Pixellate-10", new Pixellate(10) ,default(Rectangle)},
-            { "SinWave", new SinWave(10f,10f,Direction.LeftToRight),default(Rectangle) },
+            { "Pointillism", new Pointillism(5),default },
+            { "Posterize", new Posterize(10),default },
+            { "Solarize", new Solarize(1f),default },
+            { "Replace-Black-For-White", new Replace(Color.Black,Color.White,0.2f),default },
+            { "Invert", new Invert(),default },
+            { "Turbulence", new Turbulence(),default },
+            { "Pixellate-10", new Pixellate(10) ,default},
+            { "SinWave", new SinWave(10f,10f,Direction.LeftToRight),default },
 
             { "Posterize-Partial", new Posterize(10),new Rectangle(100,100,500,500) },
             { "Solarize-Partial", new Solarize(1f),new Rectangle(100,100,500,500) },

@@ -29,6 +29,6 @@ namespace Structure.Sketching.Filters.Interfaces
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        Image Apply(Image image, Rectangle targetLocation = default(Rectangle));
+        Image Apply(Image image, Rectangle targetLocation = default);
     }
 }

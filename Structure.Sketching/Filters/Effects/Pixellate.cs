@@ -49,9 +49,9 @@ namespace Structure.Sketching.Filters.Effects
         /// <param name="image">The image.</param>
         /// <param name="targetLocation">The target location.</param>
         /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default(Rectangle))
+        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
         {
-            targetLocation = targetLocation == default(Rectangle) ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PixelSize)
             {
                 var MinY = (y - (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
