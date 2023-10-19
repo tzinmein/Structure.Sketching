@@ -62,7 +62,7 @@ namespace Structure.Sketching.Filters.Effects
             {
                 var MinY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (Color* TargetPointer = &Copy[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &Copy[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; x += PointSize2)
@@ -77,7 +77,7 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x);
+                                var Offset = y * image.Width + x;
                                 RValue += Copy[Offset].Red;
                                 GValue += Copy[Offset].Green;
                                 BValue += Copy[Offset].Blue;
@@ -97,7 +97,7 @@ namespace Structure.Sketching.Filters.Effects
             {
                 var MinY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (Color* TargetPointer = &Copy[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &Copy[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left + PointSize; x < targetLocation.Right; x += PointSize2)
@@ -112,7 +112,7 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x);
+                                var Offset = y * image.Width + x;
                                 RValue += Copy[Offset].Red;
                                 GValue += Copy[Offset].Green;
                                 BValue += Copy[Offset].Blue;
@@ -133,7 +133,7 @@ namespace Structure.Sketching.Filters.Effects
                 var TempY = y + new Random(y).Next(-PointSize, PointSize);
                 var MinY = (TempY - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
                 var MaxY = (TempY + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (Color* TargetPointer = &Copy[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &Copy[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left + PointSize; x < targetLocation.Right; x += PointSize2)
@@ -149,7 +149,7 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var Offset = ((y * image.Width) + x);
+                                var Offset = y * image.Width + x;
                                 RValue += Copy[Offset].Red;
                                 GValue += Copy[Offset].Green;
                                 BValue += Copy[Offset].Blue;

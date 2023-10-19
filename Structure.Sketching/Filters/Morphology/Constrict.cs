@@ -58,7 +58,7 @@ namespace Structure.Sketching.Filters.Morphology
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -78,7 +78,7 @@ namespace Structure.Sketching.Filters.Morphology
                                     Length += TempX;
                                     TempX = 0;
                                 }
-                                var Start = ((TempY * image.Width) + TempX);
+                                var Start = TempY * image.Width + TempX;
                                 fixed (Color* ImagePointer = &TempValues[Start])
                                 {
                                     Color* ImagePointer2 = ImagePointer;

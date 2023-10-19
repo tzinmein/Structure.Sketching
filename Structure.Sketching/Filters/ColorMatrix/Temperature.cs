@@ -1,4 +1,5 @@
 ﻿/*
+Copyright 2016 James Craig
 Copyright 2023 Ho Tzin Mein
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +52,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
             else
             {
                 // Note: the R-squared value for this approximation is 0.988.
-                red = (int)(329.698727446 * (Math.Pow(value - 60, -0.1332047592)));
+                red = (int)(329.698727446 * Math.Pow(value - 60, -0.1332047592));
                 red = Math.Clamp(red, 0, 255);
             }
 
@@ -64,7 +65,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
             else
             {
                 // Note: the R-squared value for this approximation is 0.987.
-                green = (int)(288.1221695283 * (Math.Pow(value - 60, -0.0755148492)));
+                green = (int)(288.1221695283 * Math.Pow(value - 60, -0.0755148492));
             }
 
             green = Math.Clamp(green, 0, 255);

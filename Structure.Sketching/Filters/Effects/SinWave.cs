@@ -73,7 +73,7 @@ namespace Structure.Sketching.Filters.Effects
             Array.Copy(image.Pixels, Result, Result.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -81,9 +81,9 @@ namespace Structure.Sketching.Filters.Effects
                         double Value1 = 0;
                         double Value2 = 0;
                         if (Direction == Direction.RightToLeft || Direction == Direction.LeftToRight)
-                            Value1 = System.Math.Sin(((x * Frequency) * System.Math.PI) / 180.0d) * Amplitude;
+                            Value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
                         if (Direction == Direction.BottomToTop || Direction == Direction.TopToBottom)
-                            Value2 = System.Math.Sin(((y * Frequency) * System.Math.PI) / 180.0d) * Amplitude;
+                            Value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
                         Value1 = y - (int)Value1;
                         Value2 = x - (int)Value2;
                         while (Value1 < 0)
@@ -94,7 +94,7 @@ namespace Structure.Sketching.Filters.Effects
                             Value1 -= image.Height;
                         while (Value2 >= image.Width)
                             Value2 -= image.Width;
-                        Result[(y * image.Width) + x] = image.Pixels[((int)Value1 * image.Width) + ((int)Value2)];
+                        Result[y * image.Width + x] = image.Pixels[(int)Value1 * image.Width + (int)Value2];
                     }
                 }
             });

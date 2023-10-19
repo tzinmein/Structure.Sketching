@@ -188,16 +188,16 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                     return y * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio420:
-                    return (y / 2) * CStride;
+                    return y / 2 * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio440:
-                    return (y / 2) * CStride;
+                    return y / 2 * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio411:
                     return y * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio410:
-                    return (y / 2) * CStride;
+                    return y / 2 * CStride;
             }
             return y * CStride;
         }
@@ -301,7 +301,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                        byte green = CBPixels[co + x / cScale];
                        byte blue = CRPixels[co + x / cScale];
 
-                       pixels[(y * width) + x] = new Bgra(red, green, blue);
+                       pixels[y * width + x] = new Bgra(red, green, blue);
                    }
                });
 
@@ -326,10 +326,10 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                     for (int x = 0; x < width; x++)
                     {
                         byte yy = YPixels[yo + x];
-                        byte cb = CBPixels[co + (x / cScale)];
-                        byte cr = CRPixels[co + (x / cScale)];
+                        byte cb = CBPixels[co + x / cScale];
+                        byte cr = CRPixels[co + x / cScale];
 
-                        pixels[(y * width) + x] = new YCbCr(yy, cb, cr);
+                        pixels[y * width + x] = new YCbCr(yy, cb, cr);
                     }
                 });
 

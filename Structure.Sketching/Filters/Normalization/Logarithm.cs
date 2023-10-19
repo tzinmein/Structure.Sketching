@@ -38,13 +38,13 @@ namespace Structure.Sketching.Filters.Normalization
         {
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var MaxValue = GetMaxValue(image, targetLocation);
-            MaxValue = new Color((byte)((255 / Math.Log(1f + MaxValue.Red))),
-                (byte)((255 / Math.Log(1f + MaxValue.Green))),
-                (byte)((255 / Math.Log(1f + MaxValue.Blue))),
+            MaxValue = new Color((byte)(255 / Math.Log(1f + MaxValue.Red)),
+                (byte)(255 / Math.Log(1f + MaxValue.Green)),
+                (byte)(255 / Math.Log(1f + MaxValue.Blue)),
                 MaxValue.Alpha);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -66,13 +66,13 @@ namespace Structure.Sketching.Filters.Normalization
             {
                 for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    byte Red = image.Pixels[(y * image.Width) + x].Red;
+                    byte Red = image.Pixels[y * image.Width + x].Red;
                     if (ReturnValue.Red < Red)
                         ReturnValue.Red = Red;
-                    byte Green = image.Pixels[(y * image.Width) + x].Green;
+                    byte Green = image.Pixels[y * image.Width + x].Green;
                     if (ReturnValue.Green < Green)
                         ReturnValue.Green = Green;
-                    byte Blue = image.Pixels[(y * image.Width) + x].Blue;
+                    byte Blue = image.Pixels[y * image.Width + x].Blue;
                     if (ReturnValue.Blue < Blue)
                         ReturnValue.Blue = Blue;
                     if (ReturnValue == Color.White)

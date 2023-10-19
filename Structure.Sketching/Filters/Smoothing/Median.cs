@@ -60,7 +60,7 @@ namespace Structure.Sketching.Filters.Smoothing
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &TempValues[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -78,17 +78,17 @@ namespace Structure.Sketching.Filters.Smoothing
                                     int TempY = y + y2;
                                     if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
                                     {
-                                        RValues.Add(image.Pixels[(TempY * image.Width) + TempX].Red);
-                                        GValues.Add(image.Pixels[(TempY * image.Width) + TempX].Green);
-                                        BValues.Add(image.Pixels[(TempY * image.Width) + TempX].Blue);
+                                        RValues.Add(image.Pixels[TempY * image.Width + TempX].Red);
+                                        GValues.Add(image.Pixels[TempY * image.Width + TempX].Green);
+                                        BValues.Add(image.Pixels[TempY * image.Width + TempX].Blue);
                                     }
                                 }
                             }
                         }
-                        TempValues[(y * image.Width) + x].Red = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(y * image.Width) + x].Green = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(y * image.Width) + x].Blue = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
-                        TempValues[(y * image.Width) + x].Alpha = image.Pixels[(y * image.Width) + x].Alpha;
+                        TempValues[y * image.Width + x].Red = RValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[y * image.Width + x].Green = GValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[y * image.Width + x].Blue = BValues.OrderBy(_ => _).ElementAt(RValues.Count / 2);
+                        TempValues[y * image.Width + x].Alpha = image.Pixels[y * image.Width + x].Alpha;
                     }
                 }
             });

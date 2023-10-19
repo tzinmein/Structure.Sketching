@@ -291,8 +291,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
             Bits.Mask >>= t;
             int s = 1 << t;
             var x = (int)((Bits.Accumulator >> Bits.NumberOfUnreadBits) & (s - 1));
-            if (x < (s >> 1))
-                x += ((-1) << t) + 1;
+            if (x < s >> 1)
+                x += (-1 << t) + 1;
             return x;
         }
 

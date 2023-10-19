@@ -138,7 +138,7 @@ namespace Structure.Sketching.Formats.Gif.Format
                                                 BitConverter.ToInt16(buffer, 2),
                                                 buffer[5],
                                                 buffer[6],
-                                                ((Packed & 0x80) >> 7) == 1,
+                                                (Packed & 0x80) >> 7 == 1,
                                                 2 << (Packed & 0x07));
         }
 

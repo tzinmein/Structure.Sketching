@@ -43,11 +43,11 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
 
             if (value <= 1)
             {
-                return (((1.5f * value) - 2.5f) * value * value) + 1;
+                return (1.5f * value - 2.5f) * value * value + 1;
             }
             else if (value < 2)
             {
-                return (((((a * value) + 2.5f) * value) - 4) * value) + 2;
+                return ((a * value + 2.5f) * value - 4) * value + 2;
             }
             return 0;
         }

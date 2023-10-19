@@ -65,20 +65,20 @@ namespace Structure.Sketching.Filters.Pipelines
             var TempImageY = new BumpMap(YDirection == YDirection.TopToBottom ? Direction.TopToBottom : Direction.BottomToTop).Apply(image.Copy(), targetLocation);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var TempVector = new Vector3(TempImageX.Pixels[(y * image.Width) + x].Red / 255f,
-                            TempImageY.Pixels[(y * image.Width) + x].Red / 255f,
+                        var TempVector = new Vector3(TempImageX.Pixels[y * image.Width + x].Red / 255f,
+                            TempImageY.Pixels[y * image.Width + x].Red / 255f,
                             1f);
                         TempVector = Vector3.Normalize(TempVector);
                         TempVector = new Vector3(TempVector.X + 1.0f, TempVector.Y + 1f, TempVector.Z + 1f);
                         TempVector /= 2.0f;
-                        image.Pixels[(y * image.Width) + x].Red = (byte)(TempVector.X * 255);
-                        image.Pixels[(y * image.Width) + x].Green = (byte)(TempVector.Y * 255);
-                        image.Pixels[(y * image.Width) + x].Blue = (byte)(TempVector.Z * 255);
+                        image.Pixels[y * image.Width + x].Red = (byte)(TempVector.X * 255);
+                        image.Pixels[y * image.Width + x].Green = (byte)(TempVector.Y * 255);
+                        image.Pixels[y * image.Width + x].Blue = (byte)(TempVector.Z * 255);
                     }
                 }
             });

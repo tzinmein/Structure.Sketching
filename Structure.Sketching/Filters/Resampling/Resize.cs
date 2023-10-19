@@ -136,8 +136,8 @@ namespace Structure.Sketching.Filters.Resampling
             double TempHeight = Height < 0 ? image.Width : Height;
             double XScale = TempWidth / image.Width;
             double YScale = TempHeight / image.Height;
-            var YRadius = YScale < 1f ? (Filter.FilterRadius / YScale) : Filter.FilterRadius;
-            var XRadius = XScale < 1f ? (Filter.FilterRadius / XScale) : Filter.FilterRadius;
+            var YRadius = YScale < 1f ? Filter.FilterRadius / YScale : Filter.FilterRadius;
+            var XRadius = XScale < 1f ? Filter.FilterRadius / XScale : Filter.FilterRadius;
 
             Parallel.For(0, Height, y =>
             {
@@ -183,10 +183,10 @@ namespace Structure.Sketching.Filters.Resampling
                                         ++PixelPointer2;
                                         continue;
                                     }
-                                    Values.X += ((*PixelPointer2).Red * (float)TempWeight);
-                                    Values.Y += ((*PixelPointer2).Green * (float)TempWeight);
-                                    Values.Z += ((*PixelPointer2).Blue * (float)TempWeight);
-                                    Values.W += ((*PixelPointer2).Alpha * (float)TempWeight);
+                                    Values.X += (*PixelPointer2).Red * (float)TempWeight;
+                                    Values.Y += (*PixelPointer2).Green * (float)TempWeight;
+                                    Values.Z += (*PixelPointer2).Blue * (float)TempWeight;
+                                    Values.W += (*PixelPointer2).Alpha * (float)TempWeight;
                                     ++PixelPointer2;
                                     Weight += (float)TempWeight;
                                 }

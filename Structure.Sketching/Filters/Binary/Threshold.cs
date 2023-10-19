@@ -71,7 +71,7 @@ namespace Structure.Sketching.Filters.Binary
             new Greyscale709().Apply(image, targetLocation);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)

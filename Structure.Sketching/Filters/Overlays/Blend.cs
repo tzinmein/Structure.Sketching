@@ -72,16 +72,16 @@ namespace Structure.Sketching.Filters.Overlays
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y1 = targetLocation.Bottom, y2 = SourceLocation.Bottom; y1 < targetLocation.Top && y2 < SourceLocation.Top; ++y1, ++y2)
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y1 * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y1 * image.Width + targetLocation.Left])
                 {
-                    fixed (Color* SourcePointer = &Image.Pixels[(y2 * Image.Width) + SourceLocation.Left])
+                    fixed (Color* SourcePointer = &Image.Pixels[y2 * Image.Width + SourceLocation.Left])
                     {
                         Color* TargetPointer2 = TargetPointer;
                         Color* SourcePointer2 = SourcePointer;
                         for (int x1 = targetLocation.Left, x2 = SourceLocation.Left; x1 < targetLocation.Right && x2 < SourceLocation.Right; ++x1, ++x2)
                         {
                             float TempAlpha = (*SourcePointer2).Alpha / 255f;
-                            *TargetPointer2 = (*TargetPointer2 * (1f - TempAlpha)) + (*SourcePointer2 * TempAlpha);
+                            *TargetPointer2 = *TargetPointer2 * (1f - TempAlpha) + *SourcePointer2 * TempAlpha;
                             ++TargetPointer2;
                             ++SourcePointer2;
                         }

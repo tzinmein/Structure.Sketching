@@ -65,7 +65,7 @@ namespace Structure.Sketching.Quantizers.Octree
             {
                 for (int x = 0; x < image.Width; x++)
                 {
-                    int TempOffset = (y * image.Width) + x;
+                    int TempOffset = y * image.Width + x;
                     octree.AddColor(image.Pixels[TempOffset]);
                 }
             }
@@ -86,7 +86,7 @@ namespace Structure.Sketching.Quantizers.Octree
                 {
                     for (int x = 0; x < image.Width; x++)
                     {
-                        int TempOffset = (y * image.Width) + x;
+                        int TempOffset = y * image.Width + x;
                         quantizedPixels[TempOffset] = QuantizePixel((Bgra)image.Pixels[TempOffset]);
                     }
                 });

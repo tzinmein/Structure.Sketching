@@ -114,7 +114,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                                 var yoff = GetRowOffset(y);
                                 for (int x = 0; x < pixelWidth; x++)
                                 {
-                                    int offset = (y * pixelWidth) + x;
+                                    int offset = y * pixelWidth + x;
 
                                     pixels[offset].Red = Pixels[yoff + x];
                                     pixels[offset].Green = Pixels[yoff + x];

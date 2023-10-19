@@ -85,7 +85,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <param name="writer">The writer.</param>
         public void Write(BinaryWriter writer)
         {
-            int Amount = (Data.Length * 3) % 4;
+            int Amount = Data.Length * 3 % 4;
             if (Amount != 0)
             {
                 Amount = 4 - Amount;

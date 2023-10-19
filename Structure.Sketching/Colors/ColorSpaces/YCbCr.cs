@@ -75,9 +75,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
             var cb = color.CbChroma - 128;
             var cr = color.CrChroma - 128;
 
-            return new Color((byte)(Math.Round(y + (1.402 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255)),
-                                (byte)(Math.Round(y - (0.344136 * cb) - (0.714136 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255)),
-                                (byte)(Math.Round(y + (1.772 * cb), MidpointRounding.AwayFromZero)).Clamp(0, 255));
+            return new Color((byte)Math.Round(y + 1.402 * cr, MidpointRounding.AwayFromZero).Clamp(0, 255),
+                                (byte)Math.Round(y - 0.344136 * cb - 0.714136 * cr, MidpointRounding.AwayFromZero).Clamp(0, 255),
+                                (byte)Math.Round(y + 1.772 * cb, MidpointRounding.AwayFromZero).Clamp(0, 255));
         }
 
         /// <summary>
@@ -92,9 +92,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
             var g = color.Green;
             var b = color.Blue;
 
-            return new YCbCr((0.299 * r) + (0.587 * g) + (0.114 * b),
-                                128 - (0.168736 * r) - (0.331264 * g) + (0.5 * b),
-                                128 + (0.5 * r) - (0.418688 * g) - (0.081312 * b));
+            return new YCbCr(0.299 * r + 0.587 * g + 0.114 * b,
+                                128 - 0.168736 * r - 0.331264 * g + 0.5 * b,
+                                128 + 0.5 * r - 0.418688 * g - 0.081312 * b);
         }
 
         /// <summary>

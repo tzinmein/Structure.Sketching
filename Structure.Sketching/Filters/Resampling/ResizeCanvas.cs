@@ -87,9 +87,9 @@ namespace Structure.Sketching.Filters.Resampling
                         Color* InputPointer2 = InputPointer;
                         for (int x = 0; x < Width; ++x)
                         {
-                            if ((x + XOffset) >= image.Width)
+                            if (x + XOffset >= image.Width)
                                 break;
-                            if ((x + XOffset) < 0)
+                            if (x + XOffset < 0)
                             {
                                 ++OutputPointer2;
                                 ++InputPointer2;

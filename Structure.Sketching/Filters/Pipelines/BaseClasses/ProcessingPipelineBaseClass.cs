@@ -61,7 +61,7 @@ namespace Structure.Sketching.Filters.Pipelines.BaseClasses
         {
             if (filter as MatrixBaseClass != null && Filters.Count > 0)
             {
-                var LastFilter = Filters[Filters.Count - 1];
+                var LastFilter = Filters[^1];
                 if (LastFilter as MatrixBaseClass != null)
                 {
                     Filters.Remove(LastFilter);
@@ -70,7 +70,7 @@ namespace Structure.Sketching.Filters.Pipelines.BaseClasses
             }
             else if (Combine && filter as ConvolutionBaseClass != null && Filters.Count > 0)
             {
-                var LastFilter = Filters[Filters.Count - 1];
+                var LastFilter = Filters[^1];
                 if (LastFilter as ConvolutionBaseClass != null)
                 {
                     Filters.Remove(LastFilter);

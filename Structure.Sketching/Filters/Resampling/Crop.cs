@@ -42,7 +42,7 @@ namespace Structure.Sketching.Filters.Resampling
                 fixed (Color* TargetPointer = &Result[(y - targetLocation.Bottom) * targetLocation.Width])
                 {
                     Color* TargetPointer2 = TargetPointer;
-                    fixed (Color* SourcePointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                    fixed (Color* SourcePointer = &image.Pixels[y * image.Width + targetLocation.Left])
                     {
                         Color* SourcePointer2 = SourcePointer;
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)

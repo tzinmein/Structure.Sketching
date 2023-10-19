@@ -143,9 +143,9 @@ namespace Structure.Sketching.Formats.Gif.Format
                                         BitConverter.ToInt16(TempBuffer, 2),
                                         BitConverter.ToInt16(TempBuffer, 4),
                                         BitConverter.ToInt16(TempBuffer, 6),
-                                        ((Packed & 0x80) >> 7) == 1,
+                                        (Packed & 0x80) >> 7 == 1,
                                         2 << (Packed & 0x07),
-                                        ((Packed & 0x40) >> 6) == 1);
+                                        (Packed & 0x40) >> 6 == 1);
         }
 
         /// <summary>

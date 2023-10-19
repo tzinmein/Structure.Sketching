@@ -39,11 +39,11 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
             scanline = scanline.ExpandArray(header.BitDepth);
             Parallel.For(0, header.Width, x =>
             {
-                int Offset = (row * header.Width) + x;
+                int Offset = row * header.Width + x;
                 pixels[Offset].Red = scanline[x * 2];
                 pixels[Offset].Green = scanline[x * 2];
                 pixels[Offset].Blue = scanline[x * 2];
-                pixels[Offset].Alpha = scanline[(x * 2) + 1];
+                pixels[Offset].Alpha = scanline[x * 2 + 1];
             });
         }
     }

@@ -55,7 +55,7 @@ namespace Structure.Sketching.Filters.Arithmetic
             {
                 if (y >= SecondImage.Height)
                     return;
-                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* OutputPointer = Pointer;
                     fixed (Color* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])

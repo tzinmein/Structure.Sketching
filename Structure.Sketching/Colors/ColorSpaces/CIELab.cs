@@ -121,15 +121,15 @@ namespace Structure.Sketching.Colors.ColorSpaces
         public static implicit operator XYZ(CIELab color)
         {
             var y = (color.L + 16d) / 116d;
-            var x = (color.A / 500d) + y;
-            var z = y - (color.B / 200d);
+            var x = color.A / 500d + y;
+            var z = y - color.B / 200d;
             var white = XYZ.WhiteReference;
 
             var x3 = x * x * x;
             var z3 = z * z * z;
 
             return new XYZ(white.X * (x3 > XYZEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
-                    white.Y * (color.L > (Kappa * XYZEpsilon) ? Math.Pow(((color.L + 16.0) / 116.0), 3) : color.L / Kappa),
+                    white.Y * (color.L > Kappa * XYZEpsilon ? Math.Pow((color.L + 16.0) / 116.0, 3) : color.L / Kappa),
                     white.Z * (z3 > XYZEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787));
         }
 

@@ -47,13 +47,13 @@ namespace Structure.Sketching.Procedural
                 for (int y = 0; y < Height; ++y)
                 {
                     var Value = GetValue(x, y, Width, Height, Frequency, Amplitude, Persistance, Octaves, Noise);
-                    Value = (Value * 0.5f) + 0.5f;
+                    Value = Value * 0.5f + 0.5f;
                     Value *= 255;
                     var RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
-                    ReturnValue.Pixels[(y * Width) + x].Red = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x].Green = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x].Blue = RGBValue;
-                    ReturnValue.Pixels[(y * Width) + x].Alpha = 255;
+                    ReturnValue.Pixels[y * Width + x].Red = RGBValue;
+                    ReturnValue.Pixels[y * Width + x].Green = RGBValue;
+                    ReturnValue.Pixels[y * Width + x].Blue = RGBValue;
+                    ReturnValue.Pixels[y * Width + x].Alpha = 255;
                 }
             }
             return ReturnValue;

@@ -54,7 +54,7 @@ namespace Structure.Sketching.Filters.Drawing.BaseClasses
         {
             if (!targetLocation.Contains(x, y))
                 return;
-            var Offset = (y * image.Width) + x;
+            var Offset = y * image.Width + x;
             var TempColor = Color * brightness;
             //float TempAlpha = TempColor.Alpha / 255f;
             image.Pixels[Offset] = TempColor;

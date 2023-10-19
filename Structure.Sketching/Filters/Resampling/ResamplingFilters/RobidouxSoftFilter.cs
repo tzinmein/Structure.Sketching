@@ -43,9 +43,9 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
             if (value < 0) value = -value;
             var temp = value * value;
             if (value < 1)
-                return (((12 - (9 * B) - (6 * C)) * (value * temp)) + ((-18 + (12 * B) + (6 * C)) * temp) + (6 - (2 * B))) / 6;
+                return ((12 - 9 * B - 6 * C) * (value * temp) + (-18 + 12 * B + 6 * C) * temp + (6 - 2 * B)) / 6;
             if (value < 2)
-                return (((-B - (6 * C)) * (value * temp)) + (((6 * B) + (30 * C)) * temp) + (((-12 * B) - (48 * C)) * value) + ((8 * B) + (24 * C))) / 6;
+                return ((-B - 6 * C) * (value * temp) + (6 * B + 30 * C) * temp + (-12 * B - 48 * C) * value + (8 * B + 24 * C)) / 6;
             return 0;
         }
     }

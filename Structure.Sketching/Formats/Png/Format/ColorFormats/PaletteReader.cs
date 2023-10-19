@@ -66,7 +66,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
             {
                 for (int x = 0; x < header.Width; ++x)
                 {
-                    int Offset = (row * header.Width) + x;
+                    int Offset = row * header.Width + x;
                     int PixelOffset = scanline[x] * 3;
                     pixels[Offset].Red = Palette.Data[PixelOffset];
                     pixels[Offset].Green = Palette.Data[PixelOffset + 1];
@@ -78,7 +78,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
             {
                 for (int x = 0; x < header.Width; ++x)
                 {
-                    int Offset = (row * header.Width) + x;
+                    int Offset = row * header.Width + x;
                     int PixelOffset = scanline[x] * 3;
 
                     pixels[Offset].Red = Palette.Data[PixelOffset];

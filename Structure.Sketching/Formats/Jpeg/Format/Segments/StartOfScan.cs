@@ -176,7 +176,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                 throw new Exception("missing SOF marker");
             }
 
-            if (n < 6 || 4 + (2 * (int)StartOfFrameSegment.TypeOfImage) < n || n % 2 != 0)
+            if (n < 6 || 4 + 2 * (int)StartOfFrameSegment.TypeOfImage < n || n % 2 != 0)
             {
                 throw new Exception("SOS has wrong length");
             }
@@ -194,7 +194,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
 
             for (int i = 0; i < lnComp; i++)
             {
-                int cs = TempData[1 + (2 * i)];
+                int cs = TempData[1 + 2 * i];
                 int compIndex = -1;
                 for (int j = 0; j < (int)StartOfFrameSegment.TypeOfImage; j++)
                 {
@@ -221,13 +221,13 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
 
                 totalHV += StartOfFrameSegment.Components[compIndex].HorizontalSamplingFactor * StartOfFrameSegment.Components[compIndex].VerticalSamplingFactor;
 
-                scan[i].Td = (byte)(TempData[2 + (2 * i)] >> 4);
+                scan[i].Td = (byte)(TempData[2 + 2 * i] >> 4);
                 if (scan[i].Td > MAXIMUM_TH)
                 {
                     throw new Exception("bad Td value");
                 }
 
-                scan[i].Ta = (byte)(TempData[2 + (2 * i)] & 0x0f);
+                scan[i].Ta = (byte)(TempData[2 + 2 * i] & 0x0f);
                 if (scan[i].Ta > MAXIMUM_TH)
                 {
                     throw new Exception("bad Ta value");
@@ -246,10 +246,10 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
 
             if (StartOfFrameSegment.Progressive)
             {
-                zigStart = (int)TempData[1 + (2 * lnComp)];
-                zigEnd = (int)TempData[2 + (2 * lnComp)];
-                ah = (int)(TempData[3 + (2 * lnComp)] >> 4);
-                al = (int)(TempData[3 + (2 * lnComp)] & 0x0f);
+                zigStart = (int)TempData[1 + 2 * lnComp];
+                zigEnd = (int)TempData[2 + 2 * lnComp];
+                ah = (int)(TempData[3 + 2 * lnComp] >> 4);
+                al = (int)(TempData[3 + 2 * lnComp] & 0x0f);
 
                 if ((zigStart == 0 && zigEnd != 0) || zigStart > zigEnd || zigEnd >= Block.BlockSize)
                 {
@@ -269,8 +269,8 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
 
             int h0 = StartOfFrameSegment.Components[0].HorizontalSamplingFactor;
             int v0 = StartOfFrameSegment.Components[0].VerticalSamplingFactor;
-            int mxx = (StartOfFrameSegment.Width + (8 * h0) - 1) / (8 * h0);
-            int myy = (StartOfFrameSegment.Height + (8 * v0) - 1) / (8 * v0);
+            int mxx = (StartOfFrameSegment.Width + 8 * h0 - 1) / (8 * h0);
+            int myy = (StartOfFrameSegment.Height + 8 * v0 - 1) / (8 * v0);
 
             if (img1 == null && img3 == null)
             {
@@ -555,7 +555,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                 nBits = 8 + (uint)bitCount[a >> 8];
 
             emitHuff(h, (int)((uint)(runLength << 4) | nBits), writer);
-            if (nBits > 0) emit((uint)b & (uint)((1 << ((int)nBits)) - 1), nBits, writer);
+            if (nBits > 0) emit((uint)b & (uint)((1 << (int)nBits) - 1), nBits, writer);
         }
 
         private void encode444(BinaryWriter writer)
@@ -729,9 +729,9 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    var Offset = Math.Min(x + i, xmax) + (Math.Min(y + j, ymax) * Image.Width);
+                    var Offset = Math.Min(x + i, xmax) + Math.Min(y + j, ymax) * Image.Width;
                     YCbCr color = Image.Pixels[Offset];
-                    int index = (8 * j) + i;
+                    int index = 8 * j + i;
                     yBlock[index] = (int)color.YLuminance;
                     cbBlock[index] = (int)color.CbChroma;
                     crBlock[index] = (int)color.CrChroma;

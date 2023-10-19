@@ -43,14 +43,14 @@ namespace Structure.Sketching.Filters.Normalization
             GetMinMaxPixel(MinValue, MaxValue, image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        image.Pixels[(y * image.Width) + x].Red = Map(image.Pixels[(y * image.Width) + x].Red, MinValue[0], MaxValue[0]);
-                        image.Pixels[(y * image.Width) + x].Green = Map(image.Pixels[(y * image.Width) + x].Green, MinValue[1], MaxValue[1]);
-                        image.Pixels[(y * image.Width) + x].Blue = Map(image.Pixels[(y * image.Width) + x].Blue, MinValue[2], MaxValue[2]);
+                        image.Pixels[y * image.Width + x].Red = Map(image.Pixels[y * image.Width + x].Red, MinValue[0], MaxValue[0]);
+                        image.Pixels[y * image.Width + x].Green = Map(image.Pixels[y * image.Width + x].Green, MinValue[1], MaxValue[1]);
+                        image.Pixels[y * image.Width + x].Blue = Map(image.Pixels[y * image.Width + x].Blue, MinValue[2], MaxValue[2]);
                     }
                 }
             });
@@ -65,9 +65,9 @@ namespace Structure.Sketching.Filters.Normalization
             {
                 for (int y = 0; y < image.Height; ++y)
                 {
-                    var TempR = image.Pixels[(y * image.Width) + x].Red;
-                    var TempG = image.Pixels[(y * image.Width) + x].Green;
-                    var TempB = image.Pixels[(y * image.Width) + x].Blue;
+                    var TempR = image.Pixels[y * image.Width + x].Red;
+                    var TempG = image.Pixels[y * image.Width + x].Green;
+                    var TempB = image.Pixels[y * image.Width + x].Blue;
                     if (minValue[0] > TempR)
                         minValue[0] = TempR;
                     if (maxValue[0] < TempR)

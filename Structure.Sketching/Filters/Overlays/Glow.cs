@@ -71,11 +71,11 @@ namespace Structure.Sketching.Filters.Overlays
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var TempX = XRadius * image.Width;
             var TempY = YRadius * image.Height;
-            var MaxDistance = (float)Math.Sqrt((TempX * TempX) + (TempY * TempY));
+            var MaxDistance = (float)Math.Sqrt(TempX * TempX + TempY * TempY);
 
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* Pointer2 = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -84,7 +84,7 @@ namespace Structure.Sketching.Filters.Overlays
                         var SourceColor = (Vector4)(*Pointer2);
                         var Result = Vector4.Lerp(Color, SourceColor, .5f * (Distance / MaxDistance));
                         var TempAlpha = Result.W;
-                        Result = SourceColor * (1 - TempAlpha) + (Result * SourceColor * TempAlpha);
+                        Result = SourceColor * (1 - TempAlpha) + Result * SourceColor * TempAlpha;
                         *Pointer2 = (Color)Result;
                         ++Pointer2;
                     }

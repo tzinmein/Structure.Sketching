@@ -89,8 +89,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
         public static implicit operator HunterLAB(XYZ color)
         {
             var L = 10.0 * Math.Sqrt(color.Y);
-            var A = color.Y != 0 ? 17.5 * (((1.02 * color.X) - color.Y) / Math.Sqrt(color.Y)) : 0;
-            var B = color.Y != 0 ? 7.0 * ((color.Y - (.847 * color.Z)) / Math.Sqrt(color.Y)) : 0;
+            var A = color.Y != 0 ? 17.5 * ((1.02 * color.X - color.Y) / Math.Sqrt(color.Y)) : 0;
+            var B = color.Y != 0 ? 7.0 * ((color.Y - .847 * color.Z) / Math.Sqrt(color.Y)) : 0;
             return new HunterLAB(L, A, B);
         }
 
@@ -101,7 +101,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <returns>The result of the conversion.</returns>
         public static implicit operator XYZ(HunterLAB color)
         {
-            var x = (color.A / 17.5) * (color.L / 10.0);
+            var x = color.A / 17.5 * (color.L / 10.0);
             var itemL_10 = color.L / 10.0;
             var y = itemL_10 * itemL_10;
             var z = color.B / 7.0 * color.L / 10.0;

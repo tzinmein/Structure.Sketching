@@ -67,9 +67,9 @@ namespace Structure.Sketching
             for (int x = 0; x < ReturnValues.Length; ++x)
             {
                 ReturnValues[x].Red = data[x * 4];
-                ReturnValues[x].Green = data[(x * 4) + 1];
-                ReturnValues[x].Blue = data[(x * 4) + 2];
-                ReturnValues[x].Alpha = data[(x * 4) + 3];
+                ReturnValues[x].Green = data[x * 4 + 1];
+                ReturnValues[x].Blue = data[x * 4 + 2];
+                ReturnValues[x].Alpha = data[x * 4 + 3];
             }
             ReCreate(width, height, ReturnValues);
         }
@@ -221,7 +221,7 @@ namespace Structure.Sketching
                 {
                     if (ShowLine)
                     {
-                        var RValue = TempImage.Pixels[(y * TempImage.Width) + x].Red / 255f;
+                        var RValue = TempImage.Pixels[y * TempImage.Width + x].Red / 255f;
                         Builder.Append(_ASCIICharacters[(int)(RValue * _ASCIICharacters.Length)]);
                     }
                 }

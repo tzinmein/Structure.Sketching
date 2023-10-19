@@ -46,15 +46,15 @@ namespace Structure.Sketching.Filters.ColorMatrix
             float oneMinusLumB = 1f - lumB;
             _Matrix = new Matrix5x5
             {
-                M11 = (float)(lumR + (cosradians * oneMinusLumR) - (sinradians * lumR)),
-                M12 = (float)(lumR - (cosradians * lumR) - (sinradians * 0.143)),
-                M13 = (float)(lumR - (cosradians * lumR) - (sinradians * oneMinusLumR)),
-                M21 = (float)(lumG - (cosradians * lumG) - (sinradians * lumG)),
-                M22 = (float)(lumG + (cosradians * oneMinusLumG) + (sinradians * 0.140)),
-                M23 = (float)(lumG - (cosradians * lumG) + (sinradians * lumG)),
-                M31 = (float)(lumB - (cosradians * lumB) + (sinradians * oneMinusLumB)),
-                M32 = (float)(lumB - (cosradians * lumB) - (sinradians * 0.283)),
-                M33 = (float)(lumB + (cosradians * oneMinusLumB) + (sinradians * lumB)),
+                M11 = (float)(lumR + cosradians * oneMinusLumR - sinradians * lumR),
+                M12 = (float)(lumR - cosradians * lumR - sinradians * 0.143),
+                M13 = (float)(lumR - cosradians * lumR - sinradians * oneMinusLumR),
+                M21 = (float)(lumG - cosradians * lumG - sinradians * lumG),
+                M22 = (float)(lumG + cosradians * oneMinusLumG + sinradians * 0.140),
+                M23 = (float)(lumG - cosradians * lumG + sinradians * lumG),
+                M31 = (float)(lumB - cosradians * lumB + sinradians * oneMinusLumB),
+                M32 = (float)(lumB - cosradians * lumB - sinradians * 0.283),
+                M33 = (float)(lumB + cosradians * oneMinusLumB + sinradians * lumB),
                 M44 = 1,
                 M55 = 1
             };

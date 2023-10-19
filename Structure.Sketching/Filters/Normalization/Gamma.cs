@@ -37,7 +37,7 @@ namespace Structure.Sketching.Filters.Normalization
             Ramp = new int[256];
             Parallel.For(0, 256, x =>
             {
-                Ramp[x] = (int)((255.0 * System.Math.Pow(x / 255.0, 1.0 / Value)) + 0.5);
+                Ramp[x] = (int)(255.0 * System.Math.Pow(x / 255.0, 1.0 / Value) + 0.5);
                 Ramp[x] = Ramp[x] < 0 ? 0 : Ramp[x] > 255 ? 255 : Ramp[x];
             });
         }
@@ -61,7 +61,7 @@ namespace Structure.Sketching.Filters.Normalization
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)

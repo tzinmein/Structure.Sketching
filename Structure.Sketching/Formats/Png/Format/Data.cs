@@ -175,7 +175,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <returns>The scanline step</returns>
         private static int CalculateScanlineStep(ColorTypeInformation colorTypeInformation, Header header)
         {
-            return header.BitDepth >= 8 ? (colorTypeInformation.ScanlineFactor * header.BitDepth) / 8 : 1;
+            return header.BitDepth >= 8 ? colorTypeInformation.ScanlineFactor * header.BitDepth / 8 : 1;
         }
 
         /// <summary>
@@ -204,12 +204,12 @@ namespace Structure.Sketching.Formats.Png.Format
 
         private static byte[] ToScanlines(Image image)
         {
-            byte[] data = new byte[(image.Width * image.Height * 4) + image.Height];
-            int RowLength = (image.Width * 4) + 1;
+            byte[] data = new byte[image.Width * image.Height * 4 + image.Height];
+            int RowLength = image.Width * 4 + 1;
 
             Parallel.For(0, image.Width, x =>
               {
-                  int dataOffset = (x * 4) + 1;
+                  int dataOffset = x * 4 + 1;
                   int PixelOffset = x;
                   data[dataOffset] = image.Pixels[PixelOffset].Red;
                   data[dataOffset + 1] = image.Pixels[PixelOffset].Green;
@@ -218,9 +218,9 @@ namespace Structure.Sketching.Formats.Png.Format
                   data[0] = 0;
                   for (int y = 1; y < image.Height; ++y)
                   {
-                      dataOffset = (y * RowLength) + (x * 4) + 1;
-                      PixelOffset = (image.Width * y) + x;
-                      int AbovePixelOffset = (image.Width * (y - 1)) + x;
+                      dataOffset = y * RowLength + x * 4 + 1;
+                      PixelOffset = image.Width * y + x;
+                      int AbovePixelOffset = image.Width * (y - 1) + x;
                       data[dataOffset] = (byte)(image.Pixels[PixelOffset].Red - image.Pixels[AbovePixelOffset].Red);
                       data[dataOffset + 1] = (byte)(image.Pixels[PixelOffset].Green - image.Pixels[AbovePixelOffset].Green);
                       data[dataOffset + 2] = (byte)(image.Pixels[PixelOffset].Blue - image.Pixels[AbovePixelOffset].Blue);

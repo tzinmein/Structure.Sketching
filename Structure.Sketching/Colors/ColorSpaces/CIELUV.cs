@@ -96,8 +96,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
 
             var targetDenominator = GetDenominator(color);
             var referenceDenominator = GetDenominator(White);
-            var xTarget = targetDenominator == 0 ? 0 : ((4.0 * color.X / targetDenominator) - (4.0 * White.X / referenceDenominator));
-            var yTarget = targetDenominator == 0 ? 0 : ((9.0 * color.Y / targetDenominator) - (9.0 * White.Y / referenceDenominator));
+            var xTarget = targetDenominator == 0 ? 0 : 4.0 * color.X / targetDenominator - 4.0 * White.X / referenceDenominator;
+            var yTarget = targetDenominator == 0 ? 0 : 9.0 * color.Y / targetDenominator - 9.0 * White.Y / referenceDenominator;
             var U = 13.0 * L * xTarget;
             var V = 13.0 * L * yTarget;
             return new CIELUV(L, U, V);
@@ -122,15 +122,15 @@ namespace Structure.Sketching.Colors.ColorSpaces
         {
             var White = XYZ.WhiteReference;
             var C = -1.0 / 3.0;
-            var UPrime = (4.0 * White.X) / GetDenominator(White);
-            var VPrime = (9.0 * White.Y) / GetDenominator(White);
-            var A = (1.0 / 3.0) * ((52.0 * color.L) / (color.U + 13 * color.L * UPrime) - 1.0);
+            var UPrime = 4.0 * White.X / GetDenominator(White);
+            var VPrime = 9.0 * White.Y / GetDenominator(White);
+            var A = 1.0 / 3.0 * (52.0 * color.L / (color.U + 13 * color.L * UPrime) - 1.0);
             var ImteL_16_116 = (color.L + 16.0) / 116.0;
             var Y = color.L > Kappa * XYZEpsilon
                         ? ImteL_16_116 * ImteL_16_116 * ImteL_16_116
                         : color.L / Kappa;
             var B = -5.0 * Y;
-            var D = Y * ((39.0 * color.L) / (color.V + 13.0 * color.L * VPrime) - 5.0);
+            var D = Y * (39.0 * color.L / (color.V + 13.0 * color.L * VPrime) - 5.0);
             var X = (D - B) / (A - C);
             var Z = X * A + B;
             return new XYZ(100 * X, 100 * Y, 100 * Z);

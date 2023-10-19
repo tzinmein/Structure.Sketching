@@ -88,11 +88,11 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                             if (i + Value2XPosition >= 0 && i + Value2XPosition < value1.Width
                                 && j + Value2YPosition >= 0 && j + Value2YPosition < value1.Height)
                             {
-                                Value += value1.Matrix[(i + Value2XPosition) + ((j + Value2YPosition) * value1.Width)] * value2.Matrix[i + (j * value2.Width)];
+                                Value += value1.Matrix[i + Value2XPosition + (j + Value2YPosition) * value1.Width] * value2.Matrix[i + j * value2.Width];
                             }
                         }
                     }
-                    Values[x + (y * Width)] = Value;
+                    Values[x + y * Width] = Value;
                     ++Value2XPosition;
                 }
                 ++Value2YPosition;
@@ -113,7 +113,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
             Array.Copy(image.Pixels, tempPixels, image.Pixels.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -138,7 +138,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                 {
                                     if (*MatrixValue != 0)
                                     {
-                                        Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
+                                        Start = (YCurrent + y) * image.Width + x + XCurrent;
                                         var TempPixel = tempPixels[Start];
                                         Values += new Vector4(*MatrixValue * TempPixel.Red,
                                             *MatrixValue * TempPixel.Green,

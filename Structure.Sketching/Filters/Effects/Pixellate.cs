@@ -54,9 +54,9 @@ namespace Structure.Sketching.Filters.Effects
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PixelSize)
             {
-                var MinY = (y - (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                var MaxY = (y + (PixelSize / 2)).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                var MinY = (y - PixelSize / 2).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+                var MaxY = (y + PixelSize / 2).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; x += PixelSize)
@@ -64,14 +64,14 @@ namespace Structure.Sketching.Filters.Effects
                         uint RValue = 0;
                         uint GValue = 0;
                         uint BValue = 0;
-                        var MinX = (x - (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                        var MaxX = (x + (PixelSize / 2)).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                        var MinX = (x - PixelSize / 2).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                        var MaxX = (x + PixelSize / 2).Clamp(targetLocation.Left, targetLocation.Right - 1);
                         int NumberPixels = 0;
                         for (int x2 = MinX; x2 < MaxX; ++x2)
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                var TempPixel = image.Pixels[(y * image.Width) + x];
+                                var TempPixel = image.Pixels[y * image.Width + x];
                                 RValue += TempPixel.Red;
                                 GValue += TempPixel.Green;
                                 BValue += TempPixel.Blue;
@@ -85,9 +85,9 @@ namespace Structure.Sketching.Filters.Effects
                         {
                             for (int y2 = MinY; y2 < MaxY; ++y2)
                             {
-                                image.Pixels[(y2 * image.Width) + x2].Red = (byte)RValue;
-                                image.Pixels[(y2 * image.Width) + x2].Green = (byte)GValue;
-                                image.Pixels[(y2 * image.Width) + x2].Blue = (byte)BValue;
+                                image.Pixels[y2 * image.Width + x2].Red = (byte)RValue;
+                                image.Pixels[y2 * image.Width + x2].Green = (byte)GValue;
+                                image.Pixels[y2 * image.Width + x2].Blue = (byte)BValue;
                             }
                         });
                     }

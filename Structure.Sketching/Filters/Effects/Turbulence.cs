@@ -76,17 +76,17 @@ namespace Structure.Sketching.Filters.Effects
             var YNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        float XDistortion = x + (XNoise.Pixels[(y * image.Width) + x].Red * Power);
-                        float YDistortion = y + (YNoise.Pixels[(y * image.Width) + x].Red * Power);
+                        float XDistortion = x + XNoise.Pixels[y * image.Width + x].Red * Power;
+                        float YDistortion = y + YNoise.Pixels[y * image.Width + x].Red * Power;
                         var X1 = (int)XDistortion.Clamp(0, image.Width - 1);
                         var Y1 = (int)YDistortion.Clamp(0, image.Height - 1);
-                        int ResultOffset = ((y * image.Width) + x);
-                        int SourceOffset = ((Y1 * image.Width) + X1);
+                        int ResultOffset = y * image.Width + x;
+                        int SourceOffset = Y1 * image.Width + X1;
 
                         Result[ResultOffset] = image.Pixels[SourceOffset];
                     }

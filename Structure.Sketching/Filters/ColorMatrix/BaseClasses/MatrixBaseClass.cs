@@ -54,7 +54,7 @@ namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, (y, _) =>
             {
-                fixed (Color* pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* pointer2 = pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)

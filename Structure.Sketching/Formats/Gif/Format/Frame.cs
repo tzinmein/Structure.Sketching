@@ -155,7 +155,7 @@ namespace Structure.Sketching.Formats.Gif.Format
                 graphicsControl.DisposalMethod == DisposalMethod.RestoreToPrevious)
             {
                 CurrentFrame = new byte[imageWidth * imageHeight * 4];
-                Array.Copy(frames[frames.Count - 1].Data, CurrentFrame, CurrentFrame.Length);
+                Array.Copy(frames[^1].Data, CurrentFrame, CurrentFrame.Length);
                 byte[] LastFrame = new byte[imageWidth * imageHeight * 4];
                 Array.Copy(CurrentFrame, LastFrame, LastFrame.Length);
             }
@@ -206,7 +206,7 @@ namespace Structure.Sketching.Formats.Gif.Format
 
                 for (int x = descriptor.Left; x < descriptor.Left + descriptor.Width; x++)
                 {
-                    offset = ((writeY * imageWidth) + x) * 4;
+                    offset = (writeY * imageWidth + x) * 4;
                     int index = indices.Indices[i];
 
                     if (graphicsControl == null ||

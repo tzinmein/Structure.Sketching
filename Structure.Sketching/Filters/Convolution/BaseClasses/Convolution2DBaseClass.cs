@@ -79,7 +79,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
             Array.Copy(image.Pixels, tempPixels, image.Pixels.Length);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* OutputPointer = Pointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -109,16 +109,16 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                     {
                                         if (*XMatrixValue != 0 || *YMatrixValue != 0)
                                         {
-                                            Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
+                                            Start = (YCurrent + y) * image.Width + x + XCurrent;
                                             var TempPixel = tempPixels[Start];
-                                            XValue += new Vector4((*XMatrixValue * TempPixel.Red),
-                                                                            (*XMatrixValue * TempPixel.Green),
-                                                                            (*XMatrixValue * TempPixel.Blue),
-                                                                            (*XMatrixValue * TempPixel.Alpha));
-                                            YValue += new Vector4((*YMatrixValue * TempPixel.Red),
-                                                                            (*YMatrixValue * TempPixel.Green),
-                                                                            (*YMatrixValue * TempPixel.Blue),
-                                                                            (*YMatrixValue * TempPixel.Alpha));
+                                            XValue += new Vector4(*XMatrixValue * TempPixel.Red,
+                                                                            *XMatrixValue * TempPixel.Green,
+                                                                            *XMatrixValue * TempPixel.Blue,
+                                                                            *XMatrixValue * TempPixel.Alpha);
+                                            YValue += new Vector4(*YMatrixValue * TempPixel.Red,
+                                                                            *YMatrixValue * TempPixel.Green,
+                                                                            *YMatrixValue * TempPixel.Blue,
+                                                                            *YMatrixValue * TempPixel.Alpha);
                                             WeightX += *XMatrixValue;
                                             WeightY += *YMatrixValue;
                                         }
@@ -142,7 +142,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                             }
                             XValue /= WeightX;
                             YValue /= WeightY;
-                            var TempResult = Vector4.SquareRoot((XValue * XValue) + (YValue * YValue));
+                            var TempResult = Vector4.SquareRoot(XValue * XValue + YValue * YValue);
                             TempResult = Vector4.Clamp(TempResult, Vector4.Zero, new Vector4(255, 255, 255, 255)) / 255f;
                             *OutputPointer = TempResult;
                             ++OutputPointer;

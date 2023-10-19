@@ -92,7 +92,7 @@ namespace Structure.Sketching.Filters.Binary
             int ApetureMax = ApetureRadius;
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* TargetPointer = &TempValues[(y * image.Width) + targetLocation.Left])
+                fixed (Color* TargetPointer = &TempValues[y * image.Width + targetLocation.Left])
                 {
                     Color* TargetPointer2 = TargetPointer;
                     for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
@@ -108,7 +108,7 @@ namespace Structure.Sketching.Filters.Binary
                                     int TempY = y + y2;
                                     if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
                                     {
-                                        RValues.Add(image.Pixels[(TempY * image.Width) + TempX].Red);
+                                        RValues.Add(image.Pixels[TempY * image.Width + TempX].Red);
                                     }
                                 }
                             }

@@ -156,7 +156,7 @@ namespace Structure.Sketching.Quantizers.Octree
         private void Reduce()
         {
             int index = MaxColorBits - 1;
-            while ((index > 0) && (ReducibleNodes[index] == null))
+            while (index > 0 && ReducibleNodes[index] == null)
             {
                 index--;
             }

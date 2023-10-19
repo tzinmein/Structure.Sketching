@@ -62,7 +62,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         {
             int width = header.Width;
             int height = header.Height;
-            var alignment = (int)(((4d - ((width / 8.0d) % 4d)) % 4d) * 8);
+            var alignment = (int)((4d - width / 8.0d % 4d) % 4d * 8);
             byte[] ReturnValue = new byte[width * height * 4];
             using (var BitStream = new BitReader(data))
             {

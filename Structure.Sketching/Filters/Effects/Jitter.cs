@@ -53,7 +53,7 @@ namespace Structure.Sketching.Filters.Effects
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {
-                fixed (Color* Pointer = &image.Pixels[(y * image.Width) + targetLocation.Left])
+                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
                     Color* SourcePointer = Pointer;
                     for (int x = 0; x < image.Width; ++x)
@@ -64,7 +64,7 @@ namespace Structure.Sketching.Filters.Effects
                         NewY += y;
                         NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
                         NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
-                        image.Pixels[(NewY * image.Width) + NewX] = *SourcePointer;
+                        image.Pixels[NewY * image.Width + NewX] = *SourcePointer;
                         ++SourcePointer;
                     }
                 }

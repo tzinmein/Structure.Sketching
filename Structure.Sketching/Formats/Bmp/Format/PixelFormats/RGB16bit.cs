@@ -44,11 +44,11 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * (int)BPP) % 4)) % 4;
+            int alignment = (4 - width * (int)BPP % 4) % 4;
             byte[] ReturnValue = new byte[width * height * 4];
             Parallel.For(0, height, y =>
             {
-                int RowOffset = y * ((width * (int)BPP) + alignment);
+                int RowOffset = y * (width * (int)BPP + alignment);
                 int CurrentY = height - y - 1;
                 if (CurrentY < 0)
                     CurrentY = 0;
@@ -56,14 +56,14 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                     CurrentY = height - 1;
                 for (int x = 0; x < width; ++x)
                 {
-                    int Offset = RowOffset + (x * (int)BPP);
+                    int Offset = RowOffset + x * (int)BPP;
                     var TempValue = BitConverter.ToInt16(data, Offset);
                     var r = (int)(((TempValue & header.RedMask) >> header.RedOffset) * header.RedMultiplier);
                     var g = (int)(((TempValue & header.GreenMask) >> header.GreenOffset) * header.GreenMultiplier);
                     var b = (int)(((TempValue & header.BlueMask) >> header.BlueOffset) * header.BlueMultiplier);
                     var a = (int)(header.AlphaMask == 0 ? 255 : ((TempValue & header.AlphaMask) >> header.AlphaOffset) * header.AlphaMultiplier);
 
-                    int ArrayOffset = ((CurrentY * width) + x) * 4;
+                    int ArrayOffset = (CurrentY * width + x) * 4;
                     ReturnValue[ArrayOffset] = (byte)r.Clamp(0, 255);
                     ReturnValue[ArrayOffset + 1] = (byte)g.Clamp(0, 255);
                     ReturnValue[ArrayOffset + 2] = (byte)b.Clamp(0, 255);
@@ -84,8 +84,8 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
         {
             int width = header.Width;
             int height = header.Height;
-            int alignment = (4 - ((width * (int)BPP) % 4)) % 4;
-            var ReturnValue = new byte[((width * (int)BPP) + alignment) * height];
+            int alignment = (4 - width * (int)BPP % 4) % 4;
+            var ReturnValue = new byte[(width * (int)BPP + alignment) * height];
             Parallel.For(0, height, y =>
             {
                 int SourceY = height - y - 1;
@@ -95,7 +95,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
                     SourceY = height - 1;
                 int SourceRowOffset = SourceY * width * 4;
                 int DestinationY = y;
-                int DestinationRowOffset = DestinationY * ((width * (int)BPP) + alignment);
+                int DestinationRowOffset = DestinationY * (width * (int)BPP + alignment);
                 for (int x = 0; x < width; ++x)
                 {
                     int SourceX = x * 4;
