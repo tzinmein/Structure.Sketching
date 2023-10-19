@@ -111,11 +111,11 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                         {
                                             Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
                                             var TempPixel = tempPixels[Start];
-                                            XValue += new Vector4((*XMatrixValue * TempPixel.Red),
+                                            XValue = XValue + new Vector4((*XMatrixValue * TempPixel.Red),
                                                                             (*XMatrixValue * TempPixel.Green),
                                                                             (*XMatrixValue * TempPixel.Blue),
                                                                             (*XMatrixValue * TempPixel.Alpha));
-                                            YValue += new Vector4((*YMatrixValue * TempPixel.Red),
+                                            YValue = YValue + new Vector4((*YMatrixValue * TempPixel.Red),
                                                                             (*YMatrixValue * TempPixel.Green),
                                                                             (*YMatrixValue * TempPixel.Blue),
                                                                             (*YMatrixValue * TempPixel.Alpha));

@@ -90,7 +90,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers.ZLib
         /// <returns>The resulting value</returns>
         public long Update(byte[] buffer, int offset = -1, int count = int.MaxValue)
         {
-            buffer ??= new byte[0];
+            buffer = buffer ?? new byte[0];
             count = count.Clamp(0, buffer.Length);
             offset = offset.Clamp(0, buffer.Length);
             if (offset > count)

@@ -20,10 +20,10 @@ namespace Structure.Sketching.Numerics
             int Green = color1.Green - color2.Green;
             int Blue = color1.Blue - color2.Blue;
             int Alpha = color1.Alpha - color2.Alpha;
-            Red *= Red;
-            Green *= Green;
-            Blue *= Blue;
-            Alpha *= Alpha;
+            Red = Red * Red;
+            Green = Green * Green;
+            Blue = Blue * Blue;
+            Alpha = Alpha * Alpha;
 
             return Math.Sqrt(Red + Green + Blue + Alpha);
         }

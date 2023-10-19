@@ -183,10 +183,10 @@ namespace Structure.Sketching.Filters.Resampling
                                         ++PixelPointer2;
                                         continue;
                                     }
-                                    Values.X += ((*PixelPointer2).Red * (float)TempWeight);
-                                    Values.Y += ((*PixelPointer2).Green * (float)TempWeight);
-                                    Values.Z += ((*PixelPointer2).Blue * (float)TempWeight);
-                                    Values.W += ((*PixelPointer2).Alpha * (float)TempWeight);
+                                    Values.X = Values.X + ((*PixelPointer2).Red * (float)TempWeight);
+                                    Values.Y = Values.Y + ((*PixelPointer2).Green * (float)TempWeight);
+                                    Values.Z = Values.Z + ((*PixelPointer2).Blue * (float)TempWeight);
+                                    Values.W = Values.W + ((*PixelPointer2).Alpha * (float)TempWeight);
                                     ++PixelPointer2;
                                     Weight += (float)TempWeight;
                                 }

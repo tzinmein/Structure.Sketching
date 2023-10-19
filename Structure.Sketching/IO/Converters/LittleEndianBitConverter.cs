@@ -44,7 +44,7 @@ namespace Structure.Sketching.IO.Converters
             for (int i = 0; i < bytes; i++)
             {
                 buffer[i + index] = unchecked((byte)(value & 0xff));
-                value >>= 8;
+                value = value >> 8;
             }
         }
 

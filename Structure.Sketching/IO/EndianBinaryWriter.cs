@@ -47,9 +47,9 @@ namespace Structure.Sketching.IO
         /// <exception cref="System.ArgumentException">Stream is not writable</exception>
         public EndianBinaryWriter(EndianBitConverterBase bitConverter, Stream stream, Encoding encoding)
         {
-            bitConverter ??= new BigEndianBitConverter();
-            stream ??= new MemoryStream();
-            encoding ??= Encoding.UTF8;
+            bitConverter = bitConverter ?? new BigEndianBitConverter();
+            stream = stream ?? new MemoryStream();
+            encoding = encoding ?? Encoding.UTF8;
             if (!stream.CanWrite)
                 throw new ArgumentException("Stream is not writable", nameof(stream));
             BaseStream = stream;
@@ -269,7 +269,7 @@ namespace Structure.Sketching.IO
         /// <param name="value">The values to write</param>
         public void Write(byte[] value)
         {
-            value ??= new byte[0];
+            value = value ?? new byte[0];
             WriteInternal(value, value.Length);
         }
 
@@ -283,7 +283,7 @@ namespace Structure.Sketching.IO
         {
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
-            value ??= new byte[0];
+            value = value ?? new byte[0];
             BaseStream.Write(value, offset, count);
         }
 
@@ -303,7 +303,7 @@ namespace Structure.Sketching.IO
         /// <param name="value">An array containing the characters to write</param>
         public void Write(char[] value)
         {
-            value ??= new char[0];
+            value = value ?? new char[0];
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
             var data = Encoding.GetBytes(value, 0, value.Length);
@@ -317,7 +317,7 @@ namespace Structure.Sketching.IO
         /// <exception cref="ArgumentNullException">value is null</exception>
         public void Write(string value)
         {
-            value ??= "";
+            value = value ?? "";
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
             var data = Encoding.GetBytes(value);
@@ -340,7 +340,7 @@ namespace Structure.Sketching.IO
             while (value >= 128)
             {
                 buffer[index++] = (byte)((value & 0x7f) | 0x80);
-                value >>= 7;
+                value = value >> 7;
                 index++;
             }
 

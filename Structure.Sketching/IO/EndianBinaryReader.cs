@@ -47,9 +47,9 @@ namespace Structure.Sketching.IO
         /// <exception cref="System.ArgumentException">Stream is not readable</exception>
         public EndianBinaryReader(EndianBitConverterBase bitConverter, Stream stream, Encoding encoding)
         {
-            bitConverter ??= new BigEndianBitConverter();
-            stream ??= new MemoryStream();
-            encoding ??= Encoding.UTF8;
+            bitConverter = bitConverter ?? new BigEndianBitConverter();
+            stream = stream ?? new MemoryStream();
+            encoding = encoding ?? Encoding.UTF8;
             if (!stream.CanRead)
                 throw new ArgumentException("Stream is not readable", nameof(stream));
             BaseStream = stream;
@@ -142,7 +142,7 @@ namespace Structure.Sketching.IO
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is currently null.");
             count = count > data.Length ? data.Length : count;
-            data ??= new char[0];
+            data = data ?? new char[0];
             if (index > data.Length - count)
                 index = data.Length - count;
             index = index < 0 ? 0 : index;
@@ -202,7 +202,7 @@ namespace Structure.Sketching.IO
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is currently null.");
             count = count > buffer.Length ? buffer.Length : count;
-            buffer ??= new byte[0];
+            buffer = buffer ?? new byte[0];
             if (index > buffer.Length - count)
                 index = buffer.Length - count;
             index = index < 0 ? 0 : index;
@@ -246,7 +246,7 @@ namespace Structure.Sketching.IO
                     throw new EndOfStreamException();
                 }
 
-                ret |= ((b & 0x7f) << shift);
+                ret = ret | ((b & 0x7f) << shift);
                 if ((b & 0x80) == 0)
                 {
                     return ret;

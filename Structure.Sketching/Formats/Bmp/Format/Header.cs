@@ -309,7 +309,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         {
             if (mask != 0)
             {
-                mask >>= offset;
+                mask = mask >> offset;
                 return 255d / (double)mask;
             }
             return 1;
@@ -328,7 +328,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
                 while ((mask & 1) == 0)
                 {
                     ++Offset;
-                    mask >>= 1;
+                    mask = mask >> 1;
                 }
             }
             return Offset;

@@ -236,7 +236,7 @@ namespace Structure.Sketching.Formats.Png.Format
         private void ReadData(Chunk obj)
         {
             if (Data != null)
-                Data += (Data)obj;
+                Data = Data + (Data)obj;
             else
                 Data = obj;
         }
