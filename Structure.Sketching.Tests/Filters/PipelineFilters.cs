@@ -16,7 +16,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
+        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new()
         {
             { "Pipeline-Polaroid-Brightness", new ProcessingPipeline(true).AddFilter(new PolaroidColorMatrix()).AddFilter(new Brightness(.1f)),default },
             { "Pipeline-RC-Greyscale", new ProcessingPipeline(true).AddFilter(new RobertsCross()).AddFilter(new Greyscale601()),default },

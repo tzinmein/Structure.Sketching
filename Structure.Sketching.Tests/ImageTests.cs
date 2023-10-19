@@ -15,13 +15,13 @@ namespace Structure.Sketching.Tests
 
         public string SecondImage => "./TestImages/Formats/Bmp/Car.bmp";
 
-        public static readonly TheoryData<string, Func<Image, int, Image>, int> ShiftOperations = new TheoryData<string, Func<Image, int, Image>, int>
+        public static readonly TheoryData<string, Func<Image, int, Image>, int> ShiftOperations = new()
         {
             {"ShiftLeft",(x,y)=>x<<y,128 },
             {"ShiftRight",(x,y)=>x>>y,128 }
         };
 
-        public static readonly TheoryData<string, Func<Image, Image>> UnaryOperations = new TheoryData<string, Func<Image, Image>>
+        public static readonly TheoryData<string, Func<Image, Image>> UnaryOperations = new()
         {
             {"Not",(x)=>!x }
         };

@@ -7,7 +7,7 @@ namespace Structure.Sketching.Tests.Colors.ColorSpaces
 {
     public class Conversion
     {
-        public static readonly TheoryData<Func<Sketching.Colors.Color, IColorSpace>, IColorSpace> ConversionTestData = new TheoryData<Func<Sketching.Colors.Color, IColorSpace>, IColorSpace>
+        public static readonly TheoryData<Func<Sketching.Colors.Color, IColorSpace>, IColorSpace> ConversionTestData = new()
         {
             {x=>(Bgra)x,new Bgra(25,140,132,51) },
             {x=>(CIELab)x,new CIELab(55.818348999038136d,-16.853418868401192d,54.700336854544005d) },
@@ -20,7 +20,7 @@ namespace Structure.Sketching.Tests.Colors.ColorSpaces
             {x=>(HunterLAB)x,new HunterLAB(48.715385297874477d,-15.379442134009619d,28.629607681009084d) }
         };
 
-        public static readonly TheoryData<Func<IColorSpace, Sketching.Colors.Color>, IColorSpace> ConversionTestData2 = new TheoryData<Func<IColorSpace, Sketching.Colors.Color>, IColorSpace>
+        public static readonly TheoryData<Func<IColorSpace, Sketching.Colors.Color>, IColorSpace> ConversionTestData2 = new()
         {
             {x=>(Bgra)x,new Bgra(25, 140, 132, 255) },
             {x=>(CIELab)x,new CIELab(55.818348999038136d,-16.853418868401192d,54.700336854544005d) },

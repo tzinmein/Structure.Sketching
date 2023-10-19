@@ -11,7 +11,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Sketching.Numerics.Rectangle> Filters = new TheoryData<string, IFilter, Sketching.Numerics.Rectangle>
+        public static readonly TheoryData<string, IFilter, Sketching.Numerics.Rectangle> Filters = new()
         {
             { "XOr", new XOr(new Image("./TestImages/Formats/Bmp/Car.bmp")),new Sketching.Numerics.Rectangle(100,100,500,500)},
             { "Or", new Or(new Image("./TestImages/Formats/Bmp/Car.bmp")),new Sketching.Numerics.Rectangle(100,100,500,500)},

@@ -19,9 +19,9 @@ namespace Structure.Sketching.Benchmarks.Filters
         [Benchmark(Baseline = true, Description = "System.Drawing Resize")]
         public void ResizeSystemDrawing()
         {
-            using (Bitmap source = new Bitmap(2000, 2000))
+            using (Bitmap source = new(2000, 2000))
             {
-                using (Bitmap destination = new Bitmap(400, 400))
+                using (Bitmap destination = new(400, 400))
                 {
                     using (Graphics graphics = Graphics.FromImage(destination))
                     {

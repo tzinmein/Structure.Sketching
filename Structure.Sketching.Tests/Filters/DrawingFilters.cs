@@ -12,7 +12,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Sketching.Numerics.Rectangle> Filters = new TheoryData<string, IFilter, Sketching.Numerics.Rectangle>
+        public static readonly TheoryData<string, IFilter, Sketching.Numerics.Rectangle> Filters = new()
         {
             { "DrawingLine", new Line(Color.Fuchsia,0,0,500,1000),default },
             { "DrawingRectangle", new Rectangle(Color.Fuchsia,false,new Sketching.Numerics.Rectangle(0,0,500,1000)),default },

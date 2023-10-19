@@ -12,7 +12,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
+        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new()
         {
             { "Dilate", new Dilate(1),default },
             { "Constrict", new Constrict(1),default },

@@ -12,7 +12,8 @@ namespace Structure.Sketching.Tests.Formats.Gif
 
         public override string OutputDirectory => "./TestOutput/Formats/Gif/";
 
-        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+        public static readonly TheoryData<string> InputFileNames = new()
+        {
             {"giphy.gif"},
             {"rings.gif"}
         };

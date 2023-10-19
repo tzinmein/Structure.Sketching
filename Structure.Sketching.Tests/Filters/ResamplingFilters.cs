@@ -13,7 +13,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
+        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new()
         {
             { "Scale", new Scale(2000,2000,ResamplingFiltersAvailable.Hermite),default },
             { "Translate", new Translate(50,50),default },

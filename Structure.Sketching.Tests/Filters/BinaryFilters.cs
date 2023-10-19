@@ -12,7 +12,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Sketching.Numerics.Rectangle> Filters = new TheoryData<string, IFilter, Sketching.Numerics.Rectangle>
+        public static readonly TheoryData<string, IFilter, Sketching.Numerics.Rectangle> Filters = new()
         {
             { "AdaptiveThreshold", new AdaptiveThreshold(10,Color.White,Color.Black,.5f),default },
             { "Threshold", new Threshold(Color.White,Color.Black,.5f),default },

@@ -12,7 +12,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp
 
         public override string OutputDirectory => "./TestOutput/Formats/Bmp/Encoder/";
 
-        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+        public static readonly TheoryData<string> InputFileNames = new()
+        {
             {"Car.bmp"},
             {"Test24.bmp"},
             {"EncodingTest.bmp"},

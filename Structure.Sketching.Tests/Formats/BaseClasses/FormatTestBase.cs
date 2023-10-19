@@ -52,7 +52,7 @@ namespace Structure.Sketching.Tests.Formats.BaseClasses
         protected byte[] ReadBinary(FileStream stream)
         {
             byte[] Buffer = new byte[1024];
-            using (MemoryStream Temp = new MemoryStream())
+            using (MemoryStream Temp = new())
             {
                 while (true)
                 {

@@ -33,7 +33,7 @@ namespace Structure.Sketching.Benchmarks.Filters
         [Benchmark(Baseline = true, Description = "System.Drawing Crop")]
         public void CropSystemDrawing()
         {
-            using (Bitmap source = new Bitmap(Width, Height))
+            using (Bitmap source = new(Width, Height))
             {
                 using (var destination = source.Clone(new Rectangle(0, 0, Count, Count), source.PixelFormat))
                 {

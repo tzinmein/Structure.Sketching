@@ -13,7 +13,8 @@ namespace Structure.Sketching.Tests.Formats.Png
 
         public override string OutputDirectory => "./TestOutput/Formats/Png/Decoder/";
 
-        public static readonly TheoryData<string> InputFileNames = new TheoryData<string> {
+        public static readonly TheoryData<string> InputFileNames = new()
+        {
             {"splash.png"},
             {"48bit.png"},
             {"blur.png"},

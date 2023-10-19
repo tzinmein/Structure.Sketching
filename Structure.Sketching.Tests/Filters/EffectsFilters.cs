@@ -14,7 +14,7 @@ namespace Structure.Sketching.Tests.Filters
 
         public override string OutputDirectory => "./TestOutput/Filters/";
 
-        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new TheoryData<string, IFilter, Rectangle>
+        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new()
         {
             { "Pointillism", new Pointillism(5),default },
             { "Posterize", new Posterize(10),default },

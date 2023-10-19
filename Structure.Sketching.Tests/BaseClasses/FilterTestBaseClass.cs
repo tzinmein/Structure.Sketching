@@ -7,7 +7,7 @@ namespace Structure.Sketching.Tests.BaseClasses
     //[Collection("FilterCollection")]
     public abstract class FilterTestBaseClass : TestBaseClass
     {
-        public static readonly List<string> Files = new List<string>
+        public static readonly List<string> Files = new()
         {
             "./TestImages/BitmapFilter.bmp"
             //"./TestImages/Formats/Bmp/Car.bmp",
