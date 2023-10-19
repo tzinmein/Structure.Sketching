@@ -41,7 +41,7 @@ namespace Structure.Sketching.ExtensionMethods
         /// <returns>The expanded array of bytes</returns>
         public static byte[] ExpandArray(this byte[] bytes, int bits)
         {
-            bytes = bytes ?? new byte[0];
+            bytes ??= new byte[0];
             bits = bits.Clamp(0, int.MaxValue);
             byte[] Result;
             if (bits >= 8)
