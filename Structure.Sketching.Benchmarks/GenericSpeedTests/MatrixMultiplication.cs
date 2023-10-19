@@ -7,7 +7,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests
 {
     public class MatrixMultiplication
     {
-        private Matrix5x5 value1 = new(
+        private readonly Matrix5x5 _value = new(
             1, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
@@ -18,31 +18,35 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests
         [Benchmark(Description = "Byte matrix multiplication")]
         public void ByteMatrixMultiplication()
         {
-            float r = 128;
-            float g = 127;
-            float b = 126;
-            float a = 255;
-            var finalvalue = new[]
+            const float r = 128;
+            const float g = 127;
+            const float b = 126;
+            const float a = 255;
+#pragma warning disable IDE0059
+            var finalValue = new[]
             {
-                ((byte)(r* value1.M11 + g* value1.M21 + b* value1.M31 + a* value1.M41 + (value1.M51*255f)).Clamp(0,255)),
-                ((byte)(r* value1.M12 + g* value1.M22 + b* value1.M32 + a* value1.M42 + (value1.M52*255f)).Clamp(0,255)),
-                ((byte)(r* value1.M13 + g* value1.M23 + b* value1.M33 + a* value1.M43 + (value1.M53*255f)).Clamp(0,255)),
-                ((byte)(r* value1.M14 + g* value1.M24 + b* value1.M34 + a* value1.M44 + (value1.M54*255f)).Clamp(0,255))
+                (byte)(r* _value.M11 + g* _value.M21 + b* _value.M31 + a* _value.M41 + _value.M51*255f).Clamp(0,255),
+                (byte)(r* _value.M12 + g* _value.M22 + b* _value.M32 + a* _value.M42 + _value.M52*255f).Clamp(0,255),
+                (byte)(r* _value.M13 + g* _value.M23 + b* _value.M33 + a* _value.M43 + _value.M53*255f).Clamp(0,255),
+                (byte)(r* _value.M14 + g* _value.M24 + b* _value.M34 + a* _value.M44 + _value.M54*255f).Clamp(0,255)
             };
+#pragma warning restore IDE0059
         }
 
         [Benchmark(Description = "Float matrix multiplication")]
         public void FloatMatrixMultiplication()
         {
-            float r = 128 / 255f;
-            float g = 127 / 255f;
-            float b = 126 / 255f;
-            float a = 255 / 255f;
-            var finalvalue = new Vector4(r * value1.M11 + g * value1.M21 + b * value1.M31 + a * value1.M41 + value1.M51,
-                                r * value1.M12 + g * value1.M22 + b * value1.M32 + a * value1.M42 + value1.M52,
-                                r * value1.M13 + g * value1.M23 + b * value1.M33 + a * value1.M43 + value1.M53,
-                                r * value1.M14 + g * value1.M24 + b * value1.M34 + a * value1.M44 + value1.M54);
-            finalvalue = Vector4.Clamp(finalvalue, Vector4.Zero, Vector4.One) * 255f;
+            const float r = 128 / 255f;
+            const float g = 127 / 255f;
+            const float b = 126 / 255f;
+            const float a = 255 / 255f;
+            var finalValue = new Vector4(r * _value.M11 + g * _value.M21 + b * _value.M31 + a * _value.M41 + _value.M51,
+                                r * _value.M12 + g * _value.M22 + b * _value.M32 + a * _value.M42 + _value.M52,
+                                r * _value.M13 + g * _value.M23 + b * _value.M33 + a * _value.M43 + _value.M53,
+                                r * _value.M14 + g * _value.M24 + b * _value.M34 + a * _value.M44 + _value.M54);
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+            finalValue = Vector4.Clamp(finalValue, Vector4.Zero, Vector4.One) * 255f;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
     }
 }

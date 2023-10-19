@@ -55,9 +55,9 @@ namespace Structure.Sketching.Benchmarks.ArraySpeedTests
             var TestArray = new uint[10000];
             for (int x = 0; x < TestArray.Length; ++x)
             {
-                TestArray[x] = (uint)(((byte)((TestArray[x] & 0x00FF0000) * 3)) << 16
+                TestArray[x] = (uint)((byte)((TestArray[x] & 0x00FF0000) * 3) << 16
                             | ((byte)((TestArray[x] & 0x0000FF00) * 3) << 8)
-                            | ((byte)((TestArray[x] & 0x000000FF) * 3))
+                            | (byte)((TestArray[x] & 0x000000FF) * 3)
                             | ((byte)((TestArray[x] & 0xFF000000) * 3) << 24));
             }
         }

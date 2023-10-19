@@ -11,7 +11,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         [Fact]
         public void CreateByteArray()
         {
-            var data = (new[]
+            var data = new[]
             {
                 BitConverter.GetBytes((int)200),
                 BitConverter.GetBytes((int)44),
@@ -24,7 +24,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
                 BitConverter.GetBytes((int)0),
                 BitConverter.GetBytes((int)0),
                 BitConverter.GetBytes((int)0)
-            }).SelectMany(x => x).ToArray();
+            }.SelectMany(x => x).ToArray();
             var TestFileHeader = new Sketching.Formats.Bmp.Format.Header(data);
             Assert.Equal(24, TestFileHeader.BPP);
             Assert.Equal(0, TestFileHeader.ColorsImportant);
@@ -57,7 +57,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         [Fact]
         public void Read()
         {
-            var data = (new[]
+            var data = new[]
             {
                 BitConverter.GetBytes((int)200),
                 BitConverter.GetBytes((int)44),
@@ -70,7 +70,7 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
                 BitConverter.GetBytes((int)0),
                 BitConverter.GetBytes((int)0),
                 BitConverter.GetBytes((int)0)
-            }).SelectMany(x => x).ToArray();
+            }.SelectMany(x => x).ToArray();
             using var Stream = new MemoryStream(data);
             var TestFileHeader = Sketching.Formats.Bmp.Format.Header.Read(Stream);
             Assert.Equal(24, TestFileHeader.BPP);

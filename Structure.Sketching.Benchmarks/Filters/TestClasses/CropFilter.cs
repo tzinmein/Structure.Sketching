@@ -27,11 +27,11 @@ namespace Structure.Sketching.Benchmarks.Filters.TestClasses
                 {
                     fixed (Color* TargetPointer = Result)
                     {
-                        Color* TargetPointer2 = TargetPointer + ((y - targetLocation.Bottom) * targetLocation.Width);
-                        Color* SourcePointer2 = SourcePointer + ((y * image.Width) + targetLocation.Left);
+                        Color* TargetPointer2 = TargetPointer + (y - targetLocation.Bottom) * targetLocation.Width;
+                        Color* SourcePointer2 = SourcePointer + (y * image.Width + targetLocation.Left);
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
-                            *(TargetPointer2++) = *(SourcePointer2++);
+                            *TargetPointer2++ = *SourcePointer2++;
                         }
                     }
                 }
