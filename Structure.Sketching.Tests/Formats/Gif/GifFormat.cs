@@ -26,10 +26,8 @@ namespace Structure.Sketching.Tests.Formats.Gif
             {
                 var ImageFormat = new Sketching.Formats.Gif.GifFormat();
                 var TempImage = ImageFormat.DecodeAnimation(TempFile);
-                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
-                {
-                    Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
-                }
+                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
+                Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
             }
             Assert.True(CheckFileCorrect(fileName));
         }

@@ -72,15 +72,13 @@ namespace Structure.Sketching.Tests.Formats.Png
         [Fact]
         public void Decode()
         {
-            using (var TempFile = File.OpenRead("./TestImages/Formats/Png/splash.png"))
-            {
-                var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
-                var TempImage = TempDecoder.Decode(TempFile);
-                Assert.Equal(241500, TempImage.Pixels.Length);
-                Assert.Equal(500, TempImage.Width);
-                Assert.Equal(483, TempImage.Height);
-                Assert.Equal(500d / 483d, TempImage.PixelRatio);
-            }
+            using var TempFile = File.OpenRead("./TestImages/Formats/Png/splash.png");
+            var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
+            var TempImage = TempDecoder.Decode(TempFile);
+            Assert.Equal(241500, TempImage.Pixels.Length);
+            Assert.Equal(500, TempImage.Width);
+            Assert.Equal(483, TempImage.Height);
+            Assert.Equal(500d / 483d, TempImage.PixelRatio);
         }
     }
 }

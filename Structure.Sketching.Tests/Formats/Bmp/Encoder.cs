@@ -43,10 +43,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp
                 var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
                 var TempImage = TempDecoder.Decode(TempFile);
                 var TempEncoder = new Structure.Sketching.Formats.Bmp.Encoder();
-                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
-                {
-                    TempEncoder.Encode(new BinaryWriter(TempFile2), TempImage);
-                }
+                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
+                TempEncoder.Encode(new BinaryWriter(TempFile2), TempImage);
             }
             Assert.True(CheckFileCorrect(fileName));
         }

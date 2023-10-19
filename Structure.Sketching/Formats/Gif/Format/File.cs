@@ -239,21 +239,19 @@ namespace Structure.Sketching.Formats.Gif.Format
 
         private void WriteToFile(BinaryWriter writer)
         {
-            using (EndianBinaryWriter writer2 = new EndianBinaryWriter(EndianBitConverterBase.LittleEndian, writer.BaseStream))
+            using EndianBinaryWriter writer2 = new EndianBinaryWriter(EndianBitConverterBase.LittleEndian, writer.BaseStream);
+            Header.Write(writer2);
+            ScreenDescriptor.Write(writer2);
+            Frames[0].Write(writer2);
+            if (Frames.Count > 1)
             {
-                Header.Write(writer2);
-                ScreenDescriptor.Write(writer2);
-                Frames[0].Write(writer2);
-                if (Frames.Count > 1)
+                AppExtension.Write(writer2);
+                for (int x = 0; x < Frames.Count; ++x)
                 {
-                    AppExtension.Write(writer2);
-                    for (int x = 0; x < Frames.Count; ++x)
-                    {
-                        Frames[x].Write(writer2);
-                    }
+                    Frames[x].Write(writer2);
                 }
-                writer.Write(SectionTypes.EndIntroducer);
             }
+            writer.Write(SectionTypes.EndIntroducer);
         }
     }
 }

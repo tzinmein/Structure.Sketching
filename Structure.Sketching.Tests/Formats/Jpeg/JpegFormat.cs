@@ -29,10 +29,8 @@ namespace Structure.Sketching.Tests.Formats.Jpeg
             {
                 var ImageFormat = new Sketching.Formats.Jpeg.JpegFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
-                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
-                {
-                    Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
-                }
+                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
+                Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
             }
             Assert.True(CheckFileCorrect(fileName));
         }

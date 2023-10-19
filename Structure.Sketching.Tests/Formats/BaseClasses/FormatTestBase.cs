@@ -17,13 +17,9 @@ namespace Structure.Sketching.Tests.Formats.BaseClasses
 
         protected bool CheckFileCorrect(string fileName)
         {
-            using (FileStream OutputStream = File.OpenRead(OutputDirectory + fileName))
-            {
-                using (FileStream ExpectedStream = File.OpenRead(ExpectedDirectory + fileName))
-                {
-                    return ReadBinary(OutputStream).SequenceEqual(ReadBinary(ExpectedStream));
-                }
-            }
+            using FileStream OutputStream = File.OpenRead(OutputDirectory + fileName);
+            using FileStream ExpectedStream = File.OpenRead(ExpectedDirectory + fileName);
+            return ReadBinary(OutputStream).SequenceEqual(ReadBinary(ExpectedStream));
         }
 
 
@@ -52,15 +48,13 @@ namespace Structure.Sketching.Tests.Formats.BaseClasses
         protected byte[] ReadBinary(FileStream stream)
         {
             byte[] Buffer = new byte[1024];
-            using (MemoryStream Temp = new())
+            using MemoryStream Temp = new();
+            while (true)
             {
-                while (true)
-                {
-                    var Count = stream.Read(Buffer, 0, Buffer.Length);
-                    if (Count <= 0)
-                        return Temp.ToArray();
-                    Temp.Write(Buffer, 0, Count);
-                }
+                var Count = stream.Read(Buffer, 0, Buffer.Length);
+                if (Count <= 0)
+                    return Temp.ToArray();
+                Temp.Write(Buffer, 0, Count);
             }
         }
     }

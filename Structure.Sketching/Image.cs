@@ -80,11 +80,9 @@ namespace Structure.Sketching
         /// <param name="fileName">Name of the file.</param>
         public Image(string fileName)
         {
-            using (var Stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var TempImage = new Manager().Decode(Stream);
-                ReCreate(TempImage.Width, TempImage.Height, TempImage.Pixels);
-            }
+            using var Stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var TempImage = new Manager().Decode(Stream);
+            ReCreate(TempImage.Width, TempImage.Height, TempImage.Pixels);
         }
 
         /// <summary>
@@ -247,15 +245,13 @@ namespace Structure.Sketching
         /// <returns>A <see cref="string"/> that represents this instance as a base64 instance.</returns>
         public string ToString(FileFormats desiredFormat)
         {
-            using (MemoryStream Stream = new MemoryStream())
+            using MemoryStream Stream = new MemoryStream();
+            if (Save(Stream, desiredFormat))
             {
-                if (Save(Stream, desiredFormat))
-                {
-                    var TempArray = Stream.ToArray();
-                    return Convert.ToBase64String(TempArray, 0, TempArray.Length);
-                }
-                return string.Empty;
+                var TempArray = Stream.ToArray();
+                return Convert.ToBase64String(TempArray, 0, TempArray.Length);
             }
+            return string.Empty;
         }
     }
 }

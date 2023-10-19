@@ -65,15 +65,13 @@ namespace Structure.Sketching.Tests.Formats.Bmp
         [Fact]
         public void Decode()
         {
-            using (var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp"))
-            {
-                var ImageFormat = new Structure.Sketching.Formats.Bmp.BmpFormat();
-                var TempImage = ImageFormat.Decode(TempFile);
-                Assert.Equal(1760, TempImage.Pixels.Length);
-                Assert.Equal(44, TempImage.Width);
-                Assert.Equal(40, TempImage.Height);
-                Assert.Equal(44d / 40d, TempImage.PixelRatio);
-            }
+            using var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
+            var ImageFormat = new Structure.Sketching.Formats.Bmp.BmpFormat();
+            var TempImage = ImageFormat.Decode(TempFile);
+            Assert.Equal(1760, TempImage.Pixels.Length);
+            Assert.Equal(44, TempImage.Width);
+            Assert.Equal(40, TempImage.Height);
+            Assert.Equal(44d / 40d, TempImage.PixelRatio);
         }
 
         [Theory]
@@ -84,10 +82,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp
             {
                 var ImageFormat = new Sketching.Formats.Bmp.BmpFormat();
                 var TempImage = ImageFormat.Decode(TempFile);
-                using (var TempFile2 = File.OpenWrite(OutputDirectory + fileName))
-                {
-                    Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
-                }
+                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
+                Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
             }
             Assert.True(CheckFileCorrect(fileName));
         }

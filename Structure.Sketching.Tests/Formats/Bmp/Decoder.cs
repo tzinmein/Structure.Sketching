@@ -56,15 +56,13 @@ namespace Structure.Sketching.Tests.Formats.Bmp
         [Fact]
         public void Decode()
         {
-            using (var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp"))
-            {
-                var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
-                var TempImage = TempDecoder.Decode(TempFile);
-                Assert.Equal(1760, TempImage.Pixels.Length);
-                Assert.Equal(44, TempImage.Width);
-                Assert.Equal(40, TempImage.Height);
-                Assert.Equal(1.1d, TempImage.PixelRatio);
-            }
+            using var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
+            var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
+            var TempImage = TempDecoder.Decode(TempFile);
+            Assert.Equal(1760, TempImage.Pixels.Length);
+            Assert.Equal(44, TempImage.Width);
+            Assert.Equal(40, TempImage.Height);
+            Assert.Equal(1.1d, TempImage.PixelRatio);
         }
     }
 }

@@ -111,10 +111,8 @@ namespace Structure.Sketching.Formats
                 if (Format.CanEncode(fileName))
                 {
                     new FileInfo(fileName).Directory.Create();
-                    using (var ImageFile = File.OpenWrite(fileName))
-                    {
-                        return Encode(ImageFile, image, Format.Format);
-                    }
+                    using var ImageFile = File.OpenWrite(fileName);
+                    return Encode(ImageFile, image, Format.Format);
                 }
             }
             return false;
@@ -135,10 +133,8 @@ namespace Structure.Sketching.Formats
                 if (Format.CanEncode(fileName))
                 {
                     new FileInfo(fileName).Directory.Create();
-                    using (var ImageFile = File.OpenWrite(fileName))
-                    {
-                        return Encode(ImageFile, animation, Format.Format);
-                    }
+                    using var ImageFile = File.OpenWrite(fileName);
+                    return Encode(ImageFile, animation, Format.Format);
                 }
             }
             return Encode(fileName, animation[0]);
@@ -155,10 +151,8 @@ namespace Structure.Sketching.Formats
         /// </returns>
         public bool Encode(Stream stream, Animation animation, FileFormats format)
         {
-            using (var TempWriter = new BinaryWriter(stream))
-            {
-                return AnimationFormats.First(x => x.Format == format).Encode(TempWriter, animation);
-            }
+            using var TempWriter = new BinaryWriter(stream);
+            return AnimationFormats.First(x => x.Format == format).Encode(TempWriter, animation);
         }
 
         /// <summary>
@@ -170,10 +164,8 @@ namespace Structure.Sketching.Formats
         /// <returns>True if it is encoded successfully, false otherwise</returns>
         public bool Encode(Stream stream, Image image, FileFormats format)
         {
-            using (var TempWriter = new BinaryWriter(stream))
-            {
-                return Formats.First(x => x.Format == format).Encode(TempWriter, image);
-            }
+            using var TempWriter = new BinaryWriter(stream);
+            return Formats.First(x => x.Format == format).Encode(TempWriter, image);
         }
     }
 }

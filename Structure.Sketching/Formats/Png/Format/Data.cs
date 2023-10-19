@@ -141,10 +141,8 @@ namespace Structure.Sketching.Formats.Png.Format
             if (ColorTypeInfo != null)
             {
                 var ColorReader = ColorTypeInfo.CreateColorReader(palette, alphaPalette);
-                using (MemoryStream TempStream = new MemoryStream(ImageData))
-                {
-                    ReadScanlines(TempStream, Pixels, ColorReader, ColorTypeInfo, header);
-                }
+                using MemoryStream TempStream = new MemoryStream(ImageData);
+                ReadScanlines(TempStream, Pixels, ColorReader, ColorTypeInfo, header);
             }
 
             return new Image(header.Width, header.Height, Pixels);
@@ -231,14 +229,12 @@ namespace Structure.Sketching.Formats.Png.Format
                   }
               });
 
-            using (MemoryStream TempMemoryStream = new MemoryStream())
+            using MemoryStream TempMemoryStream = new MemoryStream();
+            using (ZlibDeflateStream TempDeflateStream = new ZlibDeflateStream(TempMemoryStream, 6))
             {
-                using (ZlibDeflateStream TempDeflateStream = new ZlibDeflateStream(TempMemoryStream, 6))
-                {
-                    TempDeflateStream.Write(data, 0, data.Length);
-                }
-                return TempMemoryStream.ToArray();
+                TempDeflateStream.Write(data, 0, data.Length);
             }
+            return TempMemoryStream.ToArray();
         }
 
         /// <summary>
@@ -260,64 +256,62 @@ namespace Structure.Sketching.Formats.Png.Format
             byte[] CurrentScanline = new byte[ScanlineLength];
             int Filter = 0, Column = -1, Row = 0;
 
-            using (InflateStream CompressedStream = new InflateStream(dataStream))
+            using InflateStream CompressedStream = new InflateStream(dataStream);
+            int ReadByte;
+            while ((ReadByte = CompressedStream.ReadByte()) >= 0)
             {
-                int ReadByte;
-                while ((ReadByte = CompressedStream.ReadByte()) >= 0)
+                if (Column == -1)
                 {
-                    if (Column == -1)
+                    Filter = ReadByte;
+                    ++Column;
+                }
+                else
+                {
+                    CurrentScanline[Column] = (byte)ReadByte;
+                    byte a;
+                    byte b;
+                    byte c;
+                    if (Column >= ScanlineStep)
                     {
-                        Filter = ReadByte;
-                        ++Column;
+                        a = CurrentScanline[Column - ScanlineStep];
+                        c = LastScanline[Column - ScanlineStep];
                     }
                     else
                     {
-                        CurrentScanline[Column] = (byte)ReadByte;
-                        byte a;
-                        byte b;
-                        byte c;
-                        if (Column >= ScanlineStep)
-                        {
-                            a = CurrentScanline[Column - ScanlineStep];
-                            c = LastScanline[Column - ScanlineStep];
-                        }
-                        else
-                        {
-                            a = 0;
-                            c = 0;
-                        }
+                        a = 0;
+                        c = 0;
+                    }
 
-                        b = LastScanline[Column];
-                        switch (Filter)
-                        {
-                            case 1:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + a);
-                                break;
+                    b = LastScanline[Column];
+                    switch (Filter)
+                    {
+                        case 1:
+                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + a);
+                            break;
 
-                            case 2:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + b);
-                                break;
+                        case 2:
+                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + b);
+                            break;
 
-                            case 3:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + (byte)((a + b) / 2));
-                                break;
+                        case 3:
+                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + (byte)((a + b) / 2));
+                            break;
 
-                            case 4:
-                                CurrentScanline[Column] = (byte)(CurrentScanline[Column] + PaethPredicator(a, b, c));
-                                break;
-                        }
+                        case 4:
+                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + PaethPredicator(a, b, c));
+                            break;
+                    }
 
-                        ++Column;
+                    ++Column;
 
-                        if (Column == ScanlineLength)
-                        {
-                            colorReader.ReadScanline(CurrentScanline, pixels, header, Row);
-                            ++Row;
-                            Column = -1;
-                            var Holder = CurrentScanline;
-                            CurrentScanline = LastScanline;
-                            LastScanline = Holder;
-                        }
+                    if (Column == ScanlineLength)
+                    {
+                        colorReader.ReadScanline(CurrentScanline, pixels, header, Row);
+                        ++Row;
+                        Column = -1;
+                        var Holder = CurrentScanline;
+                        CurrentScanline = LastScanline;
+                        LastScanline = Holder;
                     }
                 }
             }

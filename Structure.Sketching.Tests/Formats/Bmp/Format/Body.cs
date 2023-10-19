@@ -27,11 +27,9 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         public void Read()
         {
             byte[] data = new byte[5280];
-            using (var Stream = new MemoryStream(data))
-            {
-                var TestBody = Sketching.Formats.Bmp.Format.Body.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 5280, 0, 0, 0, 0, Compression.RGB), null, Stream);
-                Assert.Equal(7040, TestBody.Data.Length);
-            }
+            using var Stream = new MemoryStream(data);
+            var TestBody = Sketching.Formats.Bmp.Format.Body.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 5280, 0, 0, 0, 0, Compression.RGB), null, Stream);
+            Assert.Equal(7040, TestBody.Data.Length);
         }
 
         [Fact]
@@ -40,11 +38,9 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
             var data = new byte[7040];
             var image = new Image(44, 40, data);
             var TestBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1280, 0, 0, 0, 0, Compression.RGB));
-            using (var BWriter = new BinaryWriter(new MemoryStream()))
-            {
-                TestBody.Write(BWriter);
-                Assert.Equal(5280, BWriter.BaseStream.Length);
-            }
+            using var BWriter = new BinaryWriter(new MemoryStream());
+            TestBody.Write(BWriter);
+            Assert.Equal(5280, BWriter.BaseStream.Length);
         }
     }
 }
