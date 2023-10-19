@@ -71,13 +71,13 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers
 
         private int globalInitialBits;
 
-        private int hsize = HashSize;
+        private readonly int hsize = HashSize;
 
-        private int maxbits = Bits;
+        private readonly int maxbits = Bits;
 
         private int maxcode;
 
-        private int maxmaxcode = 1 << Bits;
+        private readonly int maxmaxcode = 1 << Bits;
 
         /// <summary>
         /// Encodes the specified stream.

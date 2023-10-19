@@ -36,7 +36,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         public unsafe void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
         {
             scanline = scanline.ExpandArray(header.BitDepth);
-            int BytesPerPixel = header.BitDepth * 4 / 8;
+            int BytesPerPixel = (header.BitDepth * 4) / 8;
             int BytesPerChannel = header.BitDepth / 8;
 
             fixed (Color* PixelPointer = &pixels[row * header.Width])

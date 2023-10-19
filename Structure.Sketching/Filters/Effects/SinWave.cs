@@ -81,9 +81,9 @@ namespace Structure.Sketching.Filters.Effects
                         double Value1 = 0;
                         double Value2 = 0;
                         if (Direction == Direction.RightToLeft || Direction == Direction.LeftToRight)
-                            Value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
+                            Value1 = System.Math.Sin(((x * Frequency) * System.Math.PI) / 180.0d) * Amplitude;
                         if (Direction == Direction.BottomToTop || Direction == Direction.TopToBottom)
-                            Value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
+                            Value2 = System.Math.Sin(((y * Frequency) * System.Math.PI) / 180.0d) * Amplitude;
                         Value1 = y - (int)Value1;
                         Value2 = x - (int)Value2;
                         while (Value1 < 0)

@@ -84,7 +84,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// <summary>
         /// The unscaled quant values
         /// </summary>
-        private byte[,] unscaledQuant =
+        private readonly byte[,] unscaledQuant =
         {
             // Luminance.
             {

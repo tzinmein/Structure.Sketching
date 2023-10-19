@@ -27,7 +27,7 @@ namespace Structure.Sketching.Helpers
         /// <summary>
         /// Gets the byte which represents the data items held in this instance.
         /// </summary>
-        public byte Byte
+        public readonly byte Byte
         {
             get
             {
@@ -100,13 +100,13 @@ namespace Structure.Sketching.Helpers
         {
             var field = obj as PackedField?;
 
-            return Byte == field?.Byte;
+            return this.Byte == field?.Byte;
         }
 
         /// <inheritdoc/>
         public bool Equals(PackedField other)
         {
-            return Byte.Equals(other.Byte);
+            return this.Byte.Equals(other.Byte);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Structure.Sketching.Helpers
         /// <returns>
         /// The value of the specified bit within the byte.
         /// </returns>
-        public bool GetBit(int index)
+        public readonly bool GetBit(int index)
         {
             if (index < 0 || index > 7)
             {
@@ -134,7 +134,7 @@ namespace Structure.Sketching.Helpers
         /// <returns>
         /// The value of the specified bits within the byte.
         /// </returns>
-        public int GetBits(int startIndex, int length)
+        public readonly int GetBits(int startIndex, int length)
         {
             if (startIndex < 0 || startIndex > 7)
             {
@@ -164,7 +164,7 @@ namespace Structure.Sketching.Helpers
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return Byte.GetHashCode();
+            return this.Byte.GetHashCode();
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Structure.Sketching.Helpers
         /// <param name="valueToSet">
         /// The value to set the bit to.
         /// </param>
-        public void SetBit(int index, bool valueToSet)
+        public readonly void SetBit(int index, bool valueToSet)
         {
             if (index < 0 || index > 7)
             {
@@ -196,7 +196,7 @@ namespace Structure.Sketching.Helpers
         /// <param name="startIndex">The zero-based index within the packed fields of the first bit to  set.</param>
         /// <param name="length">The number of bits to set.</param>
         /// <param name="valueToSet">The value to set the bits to.</param>
-        public void SetBits(int startIndex, int length, int valueToSet)
+        public readonly void SetBits(int startIndex, int length, int valueToSet)
         {
             if (startIndex < 0 || startIndex > 7)
             {
@@ -225,7 +225,7 @@ namespace Structure.Sketching.Helpers
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"PackedField [ Byte={Byte} ]";
+            return $"PackedField [ Byte={this.Byte} ]";
         }
     }
 }

@@ -77,7 +77,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers.ZLib
         public long Update(int value)
         {
             Value ^= Seed;
-            Value = CRCTable[(Value ^ value) & 0xFF] ^ (Value >> 8) ^ Seed;
+            Value = (CRCTable[(Value ^ value) & 0xFF] ^ (Value >> 8)) ^ Seed;
             return Value;
         }
 

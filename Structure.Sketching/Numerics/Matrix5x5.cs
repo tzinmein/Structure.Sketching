@@ -134,7 +134,7 @@ namespace Structure.Sketching.Numerics
         /// <summary>
         /// Returns whether the matrix is the identity matrix.
         /// </summary>
-        public bool IsIdentity
+        public readonly bool IsIdentity
         {
             get
             {
@@ -152,7 +152,7 @@ namespace Structure.Sketching.Numerics
         /// </summary>
         public Vector4 Translation
         {
-            get
+            readonly get
             {
                 return new Vector4(M51, M52, M53, M54);
             }
@@ -564,7 +564,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="other">The matrix to compare this instance to.</param>
         /// <returns>True if the matrices are equal; False otherwise.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Matrix5x5 other)
+        public readonly bool Equals(Matrix5x5 other)
         {
             return M11 == other.M11 && M22 == other.M22 && M33 == other.M33 && M44 == other.M44 && M55 == other.M55 &&
                    M12 == other.M12 && M13 == other.M13 && M14 == other.M14 && M15 == other.M15 &&
@@ -582,9 +582,9 @@ namespace Structure.Sketching.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            if (obj is Matrix5x5)
+            if (obj is Matrix5x5 x5)
             {
-                return Equals((Matrix5x5)obj);
+                return Equals(x5);
             }
 
             return false;
@@ -594,7 +594,7 @@ namespace Structure.Sketching.Numerics
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>The hash code.</returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return M11.GetHashCode() + M12.GetHashCode() + M13.GetHashCode() + M14.GetHashCode() + M15.GetHashCode() +
                    M21.GetHashCode() + M22.GetHashCode() + M23.GetHashCode() + M24.GetHashCode() + M25.GetHashCode() +
@@ -607,7 +607,7 @@ namespace Structure.Sketching.Numerics
         /// Returns a String representing this matrix instance.
         /// </summary>
         /// <returns>The string representation.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             CultureInfo ci = CultureInfo.CurrentCulture;
 

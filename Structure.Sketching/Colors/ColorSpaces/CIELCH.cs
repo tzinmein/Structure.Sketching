@@ -91,8 +91,8 @@ namespace Structure.Sketching.Colors.ColorSpaces
         {
             var h = Math.Atan2(color.B, color.A);
             h = h > 0 ?
-                h / Math.PI * 180.0 :
-                360 - Math.Abs(h) / Math.PI * 180.0;
+                (h / Math.PI) * 180.0 :
+                360 - (Math.Abs(h) / Math.PI) * 180.0;
             if (h < 0)
             {
                 h += 360.0;
@@ -149,7 +149,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is CIELCH && Equals((CIELCH)obj);
+            return obj is CIELCH cielch && Equals(cielch);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(CIELCH other)
+        public readonly bool Equals(CIELCH other)
         {
             return Math.Abs(other.L - L) < EPSILON
                 && Math.Abs(other.C - C) < EPSILON
@@ -185,7 +185,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({L:#0.##},{C:#0.##},{H:#0.##})";
+        public override readonly string ToString() => $"({L:#0.##},{C:#0.##},{H:#0.##})";
 
         /// <summary>
         /// Computes the hash.
@@ -193,7 +193,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

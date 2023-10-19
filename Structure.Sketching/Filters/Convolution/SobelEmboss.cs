@@ -101,6 +101,6 @@ namespace Structure.Sketching.Filters.Convolution
         /// <value>The width.</value>
         public override int Width => 3;
 
-        private float[] _Matrix;
+        private readonly float[] _Matrix;
     }
 }

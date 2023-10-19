@@ -87,7 +87,7 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses
                 if (Right >= sourceSize)
                     Right = sourceSize - 1;
                 Result[x] = new Weights();
-                Result[x].Values = new double[Right - Left + 1];
+                Result[x].Values = new double[(Right - Left) + 1];
                 for (int y = Left, count = 0; y <= Right; ++y, ++count)
                 {
                     Result[x].Values[count] = Scale < 1f ?

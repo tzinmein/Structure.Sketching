@@ -50,11 +50,11 @@ namespace Structure.Sketching.Numerics
                 }
             }
             double PreviousV = V[0];
-            V[0] = V[0] / TotalPixels;
+            V[0] = (V[0] / TotalPixels);
             for (int x = 1; x < 101; ++x)
             {
                 PreviousV += V[x];
-                V[x] = (PreviousV - V[VMin]) / (TotalPixels - V[VMin]);
+                V[x] = ((PreviousV - V[VMin]) / (TotalPixels - V[VMin]));
             }
             Width = 256;
             Height = 1;

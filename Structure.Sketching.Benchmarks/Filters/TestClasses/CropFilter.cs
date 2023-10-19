@@ -31,7 +31,7 @@ namespace Structure.Sketching.Benchmarks.Filters.TestClasses
                         Color* SourcePointer2 = SourcePointer + ((y * image.Width) + targetLocation.Left);
                         for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                         {
-                            *TargetPointer2++ = *SourcePointer2++;
+                            *(TargetPointer2++) = *(SourcePointer2++);
                         }
                     }
                 }

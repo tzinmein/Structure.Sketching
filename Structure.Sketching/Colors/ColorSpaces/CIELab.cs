@@ -129,7 +129,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
             var z3 = z * z * z;
 
             return new XYZ(white.X * (x3 > XYZEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
-                    white.Y * (color.L > (Kappa * XYZEpsilon) ? Math.Pow((color.L + 16.0) / 116.0, 3) : color.L / Kappa),
+                    white.Y * (color.L > (Kappa * XYZEpsilon) ? Math.Pow(((color.L + 16.0) / 116.0), 3) : color.L / Kappa),
                     white.Z * (z3 > XYZEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787));
         }
 
@@ -167,7 +167,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is CIELab && Equals((CIELab)obj);
+            return obj is CIELab lab && Equals(lab);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="other">The other CIELab color.</param>
         /// <returns>True if they are, false otherwise</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(CIELab other)
+        public readonly bool Equals(CIELab other)
         {
             return Math.Abs(other.L - L) < EPSILON
                 && Math.Abs(other.A - A) < EPSILON
@@ -201,7 +201,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({L:#0.##},{A:#0.##},{B:#0.##})";
+        public override readonly string ToString() => $"({L:#0.##},{A:#0.##},{B:#0.##})";
 
         /// <summary>
         /// Pivots to xyz.
@@ -219,7 +219,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

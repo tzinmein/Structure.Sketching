@@ -49,7 +49,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>The alpha.</value>
         public byte Alpha
         {
-            get { return a; }
+            readonly get { return a; }
             set { a = value; }
         }
 
@@ -59,7 +59,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>The blue.</value>
         public byte Blue
         {
-            get { return b; }
+            readonly get { return b; }
             set { b = value; }
         }
 
@@ -69,7 +69,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>The green.</value>
         public byte Green
         {
-            get { return g; }
+            readonly get { return g; }
             set { g = value; }
         }
 
@@ -79,7 +79,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <value>The red.</value>
         public byte Red
         {
-            get { return r; }
+            readonly get { return r; }
             set { r = value; }
         }
 
@@ -167,7 +167,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is Bgra && Equals((Bgra)obj);
+            return obj is Bgra bgra && Equals(bgra);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="other">The other Bgra color.</param>
         /// <returns>True if they are, false otherwise</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Bgra other)
+        public readonly bool Equals(Bgra other)
         {
             return other.b == b
                 && other.g == g
@@ -203,7 +203,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({b:#0.##},{g:#0.##},{r:#0.##},{a:#0.##})";
+        public override readonly string ToString() => $"({b:#0.##},{g:#0.##},{r:#0.##},{a:#0.##})";
 
         /// <summary>
         /// Computes the hash.
@@ -211,7 +211,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, byte component)
+        private readonly int ComputeHash(int hash, byte component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

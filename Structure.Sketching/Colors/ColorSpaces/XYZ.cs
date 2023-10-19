@@ -137,7 +137,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is XYZ && Equals((XYZ)obj);
+            return obj is XYZ xyz && Equals(xyz);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(XYZ other)
+        public readonly bool Equals(XYZ other)
         {
             return Math.Abs(other.X - X) < EPSILON
                 && Math.Abs(other.Y - Y) < EPSILON
@@ -173,7 +173,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({X:#0.##},{Y:#0.##},{Z:#0.##})";
+        public override readonly string ToString() => $"({X:#0.##},{Y:#0.##},{Z:#0.##})";
 
         /// <summary>
         /// Pivots the RGB.
@@ -201,7 +201,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

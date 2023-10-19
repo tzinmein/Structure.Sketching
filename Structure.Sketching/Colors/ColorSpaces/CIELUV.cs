@@ -122,15 +122,15 @@ namespace Structure.Sketching.Colors.ColorSpaces
         {
             var White = XYZ.WhiteReference;
             var C = -1.0 / 3.0;
-            var UPrime = 4.0 * White.X / GetDenominator(White);
-            var VPrime = 9.0 * White.Y / GetDenominator(White);
-            var A = 1.0 / 3.0 * (52.0 * color.L / (color.U + 13 * color.L * UPrime) - 1.0);
+            var UPrime = (4.0 * White.X) / GetDenominator(White);
+            var VPrime = (9.0 * White.Y) / GetDenominator(White);
+            var A = (1.0 / 3.0) * ((52.0 * color.L) / (color.U + 13 * color.L * UPrime) - 1.0);
             var ImteL_16_116 = (color.L + 16.0) / 116.0;
             var Y = color.L > Kappa * XYZEpsilon
                         ? ImteL_16_116 * ImteL_16_116 * ImteL_16_116
                         : color.L / Kappa;
             var B = -5.0 * Y;
-            var D = Y * (39.0 * color.L / (color.V + 13.0 * color.L * VPrime) - 5.0);
+            var D = Y * ((39.0 * color.L) / (color.V + 13.0 * color.L * VPrime) - 5.0);
             var X = (D - B) / (A - C);
             var Z = X * A + B;
             return new XYZ(100 * X, 100 * Y, 100 * Z);
@@ -170,7 +170,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is CIELUV && Equals((CIELUV)obj);
+            return obj is CIELUV cieluv && Equals(cieluv);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(CIELUV other)
+        public readonly bool Equals(CIELUV other)
         {
             return Math.Abs(other.L - L) < EPSILON
                 && Math.Abs(other.U - U) < EPSILON
@@ -206,7 +206,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({L:#0.##},{U:#0.##},{V:#0.##})";
+        public override readonly string ToString() => $"({L:#0.##},{U:#0.##},{V:#0.##})";
 
         /// <summary>
         /// Gets the denominator.
@@ -224,7 +224,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

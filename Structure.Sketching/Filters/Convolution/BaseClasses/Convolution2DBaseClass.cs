@@ -109,16 +109,16 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
                                     {
                                         if (*XMatrixValue != 0 || *YMatrixValue != 0)
                                         {
-                                            Start = ((YCurrent + y) * image.Width) + x + XCurrent;
+                                            Start = ((YCurrent + y) * image.Width) + (x + XCurrent);
                                             var TempPixel = tempPixels[Start];
-                                            XValue += new Vector4(*XMatrixValue * TempPixel.Red,
-                                                                            *XMatrixValue * TempPixel.Green,
-                                                                            *XMatrixValue * TempPixel.Blue,
-                                                                            *XMatrixValue * TempPixel.Alpha);
-                                            YValue += new Vector4(*YMatrixValue * TempPixel.Red,
-                                                                            *YMatrixValue * TempPixel.Green,
-                                                                            *YMatrixValue * TempPixel.Blue,
-                                                                            *YMatrixValue * TempPixel.Alpha);
+                                            XValue += new Vector4((*XMatrixValue * TempPixel.Red),
+                                                                            (*XMatrixValue * TempPixel.Green),
+                                                                            (*XMatrixValue * TempPixel.Blue),
+                                                                            (*XMatrixValue * TempPixel.Alpha));
+                                            YValue += new Vector4((*YMatrixValue * TempPixel.Red),
+                                                                            (*YMatrixValue * TempPixel.Green),
+                                                                            (*YMatrixValue * TempPixel.Blue),
+                                                                            (*YMatrixValue * TempPixel.Alpha));
                                             WeightX += *XMatrixValue;
                                             WeightY += *YMatrixValue;
                                         }

@@ -175,7 +175,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <returns>The scanline step</returns>
         private static int CalculateScanlineStep(ColorTypeInformation colorTypeInformation, Header header)
         {
-            return header.BitDepth >= 8 ? colorTypeInformation.ScanlineFactor * header.BitDepth / 8 : 1;
+            return header.BitDepth >= 8 ? (colorTypeInformation.ScanlineFactor * header.BitDepth) / 8 : 1;
         }
 
         /// <summary>

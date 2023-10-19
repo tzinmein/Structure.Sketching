@@ -129,7 +129,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         private ushort EndOfBlockRun;
         private YcbcrImg img3;
         private uint nBits;
-        private Block[][] ProgressiveCoefficients;
+        private readonly Block[][] ProgressiveCoefficients;
 
         /// <summary>
         /// Converts the scan information into an image
@@ -140,12 +140,12 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         public Image Convert(Image image, IEnumerable<SegmentBase> segments)
         {
             var Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
-            if (img1 != null)
+            if (this.img1 != null)
             {
                 return img1.Convert(Frame.Width, Frame.Height, image, segments);
             }
 
-            if (img3 != null)
+            if (this.img3 != null)
             {
                 return img3.Convert(Frame.Width, Frame.Height, image, segments);
             }
@@ -408,11 +408,9 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                                 b[unzig[zig]] *= qt[zig];
 
                             IDCT.Transform(b);
-
-                            byte[] dst = null;
-                            int offset = 0;
-                            int stride = 0;
-
+                            byte[] dst;
+                            int offset;
+                            int stride;
                             if (StartOfFrameSegment.TypeOfImage == ImageType.GreyScale)
                             {
                                 dst = img1.Pixels;
@@ -550,7 +548,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
                 a = -v;
                 b = v - 1;
             }
-            uint nBits = 0;
+            uint nBits;
             if (a < 0x100)
                 nBits = bitCount[a];
             else

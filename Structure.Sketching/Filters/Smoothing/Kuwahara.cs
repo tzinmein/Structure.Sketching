@@ -123,7 +123,7 @@ namespace Structure.Sketching.Filters.Smoothing
                         uint MinDifference = uint.MaxValue;
                         for (int i = 0; i < 4; ++i)
                         {
-                            uint CurrentDifference = MaxRValue[i] - MinRValue[i] + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i]);
+                            uint CurrentDifference = (MaxRValue[i] - MinRValue[i]) + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i]);
                             if (CurrentDifference < MinDifference && NumPixels[i] > 0)
                             {
                                 j = i;

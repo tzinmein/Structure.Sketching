@@ -101,7 +101,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <returns>The result of the conversion.</returns>
         public static implicit operator XYZ(HunterLAB color)
         {
-            var x = color.A / 17.5 * (color.L / 10.0);
+            var x = (color.A / 17.5) * (color.L / 10.0);
             var itemL_10 = color.L / 10.0;
             var y = itemL_10 * itemL_10;
             var z = color.B / 7.0 * color.L / 10.0;
@@ -146,7 +146,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is HunterLAB && Equals((HunterLAB)obj);
+            return obj is HunterLAB lab && Equals(lab);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(HunterLAB other)
+        public readonly bool Equals(HunterLAB other)
         {
             return Math.Abs(other.L - L) < EPSILON
                 && Math.Abs(other.A - A) < EPSILON
@@ -182,7 +182,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({L:#0.##},{A:#0.##},{B:#0.##})";
+        public override readonly string ToString() => $"({L:#0.##},{A:#0.##},{B:#0.##})";
 
         /// <summary>
         /// Computes the hash.
@@ -190,7 +190,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

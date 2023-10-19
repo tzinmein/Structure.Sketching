@@ -46,7 +46,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <summary>
         /// The epsilon value for double comparison
         /// </summary>
-        private static double EPSILON = 0.01d;
+        private static readonly double EPSILON = 0.01d;
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="HSV"/> to <see cref="Color"/>.
@@ -55,9 +55,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Color(HSV color)
         {
-            double Red = 0;
-            double Green = 0;
-            double Blue = 0;
+            double Red;
+            double Green;
+            double Blue;
             if (Math.Abs(color.Saturation) < EPSILON)
             {
                 Red = color.Value;
@@ -66,7 +66,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
             }
             else
             {
-                double a = color.Hue / 360d * 6;
+                double a = (color.Hue / 360d) * 6;
                 var b = Math.Floor(a);
                 double e = color.Value * (1 - color.Saturation);
                 double f = color.Value * (1 - color.Saturation * (a - b));
@@ -97,10 +97,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
         public static implicit operator HSV(Color color)
         {
             double Hue = 0;
-            double Saturation = 0;
-            double Value = 0;
             double max = Math.Max(color.Red, Math.Max(color.Green, color.Blue));
             double min = Math.Min(color.Red, Math.Min(color.Green, color.Blue));
+            double Value;
             if (Math.Abs(min - max) < EPSILON)
             {
                 Value = min;
@@ -118,7 +117,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
                 Hue = 60d * (d - c / (max - min));
                 Value = max;
             }
-            Saturation = Math.Abs(max) < EPSILON ? 0 : (max - min) / max;
+            double Saturation = Math.Abs(max) < EPSILON ? 0 : (max - min) / max;
             return new HSV(Hue, Saturation, Value / 255d);
         }
 
@@ -156,7 +155,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is HSV && Equals((HSV)obj);
+            return obj is HSV hsv && Equals(hsv);
         }
 
         /// <summary>
@@ -165,7 +164,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="other">The other HSV color.</param>
         /// <returns>True if they are, false otherwise</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(HSV other)
+        public readonly bool Equals(HSV other)
         {
             return Math.Abs(other.Hue - Hue) < EPSILON
                 && Math.Abs(other.Saturation - Saturation) < EPSILON
@@ -190,7 +189,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({Hue:#0.##},{Saturation:#0.##},{Value:#0.##})";
+        public override readonly string ToString() => $"({Hue:#0.##},{Saturation:#0.##},{Value:#0.##})";
 
         /// <summary>
         /// Computes the hash.
@@ -198,7 +197,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

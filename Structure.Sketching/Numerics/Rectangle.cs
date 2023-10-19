@@ -27,14 +27,14 @@ namespace Structure.Sketching.Numerics
         /// <param name="value">The value.</param>
         public Rectangle(Vector4 value)
         {
-            Data = value;
+            this.Data = value;
         }
 
         /// <summary>
         /// Gets the bottom.
         /// </summary>
         /// <value>The bottom.</value>
-        public int Bottom => (int)Data.Y;
+        public readonly int Bottom => (int)Data.Y;
 
         /// <summary>
         /// Gets the center.
@@ -46,31 +46,31 @@ namespace Structure.Sketching.Numerics
         /// Gets the height.
         /// </summary>
         /// <value>The height.</value>
-        public int Height => (int)(Data.W - Data.Y);
+        public readonly int Height => (int)(Data.W - Data.Y);
 
         /// <summary>
         /// Gets the left.
         /// </summary>
         /// <value>The left.</value>
-        public int Left => (int)Data.X;
+        public readonly int Left => (int)Data.X;
 
         /// <summary>
         /// Gets the right.
         /// </summary>
         /// <value>The right.</value>
-        public int Right => (int)Data.Z;
+        public readonly int Right => (int)Data.Z;
 
         /// <summary>
         /// Gets the top.
         /// </summary>
         /// <value>The top.</value>
-        public int Top => (int)Data.W;
+        public readonly int Top => (int)Data.W;
 
         /// <summary>
         /// Gets the width.
         /// </summary>
         /// <value>The width.</value>
-        public int Width => (int)(Data.Z - Data.X);
+        public readonly int Width => (int)(Data.Z - Data.X);
 
         /// <summary>
         /// Gets or sets the data.
@@ -155,7 +155,7 @@ namespace Structure.Sketching.Numerics
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Rectangle other)
+        public readonly bool Equals(Rectangle other)
         {
             return other.Data == Data;
         }
@@ -170,9 +170,9 @@ namespace Structure.Sketching.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            if (!(obj is Rectangle))
+            if (!(obj is Rectangle rectangle))
                 return false;
-            return Equals((Rectangle)obj);
+            return Equals(rectangle);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Structure.Sketching.Numerics
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return Data.GetHashCode();
         }
@@ -191,7 +191,7 @@ namespace Structure.Sketching.Numerics
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return string.Format("{{ {0}, {1}, {2}, {3} }}", Data.X, Data.Y, Data.Z, Data.W);
         }

@@ -85,8 +85,8 @@ namespace Structure.Sketching.Filters.Effects
                         float YDistortion = y + (YNoise.Pixels[(y * image.Width) + x].Red * Power);
                         var X1 = (int)XDistortion.Clamp(0, image.Width - 1);
                         var Y1 = (int)YDistortion.Clamp(0, image.Height - 1);
-                        int ResultOffset = (y * image.Width) + x;
-                        int SourceOffset = (Y1 * image.Width) + X1;
+                        int ResultOffset = ((y * image.Width) + x);
+                        int SourceOffset = ((Y1 * image.Width) + X1);
 
                         Result[ResultOffset] = image.Pixels[SourceOffset];
                     }

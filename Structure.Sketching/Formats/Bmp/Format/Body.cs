@@ -55,7 +55,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <summary>
         /// The pixel formats
         /// </summary>
-        private static Dictionary<int, IPixelFormat> PixelFormats = new Dictionary<int, IPixelFormat>
+        private static readonly Dictionary<int, IPixelFormat> PixelFormats = new Dictionary<int, IPixelFormat>
         {
             [32] = new RGB32bit(),
             [24] = new RGB24bit(),
@@ -85,7 +85,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <param name="writer">The writer.</param>
         public void Write(BinaryWriter writer)
         {
-            int Amount = Data.Length * 3 % 4;
+            int Amount = (Data.Length * 3) % 4;
             if (Amount != 0)
             {
                 Amount = 4 - Amount;

@@ -38,9 +38,9 @@ namespace Structure.Sketching.Filters.Normalization
         {
             targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
             var MaxValue = GetMaxValue(image, targetLocation);
-            MaxValue = new Color((byte)(255 / Math.Log(1f + MaxValue.Red)),
-                (byte)(255 / Math.Log(1f + MaxValue.Green)),
-                (byte)(255 / Math.Log(1f + MaxValue.Blue)),
+            MaxValue = new Color((byte)((255 / Math.Log(1f + MaxValue.Red))),
+                (byte)((255 / Math.Log(1f + MaxValue.Green))),
+                (byte)((255 / Math.Log(1f + MaxValue.Blue))),
                 MaxValue.Alpha);
             Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
             {

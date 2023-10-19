@@ -149,15 +149,14 @@ namespace Structure.Sketching.Formats.Gif.Format
         {
             int imageWidth = screenDescriptor.Width;
             int imageHeight = screenDescriptor.Height;
-            byte[] CurrentFrame = null;
-            byte[] LastFrame = null;
+            byte[] CurrentFrame;
             if (frames.Count > 0 &&
                 graphicsControl != null &&
                 graphicsControl.DisposalMethod == DisposalMethod.RestoreToPrevious)
             {
                 CurrentFrame = new byte[imageWidth * imageHeight * 4];
                 Array.Copy(frames[frames.Count - 1].Data, CurrentFrame, CurrentFrame.Length);
-                LastFrame = new byte[imageWidth * imageHeight * 4];
+                byte[] LastFrame = new byte[imageWidth * imageHeight * 4];
                 Array.Copy(CurrentFrame, LastFrame, LastFrame.Length);
             }
             else

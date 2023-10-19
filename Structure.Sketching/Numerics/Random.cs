@@ -45,7 +45,6 @@ namespace Structure.Sketching.Numerics
         {
             if (min > max)
             {
-                var temp = min;
                 min = max;
                 max = min;
             }
@@ -69,7 +68,6 @@ namespace Structure.Sketching.Numerics
         {
             if (min > max)
             {
-                var temp = min;
                 min = max;
                 max = min;
             }

@@ -139,13 +139,13 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
         /// <returns>Converts to an image</returns>
         public Image Convert(int width, int height, Image image, IEnumerable<SegmentBase> segments)
         {
-            if (IsRGB(segments))
+            if (this.IsRGB(segments))
             {
-                ConvertDirectToRGB(width, height, image, segments);
+                this.ConvertDirectToRGB(width, height, image, segments);
             }
             else
             {
-                ConvertToRGB(width, height, image, segments);
+                this.ConvertToRGB(width, height, image, segments);
             }
             return image;
         }
@@ -188,16 +188,16 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
                     return y * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio420:
-                    return y / 2 * CStride;
+                    return (y / 2) * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio440:
-                    return y / 2 * CStride;
+                    return (y / 2) * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio411:
                     return y * CStride;
 
                 case YCbCrSubsampleRatio.YCbCrSubsampleRatio410:
-                    return y / 2 * CStride;
+                    return (y / 2) * CStride;
             }
             return y * CStride;
         }

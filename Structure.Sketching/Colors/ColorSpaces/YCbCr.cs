@@ -75,9 +75,9 @@ namespace Structure.Sketching.Colors.ColorSpaces
             var cb = color.CbChroma - 128;
             var cr = color.CrChroma - 128;
 
-            return new Color((byte)Math.Round(y + (1.402 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255),
-                                (byte)Math.Round(y - (0.344136 * cb) - (0.714136 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255),
-                                (byte)Math.Round(y + (1.772 * cb), MidpointRounding.AwayFromZero).Clamp(0, 255));
+            return new Color((byte)(Math.Round(y + (1.402 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255)),
+                                (byte)(Math.Round(y - (0.344136 * cb) - (0.714136 * cr), MidpointRounding.AwayFromZero).Clamp(0, 255)),
+                                (byte)(Math.Round(y + (1.772 * cb), MidpointRounding.AwayFromZero)).Clamp(0, 255));
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is YCbCr && Equals((YCbCr)obj);
+            return obj is YCbCr cr && Equals(cr);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(YCbCr other)
+        public readonly bool Equals(YCbCr other)
         {
             return Math.Abs(other.YLuminance - YLuminance) < EPSILON
                 && Math.Abs(other.CbChroma - CbChroma) < EPSILON
@@ -167,7 +167,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({YLuminance:#0.##},{CbChroma:#0.##},{CrChroma:#0.##})";
+        public override readonly string ToString() => $"({YLuminance:#0.##},{CbChroma:#0.##},{CrChroma:#0.##})";
 
         /// <summary>
         /// Computes the hash.
@@ -175,7 +175,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, double component)
+        private readonly int ComputeHash(int hash, double component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

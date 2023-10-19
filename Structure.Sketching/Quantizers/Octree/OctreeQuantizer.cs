@@ -60,10 +60,7 @@ namespace Structure.Sketching.Quantizers.Octree
         {
             colors = maxColors.Clamp(1, 255);
 
-            if (octree == null)
-            {
-                octree = new Octree(GetBitsNeededForColorDepth(maxColors));
-            }
+            octree ??= new Octree(GetBitsNeededForColorDepth(maxColors));
             for (int y = 0; y < image.Height; y++)
             {
                 for (int x = 0; x < image.Width; x++)

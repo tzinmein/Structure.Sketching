@@ -78,7 +78,6 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers
             }
 
             byte[] Buffer = null;
-            int Code = ClearCode;
             while (XYZ < Pixels.Length)
             {
                 if (Top == 0)
@@ -107,7 +106,7 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers
                         Count--;
                         continue;
                     }
-                    Code = Data & CodeMask;
+                    int Code = Data & CodeMask;
                     Data >>= CodeSize;
                     Bits -= CodeSize;
 

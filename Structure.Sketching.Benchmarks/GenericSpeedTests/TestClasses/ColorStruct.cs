@@ -453,7 +453,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ColorStruct other)
+        public readonly bool Equals(ColorStruct other)
         {
             return other.Alpha == Alpha
                 && other.Red == Red
@@ -471,7 +471,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
-            return obj is ColorStruct && Equals((ColorStruct)obj);
+            return obj is ColorStruct @struct && Equals(@struct);
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// <param name="color">The color.</param>
         /// <param name="amount">The amount.</param>
         /// <returns>The resulting value</returns>
-        public ColorStruct Lerp(ColorStruct color, float amount)
+        public readonly ColorStruct Lerp(ColorStruct color, float amount)
         {
             return new ColorStruct(Red.Lerp(color.Red, amount),
                 Green.Lerp(color.Green, amount),
@@ -507,7 +507,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override string ToString() => $"({Red},{Green},{Blue},{Alpha})";
+        public override readonly string ToString() => $"({Red},{Green},{Blue},{Alpha})";
 
         /// <summary>
         /// Computes the hash.
@@ -515,7 +515,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// <param name="hash">The existing hash.</param>
         /// <param name="component">The component.</param>
         /// <returns>The resulting hash</returns>
-        private int ComputeHash(int hash, byte component)
+        private readonly int ComputeHash(int hash, byte component)
         {
             return ((hash << 5) + hash) ^ component.GetHashCode();
         }

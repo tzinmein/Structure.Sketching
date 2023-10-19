@@ -76,7 +76,7 @@ namespace Structure.Sketching.Filters.Effects
                     {
                         if (Distance.Euclidean(*OutputPointer, SourceColor) < Epsilon)
                         {
-                            *OutputPointer = TargetColor;
+                            *(OutputPointer) = TargetColor;
                             ++OutputPointer;
                         }
                     }

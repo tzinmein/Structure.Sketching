@@ -37,7 +37,7 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         {
             scanline = scanline.ExpandArray(header.BitDepth);
 
-            int BytesPerPixel = header.BitDepth * 3 / 8;
+            int BytesPerPixel = (header.BitDepth * 3) / 8;
             int BytesPerChannel = header.BitDepth / 8;
 
             fixed (Color* PixelPointer = &pixels[row * header.Width])
