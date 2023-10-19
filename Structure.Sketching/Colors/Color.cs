@@ -390,7 +390,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color And(Color color)
         {
-            IntData = IntData & color.IntData;
+            IntData &= color.IntData;
             return this;
         }
 
@@ -402,7 +402,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color Or(Color color)
         {
-            IntData = IntData | color.IntData;
+            IntData |= color.IntData;
             return this;
         }
 
@@ -414,7 +414,7 @@ namespace Structure.Sketching.Colors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color XOr(Color color)
         {
-            IntData = IntData ^ color.IntData;
+            IntData ^= color.IntData;
             return this;
         }
 

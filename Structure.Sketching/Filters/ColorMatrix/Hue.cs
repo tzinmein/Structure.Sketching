@@ -32,7 +32,7 @@ namespace Structure.Sketching.Filters.ColorMatrix
         /// <param name="value">The angle value (0 to 360).</param>
         public Hue(float value)
         {
-            value = value * (float)(Math.PI / 180f);
+            value *= (float)(Math.PI / 180f);
             Value = value;
             var cosradians = Math.Cos(value);
             var sinradians = Math.Sin(value);

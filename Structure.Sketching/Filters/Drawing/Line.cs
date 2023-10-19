@@ -136,7 +136,7 @@ namespace Structure.Sketching.Filters.Drawing
                 {
                     Plot(image, (int)Intery, x, (float)RFPart(Intery), targetLocation);
                     Plot(image, (int)Intery + 1, x, (float)FractionalPart(Intery), targetLocation);
-                    Intery = Intery + Gradiant;
+                    Intery += Gradiant;
                 }
             }
             else
@@ -145,7 +145,7 @@ namespace Structure.Sketching.Filters.Drawing
                 {
                     Plot(image, x, (int)Intery, (float)RFPart(Intery), targetLocation);
                     Plot(image, x, (int)Intery + 1, (float)FractionalPart(Intery), targetLocation);
-                    Intery = Intery + Gradiant;
+                    Intery += Gradiant;
                 }
             }
             return image;
