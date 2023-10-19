@@ -29,7 +29,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <value>
         /// The header.
         /// </value>
-        public byte[] header => new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+        public byte[] Header => new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
         /// <summary>
         /// Reads the header information from the specified stream.
@@ -48,7 +48,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="writer">The binary writer.</param>
         public void Write(BinaryWriter writer)
         {
-            writer.Write(header);
+            writer.Write(Header);
         }
     }
 }

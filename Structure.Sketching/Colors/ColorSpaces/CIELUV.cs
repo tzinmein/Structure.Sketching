@@ -168,7 +168,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             return obj is CIELUV cieluv && Equals(cieluv);
         }
@@ -195,7 +195,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hash = L.GetHashCode();
             hash = ComputeHash(hash, U);
@@ -206,7 +206,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override readonly string ToString() => $"({L:#0.##},{U:#0.##},{V:#0.##})";
+        public readonly override string ToString() => $"({L:#0.##},{U:#0.##},{V:#0.##})";
 
         /// <summary>
         /// Gets the denominator.

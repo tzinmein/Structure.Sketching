@@ -38,7 +38,7 @@ namespace Structure.Sketching.Formats.Jpeg
         /// <value>
         /// The file extensions.
         /// </value>
-        protected override string[] FileExtensions => new string[] { ".JPEG", ".JPG", ".JPE", ".JIF", ".JFIF", ".JFI" };
+        protected override string[] FileExtensions => new[] { ".JPEG", ".JPG", ".JPE", ".JIF", ".JFIF", ".JFI" };
 
         /// <summary>
         /// Determines whether this instance can decode the specified header.

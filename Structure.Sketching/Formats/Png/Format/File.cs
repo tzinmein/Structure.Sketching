@@ -163,7 +163,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// </returns>
         protected override Animation ToAnimation()
         {
-            return new Animation(new Image[] { ToImage() }, 0);
+            return new Animation(new[] { ToImage() }, 0);
         }
 
         /// <summary>

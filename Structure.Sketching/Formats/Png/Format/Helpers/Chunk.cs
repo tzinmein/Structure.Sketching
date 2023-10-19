@@ -112,7 +112,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         public void Write(BinaryWriter stream)
         {
             stream.Write(GetValueAsArray(Length));
-            stream.Write(new byte[] { (byte)((string)Type)[0], (byte)((string)Type)[1], (byte)((string)Type)[2], (byte)((string)Type)[3] });
+            stream.Write(new[] { (byte)((string)Type)[0], (byte)((string)Type)[1], (byte)((string)Type)[2], (byte)((string)Type)[3] });
             stream.Write(Data);
             stream.Write(GetValueAsArray(Crc));
         }
@@ -183,7 +183,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
             var NumberOfBytes = stream.Read(typeBuffer, 0, 4);
             if (NumberOfBytes != 4)
                 return string.Empty;
-            return new string(new char[] { (char)typeBuffer[0], (char)typeBuffer[1], (char)typeBuffer[2], (char)typeBuffer[3] });
+            return new string(new[] { (char)typeBuffer[0], (char)typeBuffer[1], (char)typeBuffer[2], (char)typeBuffer[3] });
         }
 
         private uint CalculateCRC()

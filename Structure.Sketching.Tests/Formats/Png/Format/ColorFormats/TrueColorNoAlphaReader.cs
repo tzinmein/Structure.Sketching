@@ -21,7 +21,7 @@ namespace Structure.Sketching.Tests.Formats.Png.Format.ColorFormats
                 8, 9, 0
             };
             var Result = new Color[10];
-            var ExpectedResult = new Color[] {
+            var ExpectedResult = new[] {
                 new Color(1, 2, 3, 255),
                 new Color(4, 5, 6, 255),
                 new Color(7, 8, 9, 255),

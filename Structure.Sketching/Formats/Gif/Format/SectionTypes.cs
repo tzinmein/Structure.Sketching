@@ -125,7 +125,7 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// </returns>
         public static bool operator ==(SectionTypes value1, SectionTypes value2)
         {
-            if (ReferenceEquals(value1, null) || ReferenceEquals(value2, null))
+            if (value1 is null || value2 is null)
                 return false;
             return value1.Value == value2.Value;
         }
@@ -139,10 +139,9 @@ namespace Structure.Sketching.Formats.Gif.Format
         /// </returns>
         public override bool Equals(object obj)
         {
-            var Value2 = obj as SectionTypes;
-            if (ReferenceEquals(Value2, null))
+            if (!(obj is SectionTypes Value2))
                 return false;
-            return this == (SectionTypes)obj;
+            return this == Value2;
         }
 
         /// <summary>

@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+
 namespace Structure.Sketching.ExtensionMethods
 {
     /// <summary>
@@ -41,7 +43,7 @@ namespace Structure.Sketching.ExtensionMethods
         /// <returns>The expanded array of bytes</returns>
         public static byte[] ExpandArray(this byte[] bytes, int bits)
         {
-            bytes ??= new byte[0];
+            bytes ??= Array.Empty<byte>();
             bits = bits.Clamp(0, int.MaxValue);
             byte[] Result;
             if (bits >= 8)

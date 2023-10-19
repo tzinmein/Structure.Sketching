@@ -10,7 +10,7 @@ namespace Structure.Sketching.Tests.Formats.Png.Format.ColorFormats
         {
             var data = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
             var Result = new Color[10];
-            var ExpectedResult = new Color[] {
+            var ExpectedResult = new[] {
                 new Color(1, 2, 3, 4),
                 new Color(5, 6, 7, 8),
                 new Color(9, 0, 1, 2),

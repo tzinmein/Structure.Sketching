@@ -27,7 +27,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="value">The value.</param>
         public Rectangle(Vector4 value)
         {
-            this.Data = value;
+            Data = value;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Structure.Sketching.Numerics
         /// Gets the center.
         /// </summary>
         /// <value>The center.</value>
-        public Vector2 Center => new Vector2((Left + Right) >> 1, (Top + Bottom) >> 1);
+        public readonly Vector2 Center => new Vector2((Left + Right) >> 1, (Top + Bottom) >> 1);
 
         /// <summary>
         /// Gets the height.
@@ -139,7 +139,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="y">The y.</param>
         /// <returns>True if it does, false otherwise</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Contains(int x, int y)
+        public readonly bool Contains(int x, int y)
         {
             return Left <= x
                 && Right > x
@@ -168,7 +168,7 @@ namespace Structure.Sketching.Numerics
         /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             if (!(obj is Rectangle rectangle))
                 return false;
@@ -182,7 +182,7 @@ namespace Structure.Sketching.Numerics
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override readonly int GetHashCode()
+        public readonly override int GetHashCode()
         {
             return Data.GetHashCode();
         }
@@ -191,7 +191,7 @@ namespace Structure.Sketching.Numerics
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override readonly string ToString()
+        public readonly override string ToString()
         {
             return string.Format("{{ {0}, {1}, {2}, {3} }}", Data.X, Data.Y, Data.Z, Data.W);
         }

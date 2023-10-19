@@ -9,14 +9,14 @@ namespace Structure.Sketching.Tests.Formats.Png.Format
         public void Create()
         {
             var TestObject = new Structure.Sketching.Formats.Png.Format.FileHeader();
-            Assert.Equal(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }, TestObject.header);
+            Assert.Equal(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }, TestObject.Header);
         }
 
         [Fact]
         public void CreateFromStream()
         {
             var TestObject = Structure.Sketching.Formats.Png.Format.FileHeader.Read(new MemoryStream());
-            Assert.Equal(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }, TestObject.header);
+            Assert.Equal(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }, TestObject.Header);
         }
 
         [Fact]

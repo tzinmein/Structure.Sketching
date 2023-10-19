@@ -35,10 +35,10 @@ namespace Structure.Sketching.Filters.Smoothing
         public Kuwahara(int apetureRadius)
         {
             ApetureRadius = apetureRadius;
-            ApetureMinX = new int[] { -ApetureRadius, 0, -ApetureRadius, 0 };
-            ApetureMaxX = new int[] { 0, ApetureRadius, 0, ApetureRadius };
-            ApetureMinY = new int[] { -ApetureRadius, -ApetureRadius, 0, 0 };
-            ApetureMaxY = new int[] { 0, 0, ApetureRadius, ApetureRadius };
+            ApetureMinX = new[] { -ApetureRadius, 0, -ApetureRadius, 0 };
+            ApetureMaxX = new[] { 0, ApetureRadius, 0, ApetureRadius };
+            ApetureMinY = new[] { -ApetureRadius, -ApetureRadius, 0, 0 };
+            ApetureMaxY = new[] { 0, 0, ApetureRadius, ApetureRadius };
         }
 
         /// <summary>

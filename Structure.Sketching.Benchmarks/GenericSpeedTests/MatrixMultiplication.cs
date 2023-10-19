@@ -22,7 +22,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests
             float g = 127;
             float b = 126;
             float a = 255;
-            var finalvalue = new byte[]
+            var finalvalue = new[]
             {
                 ((byte)(r* value1.M11 + g* value1.M21 + b* value1.M31 + a* value1.M41 + (value1.M51*255f)).Clamp(0,255)),
                 ((byte)(r* value1.M12 + g* value1.M22 + b* value1.M32 + a* value1.M42 + (value1.M52*255f)).Clamp(0,255)),

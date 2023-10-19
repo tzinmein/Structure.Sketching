@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
@@ -34,8 +35,8 @@ namespace Structure.Sketching.Formats.Png.Format.ColorFormats
         /// <param name="alphaPalette">The alpha palette.</param>
         public PaletteReader(Palette palette, Palette alphaPalette)
         {
-            Palette = palette ?? new Palette(new byte[0], PaletteType.Color);
-            AlphaPalette = alphaPalette ?? new Palette(new byte[0], PaletteType.Alpha);
+            Palette = palette ?? new Palette(Array.Empty<byte>(), PaletteType.Color);
+            AlphaPalette = alphaPalette ?? new Palette(Array.Empty<byte>(), PaletteType.Alpha);
         }
 
         /// <summary>

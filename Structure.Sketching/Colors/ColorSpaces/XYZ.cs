@@ -135,7 +135,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             return obj is XYZ xyz && Equals(xyz);
         }
@@ -162,7 +162,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hash = X.GetHashCode();
             hash = ComputeHash(hash, Y);
@@ -173,7 +173,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override readonly string ToString() => $"({X:#0.##},{Y:#0.##},{Z:#0.##})";
+        public readonly override string ToString() => $"({X:#0.##},{Y:#0.##},{Z:#0.##})";
 
         /// <summary>
         /// Pivots the RGB.

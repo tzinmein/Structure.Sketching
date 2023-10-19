@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Formats.BaseClasses;
 using System.IO;
 
@@ -95,7 +96,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
         /// <returns>The animation version of the file.</returns>
         protected override Animation ToAnimation()
         {
-            return new Animation(new Image[] { ToImage() }, 0);
+            return new Animation(new[] { ToImage() }, 0);
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace Structure.Sketching.Formats.Bmp.Format
             var ImageSize = image.Pixels.Length * 4;
             FileHeader = new FileHeader(54 + ImageSize, 54);
             Header = new Header(image.Width, image.Height, 24, ImageSize, 0, 0, 0, 0, Compression.RGB);
-            Palette = new Palette(0, new byte[0]);
+            Palette = new Palette(0, Array.Empty<byte>());
             Body = new Body(image, Header);
         }
     }

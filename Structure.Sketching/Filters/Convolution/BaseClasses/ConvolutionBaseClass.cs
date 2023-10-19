@@ -69,9 +69,7 @@ namespace Structure.Sketching.Filters.Convolution.BaseClasses
         {
             if (value1.Matrix.Length > value2.Matrix.Length)
             {
-                ConvolutionBaseClass TempHolder = value1;
-                value1 = value2;
-                value2 = TempHolder;
+                (value2, value1) = (value1, value2);
             }
             int Height = value1.Height + value2.Height - 1;
             int Width = value1.Width + value2.Width - 1;

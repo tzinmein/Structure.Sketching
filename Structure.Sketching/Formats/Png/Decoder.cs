@@ -38,7 +38,7 @@ namespace Structure.Sketching.Formats.Png
         /// <value>
         /// The file extensions.
         /// </value>
-        protected override string[] FileExtensions => new string[] { ".PNG" };
+        protected override string[] FileExtensions => new[] { ".PNG" };
 
         /// <summary>
         /// Determines whether this instance can decode the specified header.

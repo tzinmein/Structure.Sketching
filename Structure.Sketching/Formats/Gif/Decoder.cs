@@ -38,7 +38,7 @@ namespace Structure.Sketching.Formats.Gif
         /// <value>
         /// The file extensions.
         /// </value>
-        protected override string[] FileExtensions => new string[] { ".GIF" };
+        protected override string[] FileExtensions => new[] { ".GIF" };
 
         /// <summary>
         /// Determines whether this instance can decode the specified header.

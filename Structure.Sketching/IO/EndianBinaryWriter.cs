@@ -269,7 +269,7 @@ namespace Structure.Sketching.IO
         /// <param name="value">The values to write</param>
         public void Write(byte[] value)
         {
-            value ??= new byte[0];
+            value ??= Array.Empty<byte>();
             WriteInternal(value, value.Length);
         }
 
@@ -283,7 +283,7 @@ namespace Structure.Sketching.IO
         {
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
-            value ??= new byte[0];
+            value ??= Array.Empty<byte>();
             BaseStream.Write(value, offset, count);
         }
 
@@ -303,7 +303,7 @@ namespace Structure.Sketching.IO
         /// <param name="value">An array containing the characters to write</param>
         public void Write(char[] value)
         {
-            value ??= new char[0];
+            value ??= Array.Empty<char>();
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is null");
             var data = Encoding.GetBytes(value, 0, value.Length);

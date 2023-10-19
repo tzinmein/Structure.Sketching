@@ -182,7 +182,7 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         /// </returns>
         public static bool operator ==(ChunkTypes value1, ChunkTypes value2)
         {
-            if (ReferenceEquals(value1, null) || ReferenceEquals(value2, null))
+            if (value1 is null || value2 is null)
                 return false;
             return value1.Value == value2.Value;
         }
@@ -196,10 +196,9 @@ namespace Structure.Sketching.Formats.Png.Format.Helpers
         /// </returns>
         public override bool Equals(object obj)
         {
-            var Value2 = obj as ChunkTypes;
-            if (ReferenceEquals(Value2, null))
+            if (!(obj is ChunkTypes Value2))
                 return false;
-            return this == (ChunkTypes)obj;
+            return this == Value2;
         }
 
         /// <summary>

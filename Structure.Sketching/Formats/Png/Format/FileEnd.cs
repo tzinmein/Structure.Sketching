@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Formats.Png.Format.Helpers;
 
 namespace Structure.Sketching.Formats.Png.Format
@@ -32,7 +33,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// </returns>
         public static implicit operator Chunk(FileEnd fileEnd)
         {
-            return new Chunk(0, ChunkTypes.End, new byte[0]);
+            return new Chunk(0, ChunkTypes.End, Array.Empty<byte>());
         }
 
         /// <summary>

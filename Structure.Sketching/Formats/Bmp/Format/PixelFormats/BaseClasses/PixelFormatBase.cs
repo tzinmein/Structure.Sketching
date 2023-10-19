@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces;
 using System.IO;
 
@@ -135,7 +136,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses
                     }
                 }
             }
-            return new byte[0];
+            return Array.Empty<byte>();
         }
     }
 }

@@ -803,7 +803,7 @@ namespace Structure.Sketching.Colors
         /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             return obj is Color color && Equals(color);
         }
@@ -815,7 +815,7 @@ namespace Structure.Sketching.Colors
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hash = Red.GetHashCode();
             hash = ComputeHash(hash, Green);
@@ -841,7 +841,7 @@ namespace Structure.Sketching.Colors
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override readonly string ToString() => $"({Red},{Green},{Blue},{Alpha})";
+        public readonly override string ToString() => $"({Red},{Green},{Blue},{Alpha})";
 
         /// <summary>
         /// Computes the hash.

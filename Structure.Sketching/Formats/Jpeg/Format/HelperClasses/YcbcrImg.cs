@@ -139,13 +139,13 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
         /// <returns>Converts to an image</returns>
         public Image Convert(int width, int height, Image image, IEnumerable<SegmentBase> segments)
         {
-            if (this.IsRGB(segments))
+            if (IsRGB(segments))
             {
-                this.ConvertDirectToRGB(width, height, image, segments);
+                ConvertDirectToRGB(width, height, image, segments);
             }
             else
             {
-                this.ConvertToRGB(width, height, image, segments);
+                ConvertToRGB(width, height, image, segments);
             }
             return image;
         }

@@ -140,12 +140,12 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         public Image Convert(Image image, IEnumerable<SegmentBase> segments)
         {
             var Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
-            if (this.img1 != null)
+            if (img1 != null)
             {
                 return img1.Convert(Frame.Width, Frame.Height, image, segments);
             }
 
-            if (this.img3 != null)
+            if (img3 != null)
             {
                 return img3.Convert(Frame.Width, Frame.Height, image, segments);
             }

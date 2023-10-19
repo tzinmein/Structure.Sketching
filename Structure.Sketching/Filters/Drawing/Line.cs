@@ -76,24 +76,16 @@ namespace Structure.Sketching.Filters.Drawing
         public override Image Apply(Image image, Numerics.Rectangle targetLocation = default)
         {
             targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var IsSteep = Math.Abs(Y2 - Y1) > Math.Abs(X2 - X1);
-            if (IsSteep)
+            var isSteep = Math.Abs(Y2 - Y1) > Math.Abs(X2 - X1);
+            if (isSteep)
             {
-                var Temp = X1;
-                X1 = Y1;
-                Y1 = Temp;
-                Temp = X2;
-                X2 = Y2;
-                Y2 = Temp;
+                (Y1, X1) = (X1, Y1);
+                (Y2, X2) = (X2, Y2);
             }
             if (X1 > X2)
             {
-                var Temp = X1;
-                X1 = X2;
-                X2 = Temp;
-                Temp = Y1;
-                Y1 = Y2;
-                Y2 = Temp;
+                (X2, X1) = (X1, X2);
+                (Y2, Y1) = (Y1, Y2);
             }
             var ChangeX = X2 - X1;
             var ChangeY = Y2 - Y1;
@@ -103,7 +95,7 @@ namespace Structure.Sketching.Filters.Drawing
             var XGap = RFPart(X1 + 0.5);
             var XPixel1 = (int)XEnd;
             var YPixel1 = (int)YEnd;
-            if (IsSteep)
+            if (isSteep)
             {
                 Plot(image, YPixel1, XPixel1, (float)(RFPart(YEnd) * XGap), targetLocation);
                 Plot(image, YPixel1 + 1, XPixel1, (float)(FractionalPart(YEnd) * XGap), targetLocation);
@@ -120,7 +112,7 @@ namespace Structure.Sketching.Filters.Drawing
             XGap = FractionalPart(X2 + 0.5);
             var XPixel2 = (int)XEnd;
             var YPixel2 = (int)YEnd;
-            if (IsSteep)
+            if (isSteep)
             {
                 Plot(image, YPixel2, XPixel2, (float)(RFPart(YEnd) * XGap), targetLocation);
                 Plot(image, YPixel2 + 1, XPixel2, (float)(FractionalPart(YEnd) * XGap), targetLocation);
@@ -130,7 +122,7 @@ namespace Structure.Sketching.Filters.Drawing
                 Plot(image, XPixel2, YPixel2, (float)(RFPart(YEnd) * XGap), targetLocation);
                 Plot(image, XPixel2, YPixel2 + 1, (float)(FractionalPart(YEnd) * XGap), targetLocation);
             }
-            if (IsSteep)
+            if (isSteep)
             {
                 for (int x = XPixel1 + 1; x < XPixel2; ++x)
                 {

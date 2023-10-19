@@ -142,7 +142,7 @@ namespace Structure.Sketching.IO
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is currently null.");
             count = count > data.Length ? data.Length : count;
-            data ??= new char[0];
+            data ??= Array.Empty<char>();
             if (index > data.Length - count)
                 index = data.Length - count;
             index = index < 0 ? 0 : index;
@@ -202,7 +202,7 @@ namespace Structure.Sketching.IO
             if (BaseStream == null)
                 throw new NullReferenceException("Base stream is currently null.");
             count = count > buffer.Length ? buffer.Length : count;
-            buffer ??= new byte[0];
+            buffer ??= Array.Empty<byte>();
             if (index > buffer.Length - count)
                 index = buffer.Length - count;
             index = index < 0 ? 0 : index;

@@ -580,7 +580,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="obj">The Object to compare against.</param>
         /// <returns>True if the Object is equal to this matrix; False otherwise.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is Matrix5x5 x5)
             {
@@ -594,7 +594,7 @@ namespace Structure.Sketching.Numerics
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>The hash code.</returns>
-        public override readonly int GetHashCode()
+        public readonly override int GetHashCode()
         {
             return M11.GetHashCode() + M12.GetHashCode() + M13.GetHashCode() + M14.GetHashCode() + M15.GetHashCode() +
                    M21.GetHashCode() + M22.GetHashCode() + M23.GetHashCode() + M24.GetHashCode() + M25.GetHashCode() +
@@ -607,7 +607,7 @@ namespace Structure.Sketching.Numerics
         /// Returns a String representing this matrix instance.
         /// </summary>
         /// <returns>The string representation.</returns>
-        public override readonly string ToString()
+        public readonly override string ToString()
         {
             CultureInfo ci = CultureInfo.CurrentCulture;
 

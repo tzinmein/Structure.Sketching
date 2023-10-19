@@ -22,7 +22,7 @@ namespace Structure.Sketching.IO.Converters.Structs
     /// Int/float union struct.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-    public struct IntFloatUnion
+    public readonly struct IntFloatUnion
     {
         /// <summary>
         /// The integer value

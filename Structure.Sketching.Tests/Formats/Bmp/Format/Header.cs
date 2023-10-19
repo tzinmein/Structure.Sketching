@@ -11,7 +11,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         [Fact]
         public void CreateByteArray()
         {
-            var data = (new byte[][] {
+            var data = (new[]
+            {
                 BitConverter.GetBytes((int)200),
                 BitConverter.GetBytes((int)44),
                 BitConverter.GetBytes((int)40),
@@ -56,7 +57,8 @@ namespace Structure.Sketching.Tests.Formats.Bmp.Format
         [Fact]
         public void Read()
         {
-            var data = (new byte[][] {
+            var data = (new[]
+            {
                 BitConverter.GetBytes((int)200),
                 BitConverter.GetBytes((int)44),
                 BitConverter.GetBytes((int)40),

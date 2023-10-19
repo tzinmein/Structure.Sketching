@@ -153,7 +153,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             return obj is HSV hsv && Equals(hsv);
         }
@@ -178,7 +178,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hash = Hue.GetHashCode();
             hash = ComputeHash(hash, Saturation);
@@ -189,7 +189,7 @@ namespace Structure.Sketching.Colors.ColorSpaces
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override readonly string ToString() => $"({Hue:#0.##},{Saturation:#0.##},{Value:#0.##})";
+        public readonly override string ToString() => $"({Hue:#0.##},{Saturation:#0.##},{Value:#0.##})";
 
         /// <summary>
         /// Computes the hash.

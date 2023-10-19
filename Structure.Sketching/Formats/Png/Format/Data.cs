@@ -115,7 +115,7 @@ namespace Structure.Sketching.Formats.Png.Format
         public static Data operator +(Data Object1, Data Object2)
         {
             if (Object1 == null && Object2 == null)
-                return new Data(new byte[0]);
+                return new Data(Array.Empty<byte>());
             if (Object1 == null)
                 return new Data(Object2.ImageData);
             if (Object2 == null)
@@ -309,9 +309,7 @@ namespace Structure.Sketching.Formats.Png.Format
                         colorReader.ReadScanline(CurrentScanline, pixels, header, Row);
                         ++Row;
                         Column = -1;
-                        var Holder = CurrentScanline;
-                        CurrentScanline = LastScanline;
-                        LastScanline = Holder;
+                        (LastScanline, CurrentScanline) = (CurrentScanline, LastScanline);
                     }
                 }
             }

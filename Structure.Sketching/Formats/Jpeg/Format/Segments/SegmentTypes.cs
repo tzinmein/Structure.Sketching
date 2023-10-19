@@ -161,7 +161,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// </returns>
         public static bool operator ==(SegmentTypes value1, SegmentTypes value2)
         {
-            if (ReferenceEquals(value1, null) || ReferenceEquals(value2, null))
+            if (value1 is null || value2 is null)
                 return false;
             return value1.Value == value2.Value;
         }
@@ -175,10 +175,9 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// </returns>
         public override bool Equals(object obj)
         {
-            var Value2 = obj as SegmentTypes;
-            if (ReferenceEquals(Value2, null))
+            if (!(obj is SegmentTypes Value2))
                 return false;
-            return this == (SegmentTypes)obj;
+            return this == Value2;
         }
 
         /// <summary>
@@ -200,7 +199,7 @@ namespace Structure.Sketching.Formats.Jpeg.Format.Segments
         /// </returns>
         public override string ToString()
         {
-            return new string(new char[] { (char)Value });
+            return new string(new[] { (char)Value });
         }
     }
 }

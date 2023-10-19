@@ -103,7 +103,7 @@ namespace Structure.Sketching.Formats.BaseClasses
         public Animation DecodeAnimation(Stream stream)
         {
             if (stream == null)
-                return new Animation(new Image[] { new Image(1, 1, new Color[1]) }, 0);
+                return new Animation(new[] { new Image(1, 1, new Color[1]) }, 0);
             return new TFile().Decode(stream);
         }
     }

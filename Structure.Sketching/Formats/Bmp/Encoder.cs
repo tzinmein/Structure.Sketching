@@ -30,6 +30,6 @@ namespace Structure.Sketching.Formats.Bmp
         /// <value>
         /// The file extensions.
         /// </value>
-        protected override string[] FileExtensions => new string[] { ".BMP", ".DIB" };
+        protected override string[] FileExtensions => new[] { ".BMP", ".DIB" };
     }
 }

@@ -80,7 +80,7 @@ namespace Structure.Sketching.ExtensionMethods
         {
             if (values == null || values.Length == 0)
             {
-                return new Vector4[0];
+                return Array.Empty<Vector4>();
             }
             var NewData = new List<Vector4>();
             for (int x = 0; x < values.Length; x += 4)

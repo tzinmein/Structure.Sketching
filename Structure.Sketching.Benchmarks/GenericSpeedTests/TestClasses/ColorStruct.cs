@@ -39,7 +39,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// <param name="blue">The blue.</param>
         /// <param name="alpha">The alpha.</param>
         public ColorStruct(byte red, byte green = 0, byte blue = 0, byte alpha = 255)
-            : this(new byte[] { red, green, blue, alpha })
+            : this(new[] { red, green, blue, alpha })
         {
         }
 
@@ -149,7 +149,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// <returns>The result of the conversion.</returns>
         public static implicit operator byte[] (ColorStruct color)
         {
-            return new byte[] { color.Red, color.Green, color.Blue, color.Alpha };
+            return new[] { color.Red, color.Green, color.Blue, color.Alpha };
         }
 
         /// <summary>
@@ -469,7 +469,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             return obj is ColorStruct @struct && Equals(@struct);
         }
@@ -481,7 +481,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures
         /// like a hash table.
         /// </returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hash = Red.GetHashCode();
             hash = ComputeHash(hash, Green);
@@ -507,7 +507,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public override readonly string ToString() => $"({Red},{Green},{Blue},{Alpha})";
+        public readonly override string ToString() => $"({Red},{Green},{Blue},{Alpha})";
 
         /// <summary>
         /// Computes the hash.
