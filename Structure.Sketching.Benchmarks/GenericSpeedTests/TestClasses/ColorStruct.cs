@@ -50,7 +50,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
         /// <exception cref="System.ArgumentException">Hex value is not convertable</exception>
         public ColorStruct(string hex)
         {
-            hex = hex.StartsWith("#", StringComparison.Ordinal) ? hex.Substring(1) : hex;
+            hex = hex.StartsWith("#", StringComparison.Ordinal) ? hex[1..] : hex;
             if (hex.Length == 3)
             {
                 hex = "FF"
@@ -85,7 +85,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses
             Red = Convert.ToByte(hex.Substring(2, 2), 16);
             Green = Convert.ToByte(hex.Substring(4, 2), 16);
             Blue = Convert.ToByte(hex.Substring(6, 2), 16);
-            Alpha = Convert.ToByte(hex.Substring(0, 2), 16);
+            Alpha = Convert.ToByte(hex[..2], 16);
         }
 
         /// <summary>
