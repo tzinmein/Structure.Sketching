@@ -27,7 +27,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="value">The value.</param>
         public Rectangle(Vector4 value)
         {
-            this.Data = value;
+            Data = value;
         }
 
         /// <summary>

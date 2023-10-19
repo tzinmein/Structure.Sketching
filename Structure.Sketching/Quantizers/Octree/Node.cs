@@ -41,24 +41,24 @@ namespace Structure.Sketching.Quantizers.Octree
         public Node(int level, int colorBits, Octree octree)
         {
             // Construct the new node
-            this.leaf = level == colorBits;
+            leaf = level == colorBits;
 
-            this.red = this.green = this.blue = 0;
-            this.pixelCount = 0;
+            red = green = blue = 0;
+            pixelCount = 0;
 
             // If a leaf, increment the leaf count
-            if (this.leaf)
+            if (leaf)
             {
                 octree.Leaves++;
-                this.NextReducible = null;
-                this.children = null;
+                NextReducible = null;
+                children = null;
             }
             else
             {
                 // Otherwise add this to the reducible nodes
-                this.NextReducible = octree.ReducibleNodes[level];
+                NextReducible = octree.ReducibleNodes[level];
                 octree.ReducibleNodes[level] = this;
-                this.children = new Node[8];
+                children = new Node[8];
             }
         }
 
@@ -122,9 +122,9 @@ namespace Structure.Sketching.Quantizers.Octree
         public void AddColor(Bgra pixel, int colorBits, int level, Octree octree)
         {
             // Update the color information if this is a leaf
-            if (this.leaf)
+            if (leaf)
             {
-                this.Increment(pixel);
+                Increment(pixel);
 
                 // Setup the previous node
                 octree.TrackPrevious(this);
@@ -137,13 +137,13 @@ namespace Structure.Sketching.Quantizers.Octree
                             ((pixel.Green & Mask[level]) >> (shift - 1)) |
                             ((pixel.Blue & Mask[level]) >> shift);
 
-                Node child = this.children[index];
+                Node child = children[index];
 
                 if (child == null)
                 {
                     // Create a new child node and store it in the array
                     child = new Node(level + 1, colorBits, octree);
-                    this.children[index] = child;
+                    children[index] = child;
                 }
 
                 // Add the color to the child node
@@ -162,14 +162,14 @@ namespace Structure.Sketching.Quantizers.Octree
         /// </param>
         public void ConstructPalette(List<Bgra> palette, ref int index)
         {
-            if (this.leaf)
+            if (leaf)
             {
                 // Consume the next palette index
-                this.paletteIndex = index++;
+                paletteIndex = index++;
 
-                var r = (this.red / this.pixelCount).ToByte();
-                var g = (this.green / this.pixelCount).ToByte();
-                var b = (this.blue / this.pixelCount).ToByte();
+                var r = (red / pixelCount).ToByte();
+                var g = (green / pixelCount).ToByte();
+                var b = (blue / pixelCount).ToByte();
 
                 // And set the color of the palette entry
                 palette.Add(new Bgra(b, g, r));
@@ -179,9 +179,9 @@ namespace Structure.Sketching.Quantizers.Octree
                 // Loop through children looking for leaves
                 for (int i = 0; i < 8; i++)
                 {
-                    if (this.children[i] != null)
+                    if (children[i] != null)
                     {
-                        this.children[i].ConstructPalette(palette, ref index);
+                        children[i].ConstructPalette(palette, ref index);
                     }
                 }
             }
@@ -201,18 +201,18 @@ namespace Structure.Sketching.Quantizers.Octree
         /// </returns>
         public int GetPaletteIndex(Bgra pixel, int level)
         {
-            int index = this.paletteIndex;
+            int index = paletteIndex;
 
-            if (!this.leaf)
+            if (!leaf)
             {
                 int shift = 7 - level;
                 int pixelIndex = ((pixel.Red & Mask[level]) >> (shift - 2)) |
                                  ((pixel.Green & Mask[level]) >> (shift - 1)) |
                                  ((pixel.Blue & Mask[level]) >> shift);
 
-                if (this.children[pixelIndex] != null)
+                if (children[pixelIndex] != null)
                 {
-                    index = this.children[pixelIndex].GetPaletteIndex(pixel, level + 1);
+                    index = children[pixelIndex].GetPaletteIndex(pixel, level + 1);
                 }
                 else
                 {
@@ -231,10 +231,10 @@ namespace Structure.Sketching.Quantizers.Octree
         /// </param>
         public void Increment(Bgra pixel)
         {
-            this.pixelCount++;
-            this.red += pixel.Red;
-            this.green += pixel.Green;
-            this.blue += pixel.Blue;
+            pixelCount++;
+            red += pixel.Red;
+            green += pixel.Green;
+            blue += pixel.Blue;
         }
 
         /// <summary>
@@ -243,25 +243,25 @@ namespace Structure.Sketching.Quantizers.Octree
         /// <returns>The number of leaves removed</returns>
         public int Reduce()
         {
-            this.red = this.green = this.blue = 0;
+            red = green = blue = 0;
             int childNodes = 0;
 
             // Loop through all children and add their information to this node
             for (int index = 0; index < 8; index++)
             {
-                if (this.children[index] != null)
+                if (children[index] != null)
                 {
-                    this.red += this.children[index].red;
-                    this.green += this.children[index].green;
-                    this.blue += this.children[index].blue;
-                    this.pixelCount += this.children[index].pixelCount;
+                    red += children[index].red;
+                    green += children[index].green;
+                    blue += children[index].blue;
+                    pixelCount += children[index].pixelCount;
                     ++childNodes;
-                    this.children[index] = null;
+                    children[index] = null;
                 }
             }
 
             // Now change this to a leaf node
-            this.leaf = true;
+            leaf = true;
 
             // Return the number of nodes to decrement the leaf count by
             return childNodes - 1;

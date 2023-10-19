@@ -100,13 +100,13 @@ namespace Structure.Sketching.Helpers
         {
             var field = obj as PackedField?;
 
-            return this.Byte == field?.Byte;
+            return Byte == field?.Byte;
         }
 
         /// <inheritdoc/>
         public bool Equals(PackedField other)
         {
-            return this.Byte.Equals(other.Byte);
+            return Byte.Equals(other.Byte);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Structure.Sketching.Helpers
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return this.Byte.GetHashCode();
+            return Byte.GetHashCode();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Structure.Sketching.Helpers
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"PackedField [ Byte={this.Byte} ]";
+            return $"PackedField [ Byte={Byte} ]";
         }
     }
 }
