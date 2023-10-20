@@ -129,33 +129,30 @@ namespace Structure.Sketching.Numerics
         /// Gets the identity.
         /// </summary>
         /// <value>The identity.</value>
-        public static Matrix5x5 Identity => _identity;
+        public static Matrix5x5 Identity { get; } = new(
+            1f, 0f, 0f, 0f, 0f,
+            0f, 1f, 0f, 0f, 0f,
+            0f, 0f, 1f, 0f, 0f,
+            0f, 0f, 0f, 1f, 0f,
+            0f, 0f, 0f, 0f, 1f
+        );
 
         /// <summary>
         /// Returns whether the matrix is the identity matrix.
         /// </summary>
-        public readonly bool IsIdentity
-        {
-            get
-            {
-                return M11 == 1f && M22 == 1f && M33 == 1f && M44 == 1f && M55 == 1f &&
-                       M12 == 0f && M13 == 0f && M14 == 0f && M15 == 0f &&
-                       M21 == 0f && M23 == 0f && M24 == 0f && M25 == 0f &&
-                       M31 == 0f && M32 == 0f && M34 == 0f && M35 == 0f &&
-                       M41 == 0f && M42 == 0f && M43 == 0f && M45 == 0f &&
-                       M51 == 0f && M52 == 0f && M53 == 0f && M54 == 0f;
-            }
-        }
+        public readonly bool IsIdentity =>
+            this == new Matrix5x5(1f, 0f, 0f, 0f, 0f,
+                0f, 1f, 0f, 0f, 0f,
+                0f, 0f, 1f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f,
+                0f, 0f, 0f, 0f, 1f);
 
         /// <summary>
         /// Gets or sets the translation component of this matrix.
         /// </summary>
         public Vector4 Translation
         {
-            readonly get
-            {
-                return new Vector4(M51, M52, M53, M54);
-            }
+            readonly get => new(M51, M52, M53, M54);
             set
             {
                 M51 = value.X;
@@ -289,15 +286,6 @@ namespace Structure.Sketching.Numerics
         /// Value at row 5, column 5 of the matrix.
         /// </summary>
         public float M55;
-
-        private static readonly Matrix5x5 _identity = new Matrix5x5
-        (
-            1f, 0f, 0f, 0f, 0f,
-            0f, 1f, 0f, 0f, 0f,
-            0f, 0f, 1f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0f, 0f, 0f, 0f, 1f
-        );
 
         /// <summary>
         /// Returns a new matrix with the negated elements of the given matrix.
@@ -489,16 +477,16 @@ namespace Structure.Sketching.Numerics
         /// <param name="value2">The vector</param>
         /// <returns>The resulting vector</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe Color operator *(Matrix5x5 value1, Color value2)
+        public static Color operator *(Matrix5x5 value1, Color value2)
         {
-            float r = value2.Red / 255f;
-            float g = value2.Green / 255f;
-            float b = value2.Blue / 255f;
-            float a = value2.Alpha / 255f;
+            var r = value2.Red / 255f;
+            var g = value2.Green / 255f;
+            var b = value2.Blue / 255f;
+            var a = value2.Alpha / 255f;
             return new Vector4(r * value1.M11 + g * value1.M21 + b * value1.M31 + a * value1.M41 + value1.M51,
-                                r * value1.M12 + g * value1.M22 + b * value1.M32 + a * value1.M42 + value1.M52,
-                                r * value1.M13 + g * value1.M23 + b * value1.M33 + a * value1.M43 + value1.M53,
-                                r * value1.M14 + g * value1.M24 + b * value1.M34 + a * value1.M44 + value1.M54);
+                r * value1.M12 + g * value1.M22 + b * value1.M32 + a * value1.M42 + value1.M52,
+                r * value1.M13 + g * value1.M23 + b * value1.M33 + a * value1.M43 + value1.M53,
+                r * value1.M14 + g * value1.M24 + b * value1.M34 + a * value1.M44 + value1.M54);
         }
 
         /// <summary>
@@ -566,13 +554,9 @@ namespace Structure.Sketching.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly bool Equals(Matrix5x5 other)
         {
-            return M11 == other.M11 && M22 == other.M22 && M33 == other.M33 && M44 == other.M44 && M55 == other.M55 &&
-                   M12 == other.M12 && M13 == other.M13 && M14 == other.M14 && M15 == other.M15 &&
-                   M21 == other.M21 && M23 == other.M23 && M24 == other.M24 && M25 == other.M25 &&
-                   M31 == other.M31 && M32 == other.M32 && M34 == other.M34 && M35 == other.M35 &&
-                   M41 == other.M41 && M42 == other.M42 && M43 == other.M43 && M45 == other.M45 &&
-                   M51 == other.M51 && M52 == other.M52 && M53 == other.M53 && M54 == other.M54;
+            return this == other;
         }
+
 
         /// <summary>
         /// Returns a boolean indicating whether the given Object is equal to this matrix instance.
@@ -580,7 +564,7 @@ namespace Structure.Sketching.Numerics
         /// <param name="obj">The Object to compare against.</param>
         /// <returns>True if the Object is equal to this matrix; False otherwise.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override readonly bool Equals(object obj)
+        public readonly override bool Equals(object obj)
         {
             if (obj is Matrix5x5 x5)
             {
@@ -609,7 +593,7 @@ namespace Structure.Sketching.Numerics
         /// <returns>The string representation.</returns>
         public readonly override string ToString()
         {
-            CultureInfo ci = CultureInfo.CurrentCulture;
+            var ci = CultureInfo.CurrentCulture;
 
             return string.Format(ci, "{{ {{M11:{0} M12:{1} M13:{2} M14:{3} M15:{4}}} {{M21:{5} M22:{6} M23:{7} M24:{8} M25:{9}}} {{M31:{10} M32:{11} M33:{12} M34:{13} M35:{14}}} {{M41:{15} M42:{16} M43:{17} M44:{18} M45:{19}}} {{M51:{20} M52:{21} M53:{22} M54:{23} M55:{24}}} }}",
                                  M11.ToString(ci), M12.ToString(ci), M13.ToString(ci), M14.ToString(ci), M15.ToString(ci),
