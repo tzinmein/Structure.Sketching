@@ -49,11 +49,11 @@ namespace Structure.Sketching.Formats.Gif.Format.BaseClasses
         protected static Stream Skip(Stream stream, int length)
         {
             stream.Seek(length, SeekOrigin.Current);
-            var Flag = stream.ReadByte();
-            while (Flag != 0)
+            var flag = stream.ReadByte();
+            while (flag != 0)
             {
-                stream.Seek(Flag, SeekOrigin.Current);
-                Flag = stream.ReadByte();
+                stream.Seek(flag, SeekOrigin.Current);
+                flag = stream.ReadByte();
             }
             return stream;
         }

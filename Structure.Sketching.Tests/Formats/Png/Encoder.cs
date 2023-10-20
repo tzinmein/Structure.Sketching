@@ -12,36 +12,38 @@ namespace Structure.Sketching.Tests.Formats.Png
 
         public override string OutputDirectory => "./TestOutput/Formats/Png/Encoder/";
 
-        public static readonly TheoryData<string> InputFileNames = new()
-        {
-            {"splash.png"},
-            {"48bit.png"},
-            {"blur.png"},
-            {"indexed.png"},
-            {"splashbw.png"}
-        };
+        public static readonly TheoryData<string> InputFileNames =
+            new()
+            {
+                "splash.png",
+                "48bit.png",
+                "blur.png",
+                "indexed.png",
+                "splashbw.png"
+            };
 
         [Fact]
         public void CanEncode()
         {
-            Assert.True(new Structure.Sketching.Formats.Png.Encoder().CanEncode("ASDF.png"));
-            Assert.False(new Structure.Sketching.Formats.Png.Encoder().CanEncode("ASDF.bmp"));
-            Assert.False(new Structure.Sketching.Formats.Png.Encoder().CanEncode("ASDF.jpg"));
-            Assert.False(new Structure.Sketching.Formats.Png.Encoder().CanEncode("bmp.gif"));
+            Assert.True(new Sketching.Formats.Png.Encoder().CanEncode("ASDF.png"));
+            Assert.False(new Sketching.Formats.Png.Encoder().CanEncode("ASDF.bmp"));
+            Assert.False(new Sketching.Formats.Png.Encoder().CanEncode("ASDF.jpg"));
+            Assert.False(new Sketching.Formats.Png.Encoder().CanEncode("bmp.gif"));
         }
 
         [Theory]
         [MemberData(nameof(InputFileNames))]
         public void Encode(string fileName)
         {
-            using (var TempFile = File.OpenRead(InputDirectory + fileName))
+            using (var inputFile = File.OpenRead(InputDirectory + fileName))
             {
-                var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
-                var TempImage = TempDecoder.Decode(TempFile);
-                var TempEncoder = new Structure.Sketching.Formats.Png.Encoder();
-                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
-                TempEncoder.Encode(new BinaryWriter(TempFile2), TempImage);
+                var decoder = new Sketching.Formats.Png.Decoder();
+                var image = decoder.Decode(inputFile);
+                var encoder = new Sketching.Formats.Png.Encoder();
+                using var outputFile = File.OpenWrite(OutputDirectory + fileName);
+                encoder.Encode(new BinaryWriter(outputFile), image);
             }
+
             Assert.True(CheckDecodedPngCorrect(fileName));
         }
     }

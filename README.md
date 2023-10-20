@@ -4,7 +4,7 @@
 
 [![Linux Build Status](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml)
 
-Structure.Sketching is an image processing library for use with platforms supporting .NET Standard 2.1. While currently in beta, the library is fairly usable at this stage. The namespaces may change for individual classes as it is cleaned up for production but otherwise it should be fairly safe to use.
+Structure.Sketching is an image processing library targeting the latest .NET LTS, which is currently 6.0. It is currently in beta. The namespaces may be adjusted as it is cleaned up for production, but otherwise it should be fairly safe to use.
 
 ## Supported Formats/Filters
 
@@ -118,27 +118,39 @@ That said hopefully the list will grow with time.
 
 ## Usage
 
-The library is fairly simple to use:
+The library is quite straightforward:
 
 	new Image("ExampleImage.jpg")
 		.Apply(new CannyEdgeDetection(Color.Black, Color.White, .9f, .1f))
 		.Save("ExampleImage2.jpg");
 		
-The Image class has a Fluent interface and can accept a string pointing to the file to load, a stream, or a byte array along with a width and height if you want a blank image. The Apply function applies a filter to the image, however you can specify a rectangle as the second parameter if you want it on only a portion of the image. The save function takes either a file name or a stream and an enum specifying the format to save it as.
+The `Image` class is designed with a fluent interface, offering flexibility in loading images. You can provide the source as a string pointing to a file, a stream, or a byte array. Additionally, you can specify the dimensions (width and height) when creating a blank image.
 
-For further explanation of the filters, please see the wiki documentation... Once I've written it.
+The `Apply` function allows you to apply a filter to the image. You have the option to define a rectangle as the second parameter, restricting the filter's effect to a specific portion of the image.
+
+The `Save` function offers flexibility in saving images. You have the option to either specify a file name or a stream. Additionally, you can define the desired file format using an enum, allowing you to save the image in your preferred format.
+
+For wiki documentation... *akan datang* (coming soon).
 
 ## Installation
 
-The library is available via Nuget with the package name "structure.sketching". To install it run the following command in the Package Manager Console:
+This fork is not yet available via Nuget.
 
-Install-Package structure.sketching
+The original package is available with the package name `Structure.Sketching`. To install it run the following command in the Package Manager Console:
+
+```
+Install-Package Structure.Sketching
+````
 
 ## Build Process
 
 In order to build the library you will require the following:
 
 1. Visual Studio 2022
-2. .Net 6.0 SDK
+2. .NET 6.0 SDK
 
-Other than that, just clone the project and you should be able to load the solution and build without too much effort.
+You can press F5 at the IDE to build the package, or, at the root of the solution, type
+
+```
+dotnet build
+```	

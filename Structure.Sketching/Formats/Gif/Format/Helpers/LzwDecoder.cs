@@ -86,7 +86,7 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers
                     {
                         if (Count == 0)
                         {
-                            Buffer = ReadBlock(Stream);
+                            Buffer = ReadBlock();
                             Count = Buffer.Length;
                             if (Count == 0)
                             {
@@ -174,12 +174,11 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers
         /// <summary>
         /// Reads the next block.
         /// </summary>
-        /// <param name="stream">The stream.</param>
         /// <returns>The next block</returns>
-        private byte[] ReadBlock(Stream stream)
+        private byte[] ReadBlock()
         {
-            var Size = stream.ReadByte();
-            return stream.ReadBytes(Size);
+            var size = Stream.ReadByte();
+            return Stream.ReadBytes(size);
         }
     }
 }
