@@ -16,12 +16,13 @@
     <Description>Structure.Sketching is an image manipulation and drawing library intended for use with .Net Core and .Net 4.6.</Description>
     <PackageReleaseNotes>This is the beta release of the project. While the general functionality is set the classes themselves may change namespaces and some minor functionality may be added prior to 1.0 release.</PackageReleaseNotes>
     <Copyright>Copyright 2016 - $([System.DateTime]::Now.Year)</Copyright>
-    <PackageTags>Image Picture Gif Jpg Jpeg Bitmap Png Processing System.Drawing</PackageTags>
+    <PackageTags>Image Picture Graphics Gif Jpg Jpeg Bitmap Png Processing System.Drawing</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>0.2.$(BuildNumber)</Version>
     <PackageId>Tz.$(AssemblyName)</PackageId>
     <Title>Structure.Sketching</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/tzinmein/Structure.Sketching</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
