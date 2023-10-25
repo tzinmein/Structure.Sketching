@@ -92,7 +92,8 @@ namespace Structure.Sketching.Formats.BaseClasses
         {
             if (stream == null)
                 return new Image(1, 1, new Color[1]);
-            return new TFile().Decode(stream);
+            var file = new TFile().Decode(stream);
+            return file;
         }
 
         /// <summary>

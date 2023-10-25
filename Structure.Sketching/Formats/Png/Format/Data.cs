@@ -39,9 +39,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// </summary>
         /// <param name="image">The image.</param>
         public Data(Image image)
-            : this(ToScanlines(image))
-        {
-        }
+            : this(ToScanlines(image)) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Data"/> class.
@@ -52,11 +50,27 @@ namespace Structure.Sketching.Formats.Png.Format
             ImageData = imageData;
             ColorTypes = new Dictionary<ColorType, ColorTypeInformation>
             {
-                [ColorType.Greyscale] = new ColorTypeInformation(1, new[] { 1, 2, 4, 8 }, (x, y) => new GreyscaleNoAlphaReader()),
-                [ColorType.TrueColor] = new ColorTypeInformation(3, new[] { 8 }, (x, y) => new TrueColorNoAlphaReader()),
-                [ColorType.Palette] = new ColorTypeInformation(1, new[] { 1, 2, 4, 8 }, (x, y) => new PaletteReader(x, y)),
-                [ColorType.GreyscaleWithAlpha] = new ColorTypeInformation(2, new[] { 8 }, (x, y) => new GreyscaleAlphaReader()),
-                [ColorType.TrueColorWithAlpha] = new ColorTypeInformation(4, new[] { 8 }, (x, y) => new TrueColorAlphaReader())
+                [ColorType.Greyscale] = new(
+                    1,
+                    new[] { 1, 2, 4, 8 },
+                    (_, _) => new GreyscaleNoAlphaReader()
+                ),
+                [ColorType.TrueColor] = new(3, new[] { 8 }, (_, _) => new TrueColorNoAlphaReader()),
+                [ColorType.Palette] = new(
+                    1,
+                    new[] { 1, 2, 4, 8 },
+                    (x, y) => new PaletteReader(x, y)
+                ),
+                [ColorType.GreyscaleWithAlpha] = new(
+                    2,
+                    new[] { 8 },
+                    (_, _) => new GreyscaleAlphaReader()
+                ),
+                [ColorType.TrueColorWithAlpha] = new(
+                    4,
+                    new[] { 8 },
+                    (_, _) => new TrueColorAlphaReader()
+                )
             };
             Filters = new Dictionary<FilterType, IScanFilter>
             {
@@ -78,7 +92,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// Gets or sets the color types.
         /// </summary>
         /// <value>The color types.</value>
-        private Dictionary<ColorType, ColorTypeInformation> ColorTypes { get; set; }
+        private Dictionary<ColorType, ColorTypeInformation> ColorTypes { get; }
 
         /// <summary>
         /// Gets or sets the filters.
@@ -109,21 +123,29 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <summary>
         /// Implements the operator +.
         /// </summary>
-        /// <param name="Object1">The object1.</param>
-        /// <param name="Object2">The object2.</param>
+        /// <param name="object1">The object1.</param>
+        /// <param name="object2">The object2.</param>
         /// <returns>The result of the operator.</returns>
-        public static Data operator +(Data Object1, Data Object2)
+        public static Data operator +(Data object1, Data object2)
         {
-            if (Object1 == null && Object2 == null)
+            if (object1 == null && object2 == null)
                 return new Data(Array.Empty<byte>());
-            if (Object1 == null)
-                return new Data(Object2.ImageData);
-            if (Object2 == null)
-                return new Data(Object1.ImageData);
-            var ReturnData = new Data(new byte[Object1.ImageData.Length + Object2.ImageData.Length]);
-            Array.Copy(Object1.ImageData, 0, ReturnData.ImageData, 0, Object1.ImageData.Length);
-            Array.Copy(Object2.ImageData, 0, ReturnData.ImageData, Object1.ImageData.Length, Object2.ImageData.Length);
-            return ReturnData;
+            if (object1 == null)
+                return new Data(object2.ImageData);
+            if (object2 == null)
+                return new Data(object1.ImageData);
+            var returnData = new Data(
+                new byte[object1.ImageData.Length + object2.ImageData.Length]
+            );
+            Array.Copy(object1.ImageData, 0, returnData.ImageData, 0, object1.ImageData.Length);
+            Array.Copy(
+                object2.ImageData,
+                0,
+                returnData.ImageData,
+                object1.ImageData.Length,
+                object2.ImageData.Length
+            );
+            return returnData;
         }
 
         /// <summary>
@@ -135,17 +157,17 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <returns>The resulting image</returns>
         public Image Parse(Header header, Palette palette, Palette alphaPalette)
         {
-            Color[] Pixels = new Color[header.Width * header.Height];
-            var ColorTypeInfo = ColorTypes[header.ColorType];
+            var pixels = new Color[header.Width * header.Height];
+            var colorTypeInfo = ColorTypes[header.ColorType];
 
-            if (ColorTypeInfo != null)
-            {
-                var ColorReader = ColorTypeInfo.CreateColorReader(palette, alphaPalette);
-                using MemoryStream TempStream = new MemoryStream(ImageData);
-                ReadScanlines(TempStream, Pixels, ColorReader, ColorTypeInfo, header);
-            }
+            if (colorTypeInfo == null)
+                return new Image(header.Width, header.Height, pixels);
 
-            return new Image(header.Width, header.Height, Pixels);
+            var colorReader = colorTypeInfo.CreateColorReader(palette, alphaPalette);
+            using var tempStream = new MemoryStream(ImageData);
+            ReadScanlines(tempStream, pixels, colorReader, colorTypeInfo, header);
+
+            return new Image(header.Width, header.Height, pixels);
         }
 
         /// <summary>
@@ -154,17 +176,21 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="colorTypeInformation">The color type information.</param>
         /// <param name="header">The header.</param>
         /// <returns>The scanline length</returns>
-        private static int CalculateScanlineLength(ColorTypeInformation colorTypeInformation, Header header)
+        private static int CalculateScanlineLength(
+            ColorTypeInformation colorTypeInformation,
+            Header header
+        )
         {
-            int ScanlineLength = header.Width * header.BitDepth * colorTypeInformation.ScanlineFactor;
+            var scanLineLength =
+                header.Width * header.BitDepth * colorTypeInformation.ScanlineFactor;
 
-            int Amount = ScanlineLength % 8;
-            if (Amount != 0)
+            var amount = scanLineLength % 8;
+            if (amount != 0)
             {
-                ScanlineLength += 8 - Amount;
+                scanLineLength += 8 - amount;
             }
 
-            return ScanlineLength / 8;
+            return scanLineLength / 8;
         }
 
         /// <summary>
@@ -173,9 +199,14 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="colorTypeInformation">The color type information.</param>
         /// <param name="header">The header.</param>
         /// <returns>The scanline step</returns>
-        private static int CalculateScanlineStep(ColorTypeInformation colorTypeInformation, Header header)
+        private static int CalculateScanLineStep(
+            ColorTypeInformation colorTypeInformation,
+            Header header
+        )
         {
-            return header.BitDepth >= 8 ? colorTypeInformation.ScanlineFactor * header.BitDepth / 8 : 1;
+            return header.BitDepth >= 8
+                ? colorTypeInformation.ScanlineFactor * header.BitDepth / 8
+                : 1;
         }
 
         /// <summary>
@@ -187,7 +218,7 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <returns>The predicted paeth...</returns>
         private static byte PaethPredicator(byte left, byte above, byte upperLeft)
         {
-            int p = left + above - upperLeft;
+            var p = left + above - upperLeft;
             var pa = Math.Abs(p - left);
             var pb = Math.Abs(p - above);
             var pc = Math.Abs(p - upperLeft);
@@ -195,46 +226,54 @@ namespace Structure.Sketching.Formats.Png.Format
             {
                 return left;
             }
-            if (pb <= pc)
-            {
-                return above;
-            }
-            return upperLeft;
+            return pb <= pc ? above : upperLeft;
         }
 
         private static byte[] ToScanlines(Image image)
         {
-            byte[] data = new byte[image.Width * image.Height * 4 + image.Height];
-            int RowLength = image.Width * 4 + 1;
+            var data = new byte[image.Width * image.Height * 4 + image.Height];
+            var rowLength = image.Width * 4 + 1;
 
-            Parallel.For(0, image.Width, x =>
-              {
-                  int dataOffset = x * 4 + 1;
-                  int PixelOffset = x;
-                  data[dataOffset] = image.Pixels[PixelOffset].Red;
-                  data[dataOffset + 1] = image.Pixels[PixelOffset].Green;
-                  data[dataOffset + 2] = image.Pixels[PixelOffset].Blue;
-                  data[dataOffset + 3] = image.Pixels[PixelOffset].Alpha;
-                  data[0] = 0;
-                  for (int y = 1; y < image.Height; ++y)
-                  {
-                      dataOffset = y * RowLength + x * 4 + 1;
-                      PixelOffset = image.Width * y + x;
-                      int AbovePixelOffset = image.Width * (y - 1) + x;
-                      data[dataOffset] = (byte)(image.Pixels[PixelOffset].Red - image.Pixels[AbovePixelOffset].Red);
-                      data[dataOffset + 1] = (byte)(image.Pixels[PixelOffset].Green - image.Pixels[AbovePixelOffset].Green);
-                      data[dataOffset + 2] = (byte)(image.Pixels[PixelOffset].Blue - image.Pixels[AbovePixelOffset].Blue);
-                      data[dataOffset + 3] = (byte)(image.Pixels[PixelOffset].Alpha - image.Pixels[AbovePixelOffset].Alpha);
-                      data[y * RowLength] = 2;
-                  }
-              });
+            Parallel.For(
+                0,
+                image.Width,
+                x =>
+                {
+                    var dataOffset = x * 4 + 1;
+                    var pixelOffset = x;
+                    data[dataOffset] = image.Pixels[pixelOffset].Red;
+                    data[dataOffset + 1] = image.Pixels[pixelOffset].Green;
+                    data[dataOffset + 2] = image.Pixels[pixelOffset].Blue;
+                    data[dataOffset + 3] = image.Pixels[pixelOffset].Alpha;
+                    data[0] = 0;
+                    for (var y = 1; y < image.Height; ++y)
+                    {
+                        dataOffset = y * rowLength + x * 4 + 1;
+                        pixelOffset = image.Width * y + x;
+                        var abovePixelOffset = image.Width * (y - 1) + x;
+                        data[dataOffset] = (byte)(
+                            image.Pixels[pixelOffset].Red - image.Pixels[abovePixelOffset].Red
+                        );
+                        data[dataOffset + 1] = (byte)(
+                            image.Pixels[pixelOffset].Green - image.Pixels[abovePixelOffset].Green
+                        );
+                        data[dataOffset + 2] = (byte)(
+                            image.Pixels[pixelOffset].Blue - image.Pixels[abovePixelOffset].Blue
+                        );
+                        data[dataOffset + 3] = (byte)(
+                            image.Pixels[pixelOffset].Alpha - image.Pixels[abovePixelOffset].Alpha
+                        );
+                        data[y * rowLength] = 2;
+                    }
+                }
+            );
 
-            using MemoryStream TempMemoryStream = new MemoryStream();
-            using (ZlibDeflateStream TempDeflateStream = new ZlibDeflateStream(TempMemoryStream, 6))
+            using var tempMemoryStream = new MemoryStream();
+            using (var tempDeflateStream = new ZlibDeflateStream(tempMemoryStream, 6))
             {
-                TempDeflateStream.Write(data, 0, data.Length);
+                tempDeflateStream.Write(data, 0, data.Length);
             }
-            return TempMemoryStream.ToArray();
+            return tempMemoryStream.ToArray();
         }
 
         /// <summary>
@@ -245,36 +284,47 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="colorReader">The color reader.</param>
         /// <param name="colorTypeInformation">The color type information.</param>
         /// <param name="header">The header.</param>
-        private void ReadScanlines(MemoryStream dataStream, Color[] pixels, IColorReader colorReader, ColorTypeInformation colorTypeInformation, Header header)
+        private void ReadScanlines(
+            MemoryStream dataStream,
+            Color[] pixels,
+            IColorReader colorReader,
+            ColorTypeInformation colorTypeInformation,
+            Header header
+        )
         {
             dataStream.Seek(0, SeekOrigin.Begin);
 
-            var ScanlineLength = CalculateScanlineLength(colorTypeInformation, header);
-            var ScanlineStep = CalculateScanlineStep(colorTypeInformation, header);
+            var scanLineLength = CalculateScanlineLength(colorTypeInformation, header);
+            var scanLineStep = CalculateScanLineStep(colorTypeInformation, header);
 
-            byte[] LastScanline = new byte[ScanlineLength];
-            byte[] CurrentScanline = new byte[ScanlineLength];
-            int Filter = 0, Column = -1, Row = 0;
+            var lastScanLine = new byte[scanLineLength];
+            var currentScanLine = new byte[scanLineLength];
 
-            using InflateStream CompressedStream = new InflateStream(dataStream);
-            int ReadByte;
-            while ((ReadByte = CompressedStream.ReadByte()) >= 0)
+            int filter = 0,
+                column = -1,
+                row = 0;
+
+            using InflateStream decompressedStream = new InflateStream(dataStream);
+            using MemoryStream stream = new MemoryStream();
+            decompressedStream.CopyTo(stream);
+            stream.Flush();
+            var decompressedArray = stream.ToArray();
+            foreach (var by in decompressedArray)
             {
-                if (Column == -1)
+                if (column == -1)
                 {
-                    Filter = ReadByte;
-                    ++Column;
+                    filter = by;
+                    ++column;
                 }
                 else
                 {
-                    CurrentScanline[Column] = (byte)ReadByte;
+                    currentScanLine[column] = by;
                     byte a;
-                    byte b;
                     byte c;
-                    if (Column >= ScanlineStep)
+                    if (column >= scanLineStep)
                     {
-                        a = CurrentScanline[Column - ScanlineStep];
-                        c = LastScanline[Column - ScanlineStep];
+                        a = currentScanLine[column - scanLineStep];
+                        c = lastScanLine[column - scanLineStep];
                     }
                     else
                     {
@@ -282,45 +332,27 @@ namespace Structure.Sketching.Formats.Png.Format
                         c = 0;
                     }
 
-                    b = LastScanline[Column];
-                    switch (Filter)
+                    var b = lastScanLine[column];
+                    currentScanLine[column] = filter switch
                     {
-                        case 1:
-                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + a);
-                            break;
+                        1 => (byte)(currentScanLine[column] + a),
+                        2 => (byte)(currentScanLine[column] + b),
+                        3 => (byte)(currentScanLine[column] + (byte)((a + b) / 2)),
+                        4 => (byte)(currentScanLine[column] + PaethPredicator(a, b, c)),
+                        _ => currentScanLine[column]
+                    };
 
-                        case 2:
-                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + b);
-                            break;
+                    ++column;
 
-                        case 3:
-                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + (byte)((a + b) / 2));
-                            break;
-
-                        case 4:
-                            CurrentScanline[Column] = (byte)(CurrentScanline[Column] + PaethPredicator(a, b, c));
-                            break;
-                    }
-
-                    ++Column;
-
-                    if (Column == ScanlineLength)
+                    if (column == scanLineLength)
                     {
-                        colorReader.ReadScanline(CurrentScanline, pixels, header, Row);
-                        ++Row;
-                        Column = -1;
-                        (LastScanline, CurrentScanline) = (CurrentScanline, LastScanline);
+                        colorReader.ReadScanline(currentScanLine, pixels, header, row);
+                        ++row;
+                        column = -1;
+                        (lastScanLine, currentScanLine) = (currentScanLine, lastScanLine);
                     }
                 }
             }
-            //dataStream.Seek(0, SeekOrigin.Begin);
-
-            //var ScanlineLength = CalculateScanlineLength(colorTypeInformation, header);
-            //var ScanlineStep = CalculateScanlineStep(colorTypeInformation, header);
-
-            //byte[] LastScanline = new byte[ScanlineLength];
-            //byte[] CurrentScanline = new byte[ScanlineLength];
-
             //using (InflateStream CompressedStream = new InflateStream(dataStream))
             //{
             //    using (MemoryStream DecompressedStream = new MemoryStream())

@@ -36,11 +36,11 @@ namespace Structure.Sketching.Formats.Png.Format
             ChunkActions = new Dictionary<ChunkTypes, Action<Chunk>>
             {
                 [ChunkTypes.Header] = ReadHeader,
-                [ChunkTypes.Physical] = x => { },
+                [ChunkTypes.Physical] = _ => { },
                 [ChunkTypes.Palette] = ReadPalette,
                 [ChunkTypes.TransparencyInfo] = ReadAlphaPalette,
                 [ChunkTypes.Text] = ReadText,
-                [ChunkTypes.End] = x => { },
+                [ChunkTypes.End] = _ => { },
                 [ChunkTypes.Data] = ReadData
             };
         }
@@ -119,8 +119,8 @@ namespace Structure.Sketching.Formats.Png.Format
         public override FileBase Decode(Stream stream)
         {
             FileHeader = FileHeader.Read(stream);
-            var Chunks = ReadChunks(stream);
-            ParseChunks(Chunks);
+            var chunks = ReadChunks(stream);
+            ParseChunks(chunks);
             return this;
         }
 
@@ -195,10 +195,12 @@ namespace Structure.Sketching.Formats.Png.Format
         /// <param name="chunks">The chunks.</param>
         private void ParseChunks(IEnumerable<Chunk> chunks)
         {
-            foreach (var CurrentChunk in chunks)
+            foreach (var currentChunk in chunks)
             {
-                if (ChunkActions.ContainsKey(CurrentChunk.Type))
-                    ChunkActions[CurrentChunk.Type](CurrentChunk);
+                if (ChunkActions.ContainsKey(currentChunk.Type))
+                {
+                    ChunkActions[currentChunk.Type](currentChunk);
+                }
             }
         }
 
@@ -216,17 +218,17 @@ namespace Structure.Sketching.Formats.Png.Format
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns>A list of chunks from the stream</returns>
-        private List<Chunk> ReadChunks(Stream stream)
+        private IEnumerable<Chunk> ReadChunks(Stream stream)
         {
-            var Results = new List<Chunk>();
+            var results = new List<Chunk>();
             while (true)
             {
-                var TempChunk = Chunk.Read(stream);
-                if (TempChunk == null)
+                var tempChunk = Chunk.Read(stream);
+                if (tempChunk == null)
                     break;
-                Results.Add(TempChunk);
+                results.Add(tempChunk);
             }
-            return Results;
+            return results;
         }
 
         /// <summary>
@@ -236,7 +238,7 @@ namespace Structure.Sketching.Formats.Png.Format
         private void ReadData(Chunk obj)
         {
             if (Data != null)
-                Data += (Data)obj;
+                Data += obj;
             else
                 Data = obj;
         }
