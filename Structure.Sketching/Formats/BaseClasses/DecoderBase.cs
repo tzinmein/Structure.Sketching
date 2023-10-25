@@ -33,9 +33,7 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// <summary>
         /// Initializes a new instance of the <see cref="DecoderBase{TFile}"/> class.
         /// </summary>
-        protected DecoderBase()
-        {
-        }
+        protected DecoderBase() { }
 
         /// <summary>
         /// Gets the size of the header.
@@ -56,7 +54,8 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// <returns>True if it can, false otherwise</returns>
         public bool CanDecode(Stream stream)
         {
-            if (stream == null) return false;
+            if (stream == null)
+                return false;
             byte[] TempBuffer = new byte[HeaderSize];
             stream.Seek(0, SeekOrigin.Begin);
             stream.Read(TempBuffer, 0, HeaderSize);
@@ -79,8 +78,10 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// <returns>True if it can, false otherwise</returns>
         public bool CanDecode(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName)) return false;
-            return FileExtensions.Any(x => fileName.EndsWith(x, StringComparison.OrdinalIgnoreCase));
+            return !string.IsNullOrEmpty(fileName)
+                && FileExtensions.Any(
+                    x => fileName.EndsWith(x, StringComparison.OrdinalIgnoreCase)
+                );
         }
 
         /// <summary>
@@ -90,10 +91,7 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// <returns>The resulting image</returns>
         public Image Decode(Stream stream)
         {
-            if (stream == null)
-                return new Image(1, 1, new Color[1]);
-            var file = new TFile().Decode(stream);
-            return file;
+            return stream != null ? new TFile().Decode(stream) : new Image(1, 1, new Color[1]);
         }
 
         /// <summary>
@@ -103,9 +101,9 @@ namespace Structure.Sketching.Formats.BaseClasses
         /// <returns>The resulting animation</returns>
         public Animation DecodeAnimation(Stream stream)
         {
-            if (stream == null)
-                return new Animation(new[] { new Image(1, 1, new Color[1]) }, 0);
-            return new TFile().Decode(stream);
+            return stream != null
+                ? new TFile().Decode(stream)
+                : new Animation(new[] { new Image(1, 1, new Color[1]) }, 0);
         }
     }
 }
