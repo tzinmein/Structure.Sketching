@@ -16,11 +16,11 @@ limitations under the License.
 
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.Formats.Gif.Format.Enums;
-using Structure.Sketching.Helpers;
 using Structure.Sketching.IO;
 using Structure.Sketching.Quantizers;
 using System;
 using System.IO;
+using Structure.Sketching.Formats.Gif.Format.Helpers;
 
 namespace Structure.Sketching.Formats.Gif.Format;
 
@@ -53,14 +53,14 @@ public class GraphicsControl : SectionBase
     /// <param name="delay">The delay.</param>
     public GraphicsControl(Image image, QuantizedImage quantizedImage, short delay)
     {
-        var TempTransparencyIndex = quantizedImage.TransparentIndex;
-        bool hasTransparent = TempTransparencyIndex > -1;
-        DisposalMethod disposalMethod = hasTransparent
+        var tempTransparencyIndex = quantizedImage.TransparentIndex;
+        var hasTransparent = tempTransparencyIndex > -1;
+        var disposalMethod = hasTransparent
             ? DisposalMethod.RestoreToBackground
             : DisposalMethod.Undefined;
 
         Delay = delay;
-        TransparencyIndex = (byte)TempTransparencyIndex;
+        TransparencyIndex = (byte)tempTransparencyIndex;
         TransparencyFlag = hasTransparent;
         DisposalMethod = disposalMethod;
     }
@@ -112,14 +112,14 @@ public class GraphicsControl : SectionBase
     /// <returns>The resulting GraphicsControl object</returns>
     public static GraphicsControl Read(Stream stream)
     {
-        byte[] TempBuffer = new byte[Size];
-        stream.Read(TempBuffer, 0, TempBuffer.Length);
-        byte Packed = TempBuffer[1];
+        var tempBuffer = new byte[Size];
+        stream.Read(tempBuffer, 0, tempBuffer.Length);
+        var packed = tempBuffer[1];
 
-        return new GraphicsControl(BitConverter.ToInt16(TempBuffer, 2),
-            TempBuffer[4],
-            (Packed & 0x01) == 1,
-            (DisposalMethod)((Packed & 0x1C) >> 2));
+        return new GraphicsControl(BitConverter.ToInt16(tempBuffer, 2),
+            tempBuffer[4],
+            (packed & 0x01) == 1,
+            (DisposalMethod)((packed & 0x1C) >> 2));
     }
 
     /// <summary>

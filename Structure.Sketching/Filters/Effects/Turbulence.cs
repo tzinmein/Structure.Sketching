@@ -70,28 +70,28 @@ public class Turbulence : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var Result = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, Result, Result.Length);
-        var XNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);
-        var YNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
+        var result = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, result, result.Length);
+        var xNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);
+        var yNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    float XDistortion = x + XNoise.Pixels[y * image.Width + x].Red * Power;
-                    float YDistortion = y + YNoise.Pixels[y * image.Width + x].Red * Power;
-                    var X1 = (int)XDistortion.Clamp(0, image.Width - 1);
-                    var Y1 = (int)YDistortion.Clamp(0, image.Height - 1);
-                    int ResultOffset = y * image.Width + x;
-                    int SourceOffset = Y1 * image.Width + X1;
+                    var xDistortion = x + xNoise.Pixels[y * image.Width + x].Red * Power;
+                    var yDistortion = y + yNoise.Pixels[y * image.Width + x].Red * Power;
+                    var x1 = (int)xDistortion.Clamp(0, image.Width - 1);
+                    var y1 = (int)yDistortion.Clamp(0, image.Height - 1);
+                    var resultOffset = y * image.Width + x;
+                    var sourceOffset = y1 * image.Width + x1;
 
-                    Result[ResultOffset] = image.Pixels[SourceOffset];
+                    result[resultOffset] = image.Pixels[sourceOffset];
                 }
             }
         });
-        return image.ReCreate(image.Width, image.Height, Result);
+        return image.ReCreate(image.Width, image.Height, result);
     }
 }

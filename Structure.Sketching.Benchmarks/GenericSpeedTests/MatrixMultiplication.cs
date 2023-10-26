@@ -7,7 +7,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests;
 
 public class MatrixMultiplication
 {
-    private readonly Matrix5x5 _value = new(
+    private readonly Matrix5X5 _value = new(
         1, 0, 0, 0, 0,
         0, 1, 0, 0, 0,
         0, 0, 1, 0, 0,

@@ -52,9 +52,9 @@ public class File : FileBase
     /// <value>
     /// The sof segment.
     /// </value>
-    public StartOfFrame SOFSegment { get; private set; }
+    public StartOfFrame SofSegment { get; private set; }
 
-    private Image ReturnValue = new Image(1, 1);
+    private Image _returnValue = new Image(1, 1);
 
     /// <summary>
     /// Decodes the specified stream.
@@ -65,7 +65,7 @@ public class File : FileBase
     /// </returns>
     public override FileBase Decode(Stream stream)
     {
-        ReturnValue = ReadSegments(stream);
+        _returnValue = ReadSegments(stream);
         return this;
     }
 
@@ -80,12 +80,12 @@ public class File : FileBase
     public override bool Write(BinaryWriter stream, Image image)
     {
         new StartOfImage().Write(stream);
-        var QuantizationTableSegment = new DefineQuantizationTable(90);
-        QuantizationTableSegment.Write(stream);
+        var quantizationTableSegment = new DefineQuantizationTable(90);
+        quantizationTableSegment.Write(stream);
         new StartOfFrame(image).Write(stream);
-        var HuffmanTableSegment = new DefineHuffmanTable(null);
-        HuffmanTableSegment.Write(stream);
-        new StartOfScan(image, HuffmanTableSegment, QuantizationTableSegment).Write(stream);
+        var huffmanTableSegment = new DefineHuffmanTable(null);
+        huffmanTableSegment.Write(stream);
+        new StartOfScan(image, huffmanTableSegment, quantizationTableSegment).Write(stream);
         new EndOfImage(null).Write(stream);
         return true;
     }
@@ -122,7 +122,7 @@ public class File : FileBase
     /// </returns>
     protected override Image ToImage()
     {
-        return ReturnValue;
+        return _returnValue;
     }
 
     /// <summary>
@@ -139,19 +139,19 @@ public class File : FileBase
         Segments = new List<SegmentBase>();
         while (true)
         {
-            var TempSegment = SegmentBase.Read(bytes, Segments);
-            if (TempSegment != null)
+            var tempSegment = SegmentBase.Read(bytes, Segments);
+            if (tempSegment != null)
             {
-                TempSegment.Setup(Segments);
-                if (!Segments.Contains(TempSegment))
-                    Segments.Add(TempSegment);
-                if (TempSegment.Type == SegmentTypes.EndOfImage)
+                tempSegment.Setup(Segments);
+                if (!Segments.Contains(tempSegment))
+                    Segments.Add(tempSegment);
+                if (tempSegment.Type == SegmentTypes.EndOfImage)
                     break;
             }
         }
-        var StartOfScanSegment = Segments.OfType<StartOfScan>().FirstOrDefault();
-        if (StartOfScanSegment == null)
+        var startOfScanSegment = Segments.OfType<StartOfScan>().FirstOrDefault();
+        if (startOfScanSegment == null)
             throw new ImageException("No scan information found.");
-        return StartOfScanSegment.Convert(ReturnValue, Segments);
+        return startOfScanSegment.Convert(_returnValue, Segments);
     }
 }

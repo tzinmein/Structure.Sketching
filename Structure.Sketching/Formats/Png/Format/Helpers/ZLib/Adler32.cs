@@ -52,8 +52,8 @@ public class Adler32
     /// <returns>The updated value.</returns>
     public long Update(int value)
     {
-        uint s1 = Value & 0xFFFF;
-        uint s2 = Value >> 16;
+        var s1 = Value & 0xFFFF;
+        var s2 = Value >> 16;
         s1 = (s1 + ((uint)value & 0xFF)) % Base;
         s2 = (s1 + s2) % Base;
         Value = (s2 << 16) + s1;
@@ -72,11 +72,11 @@ public class Adler32
         buffer ??= Array.Empty<byte>();
         count = count.Clamp(0, buffer.Length);
         offset = offset.Clamp(0, buffer.Length);
-        uint s1 = Value & 0xFFFF;
-        uint s2 = Value >> 16;
+        var s1 = Value & 0xFFFF;
+        var s2 = Value >> 16;
         while (count > 0)
         {
-            int n = 3800;
+            var n = 3800;
             if (n > count)
             {
                 n = count;

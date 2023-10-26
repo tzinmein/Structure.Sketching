@@ -38,7 +38,7 @@ public class StartOfScan : SegmentBase
     public StartOfScan(ByteBuffer bytes)
         : base(SegmentTypes.StartOfScan, bytes)
     {
-        ProgressiveCoefficients = new Block[MAXIMUM_NUMBER_COMPONENTS][];
+        _progressiveCoefficients = new Block[MaximumNumberComponents][];
     }
 
     /// <summary>
@@ -76,15 +76,15 @@ public class StartOfScan : SegmentBase
     /// <summary>
     /// The grey image
     /// </summary>
-    public GreyImage img1;
+    public GreyImage Img1;
 
-    private const int acTable = 1;
-    private const int dcTable = 0;
-    private const int MAXIMUM_NUMBER_COMPONENTS = 4;
+    private const int AcTable = 1;
+    private const int DcTable = 0;
+    private const int MaximumNumberComponents = 4;
 
-    private const int MAXIMUM_TH = 3;
+    private const int MaximumTh = 3;
 
-    private static readonly int[] unzig =
+    private static readonly int[] Unzig =
     {
         0, 1, 8, 16, 9, 2, 3, 10,
         17, 24, 32, 25, 18, 11, 4, 5,
@@ -96,7 +96,7 @@ public class StartOfScan : SegmentBase
         53, 60, 61, 54, 47, 55, 62, 63
     };
 
-    private readonly byte[] bitCount =
+    private readonly byte[] _bitCount =
     {
         0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
         5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
@@ -119,17 +119,17 @@ public class StartOfScan : SegmentBase
     /// <summary>
     /// The sos header for y cb cr
     /// </summary>
-    private readonly byte[] sosHeaderYCbCr =
+    private readonly byte[] _sosHeaderYCbCr =
     {
         0xff, 0xda, 0x00, 0x0c, 0x03, 0x01, 0x00, 0x02,
         0x11, 0x03, 0x11, 0x00, 0x3f, 0x00
     };
 
-    private uint bits;
-    private ushort EndOfBlockRun;
-    private YcbcrImg img3;
-    private uint nBits;
-    private readonly Block[][] ProgressiveCoefficients;
+    private uint _bits;
+    private ushort _endOfBlockRun;
+    private YcbcrImg _img3;
+    private uint _nBits;
+    private readonly Block[][] _progressiveCoefficients;
 
     /// <summary>
     /// Converts the scan information into an image
@@ -139,15 +139,15 @@ public class StartOfScan : SegmentBase
     /// <returns>The resulting image</returns>
     public Image Convert(Image image, IEnumerable<SegmentBase> segments)
     {
-        var Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
-        if (img1 != null)
+        var frame = segments.OfType<StartOfFrame>().FirstOrDefault();
+        if (Img1 != null)
         {
-            return img1.Convert(Frame.Width, Frame.Height, image, segments);
+            return Img1.Convert(frame.Width, frame.Height, image, segments);
         }
 
-        if (img3 != null)
+        if (_img3 != null)
         {
-            return img3.Convert(Frame.Width, Frame.Height, image, segments);
+            return _img3.Convert(frame.Width, frame.Height, image, segments);
         }
         return image;
     }
@@ -167,38 +167,38 @@ public class StartOfScan : SegmentBase
     {
         Length = GetLength(Bytes);
         var n = Length;
-        var StartOfFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
-        var DefineHuffmanTableSegment = segments.OfType<DefineHuffmanTable>().FirstOrDefault();
-        var DefineRestartIntervalSegment = segments.OfType<DefineRestartInterval>().FirstOrDefault() ?? new DefineRestartInterval(null);
-        var DefineQuantizationTableSegment = segments.OfType<DefineQuantizationTable>().FirstOrDefault();
-        if (StartOfFrameSegment == null)
+        var startOfFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
+        var defineHuffmanTableSegment = segments.OfType<DefineHuffmanTable>().FirstOrDefault();
+        var defineRestartIntervalSegment = segments.OfType<DefineRestartInterval>().FirstOrDefault() ?? new DefineRestartInterval(null);
+        var defineQuantizationTableSegment = segments.OfType<DefineQuantizationTable>().FirstOrDefault();
+        if (startOfFrameSegment == null)
         {
             throw new Exception("missing SOF marker");
         }
 
-        if (n < 6 || 4 + 2 * (int)StartOfFrameSegment.TypeOfImage < n || n % 2 != 0)
+        if (n < 6 || 4 + 2 * (int)startOfFrameSegment.TypeOfImage < n || n % 2 != 0)
         {
             throw new Exception("SOS has wrong length");
         }
 
         Bytes.ReadFull(TempData, 0, n);
-        byte lnComp = TempData[0];
+        var lnComp = TempData[0];
 
         if (n != 4 + 2 * lnComp)
         {
             throw new Exception("SOS length inconsistent with number of components");
         }
 
-        Scan[] scan = new Scan[MAXIMUM_NUMBER_COMPONENTS];
-        int totalHV = 0;
+        var scan = new Scan[MaximumNumberComponents];
+        var totalHv = 0;
 
-        for (int i = 0; i < lnComp; i++)
+        for (var i = 0; i < lnComp; i++)
         {
             int cs = TempData[1 + 2 * i];
-            int compIndex = -1;
-            for (int j = 0; j < (int)StartOfFrameSegment.TypeOfImage; j++)
+            var compIndex = -1;
+            for (var j = 0; j < (int)startOfFrameSegment.TypeOfImage; j++)
             {
-                Component compv = StartOfFrameSegment.Components[j];
+                var compv = startOfFrameSegment.Components[j];
                 if (cs == compv.ComponentIdentifier)
                 {
                     compIndex = j;
@@ -211,7 +211,7 @@ public class StartOfScan : SegmentBase
             }
 
             scan[i].ComponentIndex = (byte)compIndex;
-            for (int j = 0; j < i; j++)
+            for (var j = 0; j < i; j++)
             {
                 if (scan[i].ComponentIndex == scan[j].ComponentIndex)
                 {
@@ -219,32 +219,32 @@ public class StartOfScan : SegmentBase
                 }
             }
 
-            totalHV += StartOfFrameSegment.Components[compIndex].HorizontalSamplingFactor * StartOfFrameSegment.Components[compIndex].VerticalSamplingFactor;
+            totalHv += startOfFrameSegment.Components[compIndex].HorizontalSamplingFactor * startOfFrameSegment.Components[compIndex].VerticalSamplingFactor;
 
             scan[i].Td = (byte)(TempData[2 + 2 * i] >> 4);
-            if (scan[i].Td > MAXIMUM_TH)
+            if (scan[i].Td > MaximumTh)
             {
                 throw new Exception("bad Td value");
             }
 
             scan[i].Ta = (byte)(TempData[2 + 2 * i] & 0x0f);
-            if (scan[i].Ta > MAXIMUM_TH)
+            if (scan[i].Ta > MaximumTh)
             {
                 throw new Exception("bad Ta value");
             }
         }
 
-        if (StartOfFrameSegment.TypeOfImage != ImageType.GreyScale && totalHV > 10)
+        if (startOfFrameSegment.TypeOfImage != ImageType.GreyScale && totalHv > 10)
         {
             throw new Exception("Total sampling factors too large.");
         }
 
-        int zigStart = 0;
-        int zigEnd = Block.BlockSize - 1;
-        int ah = 0;
-        int al = 0;
+        var zigStart = 0;
+        var zigEnd = Block.BlockSize - 1;
+        var ah = 0;
+        var al = 0;
 
-        if (StartOfFrameSegment.Progressive)
+        if (startOfFrameSegment.Progressive)
         {
             zigStart = (int)TempData[1 + 2 * lnComp];
             zigEnd = (int)TempData[2 + 2 * lnComp];
@@ -267,28 +267,28 @@ public class StartOfScan : SegmentBase
             }
         }
 
-        int h0 = StartOfFrameSegment.Components[0].HorizontalSamplingFactor;
-        int v0 = StartOfFrameSegment.Components[0].VerticalSamplingFactor;
-        int mxx = (StartOfFrameSegment.Width + 8 * h0 - 1) / (8 * h0);
-        int myy = (StartOfFrameSegment.Height + 8 * v0 - 1) / (8 * v0);
+        var h0 = startOfFrameSegment.Components[0].HorizontalSamplingFactor;
+        var v0 = startOfFrameSegment.Components[0].VerticalSamplingFactor;
+        var mxx = (startOfFrameSegment.Width + 8 * h0 - 1) / (8 * h0);
+        var myy = (startOfFrameSegment.Height + 8 * v0 - 1) / (8 * v0);
 
-        if (img1 == null && img3 == null)
+        if (Img1 == null && _img3 == null)
         {
-            makeImg(mxx, myy, StartOfFrameSegment);
+            MakeImg(mxx, myy, startOfFrameSegment);
         }
 
-        if (StartOfFrameSegment.Progressive)
+        if (startOfFrameSegment.Progressive)
         {
-            for (int i = 0; i < lnComp; i++)
+            for (var i = 0; i < lnComp; i++)
             {
                 int compIndex = scan[i].ComponentIndex;
-                if (ProgressiveCoefficients[compIndex] == null)
+                if (_progressiveCoefficients[compIndex] == null)
                 {
-                    ProgressiveCoefficients[compIndex] = new Block[mxx * myy * StartOfFrameSegment.Components[compIndex].HorizontalSamplingFactor * StartOfFrameSegment.Components[compIndex].VerticalSamplingFactor];
+                    _progressiveCoefficients[compIndex] = new Block[mxx * myy * startOfFrameSegment.Components[compIndex].HorizontalSamplingFactor * startOfFrameSegment.Components[compIndex].VerticalSamplingFactor];
 
-                    for (int j = 0; j < ProgressiveCoefficients[compIndex].Length; j++)
+                    for (var j = 0; j < _progressiveCoefficients[compIndex].Length; j++)
                     {
-                        ProgressiveCoefficients[compIndex][j] = new Block();
+                        _progressiveCoefficients[compIndex][j] = new Block();
                     }
                 }
             }
@@ -296,26 +296,26 @@ public class StartOfScan : SegmentBase
 
         Bytes.Bits = new BitsBuffer();
 
-        int mcu = 0;
-        byte expectedRST = SegmentTypes.Restart0;
+        var mcu = 0;
+        byte expectedRst = SegmentTypes.Restart0;
 
         var b = new Block();
-        int[] dc = new int[MAXIMUM_NUMBER_COMPONENTS];
+        var dc = new int[MaximumNumberComponents];
 
         int bx, by, blockCount = 0;
 
-        for (int my = 0; my < myy; my++)
+        for (var my = 0; my < myy; my++)
         {
-            for (int mx = 0; mx < mxx; mx++)
+            for (var mx = 0; mx < mxx; mx++)
             {
-                for (int i = 0; i < lnComp; i++)
+                for (var i = 0; i < lnComp; i++)
                 {
                     int compIndex = scan[i].ComponentIndex;
-                    int hi = StartOfFrameSegment.Components[compIndex].HorizontalSamplingFactor;
-                    int vi = StartOfFrameSegment.Components[compIndex].VerticalSamplingFactor;
-                    Block qt = DefineQuantizationTableSegment.quant[StartOfFrameSegment.Components[compIndex].QuatizationTableDestSelector];
+                    var hi = startOfFrameSegment.Components[compIndex].HorizontalSamplingFactor;
+                    var vi = startOfFrameSegment.Components[compIndex].VerticalSamplingFactor;
+                    var qt = defineQuantizationTableSegment.Quant[startOfFrameSegment.Components[compIndex].QuatizationTableDestSelector];
 
-                    for (int j = 0; j < hi * vi; j++)
+                    for (var j = 0; j < hi * vi; j++)
                     {
                         if (lnComp != 1)
                         {
@@ -324,46 +324,46 @@ public class StartOfScan : SegmentBase
                         }
                         else
                         {
-                            int q = mxx * hi;
+                            var q = mxx * hi;
                             bx = blockCount % q;
                             by = blockCount / q;
                             blockCount++;
-                            if (bx * 8 >= StartOfFrameSegment.Width || by * 8 >= StartOfFrameSegment.Height)
+                            if (bx * 8 >= startOfFrameSegment.Width || by * 8 >= startOfFrameSegment.Height)
                                 continue;
                         }
-                        if (StartOfFrameSegment.Progressive)
-                            b = ProgressiveCoefficients[compIndex][by * mxx * hi + bx];
+                        if (startOfFrameSegment.Progressive)
+                            b = _progressiveCoefficients[compIndex][by * mxx * hi + bx];
                         else
                             b = new Block();
 
                         if (ah != 0)
                         {
-                            refine(b, DefineHuffmanTableSegment.HuffmanCodes[acTable, scan[i].Ta], zigStart, zigEnd, 1 << al);
+                            Refine(b, defineHuffmanTableSegment.HuffmanCodes[AcTable, scan[i].Ta], zigStart, zigEnd, 1 << al);
                         }
                         else
                         {
-                            int zig = zigStart;
+                            var zig = zigStart;
                             if (zig == 0)
                             {
                                 zig++;
-                                var value = DefineHuffmanTableSegment.HuffmanCodes[dcTable, scan[i].Td].DecodeHuffman(Bytes);
+                                var value = defineHuffmanTableSegment.HuffmanCodes[DcTable, scan[i].Td].DecodeHuffman(Bytes);
                                 if (value > 16)
                                 {
                                     throw new Exception("Excessive DC component");
                                 }
 
-                                var dcDelta = Bytes.receiveExtend(value);
+                                var dcDelta = Bytes.ReceiveExtend(value);
                                 dc[compIndex] += dcDelta;
                                 b[0] = dc[compIndex] << al;
                             }
 
-                            if (zig <= zigEnd && EndOfBlockRun > 0)
+                            if (zig <= zigEnd && _endOfBlockRun > 0)
                             {
-                                EndOfBlockRun--;
+                                _endOfBlockRun--;
                             }
                             else
                             {
-                                var huffv = DefineHuffmanTableSegment.HuffmanCodes[acTable, scan[i].Ta];
+                                var huffv = defineHuffmanTableSegment.HuffmanCodes[AcTable, scan[i].Ta];
                                 for (; zig <= zigEnd; zig++)
                                 {
                                     var value = huffv.DecodeHuffman(Bytes);
@@ -375,19 +375,19 @@ public class StartOfScan : SegmentBase
                                         if (zig > zigEnd)
                                             break;
 
-                                        var ac = Bytes.receiveExtend(val1);
-                                        b[unzig[zig]] = ac << al;
+                                        var ac = Bytes.ReceiveExtend(val1);
+                                        b[Unzig[zig]] = ac << al;
                                     }
                                     else
                                     {
                                         if (val0 != 0x0f)
                                         {
-                                            EndOfBlockRun = (ushort)(1 << val0);
+                                            _endOfBlockRun = (ushort)(1 << val0);
                                             if (val0 != 0)
                                             {
-                                                EndOfBlockRun |= (ushort)Bytes.DecodeBits(val0);
+                                                _endOfBlockRun |= (ushort)Bytes.DecodeBits(val0);
                                             }
-                                            EndOfBlockRun--;
+                                            _endOfBlockRun--;
                                             break;
                                         }
                                         zig += 0x0f;
@@ -396,47 +396,47 @@ public class StartOfScan : SegmentBase
                             }
                         }
 
-                        if (StartOfFrameSegment.Progressive)
+                        if (startOfFrameSegment.Progressive)
                         {
                             if (zigEnd != Block.BlockSize - 1 || al != 0)
                             {
-                                ProgressiveCoefficients[compIndex][by * mxx * hi + bx] = b;
+                                _progressiveCoefficients[compIndex][by * mxx * hi + bx] = b;
                                 continue;
                             }
                         }
-                        for (int zig = 0; zig < Block.BlockSize; zig++)
-                            b[unzig[zig]] *= qt[zig];
+                        for (var zig = 0; zig < Block.BlockSize; zig++)
+                            b[Unzig[zig]] *= qt[zig];
 
-                        IDCT.Transform(b);
+                        Idct.Transform(b);
                         byte[] dst;
                         int offset;
                         int stride;
-                        if (StartOfFrameSegment.TypeOfImage == ImageType.GreyScale)
+                        if (startOfFrameSegment.TypeOfImage == ImageType.GreyScale)
                         {
-                            dst = img1.Pixels;
-                            stride = img1.Stride;
-                            offset = img1.Offset + 8 * (by * img1.Stride + bx);
+                            dst = Img1.Pixels;
+                            stride = Img1.Stride;
+                            offset = Img1.Offset + 8 * (by * Img1.Stride + bx);
                         }
                         else
                         {
                             switch (compIndex)
                             {
                                 case 0:
-                                    dst = img3.YPixels;
-                                    stride = img3.YStride;
-                                    offset = img3.YOffset + 8 * (by * img3.YStride + bx);
+                                    dst = _img3.YPixels;
+                                    stride = _img3.YStride;
+                                    offset = _img3.YOffset + 8 * (by * _img3.YStride + bx);
                                     break;
 
                                 case 1:
-                                    dst = img3.CBPixels;
-                                    stride = img3.CStride;
-                                    offset = img3.COffset + 8 * (by * img3.CStride + bx);
+                                    dst = _img3.CbPixels;
+                                    stride = _img3.CStride;
+                                    offset = _img3.COffset + 8 * (by * _img3.CStride + bx);
                                     break;
 
                                 case 2:
-                                    dst = img3.CRPixels;
-                                    stride = img3.CStride;
-                                    offset = img3.COffset + 8 * (by * img3.CStride + bx);
+                                    dst = _img3.CrPixels;
+                                    stride = _img3.CStride;
+                                    offset = _img3.COffset + 8 * (by * _img3.CStride + bx);
                                     break;
 
                                 case 3:
@@ -447,14 +447,14 @@ public class StartOfScan : SegmentBase
                             }
                         }
 
-                        for (int y = 0; y < 8; y++)
+                        for (var y = 0; y < 8; y++)
                         {
-                            int y8 = y * 8;
-                            int yStride = y * stride;
+                            var y8 = y * 8;
+                            var yStride = y * stride;
 
-                            for (int x = 0; x < 8; x++)
+                            for (var x = 0; x < 8; x++)
                             {
-                                int c = b[y8 + x];
+                                var c = b[y8 + x];
                                 if (c < -128)
                                 {
                                     c = 0;
@@ -475,22 +475,22 @@ public class StartOfScan : SegmentBase
 
                 mcu++;
 
-                if (DefineRestartIntervalSegment.RestartInterval > 0 && mcu % DefineRestartIntervalSegment.RestartInterval == 0 && mcu < mxx * myy)
+                if (defineRestartIntervalSegment.RestartInterval > 0 && mcu % defineRestartIntervalSegment.RestartInterval == 0 && mcu < mxx * myy)
                 {
                     Bytes.ReadFull(TempData, 0, 2);
-                    if (TempData[0] != 0xff || TempData[1] != expectedRST)
+                    if (TempData[0] != 0xff || TempData[1] != expectedRst)
                     {
                         throw new Exception("Bad RST marker");
                     }
 
-                    expectedRST++;
-                    if (expectedRST == SegmentTypes.Restart7 + 1)
+                    expectedRst++;
+                    if (expectedRst == SegmentTypes.Restart7 + 1)
                     {
-                        expectedRST = SegmentTypes.Restart0;
+                        expectedRst = SegmentTypes.Restart0;
                     }
                     Bytes.Bits = new BitsBuffer();
-                    dc = new int[MAXIMUM_NUMBER_COMPONENTS];
-                    EndOfBlockRun = 0;
+                    dc = new int[MaximumNumberComponents];
+                    _endOfBlockRun = 0;
                 }
             }
         }
@@ -502,12 +502,12 @@ public class StartOfScan : SegmentBase
     /// <param name="writer">The binary writer.</param>
     public override void Write(BinaryWriter writer)
     {
-        writer.Write(sosHeaderYCbCr, 0, sosHeaderYCbCr.Length);
-        encode444(writer);
-        emit(0x7f, 7, writer);
+        writer.Write(_sosHeaderYCbCr, 0, _sosHeaderYCbCr.Length);
+        Encode444(writer);
+        Emit(0x7f, 7, writer);
     }
 
-    private static int div(int a, int b)
+    private static int Div(int a, int b)
     {
         if (a >= 0)
             return (a + (b >> 1)) / b;
@@ -515,11 +515,11 @@ public class StartOfScan : SegmentBase
             return -((-a + (b >> 1)) / b);
     }
 
-    private void emit(uint bits, uint nBits, BinaryWriter writer)
+    private void Emit(uint bits, uint nBits, BinaryWriter writer)
     {
-        nBits += this.nBits;
+        nBits += this._nBits;
         bits <<= (int)(32 - nBits);
-        bits |= this.bits;
+        bits |= this._bits;
         while (nBits >= 8)
         {
             var b = (byte)(bits >> 24);
@@ -529,20 +529,20 @@ public class StartOfScan : SegmentBase
             bits <<= 8;
             nBits -= 8;
         }
-        this.bits = bits;
-        this.nBits = nBits;
+        this._bits = bits;
+        this._nBits = nBits;
     }
 
-    private void emitHuff(HuffmanIndex h, int v, BinaryWriter writer)
+    private void EmitHuff(HuffmanIndex h, int v, BinaryWriter writer)
     {
-        uint x = DefineHuffmanTableSegment.HuffmanLookUpTables[(int)h].Values[v];
-        emit(x & ((1 << 24) - 1), x >> 24, writer);
+        var x = DefineHuffmanTableSegment.HuffmanLookUpTables[(int)h].Values[v];
+        Emit(x & ((1 << 24) - 1), x >> 24, writer);
     }
 
-    private void emitHuffRLE(HuffmanIndex h, int runLength, int v, BinaryWriter writer)
+    private void EmitHuffRle(HuffmanIndex h, int runLength, int v, BinaryWriter writer)
     {
-        int a = v;
-        int b = v;
+        var a = v;
+        var b = v;
         if (a < 0)
         {
             a = -v;
@@ -550,39 +550,39 @@ public class StartOfScan : SegmentBase
         }
         uint nBits;
         if (a < 0x100)
-            nBits = bitCount[a];
+            nBits = _bitCount[a];
         else
-            nBits = 8 + (uint)bitCount[a >> 8];
+            nBits = 8 + (uint)_bitCount[a >> 8];
 
-        emitHuff(h, (int)((uint)(runLength << 4) | nBits), writer);
-        if (nBits > 0) emit((uint)b & (uint)((1 << (int)nBits) - 1), nBits, writer);
+        EmitHuff(h, (int)((uint)(runLength << 4) | nBits), writer);
+        if (nBits > 0) Emit((uint)b & (uint)((1 << (int)nBits) - 1), nBits, writer);
     }
 
-    private void encode444(BinaryWriter writer)
+    private void Encode444(BinaryWriter writer)
     {
         var b = new Block();
         var cb = new Block();
         var cr = new Block();
-        int prevDCY = 0, prevDCCb = 0, prevDCCr = 0;
+        int prevDcy = 0, prevDcCb = 0, prevDcCr = 0;
 
-        for (int y = 0; y < Image.Height; y += 8)
+        for (var y = 0; y < Image.Height; y += 8)
         {
-            for (int x = 0; x < Image.Width; x += 8)
+            for (var x = 0; x < Image.Width; x += 8)
             {
-                toYCbCr(x, y, b, cb, cr);
-                prevDCY = writeBlock(b, (QuantIndex)0, prevDCY, writer);
-                prevDCCb = writeBlock(cb, (QuantIndex)1, prevDCCb, writer);
-                prevDCCr = writeBlock(cr, (QuantIndex)1, prevDCCr, writer);
+                ToYCbCr(x, y, b, cb, cr);
+                prevDcy = WriteBlock(b, (QuantIndex)0, prevDcy, writer);
+                prevDcCb = WriteBlock(cb, (QuantIndex)1, prevDcCb, writer);
+                prevDcCr = WriteBlock(cr, (QuantIndex)1, prevDcCr, writer);
             }
         }
     }
 
-    private void makeImg(int mxx, int myy, StartOfFrame frame)
+    private void MakeImg(int mxx, int myy, StartOfFrame frame)
     {
         if (frame.TypeOfImage == ImageType.GreyScale)
         {
             var m = new GreyImage(8 * mxx, 8 * myy);
-            img1 = m.SubImage(0, 0, frame.Width, frame.Height);
+            Img1 = m.SubImage(0, 0, frame.Width, frame.Height);
         }
         else
         {
@@ -620,11 +620,11 @@ public class StartOfScan : SegmentBase
             }
 
             var m = new YcbcrImg(8 * h0 * mxx, 8 * v0 * myy, ratio);
-            img3 = m.SubImage(0, 0, frame.Width, frame.Height);
+            _img3 = m.SubImage(0, 0, frame.Width, frame.Height);
         }
     }
 
-    private void refine(Block b, Huffman h, int zigStart, int zigEnd, int delta)
+    private void Refine(Block b, Huffman h, int zigStart, int zigEnd, int delta)
     {
         if (zigStart == 0)
         {
@@ -638,27 +638,27 @@ public class StartOfScan : SegmentBase
             return;
         }
 
-        int zig = zigStart;
-        if (EndOfBlockRun == 0)
+        var zig = zigStart;
+        if (_endOfBlockRun == 0)
         {
             for (; zig <= zigEnd; zig++)
             {
-                bool done = false;
-                int z = 0;
+                var done = false;
+                var z = 0;
                 var val = h.DecodeHuffman(Bytes);
-                int val0 = val >> 4;
-                int val1 = val & 0x0f;
+                var val0 = val >> 4;
+                var val1 = val & 0x0f;
 
                 switch (val1)
                 {
                     case 0:
                         if (val0 != 0x0f)
                         {
-                            EndOfBlockRun = (ushort)(1 << val0);
+                            _endOfBlockRun = (ushort)(1 << val0);
                             if (val0 != 0)
                             {
                                 var bits = Bytes.DecodeBits(val0);
-                                EndOfBlockRun |= (ushort)bits;
+                                _endOfBlockRun |= (ushort)bits;
                             }
 
                             done = true;
@@ -679,27 +679,27 @@ public class StartOfScan : SegmentBase
                 if (done)
                     break;
 
-                zig = refineNonZeroes(b, zig, zigEnd, val0, delta);
+                zig = RefineNonZeroes(b, zig, zigEnd, val0, delta);
                 if (zig > zigEnd)
                     throw new Exception(string.Format("too many coefficients {0} > {1}", zig, zigEnd));
 
                 if (z != 0)
-                    b[unzig[zig]] = z;
+                    b[Unzig[zig]] = z;
             }
         }
 
-        if (EndOfBlockRun > 0)
+        if (_endOfBlockRun > 0)
         {
-            EndOfBlockRun--;
-            refineNonZeroes(b, zig, zigEnd, -1, delta);
+            _endOfBlockRun--;
+            RefineNonZeroes(b, zig, zigEnd, -1, delta);
         }
     }
 
-    private int refineNonZeroes(Block b, int zig, int zigEnd, int nz, int delta)
+    private int RefineNonZeroes(Block b, int zig, int zigEnd, int nz, int delta)
     {
         for (; zig <= zigEnd; zig++)
         {
-            int u = unzig[zig];
+            var u = Unzig[zig];
             if (b[u] == 0)
             {
                 if (nz == 0)
@@ -721,17 +721,17 @@ public class StartOfScan : SegmentBase
         return zig;
     }
 
-    private void toYCbCr(int x, int y, Block yBlock, Block cbBlock, Block crBlock)
+    private void ToYCbCr(int x, int y, Block yBlock, Block cbBlock, Block crBlock)
     {
-        int xmax = Image.Width - 1;
-        int ymax = Image.Height - 1;
-        for (int j = 0; j < 8; j++)
+        var xmax = Image.Width - 1;
+        var ymax = Image.Height - 1;
+        for (var j = 0; j < 8; j++)
         {
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
-                var Offset = Math.Min(x + i, xmax) + Math.Min(y + j, ymax) * Image.Width;
-                YCbCr color = Image.Pixels[Offset];
-                int index = 8 * j + i;
+                var offset = Math.Min(x + i, xmax) + Math.Min(y + j, ymax) * Image.Width;
+                YCbCr color = Image.Pixels[offset];
+                var index = 8 * j + i;
                 yBlock[index] = (int)color.YLuminance;
                 cbBlock[index] = (int)color.CbChroma;
                 crBlock[index] = (int)color.CrChroma;
@@ -739,21 +739,21 @@ public class StartOfScan : SegmentBase
         }
     }
 
-    private int writeBlock(Block b, QuantIndex q, int prevDC, BinaryWriter writer)
+    private int WriteBlock(Block b, QuantIndex q, int prevDc, BinaryWriter writer)
     {
         ForwardDiscreteCosineTransform.Transform(b);
 
         // Emit the DC delta.
-        var dc = div(b[0], 8 * DefineQuantizationTableSegment.quant[(int)q][0]);
-        emitHuffRLE((HuffmanIndex)(2 * (int)q + 0), 0, dc - prevDC, writer);
+        var dc = Div(b[0], 8 * DefineQuantizationTableSegment.Quant[(int)q][0]);
+        EmitHuffRle((HuffmanIndex)(2 * (int)q + 0), 0, dc - prevDc, writer);
 
         // Emit the AC components.
         var h = (HuffmanIndex)(2 * (int)q + 1);
-        int runLength = 0;
+        var runLength = 0;
 
-        for (int zig = 1; zig < Block.BlockSize; zig++)
+        for (var zig = 1; zig < Block.BlockSize; zig++)
         {
-            var ac = div(b[unzig[zig]], 8 * DefineQuantizationTableSegment.quant[(int)q][zig]);
+            var ac = Div(b[Unzig[zig]], 8 * DefineQuantizationTableSegment.Quant[(int)q][zig]);
 
             if (ac == 0)
             {
@@ -763,16 +763,16 @@ public class StartOfScan : SegmentBase
             {
                 while (runLength > 15)
                 {
-                    emitHuff(h, 0xf0, writer);
+                    EmitHuff(h, 0xf0, writer);
                     runLength -= 16;
                 }
 
-                emitHuffRLE(h, runLength, ac, writer);
+                EmitHuffRle(h, runLength, ac, writer);
                 runLength = 0;
             }
         }
         if (runLength > 0)
-            emitHuff(h, 0x00, writer);
+            EmitHuff(h, 0x00, writer);
         return dc;
     }
 }

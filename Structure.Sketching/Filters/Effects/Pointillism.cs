@@ -53,115 +53,115 @@ public class Pointillism : IFilter
     public unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var PointSize2 = PointSize * 2;
-        var Copy = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, Copy, Copy.Length);
-        var EllipseDrawer = new Ellipse(Color.AliceBlue, true, PointSize, PointSize, new Vector2(0, 0));
+        var pointSize2 = PointSize * 2;
+        var copy = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, copy, copy.Length);
+        var ellipseDrawer = new Ellipse(Color.AliceBlue, true, PointSize, PointSize, new Vector2(0, 0));
 
-        for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PointSize2)
+        for (var y = targetLocation.Bottom; y < targetLocation.Top; y += pointSize2)
         {
-            var MinY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var MaxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            fixed (Color* TargetPointer = &Copy[y * image.Width + targetLocation.Left])
+            var minY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; x += PointSize2)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; x += pointSize2)
                 {
-                    uint RValue = 0;
-                    uint GValue = 0;
-                    uint BValue = 0;
-                    var MinX = (x - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var MaxX = (x + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    int NumberPixels = 0;
-                    for (int x2 = MinX; x2 < MaxX; ++x2)
+                    uint rValue = 0;
+                    uint gValue = 0;
+                    uint bValue = 0;
+                    var minX = (x - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = (x + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var numberPixels = 0;
+                    for (var x2 = minX; x2 < maxX; ++x2)
                     {
-                        for (int y2 = MinY; y2 < MaxY; ++y2)
+                        for (var y2 = minY; y2 < maxY; ++y2)
                         {
-                            var Offset = y * image.Width + x;
-                            RValue += Copy[Offset].Red;
-                            GValue += Copy[Offset].Green;
-                            BValue += Copy[Offset].Blue;
-                            ++NumberPixels;
+                            var offset = y * image.Width + x;
+                            rValue += copy[offset].Red;
+                            gValue += copy[offset].Green;
+                            bValue += copy[offset].Blue;
+                            ++numberPixels;
                         }
                     }
-                    RValue /= (uint)NumberPixels;
-                    GValue /= (uint)NumberPixels;
-                    BValue /= (uint)NumberPixels;
-                    EllipseDrawer.Center = new Vector2(x, y);
-                    EllipseDrawer.Color = new Color((byte)RValue, (byte)GValue, (byte)BValue);
-                    EllipseDrawer.Apply(image, targetLocation);
+                    rValue /= (uint)numberPixels;
+                    gValue /= (uint)numberPixels;
+                    bValue /= (uint)numberPixels;
+                    ellipseDrawer.Center = new Vector2(x, y);
+                    ellipseDrawer.Color = new Color((byte)rValue, (byte)gValue, (byte)bValue);
+                    ellipseDrawer.Apply(image, targetLocation);
                 }
             }
         }
-        for (int y = targetLocation.Bottom + PointSize; y < targetLocation.Top; y += PointSize2)
+        for (var y = targetLocation.Bottom + PointSize; y < targetLocation.Top; y += pointSize2)
         {
-            var MinY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var MaxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            fixed (Color* TargetPointer = &Copy[y * image.Width + targetLocation.Left])
+            var minY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left + PointSize; x < targetLocation.Right; x += PointSize2)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left + PointSize; x < targetLocation.Right; x += pointSize2)
                 {
-                    uint RValue = 0;
-                    uint GValue = 0;
-                    uint BValue = 0;
-                    var MinX = (x - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var MaxX = (x + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    int NumberPixels = 0;
-                    for (int x2 = MinX; x2 < MaxX; ++x2)
+                    uint rValue = 0;
+                    uint gValue = 0;
+                    uint bValue = 0;
+                    var minX = (x - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = (x + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var numberPixels = 0;
+                    for (var x2 = minX; x2 < maxX; ++x2)
                     {
-                        for (int y2 = MinY; y2 < MaxY; ++y2)
+                        for (var y2 = minY; y2 < maxY; ++y2)
                         {
-                            var Offset = y * image.Width + x;
-                            RValue += Copy[Offset].Red;
-                            GValue += Copy[Offset].Green;
-                            BValue += Copy[Offset].Blue;
-                            ++NumberPixels;
+                            var offset = y * image.Width + x;
+                            rValue += copy[offset].Red;
+                            gValue += copy[offset].Green;
+                            bValue += copy[offset].Blue;
+                            ++numberPixels;
                         }
                     }
-                    RValue /= (uint)NumberPixels;
-                    GValue /= (uint)NumberPixels;
-                    BValue /= (uint)NumberPixels;
-                    EllipseDrawer.Center = new Vector2(x, y);
-                    EllipseDrawer.Color = new Color((byte)RValue, (byte)GValue, (byte)BValue);
-                    EllipseDrawer.Apply(image, targetLocation);
+                    rValue /= (uint)numberPixels;
+                    gValue /= (uint)numberPixels;
+                    bValue /= (uint)numberPixels;
+                    ellipseDrawer.Center = new Vector2(x, y);
+                    ellipseDrawer.Color = new Color((byte)rValue, (byte)gValue, (byte)bValue);
+                    ellipseDrawer.Apply(image, targetLocation);
                 }
             }
         }
-        for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PointSize2)
+        for (var y = targetLocation.Bottom; y < targetLocation.Top; y += pointSize2)
         {
-            var TempY = y + new Random(y).Next(-PointSize, PointSize);
-            var MinY = (TempY - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var MaxY = (TempY + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            fixed (Color* TargetPointer = &Copy[y * image.Width + targetLocation.Left])
+            var tempY = y + new Random(y).Next(-PointSize, PointSize);
+            var minY = (tempY - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = (tempY + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left + PointSize; x < targetLocation.Right; x += PointSize2)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left + PointSize; x < targetLocation.Right; x += pointSize2)
                 {
-                    uint RValue = 0;
-                    uint GValue = 0;
-                    uint BValue = 0;
-                    var TempX = x + new Random(x).Next(-PointSize, PointSize);
-                    var MinX = (TempX - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var MaxX = (TempX + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    int NumberPixels = 0;
-                    for (int x2 = MinX; x2 < MaxX; ++x2)
+                    uint rValue = 0;
+                    uint gValue = 0;
+                    uint bValue = 0;
+                    var tempX = x + new Random(x).Next(-PointSize, PointSize);
+                    var minX = (tempX - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = (tempX + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var numberPixels = 0;
+                    for (var x2 = minX; x2 < maxX; ++x2)
                     {
-                        for (int y2 = MinY; y2 < MaxY; ++y2)
+                        for (var y2 = minY; y2 < maxY; ++y2)
                         {
-                            var Offset = y * image.Width + x;
-                            RValue += Copy[Offset].Red;
-                            GValue += Copy[Offset].Green;
-                            BValue += Copy[Offset].Blue;
-                            ++NumberPixels;
+                            var offset = y * image.Width + x;
+                            rValue += copy[offset].Red;
+                            gValue += copy[offset].Green;
+                            bValue += copy[offset].Blue;
+                            ++numberPixels;
                         }
                     }
-                    RValue /= (uint)NumberPixels;
-                    GValue /= (uint)NumberPixels;
-                    BValue /= (uint)NumberPixels;
-                    EllipseDrawer.Center = new Vector2(TempX, TempY);
-                    EllipseDrawer.Color = new Color((byte)RValue, (byte)GValue, (byte)BValue);
-                    EllipseDrawer.Apply(image, targetLocation);
+                    rValue /= (uint)numberPixels;
+                    gValue /= (uint)numberPixels;
+                    bValue /= (uint)numberPixels;
+                    ellipseDrawer.Center = new Vector2(tempX, tempY);
+                    ellipseDrawer.Color = new Color((byte)rValue, (byte)gValue, (byte)bValue);
+                    ellipseDrawer.Apply(image, targetLocation);
                 }
             }
         }

@@ -35,8 +35,8 @@ public class StartOfFrame : SegmentBase
     public StartOfFrame(SegmentTypes type, ByteBuffer buffer)
         : base(type, buffer)
     {
-        Components = new Component[MAX_COMPONENTS];
-        for (int x = 0; x < Components.Length; ++x)
+        Components = new Component[MaxComponents];
+        for (var x = 0; x < Components.Length; ++x)
             Components[x] = new Component();
         Progressive = type == SegmentTypes.StartOfFrame2;
     }
@@ -51,7 +51,7 @@ public class StartOfFrame : SegmentBase
         Height = image.Height;
         Width = image.Width;
         Components = new Component[3];
-        TypeOfImage = ImageType.RGB;
+        TypeOfImage = ImageType.Rgb;
     }
 
     /// <summary>
@@ -97,12 +97,12 @@ public class StartOfFrame : SegmentBase
     /// <summary>
     /// The maximum number of components
     /// </summary>
-    private const int MAX_COMPONENTS = 4;
+    private const int MaxComponents = 4;
 
     /// <summary>
     /// The maximum tq
     /// </summary>
-    private const int MAXIMUM_TQ = 3;
+    private const int MaximumTq = 3;
 
     /// <summary>
     /// Setups the specified segments.
@@ -145,11 +145,11 @@ public class StartOfFrame : SegmentBase
                 break;
 
             case 6 + 3 * 3:
-                TypeOfImage = ImageType.RGB;
+                TypeOfImage = ImageType.Rgb;
                 break;
 
             case 6 + 3 * 4:
-                TypeOfImage = ImageType.CMYK;
+                TypeOfImage = ImageType.Cmyk;
                 break;
 
             default:
@@ -165,22 +165,22 @@ public class StartOfFrame : SegmentBase
         if (TempData[5] != (int)TypeOfImage)
             throw new ImageException("SOF has wrong length");
 
-        for (int x = 0; x < (int)TypeOfImage; ++x)
+        for (var x = 0; x < (int)TypeOfImage; ++x)
         {
             Components[x].ComponentIdentifier = TempData[6 + 3 * x];
-            for (int y = 0; y < x; ++y)
+            for (var y = 0; y < x; ++y)
             {
                 if (Components[x].ComponentIdentifier == Components[y].ComponentIdentifier)
                     throw new ImageException("Repeated component identifier");
             }
 
             Components[x].QuatizationTableDestSelector = TempData[8 + 3 * x];
-            if (Components[x].QuatizationTableDestSelector > MAXIMUM_TQ)
+            if (Components[x].QuatizationTableDestSelector > MaximumTq)
                 throw new ImageException("Bad Tq value");
 
-            byte hv = TempData[7 + 3 * x];
-            int h = hv >> 4;
-            int v = hv & 0x0f;
+            var hv = TempData[7 + 3 * x];
+            var h = hv >> 4;
+            var v = hv & 0x0f;
             if (h < 1 || h > 4 || v < 1 || v > 4)
                 throw new ImageException("Unsupported Luma/chroma subsampling ratio");
             if (h == 3 || v == 3)
@@ -193,7 +193,7 @@ public class StartOfFrame : SegmentBase
                     v = 1;
                     break;
 
-                case ImageType.RGB:
+                case ImageType.Rgb:
                     switch (x)
                     {
                         case 0:
@@ -217,7 +217,7 @@ public class StartOfFrame : SegmentBase
                     }
                     break;
 
-                case ImageType.CMYK:
+                case ImageType.Cmyk:
                     switch (x)
                     {
                         case 0:
@@ -255,19 +255,19 @@ public class StartOfFrame : SegmentBase
 
         Length = 8 + 3 * Components.Length;
         WriteSegmentHeader(writer);
-        byte[] Buffer = new byte[16];
-        Buffer[0] = 8;
-        Buffer[1] = (byte)(Height >> 8);
-        Buffer[2] = (byte)(Height & 0xff);
-        Buffer[3] = (byte)(Width >> 8);
-        Buffer[4] = (byte)(Width & 0xff);
-        Buffer[5] = 3;
-        for (int i = 0; i < 3; i++)
+        var buffer = new byte[16];
+        buffer[0] = 8;
+        buffer[1] = (byte)(Height >> 8);
+        buffer[2] = (byte)(Height & 0xff);
+        buffer[3] = (byte)(Width >> 8);
+        buffer[4] = (byte)(Width & 0xff);
+        buffer[5] = 3;
+        for (var i = 0; i < 3; i++)
         {
-            Buffer[3 * i + 6] = (byte)(i + 1);
-            Buffer[3 * i + 7] = subsamples[i];
-            Buffer[3 * i + 8] = chroma[i];
+            buffer[3 * i + 6] = (byte)(i + 1);
+            buffer[3 * i + 7] = subsamples[i];
+            buffer[3 * i + 8] = chroma[i];
         }
-        writer.Write(Buffer, 0, 3 * 2 + 9);
+        writer.Write(buffer, 0, 3 * 2 + 9);
     }
 }

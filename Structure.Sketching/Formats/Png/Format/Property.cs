@@ -60,14 +60,14 @@ public class Property
     /// </returns>
     public static implicit operator Property(Chunk chunk)
     {
-        int Count = 0;
-        for (int x = 0; x < chunk.Data.Length; ++x, ++Count)
+        var count = 0;
+        for (var x = 0; x < chunk.Data.Length; ++x, ++count)
         {
             if (chunk.Data[x] == 0)
                 break;
         }
 
-        return new Property(Encoding.UTF8.GetString(chunk.Data, 0, Count),
-            Encoding.UTF8.GetString(chunk.Data, Count + 1, chunk.Data.Length - Count - 1));
+        return new Property(Encoding.UTF8.GetString(chunk.Data, 0, count),
+            Encoding.UTF8.GetString(chunk.Data, count + 1, chunk.Data.Length - count - 1));
     }
 }

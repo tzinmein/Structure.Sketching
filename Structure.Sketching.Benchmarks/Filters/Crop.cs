@@ -16,17 +16,17 @@ public class Crop
     [Benchmark(Description = "Structure.Sketching Crop")]
     public void CropStructureSketching()
     {
-        var TestImage = new Image(Width, Height, new byte[Width * Height * 4]);
-        var CropFilter = new Sketching.Filters.Resampling.Crop();
-        CropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, Count, Count));
+        var testImage = new Image(Width, Height, new byte[Width * Height * 4]);
+        var cropFilter = new Sketching.Filters.Resampling.Crop();
+        cropFilter.Apply(testImage, new Numerics.Rectangle(0, 0, Count, Count));
     }
 
     [Benchmark(Description = "Structure.Sketching Test Crop")]
     public void CropStructureSketchingTest()
     {
-        var TestImage = new Image(Width, Height, new byte[Width * Height * 4]);
-        var TestCropFilter = new CropFilter();
-        TestCropFilter.Apply(TestImage, new Numerics.Rectangle(0, 0, Count, Count));
+        var testImage = new Image(Width, Height, new byte[Width * Height * 4]);
+        var testCropFilter = new CropFilter();
+        testCropFilter.Apply(testImage, new Numerics.Rectangle(0, 0, Count, Count));
     }
 
     [SupportedOSPlatform("windows")]

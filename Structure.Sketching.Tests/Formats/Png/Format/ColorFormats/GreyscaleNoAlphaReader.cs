@@ -9,8 +9,8 @@ public class GreyscaleNoAlphaReader
     public void ReadScanline()
     {
         var data = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-        var Result = new Color[10];
-        var ExpectedResult = new[] {
+        var result = new Color[10];
+        var expectedResult = new[] {
             new Color(1, 1, 1, 255),
             new Color(2, 2, 2, 255),
             new Color(3, 3, 3, 255),
@@ -22,8 +22,8 @@ public class GreyscaleNoAlphaReader
             new Color(9, 9, 9, 255),
             new Color(0, 0, 0, 255)
         };
-        var TestObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.GreyscaleNoAlphaReader();
-        TestObject.ReadScanline(data, Result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 0, 0, 0, 0), 0);
-        Assert.Equal(ExpectedResult, Result);
+        var testObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.GreyscaleNoAlphaReader();
+        testObject.ReadScanline(data, result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 0, 0, 0, 0), 0);
+        Assert.Equal(expectedResult, result);
     }
 }

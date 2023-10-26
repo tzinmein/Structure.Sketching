@@ -24,20 +24,20 @@ public enum FileFormats
     /// <summary>
     /// BMP file format
     /// </summary>
-    BMP = 0,
+    Bmp = 0,
 
     /// <summary>
     /// PNG file format
     /// </summary>
-    PNG = 1,
+    Png = 1,
 
     /// <summary>
     /// JPEG file format
     /// </summary>
-    JPEG = 2,
+    Jpeg = 2,
 
     /// <summary>
     /// GIF file format
     /// </summary>
-    GIF = 3
+    Gif = 3
 }

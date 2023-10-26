@@ -59,11 +59,11 @@ public class Palette
     /// <returns>The resulting palette information</returns>
     public static Palette Read(Header header, Stream stream)
     {
-        var NumberOfColors = header.ColorsUsed == 0 && header.BPP < 16 ? (int)Math.Pow(2, header.BPP) : header.ColorsUsed;
-        var Data = new byte[NumberOfColors * 4];
-        if (NumberOfColors > 0)
-            stream.Read(Data, 0, NumberOfColors * 4);
-        return new Palette(NumberOfColors, Data);
+        var numberOfColors = header.ColorsUsed == 0 && header.Bpp < 16 ? (int)Math.Pow(2, header.Bpp) : header.ColorsUsed;
+        var data = new byte[numberOfColors * 4];
+        if (numberOfColors > 0)
+            stream.Read(data, 0, numberOfColors * 4);
+        return new Palette(numberOfColors, data);
     }
 
     /// <summary>

@@ -38,15 +38,15 @@ public class Invert : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    (*TargetPointer2).Red = (byte)(255 - (*TargetPointer2).Red);
-                    (*TargetPointer2).Green = (byte)(255 - (*TargetPointer2).Green);
-                    (*TargetPointer2).Blue = (byte)(255 - (*TargetPointer2).Blue);
-                    ++TargetPointer2;
+                    (*targetPointer2).Red = (byte)(255 - (*targetPointer2).Red);
+                    (*targetPointer2).Green = (byte)(255 - (*targetPointer2).Green);
+                    (*targetPointer2).Blue = (byte)(255 - (*targetPointer2).Blue);
+                    ++targetPointer2;
                 }
             }
         });

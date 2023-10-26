@@ -30,16 +30,16 @@ public abstract class FilterBaseClass : IScanFilter
     /// <returns>The resulting byte array</returns>
     public byte[] Decode(byte[] scanline, byte[] previousScanline, int scanlineStep)
     {
-        var Result = new byte[scanline.Length];
-        for (int x = 0; x < Result.Length; ++x)
+        var result = new byte[scanline.Length];
+        for (var x = 0; x < result.Length; ++x)
         {
-            byte Left = (x >= scanlineStep) ? Result[x - scanlineStep] : (byte)0;
-            byte Above = previousScanline[x];
-            byte UpperLeft = (x >= scanlineStep) ? previousScanline[x - scanlineStep] : (byte)0;
+            var left = (x >= scanlineStep) ? result[x - scanlineStep] : (byte)0;
+            var above = previousScanline[x];
+            var upperLeft = (x >= scanlineStep) ? previousScanline[x - scanlineStep] : (byte)0;
 
-            Result[x] = (byte)(scanline[x] + Calculate(Left, Above, UpperLeft));
+            result[x] = (byte)(scanline[x] + Calculate(left, above, upperLeft));
         }
-        return Result;
+        return result;
     }
 
     /// <summary>
@@ -51,18 +51,18 @@ public abstract class FilterBaseClass : IScanFilter
     /// <returns>The resulting byte array</returns>
     public byte[] Encode(byte[] scanline, byte[] previousScanline, int scanlineStep)
     {
-        byte[] Result = new byte[scanline.Length + 1];
-        Result[0] = FilterValue;
-        for (int x = 0; x < scanline.Length; ++x)
+        var result = new byte[scanline.Length + 1];
+        result[0] = FilterValue;
+        for (var x = 0; x < scanline.Length; ++x)
         {
-            byte Left = (x >= scanlineStep) ? Result[x - scanlineStep] : (byte)0;
-            byte Above = previousScanline[x];
-            byte UpperLeft = (x >= scanlineStep) ? previousScanline[x - scanlineStep] : (byte)0;
+            var left = (x >= scanlineStep) ? result[x - scanlineStep] : (byte)0;
+            var above = previousScanline[x];
+            var upperLeft = (x >= scanlineStep) ? previousScanline[x - scanlineStep] : (byte)0;
 
-            Result[x + 1] = (byte)(scanline[x] - Calculate(Left, Above, UpperLeft));
+            result[x + 1] = (byte)(scanline[x] - Calculate(left, above, upperLeft));
         }
 
-        return Result;
+        return result;
     }
 
     /// <summary>

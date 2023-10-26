@@ -37,7 +37,7 @@ public class BicubicFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        float a = -0.5f;
+        var a = -0.5f;
 
         if (value < 0) value = -value;
 

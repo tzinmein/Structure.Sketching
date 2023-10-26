@@ -31,7 +31,7 @@ public class PngFormat : FormatBase
     /// <value>
     /// The format.
     /// </value>
-    public override FileFormats Format => FileFormats.PNG;
+    public override FileFormats Format => FileFormats.Png;
 
     /// <summary>
     /// Gets the decoder.

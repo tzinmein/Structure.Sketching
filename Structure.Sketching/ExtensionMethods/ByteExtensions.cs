@@ -45,23 +45,23 @@ public static class ByteExtensions
     {
         bytes ??= Array.Empty<byte>();
         bits = bits.Clamp(0, int.MaxValue);
-        byte[] Result;
+        byte[] result;
         if (bits >= 8)
         {
             return bytes;
         }
-        Result = new byte[bytes.Length * 8 / bits];
-        int Mask = 0xFF >> (8 - bits);
-        int Offset = 0;
-        foreach (byte TempByte in bytes)
+        result = new byte[bytes.Length * 8 / bits];
+        var mask = 0xFF >> (8 - bits);
+        var offset = 0;
+        foreach (var tempByte in bytes)
         {
-            for (int x = 0; x < 8; x += bits)
+            for (var x = 0; x < 8; x += bits)
             {
-                Result[Offset] = (byte)((TempByte >> (8 - bits - x)) & Mask);
-                ++Offset;
+                result[offset] = (byte)((tempByte >> (8 - bits - x)) & mask);
+                ++offset;
             }
         }
-        return Result;
+        return result;
     }
 
     /// <summary>

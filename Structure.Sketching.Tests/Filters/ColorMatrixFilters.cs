@@ -54,7 +54,7 @@ public class ColorMatrixFilters : FilterTestBaseClass
         { "Temperature--15000", new Temperature(15000), default },
         { "Temperature--25000", new Temperature(25000), default },
         { "Temperature--40000", new Temperature(40000), default },
-        { "ColorMatrix", new Sketching.Filters.ColorMatrix.ColorMatrix(new Matrix5x5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),default },
+        { "ColorMatrix", new Sketching.Filters.ColorMatrix.ColorMatrix(new Matrix5X5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),default },
 
         { "Alpha-50-Partial", new Alpha(.5f),new Rectangle(100,100,500,500) },
         { "BlackWhite-Partial", new BlackWhite(),new Rectangle(100,100,500,500) },
@@ -85,7 +85,7 @@ public class ColorMatrixFilters : FilterTestBaseClass
         { "MatrixMultiplication-Partial", new PolaroidColorMatrix() * new Brightness(.1f) ,new Rectangle(100,100,500,500)},
         { "Contrast-50-Partial", new Contrast(1.5f),new Rectangle(100,100,500,500) },
         { "Contrast--50-Partial", new Contrast(0.5f),new Rectangle(100,100,500,500) },
-        { "ColorMatrix-Partial", new ColorMatrix(new Matrix5x5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),new Rectangle(100,100,500,500) },
+        { "ColorMatrix-Partial", new ColorMatrix(new Matrix5X5(1,0,1,0,0,0,.5f,0,0,0,2.5f,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0)),new Rectangle(100,100,500,500) },
     };
 
     [Theory]

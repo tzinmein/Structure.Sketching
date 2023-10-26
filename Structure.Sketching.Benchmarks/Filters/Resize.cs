@@ -10,9 +10,9 @@ public class Resize
     [Benchmark(Description = "Structure.Sketching Resize")]
     public void CropStructureSketching()
     {
-        var TestImage = new Sketching.Image(2000, 2000);
-        var Filter = new Sketching.Filters.Resampling.Resize(400, 400, Sketching.Filters.Resampling.Enums.ResamplingFiltersAvailable.NearestNeighbor);
-        Filter.Apply(TestImage);
+        var testImage = new Sketching.Image(2000, 2000);
+        var filter = new Sketching.Filters.Resampling.Resize(400, 400, Sketching.Filters.Resampling.Enums.ResamplingFiltersAvailable.NearestNeighbor);
+        filter.Apply(testImage);
     }
 
     [SupportedOSPlatform("windows")]
@@ -21,7 +21,7 @@ public class Resize
     {
         using Bitmap source = new(2000, 2000);
         using Bitmap destination = new(400, 400);
-        using Graphics graphics = Graphics.FromImage(destination);
+        using var graphics = Graphics.FromImage(destination);
         graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
         graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
         graphics.CompositingQuality = CompositingQuality.HighQuality;

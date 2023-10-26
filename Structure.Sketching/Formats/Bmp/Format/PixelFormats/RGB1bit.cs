@@ -23,19 +23,19 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats;
 /// RGB 1bit pixel format
 /// </summary>
 /// <seealso cref="Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces.IPixelFormat"/>
-public class RGB1bit : PixelFormatBase
+public class Rgb1Bit : PixelFormatBase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RGB1bit"/> class.
+    /// Initializes a new instance of the <see cref="Rgb1Bit"/> class.
     /// </summary>
-    public RGB1bit()
+    public Rgb1Bit()
     {
-        byte Value = 1;
+        byte value = 1;
         ByteMasks = new byte[8];
-        for (int x = 0; x < 8; ++x)
+        for (var x = 0; x < 8; ++x)
         {
-            ByteMasks[x] = Value;
-            Value = (byte)(Value << 1);
+            ByteMasks[x] = value;
+            value = (byte)(value << 1);
         }
     }
 
@@ -43,7 +43,7 @@ public class RGB1bit : PixelFormatBase
     /// The bytes per pixel
     /// </summary>
     /// <value>The BPP.</value>
-    public override double BPP => 0.125;
+    public override double Bpp => 0.125;
 
     /// <summary>
     /// Gets or sets the byte masks.
@@ -60,41 +60,41 @@ public class RGB1bit : PixelFormatBase
     /// <returns>The decoded data</returns>
     public override byte[] Decode(Header header, byte[] data, Palette palette)
     {
-        int width = header.Width;
-        int height = header.Height;
+        var width = header.Width;
+        var height = header.Height;
         var alignment = (int)((4d - width / 8.0d % 4d) % 4d * 8);
-        byte[] ReturnValue = new byte[width * height * 4];
-        using (var BitStream = new BitReader(data))
+        var returnValue = new byte[width * height * 4];
+        using (var bitStream = new BitReader(data))
         {
-            for (int y = 0; y < height; ++y)
+            for (var y = 0; y < height; ++y)
             {
-                int DestinationY = height - y - 1;
-                int DestinationOffset = DestinationY * width * 4;
-                for (int x = 0; x < width; ++x)
+                var destinationY = height - y - 1;
+                var destinationOffset = destinationY * width * 4;
+                for (var x = 0; x < width; ++x)
                 {
-                    var CurrentBit = BitStream.ReadBit();
-                    if (CurrentBit == null)
-                        return ReturnValue;
-                    if (CurrentBit.Value)
+                    var currentBit = bitStream.ReadBit();
+                    if (currentBit == null)
+                        return returnValue;
+                    if (currentBit.Value)
                     {
-                        ReturnValue[DestinationOffset] = 255;
-                        ReturnValue[DestinationOffset + 1] = 255;
-                        ReturnValue[DestinationOffset + 2] = 255;
-                        ReturnValue[DestinationOffset + 3] = 255;
+                        returnValue[destinationOffset] = 255;
+                        returnValue[destinationOffset + 1] = 255;
+                        returnValue[destinationOffset + 2] = 255;
+                        returnValue[destinationOffset + 3] = 255;
                     }
                     else
                     {
-                        ReturnValue[DestinationOffset] = 0;
-                        ReturnValue[DestinationOffset + 1] = 0;
-                        ReturnValue[DestinationOffset + 2] = 0;
-                        ReturnValue[DestinationOffset + 3] = 255;
+                        returnValue[destinationOffset] = 0;
+                        returnValue[destinationOffset + 1] = 0;
+                        returnValue[destinationOffset + 2] = 0;
+                        returnValue[destinationOffset + 3] = 255;
                     }
-                    DestinationOffset += 4;
+                    destinationOffset += 4;
                 }
-                BitStream.Skip(alignment);
+                bitStream.Skip(alignment);
             }
         }
-        return ReturnValue;
+        return returnValue;
     }
 
     /// <summary>

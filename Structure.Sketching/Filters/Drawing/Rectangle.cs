@@ -75,13 +75,13 @@ public class Rectangle : ShapeBaseClass
     {
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    *TargetPointer2 = Color;
-                    ++TargetPointer2;
+                    *targetPointer2 = Color;
+                    ++targetPointer2;
                 }
             }
         });

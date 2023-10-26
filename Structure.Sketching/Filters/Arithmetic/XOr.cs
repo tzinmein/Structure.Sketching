@@ -57,23 +57,23 @@ public class XOr : IFilter
             {
                 return;
             }
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* OutputPointer = Pointer;
-                fixed (Color* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
+                var outputPointer = pointer;
+                fixed (Color* image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
                 {
-                    Color* Image2Pointer2 = Image2Pointer;
-                    int x2 = 0;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    var image2Pointer2 = image2Pointer;
+                    var x2 = 0;
+                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
                         if (x2 > SecondImage.Width)
                         {
                             break;
                         }
                         ++x2;
-                        (*OutputPointer).XOr(*Image2Pointer2);
-                        ++OutputPointer;
-                        ++Image2Pointer2;
+                        (*outputPointer).XOr(*image2Pointer2);
+                        ++outputPointer;
+                        ++image2Pointer2;
                     }
                 }
             }

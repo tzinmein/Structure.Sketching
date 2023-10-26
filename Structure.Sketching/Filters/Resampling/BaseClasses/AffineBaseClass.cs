@@ -119,25 +119,25 @@ public abstract class AffineBaseClass : IFilter
     {
         Filter.Precompute(image.Width, image.Height, Width, Height);
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var Copy = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, Copy, Copy.Length);
+        var copy = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, copy, copy.Length);
         TransformationMatrix = GetMatrix(image, targetLocation);
-        double TempWidth = Width < 0 ? image.Width : Width;
-        double TempHeight = Height < 0 ? image.Width : Height;
-        double XScale = TempWidth / image.Width;
-        double YScale = TempHeight / image.Height;
-        YRadius = YScale < 1f ? Filter.FilterRadius / YScale : Filter.FilterRadius;
-        XRadius = XScale < 1f ? Filter.FilterRadius / XScale : Filter.FilterRadius;
+        double tempWidth = Width < 0 ? image.Width : Width;
+        double tempHeight = Height < 0 ? image.Width : Height;
+        var xScale = tempWidth / image.Width;
+        var yScale = tempHeight / image.Height;
+        YRadius = yScale < 1f ? Filter.FilterRadius / yScale : Filter.FilterRadius;
+        XRadius = xScale < 1f ? Filter.FilterRadius / xScale : Filter.FilterRadius;
 
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* OutputPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* outputPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* OutputPointer2 = OutputPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var outputPointer2 = outputPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var Values = new Vector4(0, 0, 0, 0);
-                    float Weight = 0;
+                    var values = new Vector4(0, 0, 0, 0);
+                    float weight = 0;
 
                     var rotated = Vector2.Transform(new Vector2(x, y), TransformationMatrix);
                     var rotatedY = (int)rotated.Y;
@@ -147,66 +147,66 @@ public abstract class AffineBaseClass : IFilter
                         || rotatedX >= image.Width
                         || rotatedX < 0)
                     {
-                        (*OutputPointer2).Red = 0;
-                        (*OutputPointer2).Green = 0;
-                        (*OutputPointer2).Blue = 0;
-                        (*OutputPointer2).Alpha = 255;
-                        ++OutputPointer2;
+                        (*outputPointer2).Red = 0;
+                        (*outputPointer2).Green = 0;
+                        (*outputPointer2).Blue = 0;
+                        (*outputPointer2).Alpha = 255;
+                        ++outputPointer2;
                         continue;
                     }
-                    var Left = (int)(rotatedX - XRadius);
-                    var Right = (int)(rotatedX + XRadius);
-                    var Top = (int)(rotatedY - YRadius);
-                    var Bottom = (int)(rotatedY + YRadius);
-                    if (Top < 0)
-                        Top = 0;
-                    if (Bottom >= image.Height)
-                        Bottom = image.Height - 1;
-                    if (Left < 0)
-                        Left = 0;
-                    if (Right >= image.Width)
-                        Right = image.Width - 1;
-                    for (int i = Top, YCount = 0; i <= Bottom; ++i, ++YCount)
+                    var left = (int)(rotatedX - XRadius);
+                    var right = (int)(rotatedX + XRadius);
+                    var top = (int)(rotatedY - YRadius);
+                    var bottom = (int)(rotatedY + YRadius);
+                    if (top < 0)
+                        top = 0;
+                    if (bottom >= image.Height)
+                        bottom = image.Height - 1;
+                    if (left < 0)
+                        left = 0;
+                    if (right >= image.Width)
+                        right = image.Width - 1;
+                    for (int i = top, yCount = 0; i <= bottom; ++i, ++yCount)
                     {
-                        fixed (Color* PixelPointer = &Copy[i * image.Width])
+                        fixed (Color* pixelPointer = &copy[i * image.Width])
                         {
-                            Color* PixelPointer2 = PixelPointer + Left;
-                            for (int j = Left, XCount = 0; j <= Right; ++j, ++XCount)
+                            var pixelPointer2 = pixelPointer + left;
+                            for (int j = left, xCount = 0; j <= right; ++j, ++xCount)
                             {
-                                var TempYWeight = Filter.YWeights[rotatedY].Values[YCount];
-                                var TempXWeight = Filter.XWeights[rotatedX].Values[XCount];
-                                var TempWeight = TempYWeight * TempXWeight;
+                                var tempYWeight = Filter.YWeights[rotatedY].Values[yCount];
+                                var tempXWeight = Filter.XWeights[rotatedX].Values[xCount];
+                                var tempWeight = tempYWeight * tempXWeight;
 
                                 if (YRadius == 0 && XRadius == 0)
-                                    TempWeight = 1;
+                                    tempWeight = 1;
 
-                                if (TempWeight == 0)
+                                if (tempWeight == 0)
                                 {
-                                    ++PixelPointer2;
+                                    ++pixelPointer2;
                                     continue;
                                 }
-                                Values.X += (*PixelPointer2).Red * (float)TempWeight;
-                                Values.Y += (*PixelPointer2).Green * (float)TempWeight;
-                                Values.Z += (*PixelPointer2).Blue * (float)TempWeight;
-                                Values.W += (*PixelPointer2).Alpha * (float)TempWeight;
-                                ++PixelPointer2;
-                                Weight += (float)TempWeight;
+                                values.X += (*pixelPointer2).Red * (float)tempWeight;
+                                values.Y += (*pixelPointer2).Green * (float)tempWeight;
+                                values.Z += (*pixelPointer2).Blue * (float)tempWeight;
+                                values.W += (*pixelPointer2).Alpha * (float)tempWeight;
+                                ++pixelPointer2;
+                                weight += (float)tempWeight;
                             }
                         }
                     }
-                    if (Weight == 0)
-                        Weight = 1;
-                    if (Weight > 0)
+                    if (weight == 0)
+                        weight = 1;
+                    if (weight > 0)
                     {
-                        Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                        (*OutputPointer2).Red = (byte)Values.X;
-                        (*OutputPointer2).Green = (byte)Values.Y;
-                        (*OutputPointer2).Blue = (byte)Values.Z;
-                        (*OutputPointer2).Alpha = (byte)Values.W;
-                        ++OutputPointer2;
+                        values = Vector4.Clamp(values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                        (*outputPointer2).Red = (byte)values.X;
+                        (*outputPointer2).Green = (byte)values.Y;
+                        (*outputPointer2).Blue = (byte)values.Z;
+                        (*outputPointer2).Alpha = (byte)values.W;
+                        ++outputPointer2;
                     }
                     else
-                        ++OutputPointer2;
+                        ++outputPointer2;
                 }
             }
         });

@@ -67,43 +67,43 @@ public class ResizeCanvas : IFilter
     /// <returns>The image</returns>
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
-        var Final = new Color[Width * Height];
-        var XOffset = 0;
-        var YOffset = 0;
+        var final = new Color[Width * Height];
+        var xOffset = 0;
+        var yOffset = 0;
         if (Options == ResizeOptions.Center)
         {
-            XOffset = (image.Width - Width) / 2;
-            YOffset = (image.Height - Height) / 2;
+            xOffset = (image.Width - Width) / 2;
+            yOffset = (image.Height - Height) / 2;
         }
         Parallel.For(0, Height, y =>
         {
-            if (y + YOffset >= image.Height || y + YOffset < 0)
+            if (y + yOffset >= image.Height || y + yOffset < 0)
                 return;
-            fixed (Color* InputPointer = &image.Pixels[(y + YOffset) * image.Width])
+            fixed (Color* inputPointer = &image.Pixels[(y + yOffset) * image.Width])
             {
-                fixed (Color* OutputPointer = &Final[y * Width])
+                fixed (Color* outputPointer = &final[y * Width])
                 {
-                    Color* OutputPointer2 = OutputPointer;
-                    Color* InputPointer2 = InputPointer;
-                    for (int x = 0; x < Width; ++x)
+                    var outputPointer2 = outputPointer;
+                    var inputPointer2 = inputPointer;
+                    for (var x = 0; x < Width; ++x)
                     {
-                        if (x + XOffset >= image.Width)
+                        if (x + xOffset >= image.Width)
                             break;
-                        if (x + XOffset < 0)
+                        if (x + xOffset < 0)
                         {
-                            ++OutputPointer2;
-                            ++InputPointer2;
+                            ++outputPointer2;
+                            ++inputPointer2;
                         }
                         else
                         {
-                            *OutputPointer2 = *(InputPointer2 + XOffset);
-                            ++OutputPointer2;
-                            ++InputPointer2;
+                            *outputPointer2 = *(inputPointer2 + xOffset);
+                            ++outputPointer2;
+                            ++inputPointer2;
                         }
                     }
                 }
             }
         });
-        return image.ReCreate(Width, Height, Final);
+        return image.ReCreate(Width, Height, final);
     }
 }

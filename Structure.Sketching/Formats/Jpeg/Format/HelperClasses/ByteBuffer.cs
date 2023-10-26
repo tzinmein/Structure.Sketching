@@ -35,8 +35,8 @@ public class ByteBuffer
         Bits = new BitsBuffer();
         Stream = stream;
         Buffer = new byte[4096];
-        i = 0;
-        j = 0;
+        I = 0;
+        J = 0;
         UnreadableBytes = 0;
     }
 
@@ -62,7 +62,7 @@ public class ByteBuffer
     /// <value>
     /// The i.
     /// </value>
-    public int i { get; set; }
+    public int I { get; set; }
 
     /// <summary>
     /// Gets or sets the j.
@@ -70,7 +70,7 @@ public class ByteBuffer
     /// <value>
     /// The j.
     /// </value>
-    public int j { get; set; }
+    public int J { get; set; }
 
     /// <summary>
     /// Gets or sets the stream.
@@ -94,7 +94,7 @@ public class ByteBuffer
         if (Bits.NumberOfUnreadBits == 0)
             EnsureNBits(1);
 
-        bool ret = (Bits.Accumulator & Bits.Mask) != 0;
+        var ret = (Bits.Accumulator & Bits.Mask) != 0;
         Bits.NumberOfUnreadBits--;
         Bits.Mask >>= 1;
         return ret;
@@ -110,7 +110,7 @@ public class ByteBuffer
         if (Bits.NumberOfUnreadBits < n)
             EnsureNBits(n);
 
-        uint ret = Bits.Accumulator >> (Bits.NumberOfUnreadBits - n);
+        var ret = Bits.Accumulator >> (Bits.NumberOfUnreadBits - n);
         ret = (uint)(ret & ((1 << n) - 1));
         Bits.NumberOfUnreadBits -= n;
         Bits.Mask >>= n;
@@ -141,27 +141,27 @@ public class ByteBuffer
     /// Fills this instance.
     /// </summary>
     /// <exception cref="ImageException">jpeg: fill called when unread bytes exist</exception>
-    /// <exception cref="EOF">End of file reached</exception>
+    /// <exception cref="Eof">End of file reached</exception>
     public void Fill()
     {
-        if (i != j)
+        if (I != J)
             throw new ImageException("jpeg: fill called when unread bytes exist");
 
         // Move the last 2 bytes to the start of the buffer, in case we need
         // to call unreadByteStuffedByte.
-        if (j > 2)
+        if (J > 2)
         {
-            Buffer[0] = Buffer[j - 2];
-            Buffer[1] = Buffer[j - 1];
-            i = 2;
-            j = 2;
+            Buffer[0] = Buffer[J - 2];
+            Buffer[1] = Buffer[J - 1];
+            I = 2;
+            J = 2;
         }
 
         // Fill in the rest of the buffer.
-        var n = Stream.Read(Buffer, j, Buffer.Length - j);
+        var n = Stream.Read(Buffer, J, Buffer.Length - J);
         if (n == 0)
-            throw new EOF();
-        j += n;
+            throw new Eof();
+        J += n;
     }
 
     /// <summary>
@@ -180,9 +180,9 @@ public class ByteBuffer
 
         while (true)
         {
-            int m = j - i;
+            var m = J - I;
             if (m > n) m = n;
-            i += m;
+            I += m;
             n -= m;
             if (n == 0)
                 break;
@@ -196,10 +196,10 @@ public class ByteBuffer
     /// <returns>The byte</returns>
     public byte ReadByte()
     {
-        while (i == j)
+        while (I == J)
             Fill();
-        byte x = Buffer[i];
-        i++;
+        var x = Buffer[I];
+        I++;
         UnreadableBytes = 0;
         return x;
     }
@@ -208,22 +208,22 @@ public class ByteBuffer
     /// Reads the byte stuffed byte.
     /// </summary>
     /// <returns>The byte</returns>
-    /// <exception cref="MissingFF00">
+    /// <exception cref="MissingFf00">
     /// </exception>
     public byte ReadByteStuffedByte()
     {
         byte x;
 
-        if (i + 2 <= j)
+        if (I + 2 <= J)
         {
-            x = Buffer[i];
-            i++;
+            x = Buffer[I];
+            I++;
             UnreadableBytes = 1;
             if (x != 0xff)
                 return x;
-            if (Buffer[i] != 0x00)
-                throw new MissingFF00();
-            i++;
+            if (Buffer[I] != 0x00)
+                throw new MissingFf00();
+            I++;
             UnreadableBytes = 2;
             return 0xff;
         }
@@ -237,7 +237,7 @@ public class ByteBuffer
         x = ReadByte();
         UnreadableBytes = 2;
         if (x != 0x00)
-            throw new MissingFF00();
+            throw new MissingFf00();
         return 0xff;
     }
 
@@ -259,18 +259,18 @@ public class ByteBuffer
 
         while (len > 0)
         {
-            if (j - i >= len)
+            if (J - I >= len)
             {
-                Array.Copy(Buffer, i, data, offset, len);
-                i += len;
+                Array.Copy(Buffer, I, data, offset, len);
+                I += len;
                 len -= len;
             }
             else
             {
-                Array.Copy(Buffer, i, data, offset, j - i);
-                offset += j - i;
-                len -= j - i;
-                i += j - i;
+                Array.Copy(Buffer, I, data, offset, J - I);
+                offset += J - I;
+                len -= J - I;
+                I += J - I;
 
                 Fill();
             }
@@ -282,14 +282,14 @@ public class ByteBuffer
     /// </summary>
     /// <param name="t">The t.</param>
     /// <returns></returns>
-    public int receiveExtend(byte t)
+    public int ReceiveExtend(byte t)
     {
         if (Bits.NumberOfUnreadBits < t)
             EnsureNBits(t);
 
         Bits.NumberOfUnreadBits -= t;
         Bits.Mask >>= t;
-        int s = 1 << t;
+        var s = 1 << t;
         var x = (int)((Bits.Accumulator >> Bits.NumberOfUnreadBits) & (s - 1));
         if (x < s >> 1)
             x += (-1 << t) + 1;
@@ -301,7 +301,7 @@ public class ByteBuffer
     /// </summary>
     public void UnreadByteStuffedByte()
     {
-        i -= UnreadableBytes;
+        I -= UnreadableBytes;
         UnreadableBytes = 0;
         if (Bits.NumberOfUnreadBits >= 8)
         {

@@ -10,8 +10,8 @@ public class Body
     public void CreateByteArray()
     {
         var data = new byte[1600];
-        var TestBody = new Sketching.Formats.Bmp.Format.Body(data);
-        Assert.Equal(1600, TestBody.Data.Length);
+        var testBody = new Sketching.Formats.Bmp.Format.Body(data);
+        Assert.Equal(1600, testBody.Data.Length);
     }
 
     [Fact]
@@ -19,17 +19,17 @@ public class Body
     {
         var data = new byte[1600];
         var image = new Image(10, 40, data);
-        var TestBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(10, 40, 24, 1280, 0, 0, 0, 0, Compression.RGB));
-        Assert.Equal(1280, TestBody.Data.Length);
+        var testBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(10, 40, 24, 1280, 0, 0, 0, 0, Compression.Rgb));
+        Assert.Equal(1280, testBody.Data.Length);
     }
 
     [Fact]
     public void Read()
     {
-        byte[] data = new byte[5280];
-        using var Stream = new MemoryStream(data);
-        var TestBody = Sketching.Formats.Bmp.Format.Body.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 5280, 0, 0, 0, 0, Compression.RGB), null, Stream);
-        Assert.Equal(7040, TestBody.Data.Length);
+        var data = new byte[5280];
+        using var stream = new MemoryStream(data);
+        var testBody = Sketching.Formats.Bmp.Format.Body.Read(new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 5280, 0, 0, 0, 0, Compression.Rgb), null, stream);
+        Assert.Equal(7040, testBody.Data.Length);
     }
 
     [Fact]
@@ -37,9 +37,9 @@ public class Body
     {
         var data = new byte[7040];
         var image = new Image(44, 40, data);
-        var TestBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1280, 0, 0, 0, 0, Compression.RGB));
-        using var BWriter = new BinaryWriter(new MemoryStream());
-        TestBody.Write(BWriter);
-        Assert.Equal(5280, BWriter.BaseStream.Length);
+        var testBody = new Sketching.Formats.Bmp.Format.Body(image, new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1280, 0, 0, 0, 0, Compression.Rgb));
+        using var bWriter = new BinaryWriter(new MemoryStream());
+        testBody.Write(bWriter);
+        Assert.Equal(5280, bWriter.BaseStream.Length);
     }
 }

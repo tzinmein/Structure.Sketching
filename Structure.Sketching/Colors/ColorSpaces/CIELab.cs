@@ -26,15 +26,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// </summary>
 /// <seealso cref="IColorSpace"/>
 /// <seealso cref="IEquatable{CIELab}"/>
-public struct CIELab : IEquatable<CIELab>, IColorSpace
+public struct CieLab : IEquatable<CieLab>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="CIELab"/> struct.
+    /// Initializes a new instance of the <see cref="CieLab"/> struct.
     /// </summary>
     /// <param name="lightness">The lightness.</param>
     /// <param name="aComponent">The a component.</param>
     /// <param name="bComponent">The b component.</param>
-    public CIELab(double lightness, double aComponent, double bComponent)
+    public CieLab(double lightness, double aComponent, double bComponent)
     {
         L = lightness.Clamp(0, 100);
         A = aComponent.Clamp(-100, 100);
@@ -62,7 +62,7 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
     /// Intent is 24389/27
@@ -72,31 +72,31 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     /// <summary>
     /// Intent is 216/24389
     /// </summary>
-    private const double XYZEpsilon = 0.008856;
+    private const double XyzEpsilon = 0.008856;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="CIELab"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="CieLab"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELab(Color color)
+    public static implicit operator CieLab(Color color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="CIELab"/>.
+    /// Performs an implicit conversion from <see cref="Xyz"/> to <see cref="CieLab"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELab(XYZ color)
+    public static implicit operator CieLab(Xyz color)
     {
-        var white = XYZ.WhiteReference;
+        var white = Xyz.WhiteReference;
         var x = PivotXyz(color.X / white.X);
         var y = PivotXyz(color.Y / white.Y);
         var z = PivotXyz(color.Z / white.Z);
 
-        return new CIELab(
+        return new CieLab(
             (float)Math.Max(0, 116 * y - 16),
             (float)(500 * (x - y)),
             (float)(200 * (y - z))
@@ -104,33 +104,33 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELab"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="CieLab"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(CIELab color)
+    public static implicit operator Color(CieLab color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELab"/> to <see cref="XYZ"/>.
+    /// Performs an implicit conversion from <see cref="CieLab"/> to <see cref="Xyz"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator XYZ(CIELab color)
+    public static implicit operator Xyz(CieLab color)
     {
         var y = (color.L + 16d) / 116d;
         var x = color.A / 500d + y;
         var z = y - color.B / 200d;
-        var white = XYZ.WhiteReference;
+        var white = Xyz.WhiteReference;
 
         var x3 = x * x * x;
         var z3 = z * z * z;
 
-        return new XYZ(white.X * (x3 > XYZEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
-            white.Y * (color.L > Kappa * XYZEpsilon ? Math.Pow((color.L + 16.0) / 116.0, 3) : color.L / Kappa),
-            white.Z * (z3 > XYZEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787));
+        return new Xyz(white.X * (x3 > XyzEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
+            white.Y * (color.L > Kappa * XyzEpsilon ? Math.Pow((color.L + 16.0) / 116.0, 3) : color.L / Kappa),
+            white.Z * (z3 > XyzEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787));
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(CIELab left, CIELab right)
+    public static bool operator !=(CieLab left, CieLab right)
     {
         return !(left == right);
     }
@@ -152,7 +152,7 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(CIELab left, CIELab right)
+    public static bool operator ==(CieLab left, CieLab right)
     {
         return left.Equals(right);
     }
@@ -167,7 +167,7 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is CIELab lab && Equals(lab);
+        return obj is CieLab lab && Equals(lab);
     }
 
     /// <summary>
@@ -176,11 +176,11 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     /// <param name="other">The other CIELab color.</param>
     /// <returns>True if they are, false otherwise</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(CIELab other)
+    public readonly bool Equals(CieLab other)
     {
-        return Math.Abs(other.L - L) < EPSILON
-               && Math.Abs(other.A - A) < EPSILON
-               && Math.Abs(other.B - B) < EPSILON;
+        return Math.Abs(other.L - L) < Epsilon
+               && Math.Abs(other.A - A) < Epsilon
+               && Math.Abs(other.B - B) < Epsilon;
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public struct CIELab : IEquatable<CIELab>, IColorSpace
     /// <returns>The resulting value</returns>
     private static double PivotXyz(double n)
     {
-        return n > XYZEpsilon ? n.CubicRoot() : (Kappa * n + 16) / 116;
+        return n > XyzEpsilon ? n.CubicRoot() : (Kappa * n + 16) / 116;
     }
 
     /// <summary>

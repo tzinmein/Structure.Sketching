@@ -46,8 +46,8 @@ public class Scale : AffineBaseClass
     /// <returns>The transformation matrix</returns>
     protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
     {
-        float XScale = (float)image.Width / Width;
-        float YScale = (float)image.Height / Height;
-        return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
+        var xScale = (float)image.Width / Width;
+        var yScale = (float)image.Height / Height;
+        return Matrix3x2.CreateScale(xScale, yScale, targetLocation.Center);
     }
 }

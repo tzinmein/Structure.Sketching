@@ -22,6 +22,6 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Exceptions;
 /// Missing FF00 exception
 /// </summary>
 /// <seealso cref="System.Exception" />
-public class MissingFF00 : Exception
+public class MissingFf00 : Exception
 {
 }

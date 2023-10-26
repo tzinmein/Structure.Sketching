@@ -35,28 +35,28 @@ public class ZlibDeflateStream : Stream
     {
         InternalAdler32 = new Adler32();
         InternalStream = stream;
-        int CMF = 0x78;
-        int FLG = 218;
+        var cmf = 0x78;
+        var flg = 218;
         if (compressionLevel is >= 5 and <= 6)
         {
-            FLG = 156;
+            flg = 156;
         }
         else if (compressionLevel is >= 3 and <= 4)
         {
-            FLG = 94;
+            flg = 94;
         }
         else if (compressionLevel <= 2)
         {
-            FLG = 1;
+            flg = 1;
         }
-        FLG -= (CMF * 256 + FLG) % 31;
-        if (FLG < 0)
+        flg -= (cmf * 256 + flg) % 31;
+        if (flg < 0)
         {
-            FLG += 31;
+            flg += 31;
         }
-        InternalStream.WriteByte((byte)CMF);
-        InternalStream.WriteByte((byte)FLG);
-        CompressionLevel level = CompressionLevel.Optimal;
+        InternalStream.WriteByte((byte)cmf);
+        InternalStream.WriteByte((byte)flg);
+        var level = CompressionLevel.Optimal;
         if (compressionLevel is >= 1 and <= 5)
         {
             level = CompressionLevel.Fastest;
@@ -208,11 +208,11 @@ public class ZlibDeflateStream : Stream
                 InternalStream.WriteByte(0);
             }
 
-            var Crc = (uint)InternalAdler32.Value;
-            InternalStream.WriteByte((byte)((Crc >> 24) & 0xFF));
-            InternalStream.WriteByte((byte)((Crc >> 16) & 0xFF));
-            InternalStream.WriteByte((byte)((Crc >> 8) & 0xFF));
-            InternalStream.WriteByte((byte)(Crc & 0xFF));
+            var crc = (uint)InternalAdler32.Value;
+            InternalStream.WriteByte((byte)((crc >> 24) & 0xFF));
+            InternalStream.WriteByte((byte)((crc >> 16) & 0xFF));
+            InternalStream.WriteByte((byte)((crc >> 8) & 0xFF));
+            InternalStream.WriteByte((byte)(crc & 0xFF));
         }
 
         base.Dispose(disposing);

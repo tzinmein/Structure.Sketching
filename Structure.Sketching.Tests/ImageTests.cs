@@ -29,11 +29,11 @@ public class ImageTests : FilterTestBaseClass
     [Fact]
     public void BadDataConstructor()
     {
-        var TempImage = new Image(-1, -1, (byte[])null);
-        Assert.Equal(1, TempImage.Width);
-        Assert.Equal(1, TempImage.Height);
-        Assert.Equal(1, TempImage.PixelRatio);
-        Assert.Null(TempImage.Pixels);
+        var tempImage = new Image(-1, -1, (byte[])null);
+        Assert.Equal(1, tempImage.Width);
+        Assert.Equal(1, tempImage.Height);
+        Assert.Equal(1, tempImage.PixelRatio);
+        Assert.Null(tempImage.Pixels);
     }
 
     [Theory]
@@ -42,14 +42,14 @@ public class ImageTests : FilterTestBaseClass
     {
         foreach (var file in Files)
         {
-            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-            var TestImage = new Image(file);
-            var ResultImage = operation(TestImage, value);
-            ResultImage.Save(OutputDirectory + outputFileName);
+            var outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var testImage = new Image(file);
+            var resultImage = operation(testImage, value);
+            resultImage.Save(OutputDirectory + outputFileName);
         }
-        foreach (string file in Files)
+        foreach (var file in Files)
         {
-            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
             Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
         }
     }
@@ -60,14 +60,14 @@ public class ImageTests : FilterTestBaseClass
     {
         foreach (var file in Files)
         {
-            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-            var TestImage = new Image(file);
-            var ResultImage = operation(TestImage);
-            ResultImage.Save(OutputDirectory + outputFileName);
+            var outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var testImage = new Image(file);
+            var resultImage = operation(testImage);
+            resultImage.Save(OutputDirectory + outputFileName);
         }
-        foreach (string file in Files)
+        foreach (var file in Files)
         {
-            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
             Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
         }
     }
@@ -75,17 +75,17 @@ public class ImageTests : FilterTestBaseClass
     [Fact]
     public void NoDataConstructor()
     {
-        var TempImage = new Image(1, 1);
-        Assert.Equal(1, TempImage.Width);
-        Assert.Equal(1, TempImage.Height);
-        Assert.Equal(1, TempImage.PixelRatio);
-        Assert.Equal(new Color(0, 0, 0, 0), TempImage.Pixels[0]);
+        var tempImage = new Image(1, 1);
+        Assert.Equal(1, tempImage.Width);
+        Assert.Equal(1, tempImage.Height);
+        Assert.Equal(1, tempImage.PixelRatio);
+        Assert.Equal(new Color(0, 0, 0, 0), tempImage.Pixels[0]);
     }
 
     [Fact]
-    public void ToASCIIArt()
+    public void ToAsciiArt()
     {
-        var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102,
+        var testImage = new Image(1, 10, new byte[] { 25, 51, 76, 102,
             127, 153, 178, 204,
             229, 255, 25, 51,
             76, 102, 127, 153,
@@ -96,13 +96,13 @@ public class ImageTests : FilterTestBaseClass
             76, 102, 127, 153,
             178, 204, 229, 255 });
         var s = Environment.NewLine;
-        Assert.Equal($"#{s}.{s}-{s}*{s}={s}", TestImage.ToASCIIArt());
+        Assert.Equal($"#{s}.{s}-{s}*{s}={s}", testImage.ToAsciiArt());
     }
 
     [Fact]
     public void ToBase64String()
     {
-        var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255 });
-        Assert.Equal("Qk1eAAAAAAAAADYAAAAoAAAAAQAAAAoAAAABABgAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAA5cyyAH9mTAAZ/+UAspl/AEwzGQDlzLIAf2ZMABn/5QCymX8ATDMZAA==", TestImage.ToString(FileFormats.BMP));
+        var testImage = new Image(1, 10, new byte[] { 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255 });
+        Assert.Equal("Qk1eAAAAAAAAADYAAAAoAAAAAQAAAAoAAAABABgAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAA5cyyAH9mTAAZ/+UAspl/AEwzGQDlzLIAf2ZMABn/5QCymX8ATDMZAA==", testImage.ToString(FileFormats.Bmp));
     }
 }

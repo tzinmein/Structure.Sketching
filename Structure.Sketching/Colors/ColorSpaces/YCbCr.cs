@@ -62,7 +62,7 @@ public struct YCbCr : IEquatable<YCbCr>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="YCbCr"/> to <see cref="Color"/>.
@@ -144,9 +144,9 @@ public struct YCbCr : IEquatable<YCbCr>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Equals(YCbCr other)
     {
-        return Math.Abs(other.YLuminance - YLuminance) < EPSILON
-               && Math.Abs(other.CbChroma - CbChroma) < EPSILON
-               && Math.Abs(other.CrChroma - CrChroma) < EPSILON;
+        return Math.Abs(other.YLuminance - YLuminance) < Epsilon
+               && Math.Abs(other.CbChroma - CbChroma) < Epsilon
+               && Math.Abs(other.CrChroma - CrChroma) < Epsilon;
     }
 
     /// <summary>

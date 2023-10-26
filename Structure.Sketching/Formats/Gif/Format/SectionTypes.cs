@@ -139,9 +139,9 @@ public class SectionTypes
     /// </returns>
     public override bool Equals(object obj)
     {
-        if (!(obj is SectionTypes Value2))
+        if (!(obj is SectionTypes value2))
             return false;
-        return this == Value2;
+        return this == value2;
     }
 
     /// <summary>

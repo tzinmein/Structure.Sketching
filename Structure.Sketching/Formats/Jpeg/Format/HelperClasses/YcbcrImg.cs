@@ -38,10 +38,10 @@ public class YcbcrImg
     public YcbcrImg(int width, int height, YCbCrSubsampleRatio ratio)
     {
         int cw, ch;
-        yCbCrSize(width, height, ratio, out cw, out ch);
+        YCbCrSize(width, height, ratio, out cw, out ch);
         YPixels = new byte[width * height];
-        CBPixels = new byte[cw * ch];
-        CRPixels = new byte[cw * ch];
+        CbPixels = new byte[cw * ch];
+        CrPixels = new byte[cw * ch];
         Ratio = ratio;
         YStride = width;
         CStride = cw;
@@ -59,7 +59,7 @@ public class YcbcrImg
     /// Gets or sets the cb pixels.
     /// </summary>
     /// <value>The cb pixels.</value>
-    public byte[] CBPixels { get; set; }
+    public byte[] CbPixels { get; set; }
 
     /// <summary>
     /// Gets or sets the c offset.
@@ -71,7 +71,7 @@ public class YcbcrImg
     /// Gets or sets the cr pixels.
     /// </summary>
     /// <value>The cr pixels.</value>
-    public byte[] CRPixels { get; set; }
+    public byte[] CrPixels { get; set; }
 
     /// <summary>
     /// Gets or sets the c stride.
@@ -139,13 +139,13 @@ public class YcbcrImg
     /// <returns>Converts to an image</returns>
     public Image Convert(int width, int height, Image image, IEnumerable<SegmentBase> segments)
     {
-        if (IsRGB(segments))
+        if (IsRgb(segments))
         {
-            ConvertDirectToRGB(width, height, image, segments);
+            ConvertDirectToRgb(width, height, image, segments);
         }
         else
         {
-            ConvertToRGB(width, height, image, segments);
+            ConvertToRgb(width, height, image, segments);
         }
         return image;
     }
@@ -155,24 +155,24 @@ public class YcbcrImg
     /// </summary>
     /// <param name="segments">The segments.</param>
     /// <returns>True if it is, false otherwise</returns>
-    public bool IsRGB(IEnumerable<SegmentBase> segments)
+    public bool IsRgb(IEnumerable<SegmentBase> segments)
     {
-        var Application0Segment = segments.OfType<Application0>().FirstOrDefault() ?? new Application0(null);
-        var Application14Segment = segments.OfType<Application14>().FirstOrDefault() ?? new Application14(null);
-        var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
-        if (Application0Segment.IsJFIF)
+        var application0Segment = segments.OfType<Application0>().FirstOrDefault() ?? new Application0(null);
+        var application14Segment = segments.OfType<Application14>().FirstOrDefault() ?? new Application14(null);
+        var startFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
+        if (application0Segment.IsJfif)
         {
             return false;
         }
 
-        if (Application14Segment.IsAdobeTransformValid && Application14Segment.AdobeTransform == AdobeTransformUnknown)
+        if (application14Segment.IsAdobeTransformValid && application14Segment.AdobeTransform == AdobeTransformUnknown)
         {
             return true;
         }
 
-        return StartFrameSegment.Components[0].ComponentIdentifier == 'R'
-               && StartFrameSegment.Components[1].ComponentIdentifier == 'G'
-               && StartFrameSegment.Components[2].ComponentIdentifier == 'B';
+        return startFrameSegment.Components[0].ComponentIdentifier == 'R'
+               && startFrameSegment.Components[1].ComponentIdentifier == 'G'
+               && startFrameSegment.Components[2].ComponentIdentifier == 'B';
     }
 
     /// <summary>
@@ -227,8 +227,8 @@ public class YcbcrImg
             Width = width,
             Height = height,
             YPixels = YPixels,
-            CBPixels = CBPixels,
-            CRPixels = CRPixels,
+            CbPixels = CbPixels,
+            CrPixels = CrPixels,
             Ratio = Ratio,
             YStride = YStride,
             CStride = CStride,
@@ -245,7 +245,7 @@ public class YcbcrImg
     /// <param name="ratio">The ratio.</param>
     /// <param name="cw">The cw.</param>
     /// <param name="ch">The ch.</param>
-    private static void yCbCrSize(int width, int height, YCbCrSubsampleRatio ratio, out int cw, out int ch)
+    private static void YCbCrSize(int width, int height, YCbCrSubsampleRatio ratio, out int cw, out int ch)
     {
         switch (ratio)
         {
@@ -281,10 +281,10 @@ public class YcbcrImg
         }
     }
 
-    private void ConvertDirectToRGB(int width, int height, Image image, IEnumerable<SegmentBase> segments)
+    private void ConvertDirectToRgb(int width, int height, Image image, IEnumerable<SegmentBase> segments)
     {
-        var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
-        int cScale = StartFrameSegment.Components[0].HorizontalSamplingFactor / StartFrameSegment.Components[1].HorizontalSamplingFactor;
+        var startFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
+        var cScale = startFrameSegment.Components[0].HorizontalSamplingFactor / startFrameSegment.Components[1].HorizontalSamplingFactor;
         var pixels = new Color[width * height];
 
         Parallel.For(
@@ -295,11 +295,11 @@ public class YcbcrImg
                 var yo = RowYOffset(y);
                 var co = RowCOffset(y);
 
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
-                    byte red = YPixels[yo + x];
-                    byte green = CBPixels[co + x / cScale];
-                    byte blue = CRPixels[co + x / cScale];
+                    var red = YPixels[yo + x];
+                    var green = CbPixels[co + x / cScale];
+                    var blue = CrPixels[co + x / cScale];
 
                     pixels[y * width + x] = new Bgra(red, green, blue);
                 }
@@ -308,12 +308,12 @@ public class YcbcrImg
         image.ReCreate(width, height, pixels);
     }
 
-    private void ConvertToRGB(int width, int height, Image image, IEnumerable<SegmentBase> segments)
+    private void ConvertToRgb(int width, int height, Image image, IEnumerable<SegmentBase> segments)
     {
-        var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
-        int cScale = StartFrameSegment.Components[0].HorizontalSamplingFactor / StartFrameSegment.Components[1].HorizontalSamplingFactor;
+        var startFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
+        var cScale = startFrameSegment.Components[0].HorizontalSamplingFactor / startFrameSegment.Components[1].HorizontalSamplingFactor;
 
-        Color[] pixels = new Color[width * height];
+        var pixels = new Color[width * height];
 
         Parallel.For(
             0,
@@ -323,11 +323,11 @@ public class YcbcrImg
                 var yo = RowYOffset(y);
                 var co = RowCOffset(y);
 
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
-                    byte yy = YPixels[yo + x];
-                    byte cb = CBPixels[co + x / cScale];
-                    byte cr = CRPixels[co + x / cScale];
+                    var yy = YPixels[yo + x];
+                    var cb = CbPixels[co + x / cScale];
+                    var cr = CrPixels[co + x / cScale];
 
                     pixels[y * width + x] = new YCbCr(yy, cb, cr);
                 }

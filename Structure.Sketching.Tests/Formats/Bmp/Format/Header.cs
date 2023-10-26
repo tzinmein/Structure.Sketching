@@ -25,33 +25,33 @@ public class Header
             BitConverter.GetBytes((int)0),
             BitConverter.GetBytes((int)0)
         }.SelectMany(x => x).ToArray();
-        var TestFileHeader = new Sketching.Formats.Bmp.Format.Header(data);
-        Assert.Equal(24, TestFileHeader.BPP);
-        Assert.Equal(0, TestFileHeader.ColorsImportant);
-        Assert.Equal(0, TestFileHeader.ColorsUsed);
-        Assert.Equal(Compression.RGB, TestFileHeader.Compression);
-        Assert.Equal(40, TestFileHeader.Height);
-        Assert.Equal(1000, TestFileHeader.ImageSize);
-        Assert.Equal(1, TestFileHeader.Planes);
-        Assert.Equal(44, TestFileHeader.Width);
-        Assert.Equal(0, TestFileHeader.XPPM);
-        Assert.Equal(0, TestFileHeader.YPPM);
+        var testFileHeader = new Sketching.Formats.Bmp.Format.Header(data);
+        Assert.Equal(24, testFileHeader.Bpp);
+        Assert.Equal(0, testFileHeader.ColorsImportant);
+        Assert.Equal(0, testFileHeader.ColorsUsed);
+        Assert.Equal(Compression.Rgb, testFileHeader.Compression);
+        Assert.Equal(40, testFileHeader.Height);
+        Assert.Equal(1000, testFileHeader.ImageSize);
+        Assert.Equal(1, testFileHeader.Planes);
+        Assert.Equal(44, testFileHeader.Width);
+        Assert.Equal(0, testFileHeader.Xppm);
+        Assert.Equal(0, testFileHeader.Yppm);
     }
 
     [Fact]
     public void CreateValues()
     {
-        var TestFileHeader = new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1000, 0, 0, 0, 0, Compression.RGB);
-        Assert.Equal(24, TestFileHeader.BPP);
-        Assert.Equal(0, TestFileHeader.ColorsImportant);
-        Assert.Equal(0, TestFileHeader.ColorsUsed);
-        Assert.Equal(Compression.RGB, TestFileHeader.Compression);
-        Assert.Equal(40, TestFileHeader.Height);
-        Assert.Equal(1000, TestFileHeader.ImageSize);
-        Assert.Equal(1, TestFileHeader.Planes);
-        Assert.Equal(44, TestFileHeader.Width);
-        Assert.Equal(0, TestFileHeader.XPPM);
-        Assert.Equal(0, TestFileHeader.YPPM);
+        var testFileHeader = new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1000, 0, 0, 0, 0, Compression.Rgb);
+        Assert.Equal(24, testFileHeader.Bpp);
+        Assert.Equal(0, testFileHeader.ColorsImportant);
+        Assert.Equal(0, testFileHeader.ColorsUsed);
+        Assert.Equal(Compression.Rgb, testFileHeader.Compression);
+        Assert.Equal(40, testFileHeader.Height);
+        Assert.Equal(1000, testFileHeader.ImageSize);
+        Assert.Equal(1, testFileHeader.Planes);
+        Assert.Equal(44, testFileHeader.Width);
+        Assert.Equal(0, testFileHeader.Xppm);
+        Assert.Equal(0, testFileHeader.Yppm);
     }
 
     [Fact]
@@ -71,26 +71,26 @@ public class Header
             BitConverter.GetBytes((int)0),
             BitConverter.GetBytes((int)0)
         }.SelectMany(x => x).ToArray();
-        using var Stream = new MemoryStream(data);
-        var TestFileHeader = Sketching.Formats.Bmp.Format.Header.Read(Stream);
-        Assert.Equal(24, TestFileHeader.BPP);
-        Assert.Equal(0, TestFileHeader.ColorsImportant);
-        Assert.Equal(0, TestFileHeader.ColorsUsed);
-        Assert.Equal(Compression.RGB, TestFileHeader.Compression);
-        Assert.Equal(40, TestFileHeader.Height);
-        Assert.Equal(1000, TestFileHeader.ImageSize);
-        Assert.Equal(1, TestFileHeader.Planes);
-        Assert.Equal(44, TestFileHeader.Width);
-        Assert.Equal(0, TestFileHeader.XPPM);
-        Assert.Equal(0, TestFileHeader.YPPM);
+        using var stream = new MemoryStream(data);
+        var testFileHeader = Sketching.Formats.Bmp.Format.Header.Read(stream);
+        Assert.Equal(24, testFileHeader.Bpp);
+        Assert.Equal(0, testFileHeader.ColorsImportant);
+        Assert.Equal(0, testFileHeader.ColorsUsed);
+        Assert.Equal(Compression.Rgb, testFileHeader.Compression);
+        Assert.Equal(40, testFileHeader.Height);
+        Assert.Equal(1000, testFileHeader.ImageSize);
+        Assert.Equal(1, testFileHeader.Planes);
+        Assert.Equal(44, testFileHeader.Width);
+        Assert.Equal(0, testFileHeader.Xppm);
+        Assert.Equal(0, testFileHeader.Yppm);
     }
 
     [Fact]
     public void Write()
     {
-        var TestFileHeader = new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1000, 0, 0, 0, 0, Compression.RGB);
-        using var BWriter = new BinaryWriter(new MemoryStream());
-        TestFileHeader.Write(BWriter);
-        Assert.Equal(40, BWriter.BaseStream.Length);
+        var testFileHeader = new Sketching.Formats.Bmp.Format.Header(44, 40, 24, 1000, 0, 0, 0, 0, Compression.Rgb);
+        using var bWriter = new BinaryWriter(new MemoryStream());
+        testFileHeader.Write(bWriter);
+        Assert.Equal(40, bWriter.BaseStream.Length);
     }
 }

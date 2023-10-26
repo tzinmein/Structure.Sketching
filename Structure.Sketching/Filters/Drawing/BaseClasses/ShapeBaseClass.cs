@@ -54,10 +54,10 @@ public abstract class ShapeBaseClass : IShape
     {
         if (!targetLocation.Contains(x, y))
             return;
-        var Offset = y * image.Width + x;
-        var TempColor = Color * brightness;
+        var offset = y * image.Width + x;
+        var tempColor = Color * brightness;
         //float TempAlpha = TempColor.Alpha / 255f;
-        image.Pixels[Offset] = TempColor;
+        image.Pixels[offset] = tempColor;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public abstract class ShapeBaseClass : IShape
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>One minus the fractional portion of the value</returns>
-    protected double RFPart(double value)
+    protected double RfPart(double value)
     {
         return 1 - FractionalPart(value);
     }

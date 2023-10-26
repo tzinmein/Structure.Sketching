@@ -57,10 +57,10 @@ public abstract class QuantizerBase : IQuantizer
     public QuantizedImage Quantize(Image image, int maxColors)
     {
         Initialize(image, maxColors);
-        var Palette = GetPalette();
+        var palette = GetPalette();
 
-        var Pixels = Process(image);
-        return new QuantizedImage(image.Width, image.Height, Palette, Pixels, TransparentIndex);
+        var pixels = Process(image);
+        return new QuantizedImage(image.Width, image.Height, palette, pixels, TransparentIndex);
     }
 
     /// <summary>

@@ -39,12 +39,12 @@ public class GreyscaleNoAlphaReader : IColorReader
         scanline = scanline.ExpandArray(header.BitDepth);
         Parallel.For(0, header.Width, x =>
         {
-            int Offset = row * header.Width + x;
+            var offset = row * header.Width + x;
 
-            pixels[Offset].Red = scanline[x];
-            pixels[Offset].Green = scanline[x];
-            pixels[Offset].Blue = scanline[x];
-            pixels[Offset].Alpha = 255;
+            pixels[offset].Red = scanline[x];
+            pixels[offset].Green = scanline[x];
+            pixels[offset].Blue = scanline[x];
+            pixels[offset].Alpha = 255;
         });
     }
 }

@@ -304,8 +304,8 @@ public class Data
             column = -1,
             row = 0;
 
-        using InflateStream decompressedStream = new InflateStream(dataStream);
-        using MemoryStream stream = new MemoryStream();
+        using var decompressedStream = new InflateStream(dataStream);
+        using var stream = new MemoryStream();
         decompressedStream.CopyTo(stream);
         stream.Flush();
         var decompressedArray = stream.ToArray();

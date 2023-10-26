@@ -25,7 +25,7 @@ public class PaethFilter : FilterBaseClass
     /// <returns>The resulting byte.</returns>
     protected override byte Calculate(byte left, byte above, byte upperLeft)
     {
-        int p = left + above - upperLeft;
+        var p = left + above - upperLeft;
         var pa = Math.Abs(p - left);
         var pb = Math.Abs(p - above);
         var pc = Math.Abs(p - upperLeft);

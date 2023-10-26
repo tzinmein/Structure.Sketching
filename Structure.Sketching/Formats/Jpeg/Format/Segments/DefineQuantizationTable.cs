@@ -35,9 +35,9 @@ public class DefineQuantizationTable : SegmentBase
     public DefineQuantizationTable(ByteBuffer bytes)
         : base(SegmentTypes.DefineQuantizationTable, bytes)
     {
-        quant = new Block[MAXIMUM_TQ + 1];
-        for (int i = 0; i < quant.Length; i++)
-            quant[i] = new Block();
+        Quant = new Block[MaximumTq + 1];
+        for (var i = 0; i < Quant.Length; i++)
+            Quant[i] = new Block();
     }
 
     /// <summary>
@@ -47,10 +47,10 @@ public class DefineQuantizationTable : SegmentBase
     public DefineQuantizationTable(int quality)
         : base(SegmentTypes.DefineQuantizationTable, null)
     {
-        quant = new Block[MAXIMUM_TQ - 1];
-        for (int i = 0; i < quant.Length; i++)
+        Quant = new Block[MaximumTq - 1];
+        for (var i = 0; i < Quant.Length; i++)
         {
-            quant[i] = new Block();
+            Quant[i] = new Block();
         }
 
         if (quality < 1) quality = 1;
@@ -58,15 +58,15 @@ public class DefineQuantizationTable : SegmentBase
 
         int scale;
         scale = quality < 50 ? 5000 / quality : 200 - quality * 2;
-        for (int i = 0; i < quant.Length; i++)
+        for (var i = 0; i < Quant.Length; i++)
         {
-            for (int j = 0; j < Block.BlockSize; j++)
+            for (var j = 0; j < Block.BlockSize; j++)
             {
-                int x = unscaledQuant[i, j];
+                int x = _unscaledQuant[i, j];
                 x = (x * scale + 50) / 100;
                 if (x < 1) x = 1;
                 if (x > 255) x = 255;
-                quant[i][j] = (byte)x;
+                Quant[i][j] = (byte)x;
             }
         }
     }
@@ -77,14 +77,14 @@ public class DefineQuantizationTable : SegmentBase
     /// <value>
     /// The quant.
     /// </value>
-    public Block[] quant { get; private set; }
+    public Block[] Quant { get; private set; }
 
-    private const byte MAXIMUM_TQ = 3;
+    private const byte MaximumTq = 3;
 
     /// <summary>
     /// The unscaled quant values
     /// </summary>
-    private readonly byte[,] unscaledQuant =
+    private readonly byte[,] _unscaledQuant =
     {
         // Luminance.
         {
@@ -128,12 +128,12 @@ public class DefineQuantizationTable : SegmentBase
         var n = Length;
         while (n > 0)
         {
-            bool done = false;
+            var done = false;
 
             n--;
             var x = Bytes.ReadByte();
             var tq = (byte)(x & 0x0f);
-            if (tq > MAXIMUM_TQ)
+            if (tq > MaximumTq)
                 throw new Exception("bad Tq value");
 
             switch (x >> 4)
@@ -147,8 +147,8 @@ public class DefineQuantizationTable : SegmentBase
                     n -= Block.BlockSize;
                     Bytes.ReadFull(TempData, 0, Block.BlockSize);
 
-                    for (int i = 0; i < Block.BlockSize; i++)
-                        quant[tq][i] = TempData[i];
+                    for (var i = 0; i < Block.BlockSize; i++)
+                        Quant[tq][i] = TempData[i];
                     break;
 
                 case 1:
@@ -160,8 +160,8 @@ public class DefineQuantizationTable : SegmentBase
                     n -= 2 * Block.BlockSize;
                     Bytes.ReadFull(TempData, 0, 2 * Block.BlockSize);
 
-                    for (int i = 0; i < Block.BlockSize; i++)
-                        quant[tq][i] = ((int)TempData[2 * i] << 8) | (int)TempData[2 * i + 1];
+                    for (var i = 0; i < Block.BlockSize; i++)
+                        Quant[tq][i] = ((int)TempData[2 * i] << 8) | (int)TempData[2 * i + 1];
                     break;
 
                 default:
@@ -184,10 +184,10 @@ public class DefineQuantizationTable : SegmentBase
     {
         Length = 132;
         WriteSegmentHeader(writer);
-        for (int i = 0; i < quant.Length; i++)
+        for (var i = 0; i < Quant.Length; i++)
         {
             writer.Write((byte)i);
-            writer.Write(quant[i].Data.Select(x => (byte)x).ToArray(), 0, quant[i].Data.Length);
+            writer.Write(Quant[i].Data.Select(x => (byte)x).ToArray(), 0, Quant[i].Data.Length);
         }
     }
 }

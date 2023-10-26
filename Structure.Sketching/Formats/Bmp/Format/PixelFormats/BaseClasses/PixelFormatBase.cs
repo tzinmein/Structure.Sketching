@@ -30,7 +30,7 @@ public abstract class PixelFormatBase : IPixelFormat
     /// The bytes per pixel for this format.
     /// </summary>
     /// <value>The BPP.</value>
-    public abstract double BPP { get; }
+    public abstract double Bpp { get; }
 
     /// <summary>
     /// Decodes the specified data.
@@ -58,79 +58,79 @@ public abstract class PixelFormatBase : IPixelFormat
     /// <returns>The byte array of the data</returns>
     public byte[] Read(Header header, Stream stream)
     {
-        if (header.Compression == Compression.RGB
-            || header.Compression == Compression.BITFIELDS)
+        if (header.Compression == Compression.Rgb
+            || header.Compression == Compression.Bitfields)
         {
-            int width = header.Width;
-            int height = header.Height;
-            int dataWidth = width;
-            int alignment = (int)(4 - width * BPP % 4) % 4;
-            int size = (int)(dataWidth * BPP + alignment) * height;
+            var width = header.Width;
+            var height = header.Height;
+            var dataWidth = width;
+            var alignment = (int)(4 - width * Bpp % 4) % 4;
+            var size = (int)(dataWidth * Bpp + alignment) * height;
             if (size < header.ImageSize)
                 size = header.ImageSize;
-            byte[] data = new byte[size];
+            var data = new byte[size];
             stream.Read(data, 0, size);
             return data;
         }
-        if (header.Compression == Compression.RLE8)
+        if (header.Compression == Compression.Rle8)
         {
-            int width = header.Width;
-            int height = header.Height;
-            int alignment = (int)(4 - width * BPP % 4) % 4;
-            byte[] TempData = new byte[2048];
-            using (MemoryStream MemStream = new MemoryStream())
+            var width = header.Width;
+            var height = header.Height;
+            var alignment = (int)(4 - width * Bpp % 4) % 4;
+            var tempData = new byte[2048];
+            using (var memStream = new MemoryStream())
             {
-                int Length = 0;
-                while ((Length = stream.Read(TempData, 0, 2048)) > 0)
+                var length = 0;
+                while ((length = stream.Read(tempData, 0, 2048)) > 0)
                 {
-                    MemStream.Write(TempData, 0, Length);
+                    memStream.Write(tempData, 0, length);
                 }
-                TempData = MemStream.ToArray();
+                tempData = memStream.ToArray();
             }
-            using (MemoryStream MemStream = new MemoryStream())
+            using (var memStream = new MemoryStream())
             {
-                for (int x = 0; x < TempData.Length;)
+                for (var x = 0; x < tempData.Length;)
                 {
-                    if (TempData[x] == 0)
+                    if (tempData[x] == 0)
                     {
                         ++x;
-                        switch (TempData[x])
+                        switch (tempData[x])
                         {
                             case 0:
-                                for (int y = 0; y < alignment; ++y)
+                                for (var y = 0; y < alignment; ++y)
                                 {
-                                    MemStream.WriteByte(0);
+                                    memStream.WriteByte(0);
                                 }
                                 ++x;
                                 break;
 
                             case 1:
-                                return MemStream.ToArray();
+                                return memStream.ToArray();
 
                             case 2:
                                 break;
 
                             default:
-                                int RunLength = TempData[x];
+                                int runLength = tempData[x];
                                 ++x;
-                                int AbsoluteAlignment = (2 - RunLength % 2) % 2;
-                                for (int y = 0; y < RunLength; ++y, ++x)
+                                var absoluteAlignment = (2 - runLength % 2) % 2;
+                                for (var y = 0; y < runLength; ++y, ++x)
                                 {
-                                    MemStream.WriteByte(TempData[x]);
+                                    memStream.WriteByte(tempData[x]);
                                 }
-                                x += AbsoluteAlignment;
+                                x += absoluteAlignment;
                                 break;
                         }
                     }
                     else
                     {
-                        int RunLength = TempData[x];
+                        int runLength = tempData[x];
                         ++x;
-                        byte Value = TempData[x];
+                        var value = tempData[x];
                         ++x;
-                        for (int y = 0; y < RunLength; ++y)
+                        for (var y = 0; y < runLength; ++y)
                         {
-                            MemStream.WriteByte(Value);
+                            memStream.WriteByte(value);
                         }
                     }
                 }

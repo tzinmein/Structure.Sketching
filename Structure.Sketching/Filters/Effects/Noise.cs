@@ -53,21 +53,21 @@ public class Noise : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* OutputPointer = Pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var outputPointer = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    int R = (*OutputPointer).Red + Random.ThreadSafeNext(-Amount, Amount);
-                    int G = (*OutputPointer).Green + Random.ThreadSafeNext(-Amount, Amount);
-                    int B = (*OutputPointer).Blue + Random.ThreadSafeNext(-Amount, Amount);
-                    R = R < 0 ? 0 : R > 255 ? 255 : R;
-                    G = G < 0 ? 0 : G > 255 ? 255 : G;
-                    B = B < 0 ? 0 : B > 255 ? 255 : B;
-                    (*OutputPointer).Red = (byte)R;
-                    (*OutputPointer).Green = (byte)G;
-                    (*OutputPointer).Blue = (byte)B;
-                    ++OutputPointer;
+                    var r = (*outputPointer).Red + Random.ThreadSafeNext(-Amount, Amount);
+                    var g = (*outputPointer).Green + Random.ThreadSafeNext(-Amount, Amount);
+                    var b = (*outputPointer).Blue + Random.ThreadSafeNext(-Amount, Amount);
+                    r = r < 0 ? 0 : r > 255 ? 255 : r;
+                    g = g < 0 ? 0 : g > 255 ? 255 : g;
+                    b = b < 0 ? 0 : b > 255 ? 255 : b;
+                    (*outputPointer).Red = (byte)r;
+                    (*outputPointer).Green = (byte)g;
+                    (*outputPointer).Blue = (byte)b;
+                    ++outputPointer;
                 }
             }
         });

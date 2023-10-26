@@ -10,15 +10,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// </summary>
 /// <seealso cref="System.IEquatable{HSV}"/>
 /// <seealso cref="IColorSpace"/>
-public struct HSV : IEquatable<HSV>, IColorSpace
+public struct Hsv : IEquatable<Hsv>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="HSV"/> struct.
+    /// Initializes a new instance of the <see cref="Hsv"/> struct.
     /// </summary>
     /// <param name="hue">The hue.</param>
     /// <param name="saturation">The saturation.</param>
     /// <param name="value">The value.</param>
-    public HSV(double hue, double saturation, double value)
+    public Hsv(double hue, double saturation, double value)
     {
         Hue = hue;
         Saturation = saturation;
@@ -46,79 +46,79 @@ public struct HSV : IEquatable<HSV>, IColorSpace
     /// <summary>
     /// The epsilon value for double comparison
     /// </summary>
-    private static readonly double EPSILON = 0.01d;
+    private static readonly double Epsilon = 0.01d;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="HSV"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="Hsv"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(HSV color)
+    public static implicit operator Color(Hsv color)
     {
-        double Red;
-        double Green;
-        double Blue;
-        if (Math.Abs(color.Saturation) < EPSILON)
+        double red;
+        double green;
+        double blue;
+        if (Math.Abs(color.Saturation) < Epsilon)
         {
-            Red = color.Value;
-            Green = color.Value;
-            Blue = color.Value;
+            red = color.Value;
+            green = color.Value;
+            blue = color.Value;
         }
         else
         {
-            double a = color.Hue / 360d * 6;
+            var a = color.Hue / 360d * 6;
             var b = Math.Floor(a);
-            double e = color.Value * (1 - color.Saturation);
-            double f = color.Value * (1 - color.Saturation * (a - b));
-            double g = color.Value * (1 - color.Saturation * (1 - (a - b)));
+            var e = color.Value * (1 - color.Saturation);
+            var f = color.Value * (1 - color.Saturation * (a - b));
+            var g = color.Value * (1 - color.Saturation * (1 - (a - b)));
 
             switch ((int)b)
             {
                 case 6:
-                case 0: Red = color.Value; Green = g; Blue = e; break;
-                case 1: Red = f; Green = color.Value; Blue = e; break;
-                case 2: Red = e; Green = color.Value; Blue = g; break;
-                case 3: Red = e; Green = f; Blue = color.Value; break;
-                case 4: Red = g; Green = e; Blue = color.Value; break;
-                default: Red = color.Value; Green = e; Blue = f; break;
+                case 0: red = color.Value; green = g; blue = e; break;
+                case 1: red = f; green = color.Value; blue = e; break;
+                case 2: red = e; green = color.Value; blue = g; break;
+                case 3: red = e; green = f; blue = color.Value; break;
+                case 4: red = g; green = e; blue = color.Value; break;
+                default: red = color.Value; green = e; blue = f; break;
             }
         }
 
-        return new Color(((byte)(Red * 255)).Clamp(0, 255),
-            ((byte)(Green * 255)).Clamp(0, 255),
-            ((byte)(Blue * 255)).Clamp(0, 255));
+        return new Color(((byte)(red * 255)).Clamp(0, 255),
+            ((byte)(green * 255)).Clamp(0, 255),
+            ((byte)(blue * 255)).Clamp(0, 255));
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="HSV"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Hsv"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator HSV(Color color)
+    public static implicit operator Hsv(Color color)
     {
-        double Hue = 0;
+        double hue = 0;
         double max = Math.Max(color.Red, Math.Max(color.Green, color.Blue));
         double min = Math.Min(color.Red, Math.Min(color.Green, color.Blue));
-        double Value;
-        if (Math.Abs(min - max) < EPSILON)
+        double value;
+        if (Math.Abs(min - max) < Epsilon)
         {
-            Value = min;
+            value = min;
         }
         else
         {
             double c;
-            if (Math.Abs(color.Red - min) < EPSILON) c = color.Green - color.Blue;
-            else if (Math.Abs(color.Blue - min) < EPSILON) c = color.Red - color.Green;
+            if (Math.Abs(color.Red - min) < Epsilon) c = color.Green - color.Blue;
+            else if (Math.Abs(color.Blue - min) < Epsilon) c = color.Red - color.Green;
             else c = color.Blue - color.Red;
             double d;
-            if (Math.Abs(color.Red - min) < EPSILON) d = 3;
-            else if (Math.Abs(color.Blue - min) < EPSILON) d = 1;
+            if (Math.Abs(color.Red - min) < Epsilon) d = 3;
+            else if (Math.Abs(color.Blue - min) < Epsilon) d = 1;
             else d = 5;
-            Hue = 60d * (d - c / (max - min));
-            Value = max;
+            hue = 60d * (d - c / (max - min));
+            value = max;
         }
-        double Saturation = Math.Abs(max) < EPSILON ? 0 : (max - min) / max;
-        return new HSV(Hue, Saturation, Value / 255d);
+        var saturation = Math.Abs(max) < Epsilon ? 0 : (max - min) / max;
+        return new Hsv(hue, saturation, value / 255d);
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public struct HSV : IEquatable<HSV>, IColorSpace
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(HSV left, HSV right)
+    public static bool operator !=(Hsv left, Hsv right)
     {
         return !(left == right);
     }
@@ -140,7 +140,7 @@ public struct HSV : IEquatable<HSV>, IColorSpace
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(HSV left, HSV right)
+    public static bool operator ==(Hsv left, Hsv right)
     {
         return left.Equals(right);
     }
@@ -155,7 +155,7 @@ public struct HSV : IEquatable<HSV>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is HSV hsv && Equals(hsv);
+        return obj is Hsv hsv && Equals(hsv);
     }
 
     /// <summary>
@@ -164,11 +164,11 @@ public struct HSV : IEquatable<HSV>, IColorSpace
     /// <param name="other">The other HSV color.</param>
     /// <returns>True if they are, false otherwise</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(HSV other)
+    public readonly bool Equals(Hsv other)
     {
-        return Math.Abs(other.Hue - Hue) < EPSILON
-               && Math.Abs(other.Saturation - Saturation) < EPSILON
-               && Math.Abs(other.Value - Value) < EPSILON;
+        return Math.Abs(other.Hue - Hue) < Epsilon
+               && Math.Abs(other.Saturation - Saturation) < Epsilon
+               && Math.Abs(other.Value - Value) < Epsilon;
     }
 
     /// <summary>

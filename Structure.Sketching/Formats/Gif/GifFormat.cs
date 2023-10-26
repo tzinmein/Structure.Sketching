@@ -31,7 +31,7 @@ public class GifFormat : AnimationFormatBase
     /// <value>
     /// The format.
     /// </value>
-    public override FileFormats Format => FileFormats.GIF;
+    public override FileFormats Format => FileFormats.Gif;
 
     /// <summary>
     /// Gets the decoder.

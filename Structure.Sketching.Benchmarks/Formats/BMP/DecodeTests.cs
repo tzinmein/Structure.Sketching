@@ -8,17 +8,17 @@ public class DecodeTests
     [Benchmark(Baseline = true, Description = "FileStream reading")]
     public void FileStreamReading()
     {
-        using var TestStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
-        new Structure.Sketching.Formats.Bmp.BmpFormat().Decode(TestStream);
+        using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
+        new Structure.Sketching.Formats.Bmp.BmpFormat().Decode(testStream);
     }
 
     [Benchmark(Description = "MemoryStream reading")]
     public void MemoryStreamReading()
     {
-        using var TestStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
-        byte[] Data = new byte[TestStream.Length];
-        TestStream.Read(Data, 0, (int)TestStream.Length);
-        using var MemStream = new MemoryStream(Data);
-        new Structure.Sketching.Formats.Bmp.BmpFormat().Decode(MemStream);
+        using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
+        var data = new byte[testStream.Length];
+        testStream.Read(data, 0, (int)testStream.Length);
+        using var memStream = new MemoryStream(data);
+        new Structure.Sketching.Formats.Bmp.BmpFormat().Decode(memStream);
     }
 }

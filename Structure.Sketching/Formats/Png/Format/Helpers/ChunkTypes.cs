@@ -81,12 +81,12 @@ public class ChunkTypes
     /// <summary>
     /// The icc color profile
     /// </summary>
-    public static ChunkTypes ICCColorProfile = "iCCP";
+    public static ChunkTypes IccColorProfile = "iCCP";
 
     /// <summary>
     /// The iso text
     /// </summary>
-    public static ChunkTypes ISOText = "tEXt";
+    public static ChunkTypes IsoText = "tEXt";
 
     /// <summary>
     /// The last modified
@@ -106,7 +106,7 @@ public class ChunkTypes
     /// <summary>
     /// The RGB color space used
     /// </summary>
-    public static ChunkTypes RGBColorSpaceUsed = "sRGB";
+    public static ChunkTypes RgbColorSpaceUsed = "sRGB";
 
     /// <summary>
     /// The significant bits
@@ -196,9 +196,9 @@ public class ChunkTypes
     /// </returns>
     public override bool Equals(object obj)
     {
-        if (!(obj is ChunkTypes Value2))
+        if (!(obj is ChunkTypes value2))
             return false;
-        return this == Value2;
+        return this == value2;
     }
 
     /// <summary>

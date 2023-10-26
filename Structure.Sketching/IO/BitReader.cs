@@ -84,19 +84,19 @@ public class BitReader : IDisposable
     {
         if (CurrentBit == 8)
         {
-            var TempByte = InternalStream.ReadByte();
-            if (TempByte == -1)
+            var tempByte = InternalStream.ReadByte();
+            if (tempByte == -1)
                 return null;
             CurrentBit = 0;
-            CurrentByte = (byte)TempByte;
+            CurrentByte = (byte)tempByte;
         }
-        bool TempValue;
+        bool tempValue;
         if (bigEndian)
-            TempValue = (CurrentByte & (1 << CurrentBit)) > 0;
+            tempValue = (CurrentByte & (1 << CurrentBit)) > 0;
         else
-            TempValue = (CurrentByte & (1 << (7 - CurrentBit))) > 0;
+            tempValue = (CurrentByte & (1 << (7 - CurrentBit))) > 0;
         ++CurrentBit;
-        return TempValue;
+        return tempValue;
     }
 
     /// <summary>
@@ -107,22 +107,22 @@ public class BitReader : IDisposable
     {
         if (CurrentBit == 8)
         {
-            var TempByte = InternalStream.ReadByte();
-            if (TempByte == -1)
+            var tempByte = InternalStream.ReadByte();
+            if (tempByte == -1)
                 return;
             CurrentBit = 0;
-            CurrentByte = (byte)TempByte;
+            CurrentByte = (byte)tempByte;
         }
-        for (int x = 0; x < bitCount; ++x)
+        for (var x = 0; x < bitCount; ++x)
         {
             ++CurrentBit;
             if (CurrentBit == 8)
             {
-                var TempByte = InternalStream.ReadByte();
-                if (TempByte == -1)
+                var tempByte = InternalStream.ReadByte();
+                if (tempByte == -1)
                     return;
                 CurrentBit = 0;
-                CurrentByte = (byte)TempByte;
+                CurrentByte = (byte)tempByte;
             }
         }
     }

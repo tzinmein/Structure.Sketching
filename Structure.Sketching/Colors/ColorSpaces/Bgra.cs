@@ -37,10 +37,10 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="alpha">The alpha.</param>
     public Bgra(byte blue, byte green, byte red, byte alpha = 255)
     {
-        r = red.Clamp(0, 255);
-        g = green.Clamp(0, 255);
-        b = blue.Clamp(0, 255);
-        a = alpha.Clamp(0, 255);
+        _r = red.Clamp(0, 255);
+        _g = green.Clamp(0, 255);
+        _b = blue.Clamp(0, 255);
+        _a = alpha.Clamp(0, 255);
     }
 
     /// <summary>
@@ -49,8 +49,8 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <value>The alpha.</value>
     public byte Alpha
     {
-        readonly get { return a; }
-        set { a = value; }
+        readonly get { return _a; }
+        set { _a = value; }
     }
 
     /// <summary>
@@ -59,8 +59,8 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <value>The blue.</value>
     public byte Blue
     {
-        readonly get { return b; }
-        set { b = value; }
+        readonly get { return _b; }
+        set { _b = value; }
     }
 
     /// <summary>
@@ -69,8 +69,8 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <value>The green.</value>
     public byte Green
     {
-        readonly get { return g; }
-        set { g = value; }
+        readonly get { return _g; }
+        set { _g = value; }
     }
 
     /// <summary>
@@ -79,29 +79,29 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <value>The red.</value>
     public byte Red
     {
-        readonly get { return r; }
-        set { r = value; }
+        readonly get { return _r; }
+        set { _r = value; }
     }
 
     /// <summary>
     /// alpha component
     /// </summary>
-    private byte a;
+    private byte _a;
 
     /// <summary>
     /// blue component
     /// </summary>
-    private byte b;
+    private byte _b;
 
     /// <summary>
     /// green component
     /// </summary>
-    private byte g;
+    private byte _g;
 
     /// <summary>
     /// red component
     /// </summary>
-    private byte r;
+    private byte _r;
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Bgra"/>.
@@ -130,7 +130,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <returns>The result of the conversion.</returns>
     public static implicit operator int(Bgra color)
     {
-        return color.r << 16 | color.g << 8 | color.b << 0 | color.a << 24;
+        return color._r << 16 | color._g << 8 | color._b << 0 | color._a << 24;
     }
 
     /// <summary>
@@ -178,10 +178,10 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Equals(Bgra other)
     {
-        return other.b == b
-               && other.g == g
-               && other.r == r
-               && other.a == a;
+        return other._b == _b
+               && other._g == _g
+               && other._r == _r
+               && other._a == _a;
     }
 
     /// <summary>
@@ -193,17 +193,17 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// </returns>
     public readonly override int GetHashCode()
     {
-        var hash = b.GetHashCode();
-        hash = ComputeHash(hash, g);
-        hash = ComputeHash(hash, r);
-        return ComputeHash(hash, a);
+        var hash = _b.GetHashCode();
+        hash = ComputeHash(hash, _g);
+        hash = ComputeHash(hash, _r);
+        return ComputeHash(hash, _a);
     }
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents this instance.
     /// </summary>
     /// <returns>A <see cref="string"/> that represents this instance.</returns>
-    public readonly override string ToString() => $"({b:#0.##},{g:#0.##},{r:#0.##},{a:#0.##})";
+    public readonly override string ToString() => $"({_b:#0.##},{_g:#0.##},{_r:#0.##},{_a:#0.##})";
 
     /// <summary>
     /// Computes the hash.

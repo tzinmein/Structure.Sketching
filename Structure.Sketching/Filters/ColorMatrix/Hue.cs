@@ -34,27 +34,27 @@ public class Hue : MatrixBaseClass
     {
         value *= (float)(Math.PI / 180f);
         Value = value;
-        var cosradians = Math.Cos(value);
-        var sinradians = Math.Sin(value);
+        var cosRadians = Math.Cos(value);
+        var sinRadians = Math.Sin(value);
 
-        float lumR = .213f;
-        float lumG = .715f;
-        float lumB = .072f;
+        const float lumR = .213f;
+        const float lumG = .715f;
+        const float lumB = .072f;
 
-        float oneMinusLumR = 1f - lumR;
-        float oneMinusLumG = 1f - lumG;
-        float oneMinusLumB = 1f - lumB;
-        _Matrix = new Matrix5x5
+        const float oneMinusLumR = 1f - lumR;
+        const float oneMinusLumG = 1f - lumG;
+        const float oneMinusLumB = 1f - lumB;
+        Matrix = new Matrix5X5
         {
-            M11 = (float)(lumR + cosradians * oneMinusLumR - sinradians * lumR),
-            M12 = (float)(lumR - cosradians * lumR - sinradians * 0.143),
-            M13 = (float)(lumR - cosradians * lumR - sinradians * oneMinusLumR),
-            M21 = (float)(lumG - cosradians * lumG - sinradians * lumG),
-            M22 = (float)(lumG + cosradians * oneMinusLumG + sinradians * 0.140),
-            M23 = (float)(lumG - cosradians * lumG + sinradians * lumG),
-            M31 = (float)(lumB - cosradians * lumB + sinradians * oneMinusLumB),
-            M32 = (float)(lumB - cosradians * lumB - sinradians * 0.283),
-            M33 = (float)(lumB + cosradians * oneMinusLumB + sinradians * lumB),
+            M11 = (float)(lumR + cosRadians * oneMinusLumR - sinRadians * lumR),
+            M12 = (float)(lumR - cosRadians * lumR - sinRadians * 0.143),
+            M13 = (float)(lumR - cosRadians * lumR - sinRadians * oneMinusLumR),
+            M21 = (float)(lumG - cosRadians * lumG - sinRadians * lumG),
+            M22 = (float)(lumG + cosRadians * oneMinusLumG + sinRadians * 0.140),
+            M23 = (float)(lumG - cosRadians * lumG + sinRadians * lumG),
+            M31 = (float)(lumB - cosRadians * lumB + sinRadians * oneMinusLumB),
+            M32 = (float)(lumB - cosRadians * lumB - sinRadians * 0.283),
+            M33 = (float)(lumB + cosRadians * oneMinusLumB + sinRadians * lumB),
             M44 = 1,
             M55 = 1
         };
@@ -64,23 +64,17 @@ public class Hue : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5x5 Matrix => _Matrix;
-
-    /// <summary>
-    /// Gets the value.
-    /// </summary>
-    /// <value>The value.</value>
-    public float Value { get; }
-
-    /// <summary>
-    /// The matrix backing field
-    /// </summary>
-    private Matrix5x5 _Matrix = new Matrix5x5
-    (
+    public override Matrix5X5 Matrix { get; } = new(
         1f, 0f, 0f, 0f, 0f,
         0f, 1f, 0f, 0f, 0f,
         0f, 0f, 1f, 0f, 0f,
         0f, 0f, 0f, 1f, 0f,
         0f, 0f, 0f, 0f, 1f
     );
+
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <value>The value.</value>
+    public float Value { get; }
 }

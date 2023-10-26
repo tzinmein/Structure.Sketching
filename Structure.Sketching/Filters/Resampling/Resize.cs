@@ -105,11 +105,8 @@ public class Resize : IFilter
     /// <returns>The image</returns>
     public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        double XScale = (double)Width / image.Width;
-        double YScale = (double)Height / image.Height;
-
-        var Output = Sample(image, XScale, YScale, image.Width, image.Height);
-        image.ReCreate(Width, Height, Output);
+        var output = Sample(image);
+        image.ReCreate(Width, Height, output);
         return image;
     }
 
@@ -121,93 +118,93 @@ public class Resize : IFilter
     /// <returns>The transformation matrix</returns>
     protected Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
     {
-        float XScale = (float)image.Width / Width;
-        float YScale = (float)image.Height / Height;
-        return Matrix3x2.CreateScale(XScale, YScale);
+        var xScale = (float)image.Width / Width;
+        var yScale = (float)image.Height / Height;
+        return Matrix3x2.CreateScale(xScale, yScale);
     }
 
-    private unsafe Color[] Sample(Image image, double xScale, double yScale, int oldWidth, int oldHeight)
+    private unsafe Color[] Sample(Image image)
     {
         Filter.Precompute(image.Width, image.Height, Width, Height);
         var targetLocation = new Rectangle(0, 0, image.Width, image.Height);
-        var Output = new Color[Width * Height];
-        var TransformationMatrix = GetMatrix(image, targetLocation);
-        double TempWidth = Width < 0 ? image.Width : Width;
-        double TempHeight = Height < 0 ? image.Width : Height;
-        double XScale = TempWidth / image.Width;
-        double YScale = TempHeight / image.Height;
-        var YRadius = YScale < 1f ? Filter.FilterRadius / YScale : Filter.FilterRadius;
-        var XRadius = XScale < 1f ? Filter.FilterRadius / XScale : Filter.FilterRadius;
+        var output = new Color[Width * Height];
+        var transformationMatrix = GetMatrix(image, targetLocation);
+        double tempWidth = Width < 0 ? image.Width : Width;
+        double tempHeight = Height < 0 ? image.Width : Height;
+        var xScale = tempWidth / image.Width;
+        var yScale = tempHeight / image.Height;
+        var yRadius = yScale < 1f ? Filter.FilterRadius / yScale : Filter.FilterRadius;
+        var xRadius = xScale < 1f ? Filter.FilterRadius / xScale : Filter.FilterRadius;
 
         Parallel.For(0, Height, y =>
         {
-            fixed (Color* OutputPointer = &Output[y * Width])
+            fixed (Color* outputPointer = &output[y * Width])
             {
-                Color* OutputPointer2 = OutputPointer;
-                for (int x = 0; x < Width; ++x)
+                var outputPointer2 = outputPointer;
+                for (var x = 0; x < Width; ++x)
                 {
-                    var Values = new Vector4(0, 0, 0, 0);
-                    float Weight = 0;
+                    var values = new Vector4(0, 0, 0, 0);
+                    float weight = 0;
 
-                    var rotated = Vector2.Transform(new Vector2(x, y), TransformationMatrix);
+                    var rotated = Vector2.Transform(new Vector2(x, y), transformationMatrix);
                     var rotatedY = (int)rotated.Y;
                     var rotatedX = (int)rotated.X;
-                    var Left = (int)(rotatedX - XRadius);
-                    var Right = (int)(rotatedX + XRadius);
-                    var Top = (int)(rotatedY - YRadius);
-                    var Bottom = (int)(rotatedY + YRadius);
-                    if (Top < 0)
-                        Top = 0;
-                    if (Bottom >= image.Height)
-                        Bottom = image.Height - 1;
-                    if (Left < 0)
-                        Left = 0;
-                    if (Right >= image.Width)
-                        Right = image.Width - 1;
-                    for (int i = Top, YCount = 0; i <= Bottom; ++i, ++YCount)
+                    var left = (int)(rotatedX - xRadius);
+                    var right = (int)(rotatedX + xRadius);
+                    var top = (int)(rotatedY - yRadius);
+                    var bottom = (int)(rotatedY + yRadius);
+                    if (top < 0)
+                        top = 0;
+                    if (bottom >= image.Height)
+                        bottom = image.Height - 1;
+                    if (left < 0)
+                        left = 0;
+                    if (right >= image.Width)
+                        right = image.Width - 1;
+                    for (int i = top, yCount = 0; i <= bottom; ++i, ++yCount)
                     {
-                        fixed (Color* PixelPointer = &image.Pixels[i * image.Width])
+                        fixed (Color* pixelPointer = &image.Pixels[i * image.Width])
                         {
-                            Color* PixelPointer2 = PixelPointer + Left;
-                            for (int j = Left, XCount = 0; j <= Right; ++j, ++XCount)
+                            var pixelPointer2 = pixelPointer + left;
+                            for (int j = left, xCount = 0; j <= right; ++j, ++xCount)
                             {
-                                var TempYWeight = Filter.YWeights[rotatedY].Values[YCount];
-                                var TempXWeight = Filter.XWeights[rotatedX].Values[XCount];
-                                var TempWeight = TempYWeight * TempXWeight;
+                                var tempYWeight = Filter.YWeights[rotatedY].Values[yCount];
+                                var tempXWeight = Filter.XWeights[rotatedX].Values[xCount];
+                                var tempWeight = tempYWeight * tempXWeight;
 
-                                if (YRadius == 0 && XRadius == 0)
-                                    TempWeight = 1;
+                                if (yRadius == 0 && xRadius == 0)
+                                    tempWeight = 1;
 
-                                if (TempWeight == 0)
+                                if (tempWeight == 0)
                                 {
-                                    ++PixelPointer2;
+                                    ++pixelPointer2;
                                     continue;
                                 }
-                                Values.X += (*PixelPointer2).Red * (float)TempWeight;
-                                Values.Y += (*PixelPointer2).Green * (float)TempWeight;
-                                Values.Z += (*PixelPointer2).Blue * (float)TempWeight;
-                                Values.W += (*PixelPointer2).Alpha * (float)TempWeight;
-                                ++PixelPointer2;
-                                Weight += (float)TempWeight;
+                                values.X += (*pixelPointer2).Red * (float)tempWeight;
+                                values.Y += (*pixelPointer2).Green * (float)tempWeight;
+                                values.Z += (*pixelPointer2).Blue * (float)tempWeight;
+                                values.W += (*pixelPointer2).Alpha * (float)tempWeight;
+                                ++pixelPointer2;
+                                weight += (float)tempWeight;
                             }
                         }
                     }
-                    if (Weight == 0)
-                        Weight = 1;
-                    if (Weight > 0)
+                    if (weight == 0)
+                        weight = 1;
+                    if (weight > 0)
                     {
-                        Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                        (*OutputPointer2).Red = (byte)Values.X;
-                        (*OutputPointer2).Green = (byte)Values.Y;
-                        (*OutputPointer2).Blue = (byte)Values.Z;
-                        (*OutputPointer2).Alpha = (byte)Values.W;
-                        ++OutputPointer2;
+                        values = Vector4.Clamp(values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                        (*outputPointer2).Red = (byte)values.X;
+                        (*outputPointer2).Green = (byte)values.Y;
+                        (*outputPointer2).Blue = (byte)values.Z;
+                        (*outputPointer2).Alpha = (byte)values.W;
+                        ++outputPointer2;
                     }
                     else
-                        ++OutputPointer2;
+                        ++outputPointer2;
                 }
             }
         });
-        return Output;
+        return output;
     }
 }

@@ -55,12 +55,12 @@ public class EndianBinaryReader : IDisposable
         BaseStream = stream;
         BitConverter = bitConverter;
         Encoding = encoding;
-        decoder = encoding.GetDecoder();
-        minBytesPerChar = 1;
+        _decoder = encoding.GetDecoder();
+        _minBytesPerChar = 1;
 
         if (encoding is UnicodeEncoding)
         {
-            minBytesPerChar = 2;
+            _minBytesPerChar = 2;
         }
     }
 
@@ -82,22 +82,22 @@ public class EndianBinaryReader : IDisposable
     /// <summary>
     /// Buffer used for temporary storage before conversion into primitives
     /// </summary>
-    private readonly byte[] buffer = new byte[16];
+    private readonly byte[] _buffer = new byte[16];
 
     /// <summary>
     /// Buffer used for temporary storage when reading a single character
     /// </summary>
-    private readonly char[] charBuffer = new char[1];
+    private readonly char[] _charBuffer = new char[1];
 
     /// <summary>
     /// Decoder to use for string conversions.
     /// </summary>
-    private readonly Decoder decoder;
+    private readonly Decoder _decoder;
 
     /// <summary>
     /// Minimum number of bytes used to encode a character
     /// </summary>
-    private readonly int minBytesPerChar;
+    private readonly int _minBytesPerChar;
 
     /// <summary>
     /// Closes the reader, including the underlying stream.
@@ -125,8 +125,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The resulting int.</returns>
     public int Read()
     {
-        var charsRead = Read(charBuffer, 0, 1);
-        return charsRead == 0 ? -1 : charBuffer[0];
+        var charsRead = Read(_charBuffer, 0, 1);
+        return charsRead == 0 ? -1 : _charBuffer[0];
     }
 
     /// <summary>
@@ -148,11 +148,11 @@ public class EndianBinaryReader : IDisposable
         index = index < 0 ? 0 : index;
         count = count < 0 ? 0 : count;
 
-        int read = 0;
-        bool firstTime = true;
-        byte[] byteBuffer = buffer;
+        var read = 0;
+        var firstTime = true;
+        var byteBuffer = _buffer;
 
-        if (byteBuffer.Length < count * minBytesPerChar)
+        if (byteBuffer.Length < count * _minBytesPerChar)
         {
             byteBuffer = new byte[4096];
         }
@@ -162,12 +162,12 @@ public class EndianBinaryReader : IDisposable
             int amountToRead;
             if (firstTime)
             {
-                amountToRead = count * minBytesPerChar;
+                amountToRead = count * _minBytesPerChar;
                 firstTime = false;
             }
             else
             {
-                amountToRead = ((count - read - 1) * minBytesPerChar) + 1;
+                amountToRead = ((count - read - 1) * _minBytesPerChar) + 1;
             }
 
             if (amountToRead > byteBuffer.Length)
@@ -181,7 +181,7 @@ public class EndianBinaryReader : IDisposable
                 return read;
             }
 
-            var decoded = decoder.GetChars(byteBuffer, 0, bytesRead, data, index);
+            var decoded = _decoder.GetChars(byteBuffer, 0, bytesRead, data, index);
             read += decoded;
             index += decoded;
         }
@@ -208,7 +208,7 @@ public class EndianBinaryReader : IDisposable
         index = index < 0 ? 0 : index;
         count = count < 0 ? 0 : count;
 
-        int read = 0;
+        var read = 0;
         while (count > 0)
         {
             var block = BaseStream.Read(buffer, index, count);
@@ -237,8 +237,8 @@ public class EndianBinaryReader : IDisposable
         if (BaseStream == null)
             throw new NullReferenceException("Base stream is currently null.");
 
-        int ret = 0;
-        for (int shift = 0; shift < 35; shift += 7)
+        var ret = 0;
+        for (var shift = 0; shift < 35; shift += 7)
         {
             var b = BaseStream.ReadByte();
             if (b == -1)
@@ -267,8 +267,8 @@ public class EndianBinaryReader : IDisposable
         if (BaseStream == null)
             throw new NullReferenceException("Base stream is currently null.");
 
-        int ret = 0;
-        for (int i = 0; i < 5; i++)
+        var ret = 0;
+        for (var i = 0; i < 5; i++)
         {
             var b = BaseStream.ReadByte();
             if (b == -1)
@@ -291,8 +291,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The resulting boolean</returns>
     public bool ReadBoolean()
     {
-        ReadInternal(buffer, 1);
-        return BitConverter.ToBoolean(buffer, 0);
+        ReadInternal(_buffer, 1);
+        return BitConverter.ToBoolean(_buffer, 0);
     }
 
     /// <summary>
@@ -301,8 +301,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The byte read</returns>
     public byte ReadByte()
     {
-        ReadInternal(buffer, 1);
-        return buffer[0];
+        ReadInternal(_buffer, 1);
+        return _buffer[0];
     }
 
     /// <summary>
@@ -317,14 +317,14 @@ public class EndianBinaryReader : IDisposable
         if (BaseStream == null)
             throw new NullReferenceException("Base stream is currently null.");
         count = count < 0 ? 0 : count;
-        byte[] ret = new byte[count];
-        int index = 0;
+        var ret = new byte[count];
+        var index = 0;
         while (index < count)
         {
             var read = BaseStream.Read(ret, index, count - index);
             if (read == 0)
             {
-                byte[] copy = new byte[index];
+                var copy = new byte[index];
                 Buffer.BlockCopy(ret, 0, copy, 0, index);
                 return copy;
             }
@@ -344,7 +344,7 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The bytes read</returns>
     public byte[] ReadBytesOrThrow(int count)
     {
-        byte[] ret = new byte[count];
+        var ret = new byte[count];
         ReadInternal(ret, count);
         return ret;
     }
@@ -356,8 +356,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The decimal value read</returns>
     public decimal ReadDecimal()
     {
-        ReadInternal(buffer, 16);
-        return BitConverter.ToDecimal(buffer, 0);
+        ReadInternal(_buffer, 16);
+        return BitConverter.ToDecimal(_buffer, 0);
     }
 
     /// <summary>
@@ -367,8 +367,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The floating point value read</returns>
     public double ReadDouble()
     {
-        ReadInternal(buffer, 8);
-        return BitConverter.ToDouble(buffer, 0);
+        ReadInternal(_buffer, 8);
+        return BitConverter.ToDouble(_buffer, 0);
     }
 
     /// <summary>
@@ -378,8 +378,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The floating point value read</returns>
     public float ReadFloat()
     {
-        ReadInternal(buffer, 4);
-        return BitConverter.ToFloat(buffer, 0);
+        ReadInternal(_buffer, 4);
+        return BitConverter.ToFloat(_buffer, 0);
     }
 
     /// <summary>
@@ -389,8 +389,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The 32-bit integer read</returns>
     public int ReadInt()
     {
-        ReadInternal(buffer, 4);
-        return BitConverter.ToInt(buffer, 0);
+        ReadInternal(_buffer, 4);
+        return BitConverter.ToInt(_buffer, 0);
     }
 
     /// <summary>
@@ -400,8 +400,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The 64-bit integer read</returns>
     public long ReadLong()
     {
-        ReadInternal(buffer, 8);
-        return BitConverter.ToLong(buffer, 0);
+        ReadInternal(_buffer, 8);
+        return BitConverter.ToLong(_buffer, 0);
     }
 
     /// <summary>
@@ -411,8 +411,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The 16-bit integer read</returns>
     public short ReadShort()
     {
-        ReadInternal(buffer, 2);
-        return BitConverter.ToShort(buffer, 0);
+        ReadInternal(_buffer, 2);
+        return BitConverter.ToShort(_buffer, 0);
     }
 
     /// <summary>
@@ -421,8 +421,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The byte read</returns>
     public sbyte ReadSignedByte()
     {
-        ReadInternal(buffer, 1);
-        return unchecked((sbyte)buffer[0]);
+        ReadInternal(_buffer, 1);
+        return unchecked((sbyte)_buffer[0]);
     }
 
     /// <summary>
@@ -436,7 +436,7 @@ public class EndianBinaryReader : IDisposable
     {
         var bytesToRead = Read7BitEncodedInt();
 
-        byte[] data = new byte[bytesToRead];
+        var data = new byte[bytesToRead];
         ReadInternal(data, bytesToRead);
         return Encoding.GetString(data, 0, data.Length);
     }
@@ -448,8 +448,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The 32-bit unsigned integer read</returns>
     public uint ReadUnsignedInt()
     {
-        ReadInternal(buffer, 4);
-        return BitConverter.ToUnsignedInteger(buffer, 0);
+        ReadInternal(_buffer, 4);
+        return BitConverter.ToUnsignedInteger(_buffer, 0);
     }
 
     /// <summary>
@@ -459,8 +459,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The 64-bit unsigned integer read</returns>
     public ulong ReadUnsignedLong()
     {
-        ReadInternal(buffer, 8);
-        return BitConverter.ToUnsignedLong(buffer, 0);
+        ReadInternal(_buffer, 8);
+        return BitConverter.ToUnsignedLong(_buffer, 0);
     }
 
     /// <summary>
@@ -470,8 +470,8 @@ public class EndianBinaryReader : IDisposable
     /// <returns>The 16-bit unsigned integer read</returns>
     public ushort ReadUnsignedShort()
     {
-        ReadInternal(buffer, 2);
-        return BitConverter.ToUnsignedShort(buffer, 0);
+        ReadInternal(_buffer, 2);
+        return BitConverter.ToUnsignedShort(_buffer, 0);
     }
 
     /// <summary>
@@ -496,7 +496,7 @@ public class EndianBinaryReader : IDisposable
     {
         if (BaseStream == null)
             throw new NullReferenceException("Base stream is currently null.");
-        int index = 0;
+        var index = 0;
         while (index < size)
         {
             var read = BaseStream.Read(data, index, size - index);
@@ -526,7 +526,7 @@ public class EndianBinaryReader : IDisposable
     {
         if (BaseStream == null)
             throw new NullReferenceException("Base stream is currently null.");
-        int index = 0;
+        var index = 0;
         while (index < size)
         {
             var read = BaseStream.Read(data, index, size - index);

@@ -24,20 +24,20 @@ public enum Compression
     /// <summary>
     /// Basic RGB bitmap
     /// </summary>
-    RGB = 0,
+    Rgb = 0,
 
     /// <summary>
     /// RLE8, only used with 8-BPP bitmaps
     /// </summary>
-    RLE8 = 1,
+    Rle8 = 1,
 
     /// <summary>
     /// RLE4, only used with 4-BPP bitmaps
     /// </summary>
-    RLE4 = 2,
+    Rle4 = 2,
 
     /// <summary>
     /// Uses bitfields to determine pixel layout
     /// </summary>
-    BITFIELDS = 3
+    Bitfields = 3
 }

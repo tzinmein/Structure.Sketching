@@ -71,11 +71,11 @@ public class Manager
     /// <returns>An image object of the stream</returns>
     public Image Decode(Stream stream)
     {
-        foreach (IFormat Format in Formats)
+        foreach (var format in Formats)
         {
-            if (Format.CanDecode(stream))
+            if (format.CanDecode(stream))
             {
-                return Format.Decode(stream);
+                return format.Decode(stream);
             }
         }
         return null;
@@ -88,11 +88,11 @@ public class Manager
     /// <returns>An animation object of the stream</returns>
     public Animation DecodeAnimation(Stream stream)
     {
-        foreach (IAnimationFormat Format in AnimationFormats)
+        foreach (var format in AnimationFormats)
         {
-            if (Format.CanDecode(stream))
+            if (format.CanDecode(stream))
             {
-                return Format.DecodeAnimation(stream);
+                return format.DecodeAnimation(stream);
             }
         }
         return null;
@@ -106,13 +106,13 @@ public class Manager
     /// <returns>True if it is encoded successfully, false otherwise</returns>
     public bool Encode(string fileName, Image image)
     {
-        foreach (IFormat Format in Formats)
+        foreach (var format in Formats)
         {
-            if (Format.CanEncode(fileName))
+            if (format.CanEncode(fileName))
             {
                 new FileInfo(fileName).Directory.Create();
-                using var ImageFile = File.OpenWrite(fileName);
-                return Encode(ImageFile, image, Format.Format);
+                using var imageFile = File.OpenWrite(fileName);
+                return Encode(imageFile, image, format.Format);
             }
         }
         return false;
@@ -128,13 +128,13 @@ public class Manager
     /// </returns>
     public bool Encode(string fileName, Animation animation)
     {
-        foreach (IAnimationFormat Format in AnimationFormats)
+        foreach (var format in AnimationFormats)
         {
-            if (Format.CanEncode(fileName))
+            if (format.CanEncode(fileName))
             {
                 new FileInfo(fileName).Directory.Create();
-                using var ImageFile = File.OpenWrite(fileName);
-                return Encode(ImageFile, animation, Format.Format);
+                using var imageFile = File.OpenWrite(fileName);
+                return Encode(imageFile, animation, format.Format);
             }
         }
         return Encode(fileName, animation[0]);
@@ -151,8 +151,8 @@ public class Manager
     /// </returns>
     public bool Encode(Stream stream, Animation animation, FileFormats format)
     {
-        using var TempWriter = new BinaryWriter(stream);
-        return AnimationFormats.First(x => x.Format == format).Encode(TempWriter, animation);
+        using var tempWriter = new BinaryWriter(stream);
+        return AnimationFormats.First(x => x.Format == format).Encode(tempWriter, animation);
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public class Manager
     /// <returns>True if it is encoded successfully, false otherwise</returns>
     public bool Encode(Stream stream, Image image, FileFormats format)
     {
-        using var TempWriter = new BinaryWriter(stream);
-        return Formats.First(x => x.Format == format).Encode(TempWriter, image);
+        using var tempWriter = new BinaryWriter(stream);
+        return Formats.First(x => x.Format == format).Encode(tempWriter, image);
     }
 }

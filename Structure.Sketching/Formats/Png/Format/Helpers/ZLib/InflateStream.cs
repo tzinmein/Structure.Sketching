@@ -34,21 +34,21 @@ public class InflateStream : Stream
     public InflateStream(Stream stream)
     {
         InternalStream = stream;
-        var CMF = InternalStream.ReadByte();
-        var Flag = InternalStream.ReadByte();
-        if (CMF == -1 || Flag == -1)
+        var cmf = InternalStream.ReadByte();
+        var flag = InternalStream.ReadByte();
+        if (cmf == -1 || flag == -1)
             return;
-        if ((CMF & 0x0f) != 8)
+        if ((cmf & 0x0f) != 8)
         {
             throw new ArgumentException("Bad compression method");
         }
-        if ((Flag & 32) != 0)
+        if ((flag & 32) != 0)
         {
-            byte[] DictionaryID = new byte[4];
+            var dictionaryId = new byte[4];
 
-            for (int x = 0; x < 4; ++x)
+            for (var x = 0; x < 4; ++x)
             {
-                DictionaryID[x] = (byte)InternalStream.ReadByte();
+                dictionaryId[x] = (byte)InternalStream.ReadByte();
             }
         }
         InternalDeflateStream = new DeflateStream(InternalStream, CompressionMode.Decompress, true);
@@ -101,7 +101,7 @@ public class InflateStream : Stream
     /// <summary>
     /// The read crc data.
     /// </summary>
-    private byte[] CRCData { get; set; }
+    private byte[] CrcData { get; set; }
 
     /// <summary>
     /// Gets or sets the deflate stream.
@@ -135,16 +135,16 @@ public class InflateStream : Stream
     /// </returns>
     public override int Read(byte[] buffer, int offset, int count)
     {
-        var ReadCount = InternalDeflateStream.Read(buffer, offset, count);
-        if (ReadCount < 1 && CRCData == null)
+        var readCount = InternalDeflateStream.Read(buffer, offset, count);
+        if (readCount < 1 && CrcData == null)
         {
-            CRCData = new byte[4];
-            for (int x = 0; x < 4; ++x)
+            CrcData = new byte[4];
+            for (var x = 0; x < 4; ++x)
             {
-                CRCData[x] = (byte)InternalStream.ReadByte();
+                CrcData[x] = (byte)InternalStream.ReadByte();
             }
         }
-        return ReadCount;
+        return readCount;
     }
 
     /// <summary>
@@ -196,12 +196,12 @@ public class InflateStream : Stream
                 InternalDeflateStream.Dispose();
                 InternalDeflateStream = null;
 
-                if (CRCData == null)
+                if (CrcData == null)
                 {
-                    CRCData = new byte[4];
-                    for (int x = 0; x < 4; ++x)
+                    CrcData = new byte[4];
+                    for (var x = 0; x < 4; ++x)
                     {
-                        CRCData[x] = (byte)InternalStream.ReadByte();
+                        CrcData[x] = (byte)InternalStream.ReadByte();
                     }
                 }
             }

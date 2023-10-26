@@ -35,13 +35,13 @@ public class DefineHuffmanTable : SegmentBase
     public DefineHuffmanTable(ByteBuffer buffer)
         : base(SegmentTypes.DefineHuffmanTable, buffer)
     {
-        HuffmanCodes = new Huffman[MAXIMUM_TC + 1, MAXIMUM_TH + 1];
-        for (int i = 0; i < MAXIMUM_TC + 1; i++)
-        for (int j = 0; j < MAXIMUM_TH + 1; j++)
+        HuffmanCodes = new Huffman[MaximumTc + 1, MaximumTh + 1];
+        for (var i = 0; i < MaximumTc + 1; i++)
+        for (var j = 0; j < MaximumTh + 1; j++)
             HuffmanCodes[i, j] = new Huffman();
-        for (int i = 0; i < theHuffmanSpec.Length; i++)
+        for (var i = 0; i < _theHuffmanSpec.Length; i++)
         {
-            HuffmanLookUpTables[i] = new HuffmanLookUpTable(theHuffmanSpec[i]);
+            HuffmanLookUpTables[i] = new HuffmanLookUpTable(_theHuffmanSpec[i]);
         }
     }
 
@@ -56,16 +56,16 @@ public class DefineHuffmanTable : SegmentBase
     /// </summary>
     public HuffmanLookUpTable[] HuffmanLookUpTables = new HuffmanLookUpTable[4];
 
-    private const int LOOKUP_TABLE_SIZE = 8;
-    private const int MAXIMUM_CODE_LENGTH = 16;
-    private const int MAXIMUM_NUMBER_CODES = 256;
-    private const int MAXIMUM_TC = 1;
-    private const int MAXIMUM_TH = 3;
+    private const int LookupTableSize = 8;
+    private const int MaximumCodeLength = 16;
+    private const int MaximumNumberCodes = 256;
+    private const int MaximumTc = 1;
+    private const int MaximumTh = 3;
 
     /// <summary>
     /// The huffman spec
     /// </summary>
-    private readonly HuffmanSpec[] theHuffmanSpec =
+    private readonly HuffmanSpec[] _theHuffmanSpec =
     {
         // Luminance DC.
         new HuffmanSpec(
@@ -141,7 +141,7 @@ public class DefineHuffmanTable : SegmentBase
     public override void Setup(IEnumerable<SegmentBase> segments)
     {
         Length = GetLength(Bytes);
-        var Frame = segments.OfType<StartOfFrame>().FirstOrDefault();
+        var frame = segments.OfType<StartOfFrame>().FirstOrDefault();
         var n = Length;
         while (n > 0)
         {
@@ -149,20 +149,20 @@ public class DefineHuffmanTable : SegmentBase
                 throw new Exception("DHT has wrong length");
             Bytes.ReadFull(TempData, 0, 17);
 
-            int tc = TempData[0] >> 4;
-            if (tc > MAXIMUM_TC)
+            var tc = TempData[0] >> 4;
+            if (tc > MaximumTc)
                 throw new Exception("bad Tc value");
 
-            int th = TempData[0] & 0x0f;
-            if (th > MAXIMUM_TH || (Frame != null && !Frame.Progressive && th > 1))
+            var th = TempData[0] & 0x0f;
+            if (th > MaximumTh || (frame != null && !frame.Progressive && th > 1))
                 throw new Exception("bad Th value");
 
-            Huffman h = HuffmanCodes[tc, th];
+            var h = HuffmanCodes[tc, th];
 
             h.NumberOfCodes = 0;
 
-            int[] ncodes = new int[MAXIMUM_CODE_LENGTH];
-            for (int i = 0; i < ncodes.Length; i++)
+            var ncodes = new int[MaximumCodeLength];
+            for (var i = 0; i < ncodes.Length; i++)
             {
                 ncodes[i] = TempData[i + 1];
                 h.NumberOfCodes += ncodes[i];
@@ -170,7 +170,7 @@ public class DefineHuffmanTable : SegmentBase
 
             if (h.NumberOfCodes == 0)
                 throw new Exception("Huffman table has zero length");
-            if (h.NumberOfCodes > MAXIMUM_NUMBER_CODES)
+            if (h.NumberOfCodes > MaximumNumberCodes)
                 throw new Exception("Huffman table has excessive length");
 
             n -= h.NumberOfCodes + 17;
@@ -180,20 +180,20 @@ public class DefineHuffmanTable : SegmentBase
             Bytes.ReadFull(h.DecodedValues, 0, h.NumberOfCodes);
 
             // Derive the look-up table.
-            for (int i = 0; i < h.LookUpTable.Length; i++)
+            for (var i = 0; i < h.LookUpTable.Length; i++)
                 h.LookUpTable[i] = 0;
 
             uint x = 0, code = 0;
 
-            for (int i = 0; i < LOOKUP_TABLE_SIZE; i++)
+            for (var i = 0; i < LookupTableSize; i++)
             {
                 code <<= 1;
 
-                for (int j = 0; j < ncodes[i]; j++)
+                for (var j = 0; j < ncodes[i]; j++)
                 {
                     var base2 = (byte)(code << (7 - i));
                     var lutValue = (ushort)(((ushort)h.DecodedValues[x] << 8) | (2 + i));
-                    for (int k = 0; k < 1 << (7 - i); k++)
+                    for (var k = 0; k < 1 << (7 - i); k++)
                         h.LookUpTable[base2 | k] = lutValue;
                     code++;
                     x++;
@@ -202,9 +202,9 @@ public class DefineHuffmanTable : SegmentBase
 
             // Derive minCodes, maxCodes, and valsIndices.
             int c = 0, index = 0;
-            for (int i = 0; i < ncodes.Length; i++)
+            for (var i = 0; i < ncodes.Length; i++)
             {
-                int nc = ncodes[i];
+                var nc = ncodes[i];
                 if (nc == 0)
                 {
                     h.MinimumCode[i] = -1;
@@ -232,7 +232,7 @@ public class DefineHuffmanTable : SegmentBase
     {
         byte[] headers = { 0x00, 0x10, 0x01, 0x11 };
         Length = 2;
-        HuffmanSpec[] specs = theHuffmanSpec;
+        var specs = _theHuffmanSpec;
 
         foreach (var s in specs)
         {
@@ -240,7 +240,7 @@ public class DefineHuffmanTable : SegmentBase
         }
         WriteSegmentHeader(writer);
 
-        for (int i = 0; i < specs.Length; i++)
+        for (var i = 0; i < specs.Length; i++)
         {
             var s = specs[i];
             writer.Write(headers[i]);

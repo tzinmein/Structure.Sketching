@@ -37,15 +37,15 @@ public class RobidouxSoftFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        const float B = 0.6796f;
-        const float C = 0.1602f;
+        const float b = 0.6796f;
+        const float c = 0.1602f;
 
         if (value < 0) value = -value;
         var temp = value * value;
         if (value < 1)
-            return ((12 - 9 * B - 6 * C) * (value * temp) + (-18 + 12 * B + 6 * C) * temp + (6 - 2 * B)) / 6;
+            return ((12 - 9 * b - 6 * c) * (value * temp) + (-18 + 12 * b + 6 * c) * temp + (6 - 2 * b)) / 6;
         if (value < 2)
-            return ((-B - 6 * C) * (value * temp) + (6 * B + 30 * C) * temp + (-12 * B - 48 * C) * value + (8 * B + 24 * C)) / 6;
+            return ((-b - 6 * c) * (value * temp) + (6 * b + 30 * c) * temp + (-12 * b - 48 * c) * value + (8 * b + 24 * c)) / 6;
         return 0;
     }
 }

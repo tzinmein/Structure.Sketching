@@ -32,14 +32,14 @@ public class Contrast : MatrixBaseClass
     public Contrast(float value)
     {
         Value = value;
-        float TempValue = 0.5f * (1f - value);
-        _Matrix = new Matrix5x5
+        var tempValue = 0.5f * (1f - value);
+        Matrix = new Matrix5X5
         (
             value, 0f, 0f, 0f, 0f,
             0f, value, 0f, 0f, 0f,
             0f, 0f, value, 0f, 0f,
             0f, 0f, 0f, 1f, 0f,
-            TempValue, TempValue, TempValue, 0f, 1f
+            tempValue, tempValue, tempValue, 0f, 1f
         );
     }
 
@@ -47,23 +47,11 @@ public class Contrast : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5x5 Matrix => _Matrix;
+    public override Matrix5X5 Matrix { get; }
 
     /// <summary>
     /// Gets the value.
     /// </summary>
     /// <value>The value.</value>
     public float Value { get; }
-
-    /// <summary>
-    /// The matrix backing field
-    /// </summary>
-    private Matrix5x5 _Matrix = new Matrix5x5
-    (
-        1f, 0f, 0f, 0f, 0f,
-        0f, 1f, 0f, 0f, 0f,
-        0f, 0f, 1f, 0f, 0f,
-        0f, 0f, 0f, 1f, 0f,
-        0f, 0f, 0f, 0f, 1f
-    );
 }

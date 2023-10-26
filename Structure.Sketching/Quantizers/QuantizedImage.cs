@@ -82,14 +82,14 @@ public class QuantizedImage
     /// <returns>The result of the conversion.</returns>
     public static implicit operator Image(QuantizedImage quantizedImage)
     {
-        int palletCount = quantizedImage.Palette.Length - 1;
-        Color[] Pixels = new Color[quantizedImage.Pixels.Length];
+        var palletCount = quantizedImage.Palette.Length - 1;
+        var pixels = new Color[quantizedImage.Pixels.Length];
 
         Parallel.For(0, quantizedImage.Pixels.Length, x =>
         {
-            Pixels[x] = quantizedImage.Palette[Math.Min(palletCount, quantizedImage.Pixels[x])];
+            pixels[x] = quantizedImage.Palette[Math.Min(palletCount, quantizedImage.Pixels[x])];
         });
 
-        return new Image(quantizedImage.Width, quantizedImage.Height, Pixels);
+        return new Image(quantizedImage.Width, quantizedImage.Height, pixels);
     }
 }

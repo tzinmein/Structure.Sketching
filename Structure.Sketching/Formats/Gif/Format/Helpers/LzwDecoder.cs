@@ -22,13 +22,13 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers;
 /// <summary>
 /// LZW Decoder
 /// </summary>
-public class LZWDecoder
+public class LzwDecoder
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LZWDecoder"/> class.
+    /// Initializes a new instance of the <see cref="LzwDecoder"/> class.
     /// </summary>
     /// <param name="stream">The stream.</param>
-    public LZWDecoder(Stream stream)
+    public LzwDecoder(Stream stream)
     {
         Stream = stream;
     }
@@ -50,125 +50,125 @@ public class LZWDecoder
     /// <returns>The resulting byte array.</returns>
     public byte[] Decode(int width, int height, int dataSize)
     {
-        byte[] Pixels = new byte[width * height];
-        int ClearCode = 1 << dataSize;
-        int CodeSize = dataSize + 1;
-        int EndCode = ClearCode + 1;
-        int AvailableCode = ClearCode + 2;
-        int OldCode = -1;
-        int CodeMask = (1 << CodeSize) - 1;
-        int Bits = 0;
+        var pixels = new byte[width * height];
+        var clearCode = 1 << dataSize;
+        var codeSize = dataSize + 1;
+        var endCode = clearCode + 1;
+        var availableCode = clearCode + 2;
+        var oldCode = -1;
+        var codeMask = (1 << codeSize) - 1;
+        var bits = 0;
 
-        int[] Prefix = new int[4096];
-        int[] Suffix = new int[4096];
-        int[] PixelStack = new int[4097];
+        var prefix = new int[4096];
+        var suffix = new int[4096];
+        var pixelStack = new int[4097];
 
-        int Top = 0;
-        int Count = 0;
-        int BI = 0;
-        int XYZ = 0;
+        var top = 0;
+        var count = 0;
+        var bi = 0;
+        var xyz = 0;
 
-        int Data = 0;
-        int First = 0;
+        var data = 0;
+        var first = 0;
 
-        for (int x = 0; x < ClearCode; ++x)
+        for (var x = 0; x < clearCode; ++x)
         {
-            Prefix[x] = 0;
-            Suffix[x] = (byte)x;
+            prefix[x] = 0;
+            suffix[x] = (byte)x;
         }
 
-        byte[] Buffer = null;
-        while (XYZ < Pixels.Length)
+        byte[] buffer = null;
+        while (xyz < pixels.Length)
         {
-            if (Top == 0)
+            if (top == 0)
             {
-                if (Bits < CodeSize)
+                if (bits < codeSize)
                 {
-                    if (Count == 0)
+                    if (count == 0)
                     {
-                        Buffer = ReadBlock();
-                        Count = Buffer.Length;
-                        if (Count == 0)
+                        buffer = ReadBlock();
+                        count = buffer.Length;
+                        if (count == 0)
                         {
                             break;
                         }
 
-                        BI = 0;
+                        bi = 0;
                     }
 
-                    if (Buffer != null)
+                    if (buffer != null)
                     {
-                        Data += Buffer[BI] << Bits;
+                        data += buffer[bi] << bits;
                     }
 
-                    Bits += 8;
-                    BI++;
-                    Count--;
+                    bits += 8;
+                    bi++;
+                    count--;
                     continue;
                 }
-                int Code = Data & CodeMask;
-                Data >>= CodeSize;
-                Bits -= CodeSize;
+                var code = data & codeMask;
+                data >>= codeSize;
+                bits -= codeSize;
 
-                if (Code > AvailableCode || Code == EndCode)
+                if (code > availableCode || code == endCode)
                 {
                     break;
                 }
 
-                if (Code == ClearCode)
+                if (code == clearCode)
                 {
-                    CodeSize = dataSize + 1;
-                    CodeMask = (1 << CodeSize) - 1;
-                    AvailableCode = ClearCode + 2;
-                    OldCode = -1;
+                    codeSize = dataSize + 1;
+                    codeMask = (1 << codeSize) - 1;
+                    availableCode = clearCode + 2;
+                    oldCode = -1;
                     continue;
                 }
 
-                if (OldCode == -1)
+                if (oldCode == -1)
                 {
-                    PixelStack[Top++] = Suffix[Code];
-                    OldCode = Code;
-                    First = Code;
+                    pixelStack[top++] = suffix[code];
+                    oldCode = code;
+                    first = code;
                     continue;
                 }
 
-                int inCode = Code;
-                if (Code == AvailableCode)
+                var inCode = code;
+                if (code == availableCode)
                 {
-                    PixelStack[Top++] = (byte)First;
+                    pixelStack[top++] = (byte)first;
 
-                    Code = OldCode;
+                    code = oldCode;
                 }
 
-                while (Code > ClearCode)
+                while (code > clearCode)
                 {
-                    PixelStack[Top++] = Suffix[Code];
-                    Code = Prefix[Code];
+                    pixelStack[top++] = suffix[code];
+                    code = prefix[code];
                 }
 
-                First = Suffix[Code];
-                PixelStack[Top++] = Suffix[Code];
+                first = suffix[code];
+                pixelStack[top++] = suffix[code];
 
-                if (AvailableCode < 4096)
+                if (availableCode < 4096)
                 {
-                    Prefix[AvailableCode] = OldCode;
-                    Suffix[AvailableCode] = First;
-                    AvailableCode++;
-                    if (AvailableCode == CodeMask + 1 && AvailableCode < 4096)
+                    prefix[availableCode] = oldCode;
+                    suffix[availableCode] = first;
+                    availableCode++;
+                    if (availableCode == codeMask + 1 && availableCode < 4096)
                     {
-                        CodeSize++;
-                        CodeMask = (1 << CodeSize) - 1;
+                        codeSize++;
+                        codeMask = (1 << codeSize) - 1;
                     }
                 }
 
-                OldCode = inCode;
+                oldCode = inCode;
             }
 
-            Top--;
-            Pixels[XYZ++] = (byte)PixelStack[Top];
+            top--;
+            pixels[xyz++] = (byte)pixelStack[top];
         }
 
-        return Pixels;
+        return pixels;
     }
 
     /// <summary>

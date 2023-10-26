@@ -34,21 +34,21 @@ public class ColorTable : SectionBase
     /// Initializes a new instance of the <see cref="ColorTable"/> class.
     /// </summary>
     /// <param name="image">The image.</param>
-    /// <param name="BitDepth">The bit depth.</param>
-    public ColorTable(QuantizedImage image, int BitDepth)
+    /// <param name="bitDepth">The bit depth.</param>
+    public ColorTable(QuantizedImage image, int bitDepth)
     {
-        Bgra[] palette = image.Palette;
-        int pixelCount = palette.Length;
+        var palette = image.Palette;
+        var pixelCount = palette.Length;
 
         // Get max colors for bit depth.
-        int colorTableLength = (int)Math.Pow(2, BitDepth) * 3;
-        byte[] colorTable = new byte[colorTableLength];
+        var colorTableLength = (int)Math.Pow(2, bitDepth) * 3;
+        var colorTable = new byte[colorTableLength];
 
         Parallel.For(0, pixelCount,
             i =>
             {
-                int offset = i * 3;
-                Bgra color = palette[i];
+                var offset = i * 3;
+                var color = palette[i];
 
                 colorTable[offset] = color.Red;
                 colorTable[offset + 1] = color.Green;
@@ -84,9 +84,9 @@ public class ColorTable : SectionBase
     /// </returns>
     public static ColorTable Read(Stream stream, int size)
     {
-        byte[] ColorTable = new byte[size * 3];
-        stream.Read(ColorTable, 0, ColorTable.Length);
-        return new ColorTable(ColorTable);
+        var colorTable = new byte[size * 3];
+        stream.Read(colorTable, 0, colorTable.Length);
+        return new ColorTable(colorTable);
     }
 
     /// <summary>

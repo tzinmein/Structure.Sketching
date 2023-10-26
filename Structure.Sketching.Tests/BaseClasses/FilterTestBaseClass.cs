@@ -20,14 +20,14 @@ public abstract class FilterTestBaseClass : TestBaseClass
     {
         foreach (var file in Files)
         {
-            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
             new Image(file)
                 .Apply(filter, target)
                 .Save(OutputDirectory + outputFileName);
         }
-        foreach (string file in Files)
+        foreach (var file in Files)
         {
-            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
             Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
         }
     }

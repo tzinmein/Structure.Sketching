@@ -96,7 +96,7 @@ public abstract class EndianBitConverterBase
     public void CopyBytes(decimal value, byte[] buffer, int index)
     {
         var parts = decimal.GetBits(value);
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
             CopyBytesImpl(parts[i], 4, buffer, (i * 4) + index);
         }
@@ -239,9 +239,9 @@ public abstract class EndianBitConverterBase
     /// <returns>The resulting byte array.</returns>
     public byte[] GetBytes(decimal value)
     {
-        byte[] bytes = new byte[16];
+        var bytes = new byte[16];
         var parts = decimal.GetBits(value);
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
             CopyBytesImpl(parts[i], 4, bytes, i * 4);
         }
@@ -403,8 +403,8 @@ public abstract class EndianBitConverterBase
     /// <returns>The resulting decimal value</returns>
     public decimal ToDecimal(byte[] value, int startIndex)
     {
-        int[] parts = new int[4];
-        for (int i = 0; i < 4; i++)
+        var parts = new int[4];
+        for (var i = 0; i < 4; i++)
         {
             parts[i] = ToInt(value, startIndex + (i * 4));
         }
@@ -558,7 +558,7 @@ public abstract class EndianBitConverterBase
     /// <returns>Gets the resulting byte array.</returns>
     private byte[] GetBytes(long value, int bytes)
     {
-        byte[] buffer = new byte[bytes];
+        var buffer = new byte[bytes];
         CopyBytes(value, bytes, buffer, 0);
         return buffer;
     }

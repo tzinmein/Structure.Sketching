@@ -47,7 +47,7 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
     /// </summary>
     /// <param name="hex">The hexadecimal.</param>
-    /// <exception cref="System.ArgumentException">Hex value is not convertable</exception>
+    /// <exception cref="System.ArgumentException">Hex value is not convertible</exception>
     public ColorStruct(string hex)
     {
         hex = hex.StartsWith("#", StringComparison.Ordinal) ? hex[1..] : hex;
@@ -78,7 +78,7 @@ public struct ColorStruct : IEquatable<ColorStruct>
         }
         if (hex.Length < 8)
         {
-            throw new ArgumentException("Hex value is not convertable");
+            throw new ArgumentException("Hex value is not convertible");
         }
         IntData = 0;
         UIntData = 0;

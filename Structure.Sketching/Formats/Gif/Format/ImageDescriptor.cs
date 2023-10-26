@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
-using Structure.Sketching.Helpers;
 using Structure.Sketching.IO;
 using System;
 using System.IO;
+using Structure.Sketching.Formats.Gif.Format.Helpers;
 
 namespace Structure.Sketching.Formats.Gif.Format;
 
@@ -136,16 +136,16 @@ public class ImageDescriptor : SectionBase
     /// <returns>The resulting ImageDescriptor</returns>
     public static ImageDescriptor Read(Stream stream)
     {
-        byte[] TempBuffer = new byte[Size];
-        stream.Read(TempBuffer, 0, TempBuffer.Length);
-        byte Packed = TempBuffer[8];
-        return new ImageDescriptor(BitConverter.ToInt16(TempBuffer, 0),
-            BitConverter.ToInt16(TempBuffer, 2),
-            BitConverter.ToInt16(TempBuffer, 4),
-            BitConverter.ToInt16(TempBuffer, 6),
-            (Packed & 0x80) >> 7 == 1,
-            2 << (Packed & 0x07),
-            (Packed & 0x40) >> 6 == 1);
+        var tempBuffer = new byte[Size];
+        stream.Read(tempBuffer, 0, tempBuffer.Length);
+        var packed = tempBuffer[8];
+        return new ImageDescriptor(BitConverter.ToInt16(tempBuffer, 0),
+            BitConverter.ToInt16(tempBuffer, 2),
+            BitConverter.ToInt16(tempBuffer, 4),
+            BitConverter.ToInt16(tempBuffer, 6),
+            (packed & 0x80) >> 7 == 1,
+            2 << (packed & 0x07),
+            (packed & 0x40) >> 6 == 1);
     }
 
     /// <summary>

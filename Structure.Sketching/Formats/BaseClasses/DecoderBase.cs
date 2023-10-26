@@ -56,10 +56,10 @@ public abstract class DecoderBase<TFile> : IDecoder
     {
         if (stream == null)
             return false;
-        byte[] TempBuffer = new byte[HeaderSize];
+        var tempBuffer = new byte[HeaderSize];
         stream.Seek(0, SeekOrigin.Begin);
-        stream.Read(TempBuffer, 0, HeaderSize);
-        var value = CanDecode(TempBuffer);
+        stream.Read(tempBuffer, 0, HeaderSize);
+        var value = CanDecode(tempBuffer);
         stream.Seek(0, SeekOrigin.Begin);
         return value;
     }

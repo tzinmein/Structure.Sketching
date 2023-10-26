@@ -17,20 +17,20 @@ public abstract class FormatTestBase
 
     protected bool CheckFileCorrect(string fileName)
     {
-        using FileStream OutputStream = File.OpenRead(OutputDirectory + fileName);
-        using FileStream ExpectedStream = File.OpenRead(ExpectedDirectory + fileName);
-        return ReadBinary(OutputStream).SequenceEqual(ReadBinary(ExpectedStream));
+        using var outputStream = File.OpenRead(OutputDirectory + fileName);
+        using var expectedStream = File.OpenRead(ExpectedDirectory + fileName);
+        return ReadBinary(outputStream).SequenceEqual(ReadBinary(expectedStream));
     }
 
 
     protected bool CheckDecodedPngCorrect(string fileName)
     {
-        using FileStream expectedStream = File.OpenRead(ExpectedDirectory + fileName);
-        using FileStream outputStream = File.OpenRead(OutputDirectory + fileName);
+        using var expectedStream = File.OpenRead(ExpectedDirectory + fileName);
+        using var outputStream = File.OpenRead(OutputDirectory + fileName);
 
-        var ImageFormat = new Structure.Sketching.Formats.Png.PngFormat();
-        var expectedImage = ImageFormat.Decode(expectedStream);
-        var outputImage = ImageFormat.Decode(outputStream);
+        var imageFormat = new Structure.Sketching.Formats.Png.PngFormat();
+        var expectedImage = imageFormat.Decode(expectedStream);
+        var outputImage = imageFormat.Decode(outputStream);
 
         var dimensionsOk = outputImage.Width == expectedImage.Width && outputImage.Height == expectedImage.Height;
         if (!dimensionsOk) return false;
@@ -47,14 +47,14 @@ public abstract class FormatTestBase
 
     protected byte[] ReadBinary(FileStream stream)
     {
-        byte[] Buffer = new byte[1024];
-        using MemoryStream Temp = new();
+        var buffer = new byte[1024];
+        using MemoryStream temp = new();
         while (true)
         {
-            var Count = stream.Read(Buffer, 0, Buffer.Length);
-            if (Count <= 0)
-                return Temp.ToArray();
-            Temp.Write(Buffer, 0, Count);
+            var count = stream.Read(buffer, 0, buffer.Length);
+            if (count <= 0)
+                return temp.ToArray();
+            temp.Write(buffer, 0, count);
         }
     }
 }

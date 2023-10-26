@@ -114,9 +114,9 @@ public class File : FileBase
     /// <param name="image">The image.</param>
     private void LoadImage(Image image)
     {
-        var ImageSize = image.Pixels.Length * 4;
-        FileHeader = new FileHeader(54 + ImageSize, 54);
-        Header = new Header(image.Width, image.Height, 24, ImageSize, 0, 0, 0, 0, Compression.RGB);
+        var imageSize = image.Pixels.Length * 4;
+        FileHeader = new FileHeader(54 + imageSize, 54);
+        Header = new Header(image.Width, image.Height, 24, imageSize, 0, 0, 0, 0, Compression.Rgb);
         Palette = new Palette(0, Array.Empty<byte>());
         Body = new Body(image, Header);
     }

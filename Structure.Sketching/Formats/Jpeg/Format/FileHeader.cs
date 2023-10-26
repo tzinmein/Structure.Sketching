@@ -42,8 +42,8 @@ public class FileHeader
     /// <returns>The resulting FileHeader object</returns>
     public static FileHeader Read(Stream stream)
     {
-        var TempBuffer = new byte[2];
-        stream.Read(TempBuffer, 0, 2);
+        var tempBuffer = new byte[2];
+        stream.Read(tempBuffer, 0, 2);
         return new FileHeader();
     }
 

@@ -43,12 +43,12 @@ public class Block
     /// <value>
     /// The <see cref="int"/>.
     /// </value>
-    /// <param name="Index">The index.</param>
+    /// <param name="index">The index.</param>
     /// <returns>The value specified.</returns>
-    public int this[int Index]
+    public int this[int index]
     {
-        get { return Data[Index]; }
-        set { Data[Index] = value; }
+        get { return Data[index]; }
+        set { Data[index] = value; }
     }
 
     /// <summary>

@@ -22,6 +22,6 @@ namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Exceptions;
 /// EOF exception
 /// </summary>
 /// <seealso cref="System.Exception" />
-public class EOF : Exception
+public class Eof : Exception
 {
 }

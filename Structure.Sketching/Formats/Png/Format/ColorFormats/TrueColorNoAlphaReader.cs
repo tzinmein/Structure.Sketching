@@ -37,25 +37,25 @@ public class TrueColorNoAlphaReader : IColorReader
     {
         scanline = scanline.ExpandArray(header.BitDepth);
 
-        int BytesPerPixel = header.BitDepth * 3 / 8;
-        int BytesPerChannel = header.BitDepth / 8;
+        var bytesPerPixel = header.BitDepth * 3 / 8;
+        var bytesPerChannel = header.BitDepth / 8;
 
-        fixed (Color* PixelPointer = &pixels[row * header.Width])
+        fixed (Color* pixelPointer = &pixels[row * header.Width])
         {
-            Color* PixelPointer2 = PixelPointer;
-            fixed (byte* ScanlinePointer = &scanline[0])
+            var pixelPointer2 = pixelPointer;
+            fixed (byte* scanlinePointer = &scanline[0])
             {
-                byte* ScanlinePointer2 = ScanlinePointer;
-                for (int x = 0; x < scanline.Length; x += BytesPerPixel)
+                var scanlinePointer2 = scanlinePointer;
+                for (var x = 0; x < scanline.Length; x += bytesPerPixel)
                 {
-                    (*PixelPointer2).Red = *ScanlinePointer2;
-                    ScanlinePointer2 += BytesPerChannel;
-                    (*PixelPointer2).Green = *ScanlinePointer2;
-                    ScanlinePointer2 += BytesPerChannel;
-                    (*PixelPointer2).Blue = *ScanlinePointer2;
-                    ScanlinePointer2 += BytesPerChannel;
-                    (*PixelPointer2).Alpha = 255;
-                    ++PixelPointer2;
+                    (*pixelPointer2).Red = *scanlinePointer2;
+                    scanlinePointer2 += bytesPerChannel;
+                    (*pixelPointer2).Green = *scanlinePointer2;
+                    scanlinePointer2 += bytesPerChannel;
+                    (*pixelPointer2).Blue = *scanlinePointer2;
+                    scanlinePointer2 += bytesPerChannel;
+                    (*pixelPointer2).Alpha = 255;
+                    ++pixelPointer2;
                 }
             }
         }

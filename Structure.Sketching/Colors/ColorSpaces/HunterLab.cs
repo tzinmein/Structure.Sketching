@@ -23,15 +23,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// <summary>
 /// LAB color space
 /// </summary>
-public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
+public struct HunterLab : IEquatable<HunterLab>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="HunterLAB"/> struct.
+    /// Initializes a new instance of the <see cref="HunterLab"/> struct.
     /// </summary>
     /// <param name="l">The l.</param>
     /// <param name="a">a.</param>
     /// <param name="b">The b.</param>
-    public HunterLAB(double l, double a, double b)
+    public HunterLab(double l, double a, double b)
     {
         L = l;
         A = a;
@@ -59,54 +59,54 @@ public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="HunterLAB"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="HunterLab"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(HunterLAB color)
+    public static implicit operator Color(HunterLab color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="HunterLAB"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="HunterLab"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator HunterLAB(Color color)
+    public static implicit operator HunterLab(Color color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="HunterLAB"/>.
+    /// Performs an implicit conversion from <see cref="Xyz"/> to <see cref="HunterLab"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator HunterLAB(XYZ color)
+    public static implicit operator HunterLab(Xyz color)
     {
-        var L = 10.0 * Math.Sqrt(color.Y);
-        var A = color.Y != 0 ? 17.5 * ((1.02 * color.X - color.Y) / Math.Sqrt(color.Y)) : 0;
-        var B = color.Y != 0 ? 7.0 * ((color.Y - .847 * color.Z) / Math.Sqrt(color.Y)) : 0;
-        return new HunterLAB(L, A, B);
+        var l = 10.0 * Math.Sqrt(color.Y);
+        var a = color.Y != 0 ? 17.5 * ((1.02 * color.X - color.Y) / Math.Sqrt(color.Y)) : 0;
+        var b = color.Y != 0 ? 7.0 * ((color.Y - .847 * color.Z) / Math.Sqrt(color.Y)) : 0;
+        return new HunterLab(l, a, b);
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="HunterLAB"/> to <see cref="XYZ"/>.
+    /// Performs an implicit conversion from <see cref="HunterLab"/> to <see cref="Xyz"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator XYZ(HunterLAB color)
+    public static implicit operator Xyz(HunterLab color)
     {
         var x = color.A / 17.5 * (color.L / 10.0);
-        var itemL_10 = color.L / 10.0;
-        var y = itemL_10 * itemL_10;
+        var itemL10 = color.L / 10.0;
+        var y = itemL10 * itemL10;
         var z = color.B / 7.0 * color.L / 10.0;
 
-        return new XYZ((x + y) / 1.02,
+        return new Xyz((x + y) / 1.02,
             y,
             -(z - y) / .847
         );
@@ -119,7 +119,7 @@ public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(HunterLAB color1, HunterLAB color2)
+    public static bool operator !=(HunterLab color1, HunterLab color2)
     {
         return !(color1 == color2);
     }
@@ -131,7 +131,7 @@ public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(HunterLAB color1, HunterLAB color2)
+    public static bool operator ==(HunterLab color1, HunterLab color2)
     {
         return color1.Equals(color2);
     }
@@ -146,7 +146,7 @@ public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is HunterLAB lab && Equals(lab);
+        return obj is HunterLab lab && Equals(lab);
     }
 
     /// <summary>
@@ -157,11 +157,11 @@ public struct HunterLAB : IEquatable<HunterLAB>, IColorSpace
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(HunterLAB other)
+    public readonly bool Equals(HunterLab other)
     {
-        return Math.Abs(other.L - L) < EPSILON
-               && Math.Abs(other.A - A) < EPSILON
-               && Math.Abs(other.B - B) < EPSILON;
+        return Math.Abs(other.L - L) < Epsilon
+               && Math.Abs(other.A - A) < Epsilon
+               && Math.Abs(other.B - B) < Epsilon;
     }
 
     /// <summary>

@@ -86,38 +86,38 @@ public class AdaptiveThreshold : IFilter
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         new Greyscale709().Apply(image, targetLocation);
-        var TempValues = new Color[image.Width * image.Height];
-        Array.Copy(image.Pixels, TempValues, TempValues.Length);
-        int ApetureMin = -ApetureRadius;
-        int ApetureMax = ApetureRadius;
+        var tempValues = new Color[image.Width * image.Height];
+        Array.Copy(image.Pixels, tempValues, tempValues.Length);
+        var apetureMin = -ApetureRadius;
+        var apetureMax = ApetureRadius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &TempValues[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var RValues = new List<byte>();
-                    for (int x2 = ApetureMin; x2 < ApetureMax; ++x2)
+                    var rValues = new List<byte>();
+                    for (var x2 = apetureMin; x2 < apetureMax; ++x2)
                     {
-                        int TempX = x + x2;
-                        if (TempX >= targetLocation.Left && TempX < targetLocation.Right)
+                        var tempX = x + x2;
+                        if (tempX >= targetLocation.Left && tempX < targetLocation.Right)
                         {
-                            for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
+                            for (var y2 = apetureMin; y2 < apetureMax; ++y2)
                             {
-                                int TempY = y + y2;
-                                if (TempY >= targetLocation.Bottom && TempY < targetLocation.Top)
+                                var tempY = y + y2;
+                                if (tempY >= targetLocation.Bottom && tempY < targetLocation.Top)
                                 {
-                                    RValues.Add(image.Pixels[TempY * image.Width + TempX].Red);
+                                    rValues.Add(image.Pixels[tempY * image.Width + tempX].Red);
                                 }
                             }
                         }
                     }
-                    *TargetPointer2 = RValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
-                    ++TargetPointer2;
+                    *targetPointer2 = rValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
+                    ++targetPointer2;
                 }
             }
         });
-        return image.ReCreate(image.Width, image.Height, TempValues);
+        return image.ReCreate(image.Width, image.Height, tempValues);
     }
 }

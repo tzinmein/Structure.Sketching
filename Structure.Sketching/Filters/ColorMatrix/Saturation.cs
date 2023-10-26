@@ -33,10 +33,10 @@ public class Saturation : MatrixBaseClass
     {
         ++value;
         Value = 1f - value;
-        float saturationComplementR = 0.3086f * Value;
-        float saturationComplementG = 0.6094f * Value;
-        float saturationComplementB = 0.0820f * Value;
-        _Matrix = new Matrix5x5
+        var saturationComplementR = 0.3086f * Value;
+        var saturationComplementG = 0.6094f * Value;
+        var saturationComplementB = 0.0820f * Value;
+        Matrix = new Matrix5X5
         (
             saturationComplementR + value, saturationComplementR, saturationComplementR, 0f, 0f,
             saturationComplementG, saturationComplementG + value, saturationComplementG, 0f, 0f,
@@ -50,23 +50,17 @@ public class Saturation : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5x5 Matrix => _Matrix;
-
-    /// <summary>
-    /// Gets the value.
-    /// </summary>
-    /// <value>The value.</value>
-    public float Value { get; }
-
-    /// <summary>
-    /// The matrix backing field
-    /// </summary>
-    private Matrix5x5 _Matrix = new Matrix5x5
-    (
+    public override Matrix5X5 Matrix { get; } = new(
         1f, 0f, 0f, 0f, 0f,
         0f, 1f, 0f, 0f, 0f,
         0f, 0f, 1f, 0f, 0f,
         0f, 0f, 0f, 1f, 0f,
         0f, 0f, 0f, 0f, 1f
     );
+
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <value>The value.</value>
+    public float Value { get; }
 }

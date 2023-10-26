@@ -3,26 +3,26 @@ using Xunit;
 
 namespace Structure.Sketching.Tests.Numerics;
 
-public class Matrix5x5Tests
+public class Matrix5X5Tests
 {
     [Fact]
     public void Addition()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 2, 3, 4, 6,
             6, 1, 5, 3, 8,
             2, 6, 4, 9, 9,
             1, 3, 8, 3, 4,
             5, 7, 8, 2, 5
         );
-        var second = new Matrix5x5(
+        var second = new Matrix5X5(
             3, 5, 0, 8, 7,
             2, 2, 4, 8, 3,
             0, 2, 5, 1, 2,
             1, 4, 0, 5, 1,
             3, 4, 8, 2, 3
         );
-        var result = new Matrix5x5(
+        var result = new Matrix5X5(
             4, 7, 3, 12, 13,
             8, 3, 9, 11, 11,
             2, 8, 9, 10, 11,
@@ -38,14 +38,14 @@ public class Matrix5x5Tests
     [Fact]
     public void AreEqual()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
             0, 0, 0, 1, 0,
             0, 0, 0, 0, 1
         );
-        var second = new Matrix5x5(
+        var second = new Matrix5X5(
             1, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
@@ -61,14 +61,14 @@ public class Matrix5x5Tests
     [Fact]
     public void AreNotEqual()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
             0, 0, 0, 1, 0,
             0, 0, 0, 0, 1
         );
-        var second = new Matrix5x5(
+        var second = new Matrix5X5(
             1, 0, 0, 0, 1,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
@@ -84,7 +84,7 @@ public class Matrix5x5Tests
     [Fact]
     public void ConstructorAssignsProperties()
     {
-        var value = new Matrix5x5(
+        var value = new Matrix5X5(
             1, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
@@ -121,34 +121,34 @@ public class Matrix5x5Tests
     [Fact]
     public void IsIdentity()
     {
-        var value = new Matrix5x5(
+        var value = new Matrix5X5(
             1, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 1, 0, 0,
             0, 0, 0, 1, 0,
             0, 0, 0, 0, 1
         );
-        Assert.Equal(Matrix5x5.Identity, value);
+        Assert.Equal(Matrix5X5.Identity, value);
     }
 
     [Fact]
     public void Minus()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 2, 3, 4, 6,
             6, 1, 5, 3, 8,
             2, 6, 4, 9, 9,
             1, 3, 8, 3, 4,
             5, 7, 8, 2, 5
         );
-        var second = new Matrix5x5(
+        var second = new Matrix5X5(
             3, 5, 0, 8, 7,
             2, 2, 4, 8, 3,
             0, 2, 5, 1, 2,
             1, 4, 0, 5, 1,
             3, 4, 8, 2, 3
         );
-        var result = new Matrix5x5(
+        var result = new Matrix5X5(
             -2, -3, 3, -4, -1,
             4, -1, 1, -5, 5,
             2, 4, -1, 8, 7,
@@ -161,21 +161,21 @@ public class Matrix5x5Tests
     [Fact]
     public void Multiplication()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 2, 3, 4, 6,
             6, 1, 5, 3, 8,
             2, 6, 4, 9, 9,
             1, 3, 8, 3, 4,
             5, 7, 8, 2, 5
         );
-        var second = new Matrix5x5(
+        var second = new Matrix5X5(
             3, 5, 0, 8, 7,
             2, 2, 4, 8, 3,
             0, 2, 5, 1, 2,
             1, 4, 0, 5, 1,
             3, 4, 8, 2, 3
         );
-        var result = new Matrix5x5(
+        var result = new Matrix5X5(
             29, 55, 71, 59, 41,
             47, 86, 93, 92, 82,
             54, 102, 116, 131, 76,
@@ -188,7 +188,7 @@ public class Matrix5x5Tests
     [Fact]
     public void MultiplicationFloat()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 2, 3, 4, 6,
             6, 1, 5, 3, 8,
             2, 6, 4, 9, 9,
@@ -196,7 +196,7 @@ public class Matrix5x5Tests
             5, 7, 8, 2, 5
         );
         float value = 2;
-        var result = new Matrix5x5(
+        var result = new Matrix5X5(
             2, 4, 6, 8, 12,
             12, 2, 10, 6, 16,
             4, 12, 8, 18, 18,
@@ -209,14 +209,14 @@ public class Matrix5x5Tests
     [Fact]
     public void Negation()
     {
-        var first = new Matrix5x5(
+        var first = new Matrix5X5(
             1, 2, 3, 4, 6,
             6, 1, 5, 3, 8,
             2, 6, 4, 9, 9,
             1, 3, 8, 3, 4,
             5, 7, 8, 2, 5
         );
-        var result = new Matrix5x5(
+        var result = new Matrix5X5(
             -1, -2, -3, -4, -6,
             -6, -1, -5, -3, -8,
             -2, -6, -4, -9, -9,

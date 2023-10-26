@@ -76,10 +76,10 @@ public class Header
         Size = size;
         Width = width;
         Height = height;
-        BPP = bpp;
+        Bpp = bpp;
         ImageSize = imageSize;
-        XPPM = xppm;
-        YPPM = yppm;
+        Xppm = xppm;
+        Yppm = yppm;
         ColorsUsed = colorsUsed;
         ColorsImportant = colorsImportant;
         Compression = compression;
@@ -149,7 +149,7 @@ public class Header
     /// <value>
     /// The bits per pixel
     /// </value>
-    public short BPP { get; private set; }
+    public short Bpp { get; private set; }
 
     /// <summary>
     /// Gets the number of important colors.
@@ -251,13 +251,13 @@ public class Header
     /// Pels Per Meter in the X direction
     /// </summary>
     /// <value>The XPPM.</value>
-    public int XPPM { get; private set; }
+    public int Xppm { get; private set; }
 
     /// <summary>
     /// Pels Per Meter in the Y direction
     /// </summary>
     /// <value>The yppm.</value>
-    public int YPPM { get; private set; }
+    public int Yppm { get; private set; }
 
     /// <summary>
     /// Reads the header information from the specified stream.
@@ -266,15 +266,15 @@ public class Header
     /// <returns>The header information.</returns>
     public static Header Read(Stream stream)
     {
-        byte[] HeaderSize = new byte[4];
-        stream.Read(HeaderSize, 0, 4);
-        var Size = BitConverter.ToInt32(HeaderSize, 0);
-        byte[] data = new byte[Size];
-        stream.Read(data, 4, Size - 4);
-        data[0] = HeaderSize[0];
-        data[1] = HeaderSize[1];
-        data[2] = HeaderSize[2];
-        data[3] = HeaderSize[3];
+        var headerSize = new byte[4];
+        stream.Read(headerSize, 0, 4);
+        var size = BitConverter.ToInt32(headerSize, 0);
+        var data = new byte[size];
+        stream.Read(data, 4, size - 4);
+        data[0] = headerSize[0];
+        data[1] = headerSize[1];
+        data[2] = headerSize[2];
+        data[3] = headerSize[3];
         return new Header(data);
     }
 
@@ -288,11 +288,11 @@ public class Header
         writer.Write(Width);
         writer.Write(Height);
         writer.Write(Planes);
-        writer.Write(BPP);
+        writer.Write(Bpp);
         writer.Write((int)Compression);
         writer.Write(ImageSize);
-        writer.Write(XPPM);
-        writer.Write(YPPM);
+        writer.Write(Xppm);
+        writer.Write(Yppm);
         writer.Write(ColorsUsed);
         writer.Write(ColorsImportant);
     }
@@ -322,15 +322,15 @@ public class Header
     /// <returns>The offset</returns>
     private int GetOffset(int mask)
     {
-        int Offset = 0;
+        var offset = 0;
         if (mask != 0)
         {
             while ((mask & 1) == 0)
             {
-                ++Offset;
+                ++offset;
                 mask >>= 1;
             }
         }
-        return Offset;
+        return offset;
     }
 }

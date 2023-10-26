@@ -69,24 +69,24 @@ public class Glow : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var TempX = XRadius * image.Width;
-        var TempY = YRadius * image.Height;
-        var MaxDistance = (float)Math.Sqrt(TempX * TempX + TempY * TempY);
+        var tempX = XRadius * image.Width;
+        var tempY = YRadius * image.Height;
+        var maxDistance = (float)Math.Sqrt(tempX * tempX + tempY * tempY);
 
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* Pointer2 = Pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var pointer2 = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var Distance = Vector2.Distance(image.Center, new Vector2(x, y));
-                    var SourceColor = (Vector4)(*Pointer2);
-                    var Result = Vector4.Lerp(Color, SourceColor, .5f * (Distance / MaxDistance));
-                    var TempAlpha = Result.W;
-                    Result = SourceColor * (1 - TempAlpha) + Result * SourceColor * TempAlpha;
-                    *Pointer2 = (Color)Result;
-                    ++Pointer2;
+                    var distance = Vector2.Distance(image.Center, new Vector2(x, y));
+                    var sourceColor = (Vector4)(*pointer2);
+                    var result = Vector4.Lerp(Color, sourceColor, .5f * (distance / maxDistance));
+                    var tempAlpha = result.W;
+                    result = sourceColor * (1 - tempAlpha) + result * sourceColor * tempAlpha;
+                    *pointer2 = (Color)result;
+                    ++pointer2;
                 }
             }
         });

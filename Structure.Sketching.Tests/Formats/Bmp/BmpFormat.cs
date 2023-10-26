@@ -65,25 +65,25 @@ public class BmpFormat : FormatTestBase
     [Fact]
     public void Decode()
     {
-        using var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
-        var ImageFormat = new Structure.Sketching.Formats.Bmp.BmpFormat();
-        var TempImage = ImageFormat.Decode(TempFile);
-        Assert.Equal(1760, TempImage.Pixels.Length);
-        Assert.Equal(44, TempImage.Width);
-        Assert.Equal(40, TempImage.Height);
-        Assert.Equal(44d / 40d, TempImage.PixelRatio);
+        using var tempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
+        var imageFormat = new Structure.Sketching.Formats.Bmp.BmpFormat();
+        var tempImage = imageFormat.Decode(tempFile);
+        Assert.Equal(1760, tempImage.Pixels.Length);
+        Assert.Equal(44, tempImage.Width);
+        Assert.Equal(40, tempImage.Height);
+        Assert.Equal(44d / 40d, tempImage.PixelRatio);
     }
 
     [Theory]
     [MemberData(nameof(InputFileNames))]
     public void Encode(string fileName)
     {
-        using (var TempFile = File.OpenRead(InputDirectory + fileName))
+        using (var tempFile = File.OpenRead(InputDirectory + fileName))
         {
-            var ImageFormat = new Sketching.Formats.Bmp.BmpFormat();
-            var TempImage = ImageFormat.Decode(TempFile);
-            using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
-            Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
+            var imageFormat = new Sketching.Formats.Bmp.BmpFormat();
+            var tempImage = imageFormat.Decode(tempFile);
+            using var tempFile2 = File.OpenWrite(OutputDirectory + fileName);
+            Assert.True(imageFormat.Encode(new BinaryWriter(tempFile2), tempImage));
         }
         Assert.True(CheckFileCorrect(fileName));
     }

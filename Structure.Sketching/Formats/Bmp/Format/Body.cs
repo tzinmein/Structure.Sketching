@@ -42,7 +42,7 @@ public class Body
     /// <param name="image">The image.</param>
     /// <param name="header">The header.</param>
     public Body(Image image, Header header)
-        : this(new RGB24bit().Encode(header, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
+        : this(new Rgb24Bit().Encode(header, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
     {
     }
 
@@ -57,12 +57,12 @@ public class Body
     /// </summary>
     private static readonly Dictionary<int, IPixelFormat> PixelFormats = new Dictionary<int, IPixelFormat>
     {
-        [32] = new RGB32bit(),
-        [24] = new RGB24bit(),
-        [16] = new RGB16bit(),
-        [8] = new RGB8bit(),
-        [4] = new RGB4bit(),
-        [1] = new RGB1bit()
+        [32] = new Rgb32Bit(),
+        [24] = new Rgb24Bit(),
+        [16] = new Rgb16Bit(),
+        [8] = new Rgb8Bit(),
+        [4] = new Rgb4Bit(),
+        [1] = new Rgb1Bit()
     };
 
     /// <summary>
@@ -74,9 +74,9 @@ public class Body
     /// <returns>The resulting Body information</returns>
     public static Body Read(Header header, Palette palette, Stream stream)
     {
-        var Data = PixelFormats[header.BPP].Read(header, stream);
-        var Data2 = PixelFormats[header.BPP].Decode(header, Data, palette);
-        return new Body(Data2);
+        var data = PixelFormats[header.Bpp].Read(header, stream);
+        var data2 = PixelFormats[header.Bpp].Decode(header, data, palette);
+        return new Body(data2);
     }
 
     /// <summary>
@@ -85,13 +85,13 @@ public class Body
     /// <param name="writer">The writer.</param>
     public void Write(BinaryWriter writer)
     {
-        int Amount = Data.Length * 3 % 4;
-        if (Amount != 0)
+        var amount = Data.Length * 3 % 4;
+        if (amount != 0)
         {
-            Amount = 4 - Amount;
+            amount = 4 - amount;
         }
         writer.Write(Data, 0, Data.Length);
-        for (int x = 0; x < Amount; ++x)
+        for (var x = 0; x < amount; ++x)
         {
             writer.Write((byte)0);
         }

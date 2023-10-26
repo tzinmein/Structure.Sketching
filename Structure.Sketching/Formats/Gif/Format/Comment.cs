@@ -52,17 +52,17 @@ public class Comment : SectionBase
     /// <returns>The resulting comment</returns>
     public static Comment Read(Stream stream)
     {
-        var Size = stream.ReadByte();
-        var Builder = new StringBuilder();
+        var size = stream.ReadByte();
+        var builder = new StringBuilder();
 
-        while (Size != 0)
+        while (size != 0)
         {
-            byte[] TempBuffer = new byte[Size];
-            stream.Read(TempBuffer, 0, Size);
-            Size = stream.ReadByte();
-            Builder.Append(BitConverter.ToString(TempBuffer));
+            var tempBuffer = new byte[size];
+            stream.Read(tempBuffer, 0, size);
+            size = stream.ReadByte();
+            builder.Append(BitConverter.ToString(tempBuffer));
         }
-        return new Comment(Builder.ToString());
+        return new Comment(builder.ToString());
     }
 
     /// <summary>

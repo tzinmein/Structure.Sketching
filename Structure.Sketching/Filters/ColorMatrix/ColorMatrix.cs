@@ -29,16 +29,14 @@ public class ColorMatrix : MatrixBaseClass
     /// Initializes a new instance of the <see cref="ColorMatrix"/> class.
     /// </summary>
     /// <param name="matrix">The matrix.</param>
-    public ColorMatrix(Matrix5x5 matrix)
+    public ColorMatrix(Matrix5X5 matrix)
     {
-        _Matrix = matrix;
+        Matrix = matrix;
     }
 
     /// <summary>
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5x5 Matrix => _Matrix;
-
-    private Matrix5x5 _Matrix;
+    public override Matrix5X5 Matrix { get; }
 }

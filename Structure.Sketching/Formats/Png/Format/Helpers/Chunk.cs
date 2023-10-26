@@ -53,7 +53,7 @@ public class Chunk
         Length = length;
         Type = type;
         Data = data;
-        Crc = CalculateCRC();
+        Crc = CalculateCrc();
     }
 
     /// <summary>
@@ -95,14 +95,14 @@ public class Chunk
     /// <returns>The chunk information</returns>
     public static Chunk Read(Stream stream)
     {
-        var Length = ReadLength(stream);
-        if (Length == 0)
+        var length = ReadLength(stream);
+        if (length == 0)
             return null;
-        var TypeBuffer = new byte[4];
-        var Type = ReadType(stream, TypeBuffer);
-        var Data = ReadData(stream, Length);
-        var CRC = ReadCRC(stream, Data, TypeBuffer);
-        return new Chunk(Length, Type, Data, CRC);
+        var typeBuffer = new byte[4];
+        var type = ReadType(stream, typeBuffer);
+        var data = ReadData(stream, length);
+        var crc = ReadCrc(stream, data, typeBuffer);
+        return new Chunk(length, type, data, crc);
     }
 
     /// <summary>
@@ -125,19 +125,19 @@ public class Chunk
     /// <param name="type">The type.</param>
     /// <returns></returns>
     /// <exception cref="ImageException">image is corrupt</exception>
-    private static uint ReadCRC(Stream stream, byte[] data, byte[] type)
+    private static uint ReadCrc(Stream stream, byte[] data, byte[] type)
     {
-        byte[] TempBuffer = new byte[4];
-        var NumberOfBytes = stream.Read(TempBuffer, 0, 4);
-        if (NumberOfBytes != 4)
+        var tempBuffer = new byte[4];
+        var numberOfBytes = stream.Read(tempBuffer, 0, 4);
+        if (numberOfBytes != 4)
             return 0;
-        Array.Reverse(TempBuffer);
-        var TempValue = BitConverter.ToUInt32(TempBuffer, 0);
-        var CRC = new CRC32();
-        CRC.Update(type);
-        if (TempValue != (uint)CRC.Update(data))
+        Array.Reverse(tempBuffer);
+        var tempValue = BitConverter.ToUInt32(tempBuffer, 0);
+        var crc = new Crc32();
+        crc.Update(type);
+        if (tempValue != (uint)crc.Update(data))
             throw new ImageException("image is corrupt");
-        return TempValue;
+        return tempValue;
     }
 
     /// <summary>
@@ -150,9 +150,9 @@ public class Chunk
     /// </returns>
     private static byte[] ReadData(Stream stream, int length)
     {
-        byte[] ReturnValue = new byte[length];
-        stream.Read(ReturnValue, 0, length);
-        return ReturnValue;
+        var returnValue = new byte[length];
+        stream.Read(returnValue, 0, length);
+        return returnValue;
     }
 
     /// <summary>
@@ -162,12 +162,12 @@ public class Chunk
     /// <returns>The length of the chunk</returns>
     private static int ReadLength(Stream stream)
     {
-        byte[] TempBuffer = new byte[4];
-        var NumberOfBytes = stream.Read(TempBuffer, 0, 4);
-        if (NumberOfBytes != 4)
+        var tempBuffer = new byte[4];
+        var numberOfBytes = stream.Read(tempBuffer, 0, 4);
+        if (numberOfBytes != 4)
             return 0;
-        Array.Reverse(TempBuffer);
-        return BitConverter.ToInt32(TempBuffer, 0);
+        Array.Reverse(tempBuffer);
+        return BitConverter.ToInt32(tempBuffer, 0);
     }
 
     /// <summary>
@@ -180,18 +180,18 @@ public class Chunk
     /// </returns>
     private static string ReadType(Stream stream, byte[] typeBuffer)
     {
-        var NumberOfBytes = stream.Read(typeBuffer, 0, 4);
-        if (NumberOfBytes != 4)
+        var numberOfBytes = stream.Read(typeBuffer, 0, 4);
+        if (numberOfBytes != 4)
             return string.Empty;
         return new string(new[] { (char)typeBuffer[0], (char)typeBuffer[1], (char)typeBuffer[2], (char)typeBuffer[3] });
     }
 
-    private uint CalculateCRC()
+    private uint CalculateCrc()
     {
-        var TypeByteArray = Encoding.UTF8.GetBytes(Type);
-        var CRC = new CRC32();
-        CRC.Update(TypeByteArray);
-        return (uint)CRC.Update(Data);
+        var typeByteArray = Encoding.UTF8.GetBytes(Type);
+        var crc = new Crc32();
+        crc.Update(typeByteArray);
+        return (uint)crc.Update(Data);
     }
 
     /// <summary>

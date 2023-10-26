@@ -69,15 +69,15 @@ public class Replace : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* OutputPointer = Pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var outputPointer = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    if (Distance.Euclidean(*OutputPointer, SourceColor) < Epsilon)
+                    if (Distance.Euclidean(*outputPointer, SourceColor) < Epsilon)
                     {
-                        *OutputPointer = TargetColor;
-                        ++OutputPointer;
+                        *outputPointer = TargetColor;
+                        ++outputPointer;
                     }
                 }
             }

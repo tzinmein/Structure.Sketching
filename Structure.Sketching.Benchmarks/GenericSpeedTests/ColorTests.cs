@@ -7,20 +7,20 @@ public class ColorTests
     [Benchmark(Description = "New Color struct")]
     public void NewColorStruct()
     {
-        var TestArray = new TestClasses.ColorStruct[10000];
-        for (int x = 0; x < TestArray.Length; ++x)
+        var testArray = new TestClasses.ColorStruct[10000];
+        for (var x = 0; x < testArray.Length; ++x)
         {
-            TestArray[x] *= 3;
+            testArray[x] *= 3;
         }
     }
 
     [Benchmark(Baseline = true, Description = "Old Color struct")]
     public void OldColorStruct()
     {
-        var TestArray = new Colors.Color[10000];
-        for (int x = 0; x < TestArray.Length; ++x)
+        var testArray = new Colors.Color[10000];
+        for (var x = 0; x < testArray.Length; ++x)
         {
-            TestArray[x] *= 3;
+            testArray[x] *= 3;
         }
     }
 }

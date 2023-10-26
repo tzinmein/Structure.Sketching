@@ -41,7 +41,7 @@ public class Application0 : SegmentBase
     /// <value>
     ///   <c>true</c> if this instance is jfif; otherwise, <c>false</c>.
     /// </value>
-    public bool IsJFIF { get; set; }
+    public bool IsJfif { get; set; }
 
     /// <summary>
     /// Setups the specified segments.
@@ -60,7 +60,7 @@ public class Application0 : SegmentBase
         Bytes.ReadFull(TempData, 0, 5);
         n -= 5;
 
-        IsJFIF = TempData[0] == 'J' && TempData[1] == 'F' && TempData[2] == 'I' && TempData[3] == 'F' && TempData[4] == '\x00';
+        IsJfif = TempData[0] == 'J' && TempData[1] == 'F' && TempData[2] == 'I' && TempData[3] == 'F' && TempData[4] == '\x00';
         if (n > 0)
             Bytes.Ignore(n);
     }

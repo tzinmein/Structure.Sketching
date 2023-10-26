@@ -23,13 +23,13 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats;
 /// RGB 24bit pixel format
 /// </summary>
 /// <seealso cref="Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces.IPixelFormat"/>
-public unsafe class RGB24bit : PixelFormatBase
+public unsafe class Rgb24Bit : PixelFormatBase
 {
     /// <summary>
     /// The bytes per pixel
     /// </summary>
     /// <value>The BPP.</value>
-    public override double BPP => 3;
+    public override double Bpp => 3;
 
     /// <summary>
     /// Decodes the specified data.
@@ -40,39 +40,39 @@ public unsafe class RGB24bit : PixelFormatBase
     /// <returns>The decoded data</returns>
     public override byte[] Decode(Header header, byte[] data, Palette palette)
     {
-        int width = header.Width;
-        int height = header.Height;
-        int alignment = (4 - width * (int)BPP % 4) % 4;
-        byte[] ReturnValue = new byte[width * height * 4];
+        var width = header.Width;
+        var height = header.Height;
+        var alignment = (4 - width * (int)Bpp % 4) % 4;
+        var returnValue = new byte[width * height * 4];
         Parallel.For(0, height, y =>
         {
-            int SourceY = height - y - 1;
-            if (SourceY < 0)
-                SourceY = 0;
-            if (SourceY >= height)
-                SourceY = height - 1;
-            int SourceRowOffset = SourceY * (width * (int)BPP + alignment);
-            int DestinationY = y;
-            int DestinationRowOffset = DestinationY * width * 4;
-            fixed (byte* DataFixed = &data[SourceRowOffset])
-            fixed (byte* ReturnValueFixed = &ReturnValue[DestinationRowOffset])
+            var sourceY = height - y - 1;
+            if (sourceY < 0)
+                sourceY = 0;
+            if (sourceY >= height)
+                sourceY = height - 1;
+            var sourceRowOffset = sourceY * (width * (int)Bpp + alignment);
+            var destinationY = y;
+            var destinationRowOffset = destinationY * width * 4;
+            fixed (byte* dataFixed = &data[sourceRowOffset])
+            fixed (byte* returnValueFixed = &returnValue[destinationRowOffset])
             {
-                byte* DataFixed2 = DataFixed;
-                byte* ReturnValueFixed2 = ReturnValueFixed;
-                for (int x = 0; x < width; ++x)
+                var dataFixed2 = dataFixed;
+                var returnValueFixed2 = returnValueFixed;
+                for (var x = 0; x < width; ++x)
                 {
-                    *(ReturnValueFixed2 + 2) = *DataFixed2;
-                    ++DataFixed2;
-                    *(ReturnValueFixed2 + 1) = *DataFixed2;
-                    ++DataFixed2;
-                    *ReturnValueFixed2 = *DataFixed2;
-                    ++DataFixed2;
-                    *(ReturnValueFixed2 + 3) = 255;
-                    ReturnValueFixed2 += 4;
+                    *(returnValueFixed2 + 2) = *dataFixed2;
+                    ++dataFixed2;
+                    *(returnValueFixed2 + 1) = *dataFixed2;
+                    ++dataFixed2;
+                    *returnValueFixed2 = *dataFixed2;
+                    ++dataFixed2;
+                    *(returnValueFixed2 + 3) = 255;
+                    returnValueFixed2 += 4;
                 }
             }
         });
-        return ReturnValue;
+        return returnValue;
     }
 
     /// <summary>
@@ -84,37 +84,37 @@ public unsafe class RGB24bit : PixelFormatBase
     /// <returns>The encoded data</returns>
     public override byte[] Encode(Header header, byte[] data, Palette palette)
     {
-        int width = header.Width;
-        int height = header.Height;
-        int alignment = (4 - width * (int)BPP % 4) % 4;
-        var ReturnValue = new byte[(width * (int)BPP + alignment) * height];
+        var width = header.Width;
+        var height = header.Height;
+        var alignment = (4 - width * (int)Bpp % 4) % 4;
+        var returnValue = new byte[(width * (int)Bpp + alignment) * height];
         Parallel.For(0, height, y =>
         {
-            int SourceY = height - y - 1;
-            if (SourceY < 0)
-                SourceY = 0;
-            if (SourceY >= height)
-                SourceY = height - 1;
-            int SourceRowOffset = SourceY * width * 4;
-            int DestinationY = y;
-            int DestinationRowOffset = DestinationY * (width * (int)BPP + alignment);
-            fixed (byte* DataFixed = &data[SourceRowOffset])
-            fixed (byte* ReturnValueFixed = &ReturnValue[DestinationRowOffset])
+            var sourceY = height - y - 1;
+            if (sourceY < 0)
+                sourceY = 0;
+            if (sourceY >= height)
+                sourceY = height - 1;
+            var sourceRowOffset = sourceY * width * 4;
+            var destinationY = y;
+            var destinationRowOffset = destinationY * (width * (int)Bpp + alignment);
+            fixed (byte* dataFixed = &data[sourceRowOffset])
+            fixed (byte* returnValueFixed = &returnValue[destinationRowOffset])
             {
-                byte* DataFixed2 = DataFixed;
-                byte* ReturnValueFixed2 = ReturnValueFixed;
-                for (int x = 0; x < width; ++x)
+                var dataFixed2 = dataFixed;
+                var returnValueFixed2 = returnValueFixed;
+                for (var x = 0; x < width; ++x)
                 {
-                    *ReturnValueFixed2 = *(DataFixed2 + 2);
-                    ++ReturnValueFixed2;
-                    *ReturnValueFixed2 = *(DataFixed2 + 1);
-                    ++ReturnValueFixed2;
-                    *ReturnValueFixed2 = *DataFixed2;
-                    ++ReturnValueFixed2;
-                    DataFixed2 += 4;
+                    *returnValueFixed2 = *(dataFixed2 + 2);
+                    ++returnValueFixed2;
+                    *returnValueFixed2 = *(dataFixed2 + 1);
+                    ++returnValueFixed2;
+                    *returnValueFixed2 = *dataFixed2;
+                    ++returnValueFixed2;
+                    dataFixed2 += 4;
                 }
             }
         });
-        return ReturnValue;
+        return returnValue;
     }
 }

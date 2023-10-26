@@ -25,7 +25,7 @@ public class Decoder : FormatTestBase
     [Fact]
     public void CanDecodeByteArray()
     {
-        byte[] Header = {
+        byte[] header = {
             0x89,
             0x50,
             0x4E,
@@ -35,7 +35,7 @@ public class Decoder : FormatTestBase
             0x1A,
             0x0A
         };
-        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode(Header));
+        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode(header));
         Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes((int)19777)));
         Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes((int)19779)));
     }
@@ -54,7 +54,7 @@ public class Decoder : FormatTestBase
     [Fact]
     public void CanDecodeStream()
     {
-        byte[] Header = {
+        byte[] header = {
             0x89,
             0x50,
             0x4E,
@@ -64,7 +64,7 @@ public class Decoder : FormatTestBase
             0x1A,
             0x0A
         };
-        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(Header)));
+        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(header)));
         Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19777))));
         Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19779))));
     }
@@ -72,12 +72,12 @@ public class Decoder : FormatTestBase
     [Fact]
     public void Decode()
     {
-        using var TempFile = File.OpenRead("./TestImages/Formats/Png/splash.png");
-        var TempDecoder = new Structure.Sketching.Formats.Png.Decoder();
-        var TempImage = TempDecoder.Decode(TempFile);
-        Assert.Equal(241500, TempImage.Pixels.Length);
-        Assert.Equal(500, TempImage.Width);
-        Assert.Equal(483, TempImage.Height);
-        Assert.Equal(500d / 483d, TempImage.PixelRatio);
+        using var tempFile = File.OpenRead("./TestImages/Formats/Png/splash.png");
+        var tempDecoder = new Structure.Sketching.Formats.Png.Decoder();
+        var tempImage = tempDecoder.Decode(tempFile);
+        Assert.Equal(241500, tempImage.Pixels.Length);
+        Assert.Equal(500, tempImage.Width);
+        Assert.Equal(483, tempImage.Height);
+        Assert.Equal(500d / 483d, tempImage.PixelRatio);
     }
 }

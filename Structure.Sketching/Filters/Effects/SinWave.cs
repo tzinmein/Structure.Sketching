@@ -69,35 +69,35 @@ public class SinWave : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var Result = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, Result, Result.Length);
+        var result = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, result, result.Length);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    double Value1 = 0;
-                    double Value2 = 0;
+                    double value1 = 0;
+                    double value2 = 0;
                     if (Direction == Direction.RightToLeft || Direction == Direction.LeftToRight)
-                        Value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
+                        value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
                     if (Direction == Direction.BottomToTop || Direction == Direction.TopToBottom)
-                        Value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
-                    Value1 = y - (int)Value1;
-                    Value2 = x - (int)Value2;
-                    while (Value1 < 0)
-                        Value1 += image.Height;
-                    while (Value2 < 0)
-                        Value2 += image.Width;
-                    while (Value1 >= image.Height)
-                        Value1 -= image.Height;
-                    while (Value2 >= image.Width)
-                        Value2 -= image.Width;
-                    Result[y * image.Width + x] = image.Pixels[(int)Value1 * image.Width + (int)Value2];
+                        value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
+                    value1 = y - (int)value1;
+                    value2 = x - (int)value2;
+                    while (value1 < 0)
+                        value1 += image.Height;
+                    while (value2 < 0)
+                        value2 += image.Width;
+                    while (value1 >= image.Height)
+                        value1 -= image.Height;
+                    while (value2 >= image.Width)
+                        value2 -= image.Width;
+                    result[y * image.Width + x] = image.Pixels[(int)value1 * image.Width + (int)value2];
                 }
             }
         });
-        return image.ReCreate(image.Width, image.Height, Result);
+        return image.ReCreate(image.Width, image.Height, result);
     }
 }

@@ -104,7 +104,7 @@ public class Huffman
             {
                 bytes.EnsureNBits(8);
             }
-            catch (MissingFF00)
+            catch (MissingFf00)
             {
                 if (bytes.UnreadableBytes != 0)
                     bytes.UnreadByteStuffedByte();
@@ -118,7 +118,7 @@ public class Huffman
             }
         }
 
-        ushort v = LookUpTable[(bytes.Bits.Accumulator >> (bytes.Bits.NumberOfUnreadBits - 8)) & 0xff];
+        var v = LookUpTable[(bytes.Bits.Accumulator >> (bytes.Bits.NumberOfUnreadBits - 8)) & 0xff];
         if (v != 0)
         {
             var n = (byte)((v & 0xff) - 1);
@@ -128,8 +128,8 @@ public class Huffman
         }
 
         slowPath:
-        int code = 0;
-        for (int i = 0; i < 16; i++)
+        var code = 0;
+        for (var i = 0; i < 16; i++)
         {
             if (bytes.Bits.NumberOfUnreadBits == 0)
                 bytes.EnsureNBits(1);

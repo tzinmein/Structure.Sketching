@@ -27,7 +27,7 @@ public class HuffmanLookUpTable
     /// <param name="spec">The spec.</param>
     public HuffmanLookUpTable(HuffmanSpec spec)
     {
-        int maxValue = 0;
+        var maxValue = 0;
 
         foreach (var v in spec.Values)
         {
@@ -37,13 +37,13 @@ public class HuffmanLookUpTable
 
         Values = new uint[maxValue + 1];
 
-        int code = 0;
-        int k = 0;
+        var code = 0;
+        var k = 0;
 
-        for (int i = 0; i < spec.Count.Length; i++)
+        for (var i = 0; i < spec.Count.Length; i++)
         {
-            int nBits = (i + 1) << 24;
-            for (int j = 0; j < spec.Count[i]; j++)
+            var nBits = (i + 1) << 24;
+            for (var j = 0; j < spec.Count[i]; j++)
             {
                 Values[spec.Values[k]] = (uint)(nBits | code);
                 code++;

@@ -116,39 +116,39 @@ public class File : FileBase
         {
             ColorTable = ColorTable.Read(stream, ScreenDescriptor.GlobalColorTableSize);
         }
-        var Flag = stream.ReadByte();
-        while (Flag != SectionTypes.Terminator)
+        var flag = stream.ReadByte();
+        while (flag != SectionTypes.Terminator)
         {
-            if (Flag == SectionTypes.ImageLabel)
+            if (flag == SectionTypes.ImageLabel)
             {
                 Frames.Add(Frame.Read(stream, ColorTable, GraphicsControlExtension, ScreenDescriptor, Frames));
             }
-            else if (Flag == SectionTypes.ExtensionIntroducer)
+            else if (flag == SectionTypes.ExtensionIntroducer)
             {
-                var Label = (SectionTypes)stream.ReadByte();
-                if (Label == SectionTypes.GraphicControlLabel)
+                var label = (SectionTypes)stream.ReadByte();
+                if (label == SectionTypes.GraphicControlLabel)
                 {
                     GraphicsControlExtension = GraphicsControl.Read(stream);
                 }
-                else if (Label == SectionTypes.CommentLabel)
+                else if (label == SectionTypes.CommentLabel)
                 {
                     Comment.Read(stream);
                 }
-                else if (Label == SectionTypes.ApplicationExtensionLabel)
+                else if (label == SectionTypes.ApplicationExtensionLabel)
                 {
                     ApplicationExtension.Read(stream);
                 }
-                else if (Label == SectionTypes.PlainTextLabel)
+                else if (label == SectionTypes.PlainTextLabel)
                 {
                     PlainText.Read(stream);
                 }
             }
-            else if (Flag == SectionTypes.EndIntroducer)
+            else if (flag == SectionTypes.EndIntroducer)
             {
                 break;
             }
 
-            Flag = stream.ReadByte();
+            flag = stream.ReadByte();
         }
         return this;
     }
@@ -161,8 +161,8 @@ public class File : FileBase
     /// <returns>True if it writes successfully, false otherwise.</returns>
     public override bool Write(BinaryWriter writer, Animation animation)
     {
-        var Quantized = Quantizer.Quantize(animation[0], Quality);
-        LoadAnimation(animation, Quantized);
+        var quantized = Quantizer.Quantize(animation[0], Quality);
+        LoadAnimation(animation, quantized);
         WriteToFile(writer);
         return true;
     }
@@ -175,8 +175,8 @@ public class File : FileBase
     /// <returns>True if it writes successfully, false otherwise.</returns>
     public override bool Write(BinaryWriter stream, Image image)
     {
-        var Quantized = Quantizer.Quantize(image, Quality);
-        LoadImage(image, Quantized);
+        var quantized = Quantizer.Quantize(image, Quality);
+        LoadImage(image, quantized);
         WriteToFile(stream);
         return true;
     }
@@ -187,8 +187,8 @@ public class File : FileBase
     /// <returns>The animation version of the file</returns>
     protected override Animation ToAnimation()
     {
-        short Delay = (GraphicsControlExtension ?? new GraphicsControl(0, 0, false, Enums.DisposalMethod.Undefined)).Delay;
-        return new Animation(Frames.Select(x => new Image(ScreenDescriptor.Width, ScreenDescriptor.Height, x.Data)), Delay);
+        var delay = (GraphicsControlExtension ?? new GraphicsControl(0, 0, false, Enums.DisposalMethod.Undefined)).Delay;
+        return new Animation(Frames.Select(x => new Image(ScreenDescriptor.Width, ScreenDescriptor.Height, x.Data)), delay);
     }
 
     /// <summary>
@@ -207,20 +207,20 @@ public class File : FileBase
     /// <param name="quantizedImage">The quantized image.</param>
     private void LoadAnimation(Animation animation, QuantizedImage quantizedImage)
     {
-        var TempImage = animation[0];
-        var TransparencyIndex = quantizedImage.TransparentIndex;
+        var tempImage = animation[0];
+        var transparencyIndex = quantizedImage.TransparentIndex;
 
         Header = new FileHeader();
-        ScreenDescriptor = new LogicalScreenDescriptor(TempImage, TransparencyIndex, BitDepth);
-        Frames.Add(new Frame(TempImage, quantizedImage, BitDepth, animation.Delay));
+        ScreenDescriptor = new LogicalScreenDescriptor(tempImage, transparencyIndex, BitDepth);
+        Frames.Add(new Frame(tempImage, quantizedImage, BitDepth, animation.Delay));
         if (animation.Count > 1)
         {
             AppExtension = new ApplicationExtension(animation.RepeatCount, animation.Count);
-            for (int x = 1; x < animation.Count; ++x)
+            for (var x = 1; x < animation.Count; ++x)
             {
                 quantizedImage = Quantizer.Quantize(animation[x], Quality);
-                TempImage = animation[x];
-                Frames.Add(new Frame(TempImage, quantizedImage, BitDepth, animation.Delay));
+                tempImage = animation[x];
+                Frames.Add(new Frame(tempImage, quantizedImage, BitDepth, animation.Delay));
             }
         }
     }
@@ -239,14 +239,14 @@ public class File : FileBase
 
     private void WriteToFile(BinaryWriter writer)
     {
-        using EndianBinaryWriter writer2 = new EndianBinaryWriter(EndianBitConverterBase.LittleEndian, writer.BaseStream);
+        using var writer2 = new EndianBinaryWriter(EndianBitConverterBase.LittleEndian, writer.BaseStream);
         Header.Write(writer2);
         ScreenDescriptor.Write(writer2);
         Frames[0].Write(writer2);
         if (Frames.Count > 1)
         {
             AppExtension.Write(writer2);
-            for (int x = 0; x < Frames.Count; ++x)
+            for (var x = 0; x < Frames.Count; ++x)
             {
                 Frames[x].Write(writer2);
             }

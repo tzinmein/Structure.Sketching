@@ -8,13 +8,13 @@ namespace Structure.Sketching.Numerics;
 /// <summary>
 /// Class used to create an RGB Histogram
 /// </summary>
-public class HSVHistogram : IHistogram
+public class HsvHistogram : IHistogram
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="HSVHistogram"/> class.
+    /// Initializes a new instance of the <see cref="HsvHistogram"/> class.
     /// </summary>
     /// <param name="image">The image to load.</param>
-    public HSVHistogram(Image image = null)
+    public HsvHistogram(Image image = null)
     {
         V = new double[101];
         if (image != null)
@@ -26,9 +26,9 @@ public class HSVHistogram : IHistogram
     /// </summary>
     public double[] V { get; set; }
 
-    private int Height;
+    private int _height;
 
-    private int Width;
+    private int _width;
 
     /// <summary>
     /// Equalizes the histogram
@@ -36,28 +36,28 @@ public class HSVHistogram : IHistogram
     /// <returns>this</returns>
     public IHistogram Equalize()
     {
-        double TotalPixels = Width * Height;
-        int VMax = int.MinValue;
-        int VMin = int.MaxValue;
-        for (int x = 0; x < 101; ++x)
+        double totalPixels = _width * _height;
+        var vMax = int.MinValue;
+        var vMin = int.MaxValue;
+        for (var x = 0; x < 101; ++x)
         {
             if (V[x] > 0f)
             {
-                if (VMax < x)
-                    VMax = x;
-                if (VMin > x)
-                    VMin = x;
+                if (vMax < x)
+                    vMax = x;
+                if (vMin > x)
+                    vMin = x;
             }
         }
-        double PreviousV = V[0];
-        V[0] = V[0] / TotalPixels;
-        for (int x = 1; x < 101; ++x)
+        var previousV = V[0];
+        V[0] = V[0] / totalPixels;
+        for (var x = 1; x < 101; ++x)
         {
-            PreviousV += V[x];
-            V[x] = (PreviousV - V[VMin]) / (TotalPixels - V[VMin]);
+            previousV += V[x];
+            V[x] = (previousV - V[vMin]) / (totalPixels - V[vMin]);
         }
-        Width = 256;
-        Height = 1;
+        _width = 256;
+        _height = 1;
         return this;
     }
 
@@ -68,8 +68,8 @@ public class HSVHistogram : IHistogram
     /// <returns>The resulting color</returns>
     public Color EqualizeColor(Color color)
     {
-        var TempHSV = (HSV)color;
-        return new HSV(TempHSV.Hue, TempHSV.Saturation, V[(int)Math.Round(TempHSV.Value * 100, MidpointRounding.AwayFromZero)]);
+        var tempHsv = (Hsv)color;
+        return new Hsv(tempHsv.Hue, tempHsv.Saturation, V[(int)Math.Round(tempHsv.Value * 100, MidpointRounding.AwayFromZero)]);
     }
 
     /// <summary>
@@ -79,13 +79,13 @@ public class HSVHistogram : IHistogram
     /// <returns>This</returns>
     public IHistogram Load(params Color[] colors)
     {
-        Width = colors.Length;
-        Height = 1;
+        _width = colors.Length;
+        _height = 1;
         Array.Clear(V, 0, V.Length);
-        for (int x = 0; x < colors.Length; ++x)
+        for (var x = 0; x < colors.Length; ++x)
         {
-            var TempHSV = (HSV)colors[x];
-            ++V[(int)(TempHSV.Value * 100)];
+            var tempHsv = (Hsv)colors[x];
+            ++V[(int)(tempHsv.Value * 100)];
         }
         return this;
     }
@@ -97,22 +97,22 @@ public class HSVHistogram : IHistogram
     /// <returns>this</returns>
     public unsafe IHistogram LoadImage(Image image)
     {
-        Width = image.Width;
-        Height = image.Height;
+        _width = image.Width;
+        _height = image.Height;
         Array.Clear(V, 0, V.Length);
-        fixed (Color* TargetPointer = &image.Pixels[0])
+        fixed (Color* targetPointer = &image.Pixels[0])
         {
-            Color* TargetPointer2 = TargetPointer;
-            for (int x = 0; x < image.Width; ++x)
+            var targetPointer2 = targetPointer;
+            for (var x = 0; x < image.Width; ++x)
             {
-                for (int y = 0; y < image.Height; ++y)
+                for (var y = 0; y < image.Height; ++y)
                 {
-                    var TempR = (*TargetPointer2).Red;
-                    var TempG = (*TargetPointer2).Green;
-                    var TempB = (*TargetPointer2).Blue;
-                    ++TargetPointer2;
-                    var TempHSV = (HSV)new Color(TempR, TempG, TempB);
-                    ++V[(int)(TempHSV.Value * 100)];
+                    var tempR = (*targetPointer2).Red;
+                    var tempG = (*targetPointer2).Green;
+                    var tempB = (*targetPointer2).Blue;
+                    ++targetPointer2;
+                    var tempHsv = (Hsv)new Color(tempR, tempG, tempB);
+                    ++V[(int)(tempHsv.Value * 100)];
                 }
             }
         }
@@ -125,12 +125,12 @@ public class HSVHistogram : IHistogram
     /// <returns>this</returns>
     public IHistogram Normalize()
     {
-        double TotalPixels = Width * Height;
-        if (TotalPixels <= 0)
+        double totalPixels = _width * _height;
+        if (totalPixels <= 0)
             return this;
-        for (int x = 0; x < 101; ++x)
+        for (var x = 0; x < 101; ++x)
         {
-            V[x] /= TotalPixels;
+            V[x] /= totalPixels;
         }
         return this;
     }

@@ -16,21 +16,21 @@ public abstract class TestBaseClass
 
     protected bool CheckFileCorrect(string expectedFilePath, string outputFilePath)
     {
-        using FileStream OutputStream = File.OpenRead(outputFilePath);
-        using FileStream ExpectedStream = File.OpenRead(expectedFilePath);
-        return ReadBinary(OutputStream).SequenceEqual(ReadBinary(ExpectedStream));
+        using var outputStream = File.OpenRead(outputFilePath);
+        using var expectedStream = File.OpenRead(expectedFilePath);
+        return ReadBinary(outputStream).SequenceEqual(ReadBinary(expectedStream));
     }
 
     protected byte[] ReadBinary(FileStream stream)
     {
-        byte[] Buffer = new byte[1024];
-        using MemoryStream Temp = new();
+        var buffer = new byte[1024];
+        using MemoryStream temp = new();
         while (true)
         {
-            var Count = stream.Read(Buffer, 0, Buffer.Length);
-            if (Count <= 0)
-                return Temp.ToArray();
-            Temp.Write(Buffer, 0, Count);
+            var count = stream.Read(buffer, 0, buffer.Length);
+            if (count <= 0)
+                return temp.ToArray();
+            temp.Write(buffer, 0, count);
         }
     }
 }

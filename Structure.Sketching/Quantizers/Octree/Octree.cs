@@ -136,7 +136,7 @@ public class Octree
             Reduce();
         }
         var palette = new List<Bgra>(Leaves);
-        int paletteIndex = 0;
+        var paletteIndex = 0;
         Root.ConstructPalette(palette, ref paletteIndex);
         return palette.ToList();
     }
@@ -155,12 +155,12 @@ public class Octree
     /// </summary>
     private void Reduce()
     {
-        int index = MaxColorBits - 1;
+        var index = MaxColorBits - 1;
         while (index > 0 && ReducibleNodes[index] == null)
         {
             index--;
         }
-        Node node = ReducibleNodes[index];
+        var node = ReducibleNodes[index];
         ReducibleNodes[index] = node.NextReducible;
         Leaves -= node.Reduce();
         PreviousNode = null;

@@ -8,19 +8,19 @@ public class Property
     [Fact]
     public void Create()
     {
-        var TestObject = new Structure.Sketching.Formats.Png.Format.Property("TestKey", "TestValue");
-        Assert.Equal("TestKey", TestObject.Key);
-        Assert.Equal("TestValue", TestObject.Value);
-        TestObject = new Structure.Sketching.Formats.Png.Format.Property(null, null);
-        Assert.Equal("", TestObject.Key);
-        Assert.Equal("", TestObject.Value);
+        var testObject = new Structure.Sketching.Formats.Png.Format.Property("TestKey", "TestValue");
+        Assert.Equal("TestKey", testObject.Key);
+        Assert.Equal("TestValue", testObject.Value);
+        testObject = new Structure.Sketching.Formats.Png.Format.Property(null, null);
+        Assert.Equal("", testObject.Key);
+        Assert.Equal("", testObject.Value);
     }
 
     [Fact]
     public void ReadFromChunk()
     {
-        Structure.Sketching.Formats.Png.Format.Property TestObject = new Sketching.Formats.Png.Format.Helpers.Chunk(10, "Something", Encoding.UTF8.GetBytes("Testing\0THIS"), 1234);
-        Assert.Equal("Testing", TestObject.Key);
-        Assert.Equal("THIS", TestObject.Value);
+        Structure.Sketching.Formats.Png.Format.Property testObject = new Sketching.Formats.Png.Format.Helpers.Chunk(10, "Something", Encoding.UTF8.GetBytes("Testing\0THIS"), 1234);
+        Assert.Equal("Testing", testObject.Key);
+        Assert.Equal("THIS", testObject.Value);
     }
 }

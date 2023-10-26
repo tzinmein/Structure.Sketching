@@ -38,19 +38,19 @@ public class StretchContrast : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        byte[] MinValue = new byte[3];
-        byte[] MaxValue = new byte[3];
-        GetMinMaxPixel(MinValue, MaxValue, image);
+        var minValue = new byte[3];
+        var maxValue = new byte[3];
+        GetMinMaxPixel(minValue, maxValue, image);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    image.Pixels[y * image.Width + x].Red = Map(image.Pixels[y * image.Width + x].Red, MinValue[0], MaxValue[0]);
-                    image.Pixels[y * image.Width + x].Green = Map(image.Pixels[y * image.Width + x].Green, MinValue[1], MaxValue[1]);
-                    image.Pixels[y * image.Width + x].Blue = Map(image.Pixels[y * image.Width + x].Blue, MinValue[2], MaxValue[2]);
+                    image.Pixels[y * image.Width + x].Red = Map(image.Pixels[y * image.Width + x].Red, minValue[0], maxValue[0]);
+                    image.Pixels[y * image.Width + x].Green = Map(image.Pixels[y * image.Width + x].Green, minValue[1], maxValue[1]);
+                    image.Pixels[y * image.Width + x].Blue = Map(image.Pixels[y * image.Width + x].Blue, minValue[2], maxValue[2]);
                 }
             }
         });
@@ -61,36 +61,36 @@ public class StretchContrast : IFilter
     {
         minValue[0] = minValue[1] = minValue[2] = 255;
         maxValue[0] = maxValue[1] = maxValue[2] = 0;
-        for (int x = 0; x < image.Width; ++x)
+        for (var x = 0; x < image.Width; ++x)
         {
-            for (int y = 0; y < image.Height; ++y)
+            for (var y = 0; y < image.Height; ++y)
             {
-                var TempR = image.Pixels[y * image.Width + x].Red;
-                var TempG = image.Pixels[y * image.Width + x].Green;
-                var TempB = image.Pixels[y * image.Width + x].Blue;
-                if (minValue[0] > TempR)
-                    minValue[0] = TempR;
-                if (maxValue[0] < TempR)
-                    maxValue[0] = TempR;
+                var tempR = image.Pixels[y * image.Width + x].Red;
+                var tempG = image.Pixels[y * image.Width + x].Green;
+                var tempB = image.Pixels[y * image.Width + x].Blue;
+                if (minValue[0] > tempR)
+                    minValue[0] = tempR;
+                if (maxValue[0] < tempR)
+                    maxValue[0] = tempR;
 
-                if (minValue[1] > TempG)
-                    minValue[1] = TempG;
-                if (maxValue[1] < TempG)
-                    maxValue[1] = TempG;
+                if (minValue[1] > tempG)
+                    minValue[1] = tempG;
+                if (maxValue[1] < tempG)
+                    maxValue[1] = tempG;
 
-                if (minValue[2] > TempB)
-                    minValue[2] = TempB;
-                if (maxValue[2] < TempB)
-                    maxValue[2] = TempB;
+                if (minValue[2] > tempB)
+                    minValue[2] = tempB;
+                if (maxValue[2] < tempB)
+                    maxValue[2] = tempB;
             }
         }
     }
 
     private byte Map(byte v, byte min, byte max)
     {
-        float TempVal = v - min;
-        TempVal /= max - min;
-        TempVal *= 255;
-        return (byte)TempVal.Clamp(0, 255);
+        float tempVal = v - min;
+        tempVal /= max - min;
+        tempVal *= 255;
+        return (byte)tempVal.Clamp(0, 255);
     }
 }

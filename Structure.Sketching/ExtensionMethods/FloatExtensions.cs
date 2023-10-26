@@ -28,37 +28,37 @@ public static class Extensions
     /// <summary>
     /// Clamps the value based on the minimum and maximum specified.
     /// </summary>
-    /// <param name="Value">The value.</param>
-    /// <param name="Min">The minimum.</param>
-    /// <param name="Max">The maximum.</param>
+    /// <param name="value">The value.</param>
+    /// <param name="min">The minimum.</param>
+    /// <param name="max">The maximum.</param>
     /// <returns>The clamped value.</returns>
-    public static float Clamp(this float Value, float Min, float Max)
+    public static float Clamp(this float value, float min, float max)
     {
-        return Value < Min ? Min : Value > Max ? Max : Value;
+        return value < min ? min : value > max ? max : value;
     }
 
     /// <summary>
     /// Clamps the value based on the minimum and maximum specified.
     /// </summary>
-    /// <param name="Value">The value.</param>
-    /// <param name="Min">The minimum.</param>
-    /// <param name="Max">The maximum.</param>
+    /// <param name="value">The value.</param>
+    /// <param name="min">The minimum.</param>
+    /// <param name="max">The maximum.</param>
     /// <returns>The clamped value.</returns>
-    public static double Clamp(this double Value, double Min, double Max)
+    public static double Clamp(this double value, double min, double max)
     {
-        return Value < Min ? Min : Value > Max ? Max : Value;
+        return value < min ? min : value > max ? max : value;
     }
 
     /// <summary>
     /// Clamps the value based on the minimum and maximum specified.
     /// </summary>
-    /// <param name="Value">The value.</param>
-    /// <param name="Min">The minimum.</param>
-    /// <param name="Max">The maximum.</param>
+    /// <param name="value">The value.</param>
+    /// <param name="min">The minimum.</param>
+    /// <param name="max">The maximum.</param>
     /// <returns>The clamped value.</returns>
-    public static int Clamp(this int Value, int Min, int Max)
+    public static int Clamp(this int value, int min, int max)
     {
-        return Value < Min ? Min : Value > Max ? Max : Value;
+        return value < min ? min : value > max ? max : value;
     }
 
     /// <summary>
@@ -82,11 +82,11 @@ public static class Extensions
         {
             return Array.Empty<Vector4>();
         }
-        var NewData = new List<Vector4>();
-        for (int x = 0; x < values.Length; x += 4)
+        var newData = new List<Vector4>();
+        for (var x = 0; x < values.Length; x += 4)
         {
-            NewData.Add(new Vector4(values[x], values[x + 1], values[x + 2], values[x + 3]));
+            newData.Add(new Vector4(values[x], values[x + 1], values[x + 2], values[x + 3]));
         }
-        return NewData.ToArray();
+        return newData.ToArray();
     }
 }

@@ -22,62 +22,62 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers;
 /// <summary>
 /// LZW Encoder class
 /// </summary>
-public class LZWEncoder
+public class LzwEncoder
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LZWEncoder"/> class.
+    /// Initializes a new instance of the <see cref="LzwEncoder"/> class.
     /// </summary>
     /// <param name="indexedPixels">The indexed pixels.</param>
     /// <param name="colorDepth">The color depth.</param>
-    public LZWEncoder(byte[] indexedPixels, int colorDepth)
+    public LzwEncoder(byte[] indexedPixels, int colorDepth)
     {
-        pixelArray = indexedPixels;
-        initialCodeSize = Math.Max(2, colorDepth);
+        _pixelArray = indexedPixels;
+        _initialCodeSize = Math.Max(2, colorDepth);
     }
 
     private const int Bits = 12;
     private const int Eof = -1;
     private const int HashSize = 5003;
 
-    private readonly byte[] accumulators = new byte[256];
+    private readonly byte[] _accumulators = new byte[256];
 
-    private readonly int[] codeTable = new int[HashSize];
-    private readonly int[] hashTable = new int[HashSize];
-    private readonly int initialCodeSize;
+    private readonly int[] _codeTable = new int[HashSize];
+    private readonly int[] _hashTable = new int[HashSize];
+    private readonly int _initialCodeSize;
 
-    private readonly int[] masks =
+    private readonly int[] _masks =
     {
         0x0000, 0x0001, 0x0003, 0x0007, 0x000F, 0x001F, 0x003F, 0x007F, 0x00FF,
         0x01FF, 0x03FF, 0x07FF, 0x0FFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF
     };
 
-    private readonly byte[] pixelArray;
+    private readonly byte[] _pixelArray;
 
-    private int accumulatorCount;
-    private int bitCount;
+    private int _accumulatorCount;
+    private int _bitCount;
 
-    private int clearCode;
+    private int _clearCode;
 
-    private bool clearFlag;
+    private bool _clearFlag;
 
-    private int curPixel;
-    private int currentAccumulator;
+    private int _curPixel;
+    private int _currentAccumulator;
 
-    private int currentBits;
+    private int _currentBits;
 
-    private int eofCode;
+    private int _eofCode;
 
-    private int freeEntry;
+    private int _freeEntry;
 
-    private int globalInitialBits;
+    private int _globalInitialBits;
 
-    private readonly int hsize = HashSize;
+    private readonly int _hsize = HashSize;
 
-    private readonly int maxbits = Bits;
+    private readonly int _maxbits = Bits;
 
-    private int maxcode;
+    private int _maxcode;
 
-    private readonly int maxmaxcode = 1 << Bits;
+    private readonly int _maxmaxcode = 1 << Bits;
 
     /// <summary>
     /// Encodes the specified stream.
@@ -85,9 +85,9 @@ public class LZWEncoder
     /// <param name="stream">The stream.</param>
     public void Encode(Stream stream)
     {
-        stream.WriteByte((byte)initialCodeSize);
-        curPixel = 0;
-        Compress(initialCodeSize + 1, stream);
+        stream.WriteByte((byte)_initialCodeSize);
+        _curPixel = 0;
+        Compress(_initialCodeSize + 1, stream);
         stream.WriteByte(SectionTypes.Terminator);
     }
 
@@ -108,8 +108,8 @@ public class LZWEncoder
     /// <param name="stream">The stream.</param>
     private void AddCharacter(byte c, Stream stream)
     {
-        accumulators[accumulatorCount++] = c;
-        if (accumulatorCount >= 254)
+        _accumulators[_accumulatorCount++] = c;
+        if (_accumulatorCount >= 254)
         {
             FlushPacket(stream);
         }
@@ -121,11 +121,11 @@ public class LZWEncoder
     /// <param name="stream">The stream.</param>
     private void ClearBlock(Stream stream)
     {
-        ResetCodeTable(hsize);
-        freeEntry = clearCode + 2;
-        clearFlag = true;
+        ResetCodeTable(_hsize);
+        _freeEntry = _clearCode + 2;
+        _clearFlag = true;
 
-        Output(clearCode, stream);
+        Output(_clearCode, stream);
     }
 
     /// <summary>
@@ -142,49 +142,49 @@ public class LZWEncoder
         int hshift;
 
         // Set up the globals:  globalInitialBits - initial number of bits
-        globalInitialBits = intialBits;
+        _globalInitialBits = intialBits;
 
         // Set up the necessary values
-        clearFlag = false;
-        bitCount = globalInitialBits;
-        maxcode = GetMaxcode(bitCount);
+        _clearFlag = false;
+        _bitCount = _globalInitialBits;
+        _maxcode = GetMaxcode(_bitCount);
 
-        clearCode = 1 << (intialBits - 1);
-        eofCode = clearCode + 1;
-        freeEntry = clearCode + 2;
+        _clearCode = 1 << (intialBits - 1);
+        _eofCode = _clearCode + 1;
+        _freeEntry = _clearCode + 2;
 
-        accumulatorCount = 0; // clear packet
+        _accumulatorCount = 0; // clear packet
 
         ent = NextPixel();
 
         hshift = 0;
-        for (fcode = hsize; fcode < 65536; fcode *= 2)
+        for (fcode = _hsize; fcode < 65536; fcode *= 2)
         {
             ++hshift;
         }
         hshift = 8 - hshift; // set hash code range bound
 
-        hsizeReg = hsize;
+        hsizeReg = _hsize;
 
         ResetCodeTable(hsizeReg); // clear hash table
 
-        Output(clearCode, stream);
+        Output(_clearCode, stream);
 
         while ((c = NextPixel()) != Eof)
         {
-            fcode = (c << maxbits) + ent;
-            int i = (c << hshift) ^ ent /* = 0 */;
+            fcode = (c << _maxbits) + ent;
+            var i = (c << hshift) ^ ent /* = 0 */;
 
-            if (hashTable[i] == fcode)
+            if (_hashTable[i] == fcode)
             {
-                ent = codeTable[i];
+                ent = _codeTable[i];
                 continue;
             }
 
             // Non-empty slot
-            if (hashTable[i] >= 0)
+            if (_hashTable[i] >= 0)
             {
-                int disp = hsizeReg - i;
+                var disp = hsizeReg - i;
                 if (i == 0)
                     disp = 1;
                 do
@@ -194,15 +194,15 @@ public class LZWEncoder
                         i += hsizeReg;
                     }
 
-                    if (hashTable[i] == fcode)
+                    if (_hashTable[i] == fcode)
                     {
-                        ent = codeTable[i];
+                        ent = _codeTable[i];
                         break;
                     }
                 }
-                while (hashTable[i] >= 0);
+                while (_hashTable[i] >= 0);
 
-                if (hashTable[i] == fcode)
+                if (_hashTable[i] == fcode)
                 {
                     continue;
                 }
@@ -210,10 +210,10 @@ public class LZWEncoder
 
             Output(ent, stream);
             ent = c;
-            if (freeEntry < maxmaxcode)
+            if (_freeEntry < _maxmaxcode)
             {
-                codeTable[i] = freeEntry++; // code -> hashtable
-                hashTable[i] = fcode;
+                _codeTable[i] = _freeEntry++; // code -> hashtable
+                _hashTable[i] = fcode;
             }
             else ClearBlock(stream);
         }
@@ -221,7 +221,7 @@ public class LZWEncoder
         // Put out the final code.
         Output(ent, stream);
 
-        Output(eofCode, stream);
+        Output(_eofCode, stream);
     }
 
     /// <summary>
@@ -230,11 +230,11 @@ public class LZWEncoder
     /// <param name="outs">The outs.</param>
     private void FlushPacket(Stream outs)
     {
-        if (accumulatorCount > 0)
+        if (_accumulatorCount > 0)
         {
-            outs.WriteByte((byte)accumulatorCount);
-            outs.Write(accumulators, 0, accumulatorCount);
-            accumulatorCount = 0;
+            outs.WriteByte((byte)_accumulatorCount);
+            outs.Write(_accumulators, 0, _accumulatorCount);
+            _accumulatorCount = 0;
         }
     }
 
@@ -244,16 +244,16 @@ public class LZWEncoder
     /// <returns></returns>
     private int NextPixel()
     {
-        if (curPixel == pixelArray.Length)
+        if (_curPixel == _pixelArray.Length)
         {
             return Eof;
         }
 
-        if (curPixel == pixelArray.Length)
+        if (_curPixel == _pixelArray.Length)
             return Eof;
 
-        curPixel++;
-        return pixelArray[curPixel - 1] & 0xff;
+        _curPixel++;
+        return _pixelArray[_curPixel - 1] & 0xff;
     }
 
     /// <summary>
@@ -263,46 +263,46 @@ public class LZWEncoder
     /// <param name="outs">The outs.</param>
     private void Output(int code, Stream outs)
     {
-        currentAccumulator &= masks[currentBits];
+        _currentAccumulator &= _masks[_currentBits];
 
-        if (currentBits > 0) currentAccumulator |= code << currentBits;
-        else currentAccumulator = code;
+        if (_currentBits > 0) _currentAccumulator |= code << _currentBits;
+        else _currentAccumulator = code;
 
-        currentBits += bitCount;
+        _currentBits += _bitCount;
 
-        while (currentBits >= 8)
+        while (_currentBits >= 8)
         {
-            AddCharacter((byte)(currentAccumulator & 0xff), outs);
-            currentAccumulator >>= 8;
-            currentBits -= 8;
+            AddCharacter((byte)(_currentAccumulator & 0xff), outs);
+            _currentAccumulator >>= 8;
+            _currentBits -= 8;
         }
 
         // If the next entry is going to be too big for the code size,
         // then increase it, if possible.
-        if (freeEntry > maxcode || clearFlag)
+        if (_freeEntry > _maxcode || _clearFlag)
         {
-            if (clearFlag)
+            if (_clearFlag)
             {
-                maxcode = GetMaxcode(bitCount = globalInitialBits);
-                clearFlag = false;
+                _maxcode = GetMaxcode(_bitCount = _globalInitialBits);
+                _clearFlag = false;
             }
             else
             {
-                ++bitCount;
-                maxcode = bitCount == maxbits
-                    ? maxmaxcode
-                    : GetMaxcode(bitCount);
+                ++_bitCount;
+                _maxcode = _bitCount == _maxbits
+                    ? _maxmaxcode
+                    : GetMaxcode(_bitCount);
             }
         }
 
-        if (code == eofCode)
+        if (code == _eofCode)
         {
             // At EOF, write the rest of the buffer.
-            while (currentBits > 0)
+            while (_currentBits > 0)
             {
-                AddCharacter((byte)(currentAccumulator & 0xff), outs);
-                currentAccumulator >>= 8;
-                currentBits -= 8;
+                AddCharacter((byte)(_currentAccumulator & 0xff), outs);
+                _currentAccumulator >>= 8;
+                _currentBits -= 8;
             }
 
             FlushPacket(outs);
@@ -315,9 +315,9 @@ public class LZWEncoder
     /// <param name="size">The size.</param>
     private void ResetCodeTable(int size)
     {
-        for (int i = 0; i < size; ++i)
+        for (var i = 0; i < size; ++i)
         {
-            hashTable[i] = -1;
+            _hashTable[i] = -1;
         }
     }
 }

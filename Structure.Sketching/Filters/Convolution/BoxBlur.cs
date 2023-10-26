@@ -30,11 +30,11 @@ public class BoxBlur : ConvolutionBaseClass
     /// <param name="size">The size.</param>
     public BoxBlur(int size)
     {
-        _Height = size;
-        _Width = size;
-        _Matrix = new float[size * size];
-        for (int x = 0; x < _Matrix.Length; ++x)
-            _Matrix[x] = 1;
+        _height = size;
+        _width = size;
+        _matrix = new float[size * size];
+        for (var x = 0; x < _matrix.Length; ++x)
+            _matrix[x] = 1;
     }
 
     /// <summary>
@@ -47,13 +47,13 @@ public class BoxBlur : ConvolutionBaseClass
     /// Gets the height.
     /// </summary>
     /// <value>The height.</value>
-    public override int Height => _Height;
+    public override int Height => _height;
 
     /// <summary>
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override float[] Matrix => _Matrix;
+    public override float[] Matrix => _matrix;
 
     /// <summary>
     /// Gets the offset.
@@ -65,9 +65,9 @@ public class BoxBlur : ConvolutionBaseClass
     /// Gets the width.
     /// </summary>
     /// <value>The width.</value>
-    public override int Width => _Width;
+    public override int Width => _width;
 
-    private readonly int _Height;
-    private readonly float[] _Matrix;
-    private readonly int _Width;
+    private readonly int _height;
+    private readonly float[] _matrix;
+    private readonly int _width;
 }

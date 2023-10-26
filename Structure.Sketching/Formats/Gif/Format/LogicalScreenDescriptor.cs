@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
-using Structure.Sketching.Helpers;
 using Structure.Sketching.IO;
 using System;
 using System.IO;
+using Structure.Sketching.Formats.Gif.Format.Helpers;
 
 namespace Structure.Sketching.Formats.Gif.Format;
 
@@ -57,14 +57,14 @@ public class LogicalScreenDescriptor : SectionBase
     /// </summary>
     /// <param name="image">The image.</param>
     /// <param name="transparencyIndex">Index of the transparency.</param>
-    /// <param name="BitDepth">The bit depth.</param>
-    public LogicalScreenDescriptor(Image image, int transparencyIndex, int BitDepth)
+    /// <param name="bitDepth">The bit depth.</param>
+    public LogicalScreenDescriptor(Image image, int transparencyIndex, int bitDepth)
         : this((short)image.Width,
             (short)image.Height,
             (byte)(transparencyIndex > -1 ? transparencyIndex : 255),
             0,
             false,
-            BitDepth - 1)
+            bitDepth - 1)
     {
     }
 
@@ -131,15 +131,15 @@ public class LogicalScreenDescriptor : SectionBase
     /// <returns>The LogicalScreenDescriptor section read from the stream</returns>
     public static LogicalScreenDescriptor Read(Stream stream)
     {
-        byte[] buffer = new byte[Size];
+        var buffer = new byte[Size];
         stream.Read(buffer, 0, buffer.Length);
-        byte Packed = buffer[4];
+        var packed = buffer[4];
         return new LogicalScreenDescriptor(BitConverter.ToInt16(buffer, 0),
             BitConverter.ToInt16(buffer, 2),
             buffer[5],
             buffer[6],
-            (Packed & 0x80) >> 7 == 1,
-            2 << (Packed & 0x07));
+            (packed & 0x80) >> 7 == 1,
+            2 << (packed & 0x07));
     }
 
     /// <summary>

@@ -30,7 +30,7 @@ public abstract class MatrixBaseClass : IFilter
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public abstract Matrix5x5 Matrix { get; }
+    public abstract Matrix5X5 Matrix { get; }
 
     /// <summary>
     /// Implements the operator *.
@@ -56,8 +56,8 @@ public abstract class MatrixBaseClass : IFilter
         {
             fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* pointer2 = pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var pointer2 = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     *pointer2 = Matrix * *pointer2;
                     ++pointer2;

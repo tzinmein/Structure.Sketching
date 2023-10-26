@@ -20,8 +20,8 @@ public class TrueColorNoAlphaReader
             5, 6, 7,
             8, 9, 0
         };
-        var Result = new Color[10];
-        var ExpectedResult = new[] {
+        var result = new Color[10];
+        var expectedResult = new[] {
             new Color(1, 2, 3, 255),
             new Color(4, 5, 6, 255),
             new Color(7, 8, 9, 255),
@@ -33,8 +33,8 @@ public class TrueColorNoAlphaReader
             new Color(5, 6, 7, 255),
             new Color(8, 9, 0, 255)
         };
-        var TestObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.TrueColorNoAlphaReader();
-        TestObject.ReadScanline(data, Result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 3, 0, 0, 0), 0);
-        Assert.Equal(ExpectedResult, Result);
+        var testObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.TrueColorNoAlphaReader();
+        testObject.ReadScanline(data, result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 3, 0, 0, 0), 0);
+        Assert.Equal(expectedResult, result);
     }
 }

@@ -37,22 +37,22 @@ public class Logarithm : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var MaxValue = GetMaxValue(image, targetLocation);
-        MaxValue = new Color((byte)(255 / Math.Log(1f + MaxValue.Red)),
-            (byte)(255 / Math.Log(1f + MaxValue.Green)),
-            (byte)(255 / Math.Log(1f + MaxValue.Blue)),
-            MaxValue.Alpha);
+        var maxValue = GetMaxValue(image, targetLocation);
+        maxValue = new Color((byte)(255 / Math.Log(1f + maxValue.Red)),
+            (byte)(255 / Math.Log(1f + maxValue.Green)),
+            (byte)(255 / Math.Log(1f + maxValue.Blue)),
+            maxValue.Alpha);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    (*TargetPointer2).Red = (byte)(MaxValue.Red * Math.Log(1f + (*TargetPointer2).Red));
-                    (*TargetPointer2).Green = (byte)(MaxValue.Green * Math.Log(1f + (*TargetPointer2).Green));
-                    (*TargetPointer2).Blue = (byte)(MaxValue.Blue * Math.Log(1f + (*TargetPointer2).Blue));
-                    ++TargetPointer2;
+                    (*targetPointer2).Red = (byte)(maxValue.Red * Math.Log(1f + (*targetPointer2).Red));
+                    (*targetPointer2).Green = (byte)(maxValue.Green * Math.Log(1f + (*targetPointer2).Green));
+                    (*targetPointer2).Blue = (byte)(maxValue.Blue * Math.Log(1f + (*targetPointer2).Blue));
+                    ++targetPointer2;
                 }
             }
         });
@@ -61,24 +61,24 @@ public class Logarithm : IFilter
 
     private Color GetMaxValue(Image image, Rectangle targetLocation)
     {
-        var ReturnValue = new Color(0, 0, 0, 255);
-        for (int y = targetLocation.Bottom; y < targetLocation.Top; ++y)
+        var returnValue = new Color(0, 0, 0, 255);
+        for (var y = targetLocation.Bottom; y < targetLocation.Top; ++y)
         {
-            for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+            for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
             {
-                byte Red = image.Pixels[y * image.Width + x].Red;
-                if (ReturnValue.Red < Red)
-                    ReturnValue.Red = Red;
-                byte Green = image.Pixels[y * image.Width + x].Green;
-                if (ReturnValue.Green < Green)
-                    ReturnValue.Green = Green;
-                byte Blue = image.Pixels[y * image.Width + x].Blue;
-                if (ReturnValue.Blue < Blue)
-                    ReturnValue.Blue = Blue;
-                if (ReturnValue == Color.White)
-                    return ReturnValue;
+                var red = image.Pixels[y * image.Width + x].Red;
+                if (returnValue.Red < red)
+                    returnValue.Red = red;
+                var green = image.Pixels[y * image.Width + x].Green;
+                if (returnValue.Green < green)
+                    returnValue.Green = green;
+                var blue = image.Pixels[y * image.Width + x].Blue;
+                if (returnValue.Blue < blue)
+                    returnValue.Blue = blue;
+                if (returnValue == Color.White)
+                    return returnValue;
             }
         }
-        return ReturnValue;
+        return returnValue;
     }
 }

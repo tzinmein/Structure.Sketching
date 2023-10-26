@@ -31,7 +31,7 @@ public static class StreamExtensions
     /// <returns>The byte array read from the stream</returns>
     public static byte[] ReadBytes(this Stream stream, int length)
     {
-        byte[] buffer = new byte[length];
+        var buffer = new byte[length];
         stream.Read(buffer, 0, length);
         return buffer;
     }

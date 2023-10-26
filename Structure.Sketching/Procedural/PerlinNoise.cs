@@ -27,85 +27,85 @@ public static class PerlinNoise
     /// <summary>
     /// Generates perlin noise
     /// </summary>
-    /// <param name="Width">Width of the resulting image</param>
-    /// <param name="Height">Height of the resulting image</param>
-    /// <param name="MaxRGBValue">MaxRGBValue</param>
-    /// <param name="MinRGBValue">MinRGBValue</param>
-    /// <param name="Frequency">Frequency</param>
-    /// <param name="Amplitude">Amplitude</param>
-    /// <param name="Persistance">Persistance</param>
-    /// <param name="Octaves">Octaves</param>
-    /// <param name="Seed">Random seed</param>
+    /// <param name="width">Width of the resulting image</param>
+    /// <param name="height">Height of the resulting image</param>
+    /// <param name="maxRgbValue">MaxRGBValue</param>
+    /// <param name="minRgbValue">MinRGBValue</param>
+    /// <param name="frequency">Frequency</param>
+    /// <param name="amplitude">Amplitude</param>
+    /// <param name="persistance">Persistance</param>
+    /// <param name="octaves">Octaves</param>
+    /// <param name="seed">Random seed</param>
     /// <returns>An image containing perlin noise</returns>
-    public static Image Generate(int Width, int Height, float MaxRGBValue, float MinRGBValue,
-        float Frequency, float Amplitude, float Persistance, int Octaves, int Seed)
+    public static Image Generate(int width, int height, float maxRgbValue, float minRgbValue,
+        float frequency, float amplitude, float persistance, int octaves, int seed)
     {
-        var ReturnValue = new Image(Width, Height, new Color[Width * Height]);
-        var Noise = GenerateNoise(Seed, Width, Height);
-        for (int x = 0; x < Width; ++x)
+        var returnValue = new Image(width, height, new Color[width * height]);
+        var noise = GenerateNoise(seed, width, height);
+        for (var x = 0; x < width; ++x)
         {
-            for (int y = 0; y < Height; ++y)
+            for (var y = 0; y < height; ++y)
             {
-                var Value = GetValue(x, y, Width, Height, Frequency, Amplitude, Persistance, Octaves, Noise);
-                Value = Value * 0.5f + 0.5f;
-                Value *= 255;
-                var RGBValue = (byte)Value.Clamp(MinRGBValue, MaxRGBValue);
-                ReturnValue.Pixels[y * Width + x].Red = RGBValue;
-                ReturnValue.Pixels[y * Width + x].Green = RGBValue;
-                ReturnValue.Pixels[y * Width + x].Blue = RGBValue;
-                ReturnValue.Pixels[y * Width + x].Alpha = 255;
+                var value = GetValue(x, y, width, height, frequency, amplitude, persistance, octaves, noise);
+                value = value * 0.5f + 0.5f;
+                value *= 255;
+                var rgbValue = (byte)value.Clamp(minRgbValue, maxRgbValue);
+                returnValue.Pixels[y * width + x].Red = rgbValue;
+                returnValue.Pixels[y * width + x].Green = rgbValue;
+                returnValue.Pixels[y * width + x].Blue = rgbValue;
+                returnValue.Pixels[y * width + x].Alpha = 255;
             }
         }
-        return ReturnValue;
+        return returnValue;
     }
 
-    private static float[,] GenerateNoise(int Seed, int Width, int Height)
+    private static float[,] GenerateNoise(int seed, int width, int height)
     {
-        float[,] Noise = new float[Width, Height];
-        var RandomGenerator = new System.Random(Seed);
-        for (int x = 0; x < Width; ++x)
+        var noise = new float[width, height];
+        var randomGenerator = new System.Random(seed);
+        for (var x = 0; x < width; ++x)
         {
-            for (int y = 0; y < Height; ++y)
+            for (var y = 0; y < height; ++y)
             {
-                Noise[x, y] = ((float)RandomGenerator.NextDouble() - 0.5f) * 2.0f;
+                noise[x, y] = ((float)randomGenerator.NextDouble() - 0.5f) * 2.0f;
             }
         }
-        return Noise;
+        return noise;
     }
 
-    private static float GetSmoothNoise(float X, float Y, int Width, int Height, float[,] Noise)
+    private static float GetSmoothNoise(float x, float y, int width, int height, float[,] noise)
     {
-        if (Noise == null)
+        if (noise == null)
             return 0.0f;
-        float FractionX = X - (int)X;
-        float FractionY = Y - (int)Y;
-        int X1 = ((int)X + Width) % Width;
-        int Y1 = ((int)Y + Height) % Height;
-        int X2 = ((int)X + Width - 1) % Width;
-        int Y2 = ((int)Y + Height - 1) % Height;
+        var fractionX = x - (int)x;
+        var fractionY = y - (int)y;
+        var x1 = ((int)x + width) % width;
+        var y1 = ((int)y + height) % height;
+        var x2 = ((int)x + width - 1) % width;
+        var y2 = ((int)y + height - 1) % height;
 
-        float FinalValue = 0.0f;
-        FinalValue += FractionX * FractionY * Noise[X1, Y1];
-        FinalValue += FractionX * (1 - FractionY) * Noise[X1, Y2];
-        FinalValue += (1 - FractionX) * FractionY * Noise[X2, Y1];
-        FinalValue += (1 - FractionX) * (1 - FractionY) * Noise[X2, Y2];
+        var finalValue = 0.0f;
+        finalValue += fractionX * fractionY * noise[x1, y1];
+        finalValue += fractionX * (1 - fractionY) * noise[x1, y2];
+        finalValue += (1 - fractionX) * fractionY * noise[x2, y1];
+        finalValue += (1 - fractionX) * (1 - fractionY) * noise[x2, y2];
 
-        return FinalValue;
+        return finalValue;
     }
 
-    private static float GetValue(int X, int Y, int Width, int Height, float Frequency, float Amplitude,
-        float Persistance, int Octaves, float[,] Noise)
+    private static float GetValue(int x, int y, int width, int height, float frequency, float amplitude,
+        float persistance, int octaves, float[,] noise)
     {
-        if (Noise == null)
+        if (noise == null)
             return 0.0f;
-        float FinalValue = 0.0f;
-        for (int i = 0; i < Octaves; ++i)
+        var finalValue = 0.0f;
+        for (var i = 0; i < octaves; ++i)
         {
-            FinalValue += GetSmoothNoise(X * Frequency, Y * Frequency, Width, Height, Noise) * Amplitude;
-            Frequency *= 2.0f;
-            Amplitude *= Persistance;
+            finalValue += GetSmoothNoise(x * frequency, y * frequency, width, height, noise) * amplitude;
+            frequency *= 2.0f;
+            amplitude *= persistance;
         }
-        FinalValue = FinalValue.Clamp(-1.0f, 1.0f);
-        return FinalValue;
+        finalValue = finalValue.Clamp(-1.0f, 1.0f);
+        return finalValue;
     }
 }

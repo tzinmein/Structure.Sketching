@@ -66,44 +66,44 @@ public abstract class ResamplingFilterBase : IResamplingFilter
     /// <param name="newHeight">The new height.</param>
     public void Precompute(int oldWidth, int oldHeight, int newWidth, int newHeight)
     {
-        int DestinationWidth = newWidth < 0 ? oldWidth : newWidth;
-        int DestinationHeight = newHeight < 0 ? oldWidth : newHeight;
-        XWeights = PrecomputeWeights(DestinationWidth, oldWidth);
-        YWeights = PrecomputeWeights(DestinationHeight, oldHeight);
+        var destinationWidth = newWidth < 0 ? oldWidth : newWidth;
+        var destinationHeight = newHeight < 0 ? oldWidth : newHeight;
+        XWeights = PrecomputeWeights(destinationWidth, oldWidth);
+        YWeights = PrecomputeWeights(destinationHeight, oldHeight);
     }
 
     private Weights[] PrecomputeWeights(int destinationSize, int sourceSize)
     {
-        double Scale = (double)destinationSize / (double)sourceSize;
-        double Radius = Scale < 1f ? (FilterRadius / Scale) : FilterRadius;
-        Weights[] Result = new Weights[sourceSize];
+        var scale = (double)destinationSize / (double)sourceSize;
+        var radius = scale < 1f ? (FilterRadius / scale) : FilterRadius;
+        var result = new Weights[sourceSize];
 
-        for (int x = 0; x < sourceSize; ++x)
+        for (var x = 0; x < sourceSize; ++x)
         {
-            var Left = (int)(x - Radius);
-            var Right = (int)(x + Radius);
-            if (Left < 0)
-                Left = 0;
-            if (Right >= sourceSize)
-                Right = sourceSize - 1;
-            Result[x] = new Weights();
-            Result[x].Values = new double[(Right - Left) + 1];
-            for (int y = Left, count = 0; y <= Right; ++y, ++count)
+            var left = (int)(x - radius);
+            var right = (int)(x + radius);
+            if (left < 0)
+                left = 0;
+            if (right >= sourceSize)
+                right = sourceSize - 1;
+            result[x] = new Weights();
+            result[x].Values = new double[(right - left) + 1];
+            for (int y = left, count = 0; y <= right; ++y, ++count)
             {
-                Result[x].Values[count] = Scale < 1f ?
-                    GetValue((x - y) * Scale) :
+                result[x].Values[count] = scale < 1f ?
+                    GetValue((x - y) * scale) :
                     GetValue(x - y);
-                Result[x].TotalWeight += Result[x].Values[count];
+                result[x].TotalWeight += result[x].Values[count];
             }
 
-            if (Result[x].TotalWeight > 0)
+            if (result[x].TotalWeight > 0)
             {
-                for (int y = 0; y < Result[x].Values.Length; ++y)
+                for (var y = 0; y < result[x].Values.Length; ++y)
                 {
-                    Result[x].Values[y] /= Result[x].TotalWeight;
+                    result[x].Values[y] /= result[x].TotalWeight;
                 }
             }
         }
-        return Result;
+        return result;
     }
 }

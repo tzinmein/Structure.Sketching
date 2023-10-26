@@ -38,13 +38,13 @@ public class Encoder : FormatTestBase
     [MemberData(nameof(InputFileNames))]
     public void Encode(string fileName)
     {
-        using (var TempFile = File.OpenRead(InputDirectory + fileName))
+        using (var tempFile = File.OpenRead(InputDirectory + fileName))
         {
-            var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
-            var TempImage = TempDecoder.Decode(TempFile);
-            var TempEncoder = new Structure.Sketching.Formats.Bmp.Encoder();
-            using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
-            TempEncoder.Encode(new BinaryWriter(TempFile2), TempImage);
+            var tempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
+            var tempImage = tempDecoder.Decode(tempFile);
+            var tempEncoder = new Structure.Sketching.Formats.Bmp.Encoder();
+            using var tempFile2 = File.OpenWrite(OutputDirectory + fileName);
+            tempEncoder.Encode(new BinaryWriter(tempFile2), tempImage);
         }
         Assert.True(CheckFileCorrect(fileName));
     }

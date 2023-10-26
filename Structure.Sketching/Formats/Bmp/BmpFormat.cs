@@ -31,7 +31,7 @@ public class BmpFormat : FormatBase
     /// <value>
     /// The format.
     /// </value>
-    public override FileFormats Format => FileFormats.BMP;
+    public override FileFormats Format => FileFormats.Bmp;
 
     /// <summary>
     /// Gets the decoder.

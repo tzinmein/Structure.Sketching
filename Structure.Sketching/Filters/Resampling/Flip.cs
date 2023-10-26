@@ -52,10 +52,10 @@ public class Flip : AffineBaseClass
     /// <returns>The matrix used for the transformation</returns>
     protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
     {
-        float XScale = 1f;
-        float YScale = 1f;
-        XScale = (FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal ? -XScale : XScale;
-        YScale = (FlipDirection.Vertical & Direction) == FlipDirection.Vertical ? -YScale : YScale;
-        return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
+        var xScale = 1f;
+        var yScale = 1f;
+        xScale = (FlipDirection.Horizontal & Direction) == FlipDirection.Horizontal ? -xScale : xScale;
+        yScale = (FlipDirection.Vertical & Direction) == FlipDirection.Vertical ? -yScale : yScale;
+        return Matrix3x2.CreateScale(xScale, yScale, targetLocation.Center);
     }
 }

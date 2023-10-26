@@ -84,12 +84,12 @@ public class EndianBinaryWriter : IDisposable
     /// <summary>
     /// Buffer used for temporary storage during conversion from primitives
     /// </summary>
-    private readonly byte[] buffer = new byte[16];
+    private readonly byte[] _buffer = new byte[16];
 
     /// <summary>
     /// Buffer used for Write(char)
     /// </summary>
-    private readonly char[] charBuffer = new char[1];
+    private readonly char[] _charBuffer = new char[1];
 
     /// <summary>
     /// Closes the writer, including the underlying stream.
@@ -140,8 +140,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(bool value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 1);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 1);
     }
 
     /// <summary>
@@ -151,8 +151,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(short value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 2);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 2);
     }
 
     /// <summary>
@@ -162,8 +162,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(int value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 4);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 4);
     }
 
     /// <summary>
@@ -173,8 +173,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(long value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 8);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 8);
     }
 
     /// <summary>
@@ -184,8 +184,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(ushort value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 2);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 2);
     }
 
     /// <summary>
@@ -195,8 +195,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(uint value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 4);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 4);
     }
 
     /// <summary>
@@ -206,8 +206,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(ulong value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 8);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 8);
     }
 
     /// <summary>
@@ -217,8 +217,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(float value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 4);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 4);
     }
 
     /// <summary>
@@ -228,8 +228,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(double value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 8);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 8);
     }
 
     /// <summary>
@@ -239,8 +239,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(decimal value)
     {
-        BitConverter.CopyBytes(value, buffer, 0);
-        WriteInternal(buffer, 16);
+        BitConverter.CopyBytes(value, _buffer, 0);
+        WriteInternal(_buffer, 16);
     }
 
     /// <summary>
@@ -249,8 +249,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(byte value)
     {
-        buffer[0] = value;
-        WriteInternal(buffer, 1);
+        _buffer[0] = value;
+        WriteInternal(_buffer, 1);
     }
 
     /// <summary>
@@ -259,8 +259,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(sbyte value)
     {
-        buffer[0] = unchecked((byte)value);
-        WriteInternal(buffer, 1);
+        _buffer[0] = unchecked((byte)value);
+        WriteInternal(_buffer, 1);
     }
 
     /// <summary>
@@ -293,8 +293,8 @@ public class EndianBinaryWriter : IDisposable
     /// <param name="value">The value to write</param>
     public void Write(char value)
     {
-        charBuffer[0] = value;
-        Write(charBuffer);
+        _charBuffer[0] = value;
+        Write(_charBuffer);
     }
 
     /// <summary>
@@ -336,16 +336,16 @@ public class EndianBinaryWriter : IDisposable
         if (BaseStream == null)
             throw new NullReferenceException("Base stream is null");
         value = value < 0 ? 0 : value;
-        int index = 0;
+        var index = 0;
         while (value >= 128)
         {
-            buffer[index++] = (byte)((value & 0x7f) | 0x80);
+            _buffer[index++] = (byte)((value & 0x7f) | 0x80);
             value >>= 7;
             index++;
         }
 
-        buffer[index++] = (byte)value;
-        BaseStream.Write(buffer, 0, index);
+        _buffer[index++] = (byte)value;
+        BaseStream.Write(_buffer, 0, index);
     }
 
     /// <summary>

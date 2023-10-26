@@ -26,13 +26,13 @@ namespace Structure.Sketching.Filters.Smoothing;
 /// SNN Blur on an image
 /// </summary>
 /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-public class SNNBlur : IFilter
+public class SnnBlur : IFilter
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="SNNBlur"/> class.
+    /// Initializes a new instance of the <see cref="SnnBlur"/> class.
     /// </summary>
     /// <param name="apetureRadius">The apeture radius.</param>
-    public SNNBlur(int apetureRadius)
+    public SnnBlur(int apetureRadius)
     {
         ApetureRadius = apetureRadius;
     }
@@ -52,60 +52,60 @@ public class SNNBlur : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var TempValues = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, TempValues, TempValues.Length);
-        int ApetureMin = -ApetureRadius;
-        int ApetureMax = ApetureRadius;
+        var tempValues = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, tempValues, tempValues.Length);
+        var apetureMin = -ApetureRadius;
+        var apetureMax = ApetureRadius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &TempValues[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    uint RValue = 0;
-                    uint GValue = 0;
-                    uint BValue = 0;
-                    int NumPixels = 0;
-                    for (int x2 = ApetureMin; x2 < ApetureMax; ++x2)
+                    uint rValue = 0;
+                    uint gValue = 0;
+                    uint bValue = 0;
+                    var numPixels = 0;
+                    for (var x2 = apetureMin; x2 < apetureMax; ++x2)
                     {
-                        int TempX1 = x + x2;
-                        int TempX2 = x - x2;
-                        if (TempX1 >= targetLocation.Left && TempX1 < targetLocation.Right && TempX2 >= targetLocation.Left && TempX2 < targetLocation.Right)
+                        var tempX1 = x + x2;
+                        var tempX2 = x - x2;
+                        if (tempX1 >= targetLocation.Left && tempX1 < targetLocation.Right && tempX2 >= targetLocation.Left && tempX2 < targetLocation.Right)
                         {
-                            for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
+                            for (var y2 = apetureMin; y2 < apetureMax; ++y2)
                             {
-                                int TempY1 = y + y2;
-                                int TempY2 = y - y2;
-                                if (TempY1 >= targetLocation.Bottom && TempY1 < targetLocation.Top && TempY2 >= targetLocation.Bottom && TempY2 < targetLocation.Top)
+                                var tempY1 = y + y2;
+                                var tempY2 = y - y2;
+                                if (tempY1 >= targetLocation.Bottom && tempY1 < targetLocation.Top && tempY2 >= targetLocation.Bottom && tempY2 < targetLocation.Top)
                                 {
-                                    var TempValue1 = image.Pixels[y * image.Width + x];
-                                    var TempValue2 = image.Pixels[TempY1 * image.Width + TempX1];
-                                    var TempValue3 = image.Pixels[TempY2 * image.Width + TempX2];
-                                    if (Distance.Euclidean(TempValue1, TempValue2) < Distance.Euclidean(TempValue1, TempValue3))
+                                    var tempValue1 = image.Pixels[y * image.Width + x];
+                                    var tempValue2 = image.Pixels[tempY1 * image.Width + tempX1];
+                                    var tempValue3 = image.Pixels[tempY2 * image.Width + tempX2];
+                                    if (Distance.Euclidean(tempValue1, tempValue2) < Distance.Euclidean(tempValue1, tempValue3))
                                     {
-                                        RValue += TempValue2.Red;
-                                        GValue += TempValue2.Green;
-                                        BValue += TempValue2.Blue;
+                                        rValue += tempValue2.Red;
+                                        gValue += tempValue2.Green;
+                                        bValue += tempValue2.Blue;
                                     }
                                     else
                                     {
-                                        RValue += TempValue3.Red;
-                                        GValue += TempValue3.Green;
-                                        BValue += TempValue3.Blue;
+                                        rValue += tempValue3.Red;
+                                        gValue += tempValue3.Green;
+                                        bValue += tempValue3.Blue;
                                     }
-                                    ++NumPixels;
+                                    ++numPixels;
                                 }
                             }
                         }
                     }
-                    TempValues[y * image.Width + x].Red = (byte)(RValue / NumPixels);
-                    TempValues[y * image.Width + x].Green = (byte)(GValue / NumPixels);
-                    TempValues[y * image.Width + x].Blue = (byte)(BValue / NumPixels);
-                    TempValues[y * image.Width + x].Alpha = image.Pixels[y * image.Width + x].Alpha;
+                    tempValues[y * image.Width + x].Red = (byte)(rValue / numPixels);
+                    tempValues[y * image.Width + x].Green = (byte)(gValue / numPixels);
+                    tempValues[y * image.Width + x].Blue = (byte)(bValue / numPixels);
+                    tempValues[y * image.Width + x].Alpha = image.Pixels[y * image.Width + x].Alpha;
                 }
             }
         });
-        return image.ReCreate(image.Width, image.Height, TempValues);
+        return image.ReCreate(image.Width, image.Height, tempValues);
     }
 }

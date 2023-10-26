@@ -17,16 +17,16 @@ public class NormalizationFilters : FilterTestBaseClass
         { "Logarithm", new Logarithm(),default },
         { "Gamma", new Gamma(.2f),default },
         { "AdaptiveEqualize", new AdaptiveEqualize(5),default },
-        { "AdaptiveHSVEqualize", new AdaptiveEqualize(5,()=>new HSVHistogram()),default },
-        { "HSVEqualize", new Equalize(new HSVHistogram()),default },
+        { "AdaptiveHSVEqualize", new AdaptiveEqualize(5,()=>new HsvHistogram()),default },
+        { "HSVEqualize", new Equalize(new HsvHistogram()),default },
         { "Equalize", new Equalize(),default },
         { "StretchContrast", new StretchContrast(),default },
 
         { "Logarithm-Partial", new Logarithm(),new Rectangle(100,100,500,500) },
         { "Gamma-Partial", new Gamma(.2f),new Rectangle(100,100,500,500) },
         { "AdaptiveEqualize-Partial", new AdaptiveEqualize(5),new Rectangle(100,100,500,500) },
-        { "AdaptiveHSVEqualize-Partial", new AdaptiveEqualize(5,()=>new HSVHistogram()),new Rectangle(100,100,500,500) },
-        { "HSVEqualize-Partial", new Equalize(new HSVHistogram()),new Rectangle(100,100,500,500) },
+        { "AdaptiveHSVEqualize-Partial", new AdaptiveEqualize(5,()=>new HsvHistogram()),new Rectangle(100,100,500,500) },
+        { "HSVEqualize-Partial", new Equalize(new HsvHistogram()),new Rectangle(100,100,500,500) },
         { "Equalize-Partial", new Equalize(),new Rectangle(100,100,500,500) },
         { "StretchContrast-Partial", new StretchContrast(),new Rectangle(100,100,500,500) }
     };

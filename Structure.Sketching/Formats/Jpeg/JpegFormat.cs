@@ -31,7 +31,7 @@ public class JpegFormat : FormatBase
     /// <value>
     /// The format.
     /// </value>
-    public override FileFormats Format => FileFormats.JPEG;
+    public override FileFormats Format => FileFormats.Jpeg;
 
     /// <summary>
     /// Gets the decoder.

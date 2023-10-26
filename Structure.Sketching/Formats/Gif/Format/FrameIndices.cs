@@ -75,9 +75,9 @@ public class FrameIndices : SectionBase
     /// </returns>
     public static FrameIndices Read(Stream stream, ImageDescriptor descriptor)
     {
-        var DataSize = stream.ReadByte();
-        var Decoder = new LZWDecoder(stream);
-        return new FrameIndices(Decoder.Decode(descriptor.Width, descriptor.Height, DataSize), 0);
+        var dataSize = stream.ReadByte();
+        var decoder = new LzwDecoder(stream);
+        return new FrameIndices(decoder.Decode(descriptor.Width, descriptor.Height, dataSize), 0);
     }
 
     /// <summary>
@@ -89,7 +89,7 @@ public class FrameIndices : SectionBase
     /// </returns>
     public override bool Write(EndianBinaryWriter writer)
     {
-        var encoder = new LZWEncoder(Indices, BitDepth);
+        var encoder = new LzwEncoder(Indices, BitDepth);
         encoder.Encode(writer.BaseStream);
         return true;
     }

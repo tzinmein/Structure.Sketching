@@ -34,7 +34,7 @@ public class SobelEmboss : ConvolutionBaseClass
         switch (direction)
         {
             case Direction.TopToBottom:
-                _Matrix = new float[]
+                _matrix = new float[]
                 {
                     1, 2, 1,
                     0, 0, 0,
@@ -43,7 +43,7 @@ public class SobelEmboss : ConvolutionBaseClass
                 break;
 
             case Direction.BottomToTop:
-                _Matrix = new float[]
+                _matrix = new float[]
                 {
                     -1, -2, -1,
                     0, 0, 0,
@@ -52,7 +52,7 @@ public class SobelEmboss : ConvolutionBaseClass
                 break;
 
             case Direction.LeftToRight:
-                _Matrix = new float[]
+                _matrix = new float[]
                 {
                     -1, 0, 1,
                     -2, 0, 2,
@@ -61,7 +61,7 @@ public class SobelEmboss : ConvolutionBaseClass
                 break;
 
             default:
-                _Matrix = new float[]
+                _matrix = new float[]
                 {
                     1, 0, -1,
                     2, 0, -2,
@@ -87,7 +87,7 @@ public class SobelEmboss : ConvolutionBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override float[] Matrix => _Matrix;
+    public override float[] Matrix => _matrix;
 
     /// <summary>
     /// Gets the offset.
@@ -101,5 +101,5 @@ public class SobelEmboss : ConvolutionBaseClass
     /// <value>The width.</value>
     public override int Width => 3;
 
-    private readonly float[] _Matrix;
+    private readonly float[] _matrix;
 }

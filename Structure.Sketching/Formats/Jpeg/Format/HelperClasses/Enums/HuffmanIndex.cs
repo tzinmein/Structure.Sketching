@@ -24,20 +24,20 @@ public enum HuffmanIndex
     /// <summary>
     /// The huffman index luminance dc
     /// </summary>
-    HuffmanIndexLuminanceDC = 0,
+    HuffmanIndexLuminanceDc = 0,
 
     /// <summary>
     /// The huffman index luminance ac
     /// </summary>
-    HuffmanIndexLuminanceAC = 1,
+    HuffmanIndexLuminanceAc = 1,
 
     /// <summary>
     /// The huffman index chrominance dc
     /// </summary>
-    HuffmanIndexChrominanceDC = 2,
+    HuffmanIndexChrominanceDc = 2,
 
     /// <summary>
     /// The huffman index chrominance ac
     /// </summary>
-    HuffmanIndexChrominanceAC = 3,
+    HuffmanIndexChrominanceAc = 3,
 }

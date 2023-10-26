@@ -9,19 +9,19 @@ public class ArrayCopyTests
     [Params(100, 1000, 10000)]
     public int Count { get; set; }
 
-    private byte[] source, destination;
+    private byte[] _source, _destination;
 
     [Benchmark(Baseline = true, Description = "Copy using Array.Copy()")]
     public void CopyArray()
     {
-        Array.Copy(source, destination, Count);
+        Array.Copy(_source, _destination, Count);
     }
 
     [Benchmark(Description = "Copy using Unsafe<T>")]
     public unsafe void CopyUnsafe()
     {
-        fixed (byte* pinnedDestination = destination)
-        fixed (byte* pinnedSource = source)
+        fixed (byte* pinnedDestination = _destination)
+        fixed (byte* pinnedSource = _source)
         {
             Unsafe.CopyBlock(pinnedSource, pinnedDestination, (uint)Count);
         }
@@ -30,8 +30,8 @@ public class ArrayCopyTests
     [Benchmark(Description = "Copy using Buffer.MemoryCopy<T>")]
     public unsafe void CopyUsingBufferMemoryCopy()
     {
-        fixed (byte* pinnedDestination = destination)
-        fixed (byte* pinnedSource = source)
+        fixed (byte* pinnedDestination = _destination)
+        fixed (byte* pinnedSource = _source)
         {
             Buffer.MemoryCopy(pinnedSource, pinnedDestination, Count, Count);
         }
@@ -40,7 +40,7 @@ public class ArrayCopyTests
     [IterationSetup]
     public void SetUp()
     {
-        source = new byte[Count];
-        destination = new byte[Count];
+        _source = new byte[Count];
+        _destination = new byte[Count];
     }
 }

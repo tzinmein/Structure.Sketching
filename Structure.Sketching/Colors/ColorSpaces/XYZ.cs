@@ -24,15 +24,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// <summary>
 /// XYZ color space
 /// </summary>
-public struct XYZ : IEquatable<XYZ>, IColorSpace
+public struct Xyz : IEquatable<Xyz>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="XYZ"/> class.
+    /// Initializes a new instance of the <see cref="Xyz"/> class.
     /// </summary>
     /// <param name="x">The x.</param>
     /// <param name="y">The y.</param>
     /// <param name="z">The z.</param>
-    public XYZ(double x, double y, double z)
+    public Xyz(double x, double y, double z)
     {
         X = x;
         Y = y;
@@ -43,7 +43,7 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     /// Gets the white reference.
     /// </summary>
     /// <value>The white reference.</value>
-    public static XYZ WhiteReference => new XYZ(95.047, 100, 108.883);
+    public static Xyz WhiteReference => new Xyz(95.047, 100, 108.883);
 
     /// <summary>
     /// Gets or sets the x.
@@ -66,14 +66,14 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="Xyz"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(XYZ color)
+    public static implicit operator Color(Xyz color)
     {
         var x = color.X / 100.0;
         var y = color.Y / 100.0;
@@ -89,16 +89,16 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="XYZ"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Xyz"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator XYZ(Color color)
+    public static implicit operator Xyz(Color color)
     {
         var r = PivotRgb(color.Red / 255.0);
         var g = PivotRgb(color.Green / 255.0);
         var b = PivotRgb(color.Blue / 255.0);
-        return new XYZ(r * 0.4124 + g * 0.3576 + b * 0.1805,
+        return new Xyz(r * 0.4124 + g * 0.3576 + b * 0.1805,
             r * 0.2126 + g * 0.7152 + b * 0.0722,
             r * 0.0193 + g * 0.1192 + b * 0.9505);
     }
@@ -110,7 +110,7 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(XYZ color1, XYZ color2)
+    public static bool operator !=(Xyz color1, Xyz color2)
     {
         return !(color1 == color2);
     }
@@ -122,7 +122,7 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(XYZ color1, XYZ color2)
+    public static bool operator ==(Xyz color1, Xyz color2)
     {
         return color1.Equals(color2);
     }
@@ -137,7 +137,7 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is XYZ xyz && Equals(xyz);
+        return obj is Xyz xyz && Equals(xyz);
     }
 
     /// <summary>
@@ -148,11 +148,11 @@ public struct XYZ : IEquatable<XYZ>, IColorSpace
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(XYZ other)
+    public readonly bool Equals(Xyz other)
     {
-        return Math.Abs(other.X - X) < EPSILON
-               && Math.Abs(other.Y - Y) < EPSILON
-               && Math.Abs(other.Z - Z) < EPSILON;
+        return Math.Abs(other.X - X) < Epsilon
+               && Math.Abs(other.Y - Y) < Epsilon
+               && Math.Abs(other.Z - Z) < Epsilon;
     }
 
     /// <summary>

@@ -7,13 +7,13 @@ namespace Structure.Sketching.Numerics;
 /// <summary>
 /// Class used to create an RGB Histogram
 /// </summary>
-public class RGBHistogram : IHistogram
+public class RgbHistogram : IHistogram
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RGBHistogram"/> class.
+    /// Initializes a new instance of the <see cref="RgbHistogram"/> class.
     /// </summary>
     /// <param name="image">The image to load.</param>
-    public RGBHistogram(Image image = null)
+    public RgbHistogram(Image image = null)
     {
         R = new float[256];
         G = new float[256];
@@ -37,9 +37,9 @@ public class RGBHistogram : IHistogram
     /// </summary>
     public float[] R { get; set; }
 
-    private int Height;
+    private int _height;
 
-    private int Width;
+    private int _width;
 
     /// <summary>
     /// Equalizes the histogram
@@ -47,55 +47,55 @@ public class RGBHistogram : IHistogram
     /// <returns>this</returns>
     public IHistogram Equalize()
     {
-        float TotalPixels = Width * Height;
-        int RMax = int.MinValue;
-        int RMin = int.MaxValue;
-        int GMax = int.MinValue;
-        int GMin = int.MaxValue;
-        int BMax = int.MinValue;
-        int BMin = int.MaxValue;
-        for (int x = 0; x < 256; ++x)
+        float totalPixels = _width * _height;
+        var rMax = int.MinValue;
+        var rMin = int.MaxValue;
+        var gMax = int.MinValue;
+        var gMin = int.MaxValue;
+        var bMax = int.MinValue;
+        var bMin = int.MaxValue;
+        for (var x = 0; x < 256; ++x)
         {
             if (R[x] > 0f)
             {
-                if (RMax < x)
-                    RMax = x;
-                if (RMin > x)
-                    RMin = x;
+                if (rMax < x)
+                    rMax = x;
+                if (rMin > x)
+                    rMin = x;
             }
             if (G[x] > 0f)
             {
-                if (GMax < x)
-                    GMax = x;
-                if (GMin > x)
-                    GMin = x;
+                if (gMax < x)
+                    gMax = x;
+                if (gMin > x)
+                    gMin = x;
             }
             if (B[x] > 0f)
             {
-                if (BMax < x)
-                    BMax = x;
-                if (BMin > x)
-                    BMin = x;
+                if (bMax < x)
+                    bMax = x;
+                if (bMin > x)
+                    bMin = x;
             }
         }
 
-        float PreviousR = R[0];
-        R[0] = R[0] * 256 / TotalPixels;
-        float PreviousG = G[0];
-        G[0] = G[0] * 256 / TotalPixels;
-        float PreviousB = B[0];
-        B[0] = B[0] * 256 / TotalPixels;
-        for (int x = 1; x < 256; ++x)
+        var previousR = R[0];
+        R[0] = R[0] * 256 / totalPixels;
+        var previousG = G[0];
+        G[0] = G[0] * 256 / totalPixels;
+        var previousB = B[0];
+        B[0] = B[0] * 256 / totalPixels;
+        for (var x = 1; x < 256; ++x)
         {
-            PreviousR += R[x];
-            PreviousG += G[x];
-            PreviousB += B[x];
-            R[x] = (PreviousR - R[RMin]) / (TotalPixels - R[RMin]) * 255;
-            G[x] = (PreviousG - G[GMin]) / (TotalPixels - G[GMin]) * 255;
-            B[x] = (PreviousB - B[BMin]) / (TotalPixels - B[BMin]) * 255;
+            previousR += R[x];
+            previousG += G[x];
+            previousB += B[x];
+            R[x] = (previousR - R[rMin]) / (totalPixels - R[rMin]) * 255;
+            G[x] = (previousG - G[gMin]) / (totalPixels - G[gMin]) * 255;
+            B[x] = (previousB - B[bMin]) / (totalPixels - B[bMin]) * 255;
         }
-        Width = 256;
-        Height = 1;
+        _width = 256;
+        _height = 1;
         return this;
     }
 
@@ -116,12 +116,12 @@ public class RGBHistogram : IHistogram
     /// <returns>This</returns>
     public IHistogram Load(params Color[] colors)
     {
-        Width = colors.Length;
-        Height = 1;
+        _width = colors.Length;
+        _height = 1;
         Array.Clear(R, 0, R.Length);
         Array.Clear(G, 0, G.Length);
         Array.Clear(B, 0, B.Length);
-        for (int x = 0; x < colors.Length; ++x)
+        for (var x = 0; x < colors.Length; ++x)
         {
             ++R[colors[x].Red];
             ++G[colors[x].Green];
@@ -137,22 +137,22 @@ public class RGBHistogram : IHistogram
     /// <returns>this</returns>
     public unsafe IHistogram LoadImage(Image image)
     {
-        Width = image.Width;
-        Height = image.Height;
+        _width = image.Width;
+        _height = image.Height;
         Array.Clear(R, 0, R.Length);
         Array.Clear(G, 0, G.Length);
         Array.Clear(B, 0, B.Length);
-        fixed (Color* TargetPointer = &image.Pixels[0])
+        fixed (Color* targetPointer = &image.Pixels[0])
         {
-            Color* TargetPointer2 = TargetPointer;
-            for (int x = 0; x < image.Width; ++x)
+            var targetPointer2 = targetPointer;
+            for (var x = 0; x < image.Width; ++x)
             {
-                for (int y = 0; y < image.Height; ++y)
+                for (var y = 0; y < image.Height; ++y)
                 {
-                    ++R[(*TargetPointer2).Red];
-                    ++G[(*TargetPointer2).Green];
-                    ++B[(*TargetPointer2).Blue];
-                    ++TargetPointer2;
+                    ++R[(*targetPointer2).Red];
+                    ++G[(*targetPointer2).Green];
+                    ++B[(*targetPointer2).Blue];
+                    ++targetPointer2;
                 }
             }
         }
@@ -165,14 +165,14 @@ public class RGBHistogram : IHistogram
     /// <returns>this</returns>
     public IHistogram Normalize()
     {
-        float TotalPixels = Width * Height;
-        if (TotalPixels <= 0)
+        float totalPixels = _width * _height;
+        if (totalPixels <= 0)
             return this;
-        for (int x = 0; x < 256; ++x)
+        for (var x = 0; x < 256; ++x)
         {
-            R[x] /= TotalPixels;
-            G[x] /= TotalPixels;
-            B[x] /= TotalPixels;
+            R[x] /= totalPixels;
+            G[x] /= totalPixels;
+            B[x] /= totalPixels;
         }
         return this;
     }

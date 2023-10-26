@@ -35,12 +35,12 @@ public class Posterize : IFilter
     {
         if (divisions < 1)
             divisions = 1;
-        var Step = 255 / divisions;
+        var step = 255 / divisions;
         Divisions = new byte[divisions + 1];
         Divisions[0] = 0;
-        for (int x = 1; x < divisions; ++x)
+        for (var x = 1; x < divisions; ++x)
         {
-            Divisions[x] = (byte)(Divisions[x - 1] + Step);
+            Divisions[x] = (byte)(Divisions[x - 1] + step);
         }
         Divisions[divisions] = 255;
     }
@@ -62,15 +62,15 @@ public class Posterize : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* OutputPointer = Pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var outputPointer = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    (*OutputPointer).Red = FindValue((*OutputPointer).Red);
-                    (*OutputPointer).Green = FindValue((*OutputPointer).Green);
-                    (*OutputPointer).Blue = FindValue((*OutputPointer).Blue);
-                    ++OutputPointer;
+                    (*outputPointer).Red = FindValue((*outputPointer).Red);
+                    (*outputPointer).Green = FindValue((*outputPointer).Green);
+                    (*outputPointer).Blue = FindValue((*outputPointer).Blue);
+                    ++outputPointer;
                 }
             }
         });
@@ -81,7 +81,7 @@ public class Posterize : IFilter
     {
         if (Divisions.Length == 1)
             return Divisions[0];
-        for (int z = 1; z < Divisions.Length; ++z)
+        for (var z = 1; z < Divisions.Length; ++z)
         {
             if (Divisions[z] > x)
                 return Divisions[z - 1];

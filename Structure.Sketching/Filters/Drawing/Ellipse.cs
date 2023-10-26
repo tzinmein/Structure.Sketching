@@ -89,75 +89,75 @@ public class Ellipse : ShapeBaseClass
 
     private void DrawEllipse(Image image, Numerics.Rectangle targetLocation)
     {
-        int TwoASquare = 2 * Width * Width;
-        int TwoBSquare = 2 * Height * Height;
-        int x = Width;
-        int y = 0;
-        var XChange = Height * Height * (1 - 2 * Width);
-        var YChange = Width * Width;
-        var EllipseError = 0;
-        var StoppingX = TwoBSquare * Width;
-        var StoppingY = 0;
-        while (StoppingX >= StoppingY)
+        var twoASquare = 2 * Width * Width;
+        var twoBSquare = 2 * Height * Height;
+        var x = Width;
+        var y = 0;
+        var xChange = Height * Height * (1 - 2 * Width);
+        var yChange = Width * Width;
+        var ellipseError = 0;
+        var stoppingX = twoBSquare * Width;
+        var stoppingY = 0;
+        while (stoppingX >= stoppingY)
         {
             Plot4EllipsePoints(image, x, y, targetLocation);
             ++y;
-            StoppingY += TwoASquare;
-            EllipseError += YChange;
-            YChange += TwoASquare;
-            if (2 * EllipseError + XChange > 0)
+            stoppingY += twoASquare;
+            ellipseError += yChange;
+            yChange += twoASquare;
+            if (2 * ellipseError + xChange > 0)
             {
                 --x;
-                StoppingX -= TwoBSquare;
-                EllipseError += XChange;
-                XChange += TwoBSquare;
+                stoppingX -= twoBSquare;
+                ellipseError += xChange;
+                xChange += twoBSquare;
             }
         }
         x = 0;
         y = Height;
-        XChange = Height * Height;
-        YChange = Width * Width * (1 - 2 * Height);
-        EllipseError = 0;
-        StoppingX = 0;
-        StoppingY = TwoASquare * Height;
-        while (StoppingX <= StoppingY)
+        xChange = Height * Height;
+        yChange = Width * Width * (1 - 2 * Height);
+        ellipseError = 0;
+        stoppingX = 0;
+        stoppingY = twoASquare * Height;
+        while (stoppingX <= stoppingY)
         {
             Plot4EllipsePoints(image, x, y, targetLocation);
             ++x;
-            StoppingX += TwoBSquare;
-            EllipseError += XChange;
-            XChange += TwoBSquare;
-            if (2 * EllipseError + YChange > 0)
+            stoppingX += twoBSquare;
+            ellipseError += xChange;
+            xChange += twoBSquare;
+            if (2 * ellipseError + yChange > 0)
             {
                 --y;
-                StoppingY -= TwoASquare;
-                EllipseError += YChange;
-                YChange += TwoASquare;
+                stoppingY -= twoASquare;
+                ellipseError += yChange;
+                yChange += twoASquare;
             }
         }
     }
 
     private void DrawFilledEllipse(Image image, Numerics.Rectangle targetLocation)
     {
-        int hh = Height * Height;
-        int ww = Width * Width;
-        int hhww = hh * ww;
-        int x0 = Width;
-        int dx = 0;
+        var hh = Height * Height;
+        var ww = Width * Width;
+        var hhww = hh * ww;
+        var x0 = Width;
+        var dx = 0;
 
-        for (int x = -Width; x <= Width; ++x)
+        for (var x = -Width; x <= Width; ++x)
             Plot(image, (int)Center.X + x, (int)Center.Y, 1, targetLocation);
 
-        for (int y = 1; y <= Height; ++y)
+        for (var y = 1; y <= Height; ++y)
         {
-            int x1 = x0 - (dx - 1);
+            var x1 = x0 - (dx - 1);
             for (; x1 > 0; x1--)
                 if (x1 * x1 * hh + y * y * ww <= hhww)
                     break;
             dx = x0 - x1;
             x0 = x1;
 
-            for (int x = -x0; x <= x0; x++)
+            for (var x = -x0; x <= x0; x++)
             {
                 Plot(image, (int)Center.X + x, (int)Center.Y - y, 1, targetLocation);
                 Plot(image, (int)Center.X + x, (int)Center.Y + y, 1, targetLocation);

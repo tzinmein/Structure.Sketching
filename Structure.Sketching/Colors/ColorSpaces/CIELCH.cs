@@ -23,15 +23,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// <summary>
 /// LCH color space
 /// </summary>
-public struct CIELCH : IEquatable<CIELCH>, IColorSpace
+public struct Cielch : IEquatable<Cielch>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="CIELCH"/> struct.
+    /// Initializes a new instance of the <see cref="Cielch"/> struct.
     /// </summary>
     /// <param name="l">The l.</param>
     /// <param name="c">The c.</param>
     /// <param name="h">The h.</param>
-    public CIELCH(double l, double c, double h)
+    public Cielch(double l, double c, double h)
     {
         L = l;
         C = c;
@@ -59,35 +59,35 @@ public struct CIELCH : IEquatable<CIELCH>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELCH"/> to <see cref="XYZ"/>.
+    /// Performs an implicit conversion from <see cref="Cielch"/> to <see cref="Xyz"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELab(CIELCH color)
+    public static implicit operator CieLab(Cielch color)
     {
         var hRadians = color.H * Math.PI / 180.0;
-        return new CIELab(color.L, Math.Cos(hRadians) * color.C, Math.Sin(hRadians) * color.C);
+        return new CieLab(color.L, Math.Cos(hRadians) * color.C, Math.Sin(hRadians) * color.C);
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="CIELCH"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Cielch"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELCH(Color color)
+    public static implicit operator Cielch(Color color)
     {
-        return (CIELab)color;
+        return (CieLab)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELab"/> to <see cref="CIELCH"/>.
+    /// Performs an implicit conversion from <see cref="CieLab"/> to <see cref="Cielch"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELCH(CIELab color)
+    public static implicit operator Cielch(CieLab color)
     {
         var h = Math.Atan2(color.B, color.A);
         h = h > 0 ?
@@ -102,17 +102,17 @@ public struct CIELCH : IEquatable<CIELCH>, IColorSpace
             h -= 360.0;
         }
 
-        return new CIELCH(color.L, Math.Sqrt(color.A * color.A + color.B * color.B), h);
+        return new Cielch(color.L, Math.Sqrt(color.A * color.A + color.B * color.B), h);
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELCH"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="Cielch"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(CIELCH color)
+    public static implicit operator Color(Cielch color)
     {
-        return (CIELab)color;
+        return (CieLab)color;
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public struct CIELCH : IEquatable<CIELCH>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(CIELCH color1, CIELCH color2)
+    public static bool operator !=(Cielch color1, Cielch color2)
     {
         return !(color1 == color2);
     }
@@ -134,7 +134,7 @@ public struct CIELCH : IEquatable<CIELCH>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(CIELCH color1, CIELCH color2)
+    public static bool operator ==(Cielch color1, Cielch color2)
     {
         return color1.Equals(color2);
     }
@@ -149,7 +149,7 @@ public struct CIELCH : IEquatable<CIELCH>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is CIELCH cielch && Equals(cielch);
+        return obj is Cielch cielch && Equals(cielch);
     }
 
     /// <summary>
@@ -160,11 +160,11 @@ public struct CIELCH : IEquatable<CIELCH>, IColorSpace
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(CIELCH other)
+    public readonly bool Equals(Cielch other)
     {
-        return Math.Abs(other.L - L) < EPSILON
-               && Math.Abs(other.C - C) < EPSILON
-               && Math.Abs(other.H - H) < EPSILON;
+        return Math.Abs(other.L - L) < Epsilon
+               && Math.Abs(other.C - C) < Epsilon
+               && Math.Abs(other.H - H) < Epsilon;
     }
 
     /// <summary>

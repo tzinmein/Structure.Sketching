@@ -111,19 +111,19 @@ public class Header
     /// <returns>The result of the conversion.</returns>
     public static implicit operator Chunk(Header header)
     {
-        var TempData = new byte[13];
-        var WidthBytes = BitConverter.GetBytes(header.Width);
-        var HeightBytes = BitConverter.GetBytes(header.Height);
-        Array.Reverse(WidthBytes);
-        Array.Reverse(HeightBytes);
-        Array.Copy(WidthBytes, TempData, WidthBytes.Length);
-        Array.Copy(HeightBytes, 0, TempData, WidthBytes.Length, HeightBytes.Length);
-        TempData[8] = header.BitDepth;
-        TempData[9] = (byte)header.ColorType;
-        TempData[10] = header.CompressionMethod;
-        TempData[11] = header.FilterMethod;
-        TempData[12] = header.InterlaceMethod;
-        return new Chunk(13, ChunkTypes.Header, TempData);
+        var tempData = new byte[13];
+        var widthBytes = BitConverter.GetBytes(header.Width);
+        var heightBytes = BitConverter.GetBytes(header.Height);
+        Array.Reverse(widthBytes);
+        Array.Reverse(heightBytes);
+        Array.Copy(widthBytes, tempData, widthBytes.Length);
+        Array.Copy(heightBytes, 0, tempData, widthBytes.Length, heightBytes.Length);
+        tempData[8] = header.BitDepth;
+        tempData[9] = (byte)header.ColorType;
+        tempData[10] = header.CompressionMethod;
+        tempData[11] = header.FilterMethod;
+        tempData[12] = header.InterlaceMethod;
+        return new Chunk(13, ChunkTypes.Header, tempData);
     }
 
     /// <summary>

@@ -175,9 +175,9 @@ public class SegmentTypes
     /// </returns>
     public override bool Equals(object obj)
     {
-        if (!(obj is SegmentTypes Value2))
+        if (!(obj is SegmentTypes value2))
             return false;
-        return this == Value2;
+        return this == value2;
     }
 
     /// <summary>

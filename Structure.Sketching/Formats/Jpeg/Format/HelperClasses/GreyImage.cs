@@ -98,13 +98,13 @@ public class GreyImage
     /// <returns>Converts to an image.</returns>
     public Image Convert(int width, int height, Image image, IEnumerable<SegmentBase> segments)
     {
-        var StartFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
-        if (StartFrameSegment.TypeOfImage == ImageType.GreyScale)
+        var startFrameSegment = segments.OfType<StartOfFrame>().FirstOrDefault();
+        if (startFrameSegment.TypeOfImage == ImageType.GreyScale)
         {
-            int pixelWidth = StartFrameSegment.Width;
-            int pixelHeight = StartFrameSegment.Height;
+            var pixelWidth = startFrameSegment.Width;
+            var pixelHeight = startFrameSegment.Height;
 
-            Color[] pixels = new Color[pixelWidth * pixelHeight];
+            var pixels = new Color[pixelWidth * pixelHeight];
 
             Parallel.For(
                 0,
@@ -112,9 +112,9 @@ public class GreyImage
                 y =>
                 {
                     var yoff = GetRowOffset(y);
-                    for (int x = 0; x < pixelWidth; x++)
+                    for (var x = 0; x < pixelWidth; x++)
                     {
-                        int offset = y * pixelWidth + x;
+                        var offset = y * pixelWidth + x;
 
                         pixels[offset].Red = Pixels[yoff + x];
                         pixels[offset].Green = Pixels[yoff + x];
@@ -148,7 +148,7 @@ public class GreyImage
     /// <returns>The resulting sub image</returns>
     public GreyImage SubImage(int x, int y, int width, int height)
     {
-        var ReturnValue = new GreyImage
+        var returnValue = new GreyImage
         {
             Width = width,
             Height = height,
@@ -156,6 +156,6 @@ public class GreyImage
             Stride = Stride,
             Offset = y * Stride + x
         };
-        return ReturnValue;
+        return returnValue;
     }
 }

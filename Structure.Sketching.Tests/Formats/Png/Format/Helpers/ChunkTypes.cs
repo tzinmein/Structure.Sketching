@@ -7,28 +7,28 @@ public class ChunkTypes
     [Fact]
     public void Create()
     {
-        var TestObject = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
-        Assert.Equal("ASDF", TestObject.Value);
-        Assert.Equal("ASDF", TestObject);
+        var testObject = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
+        Assert.Equal("ASDF", testObject.Value);
+        Assert.Equal("ASDF", testObject);
     }
 
     [Fact]
     public void Equality()
     {
-        var TestObject1 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
-        var TestObject2 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
-        Assert.True(TestObject1 == TestObject2);
-        Assert.True("ASDF" == TestObject2);
-        Assert.True(TestObject1 == "ASDF");
+        var testObject1 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
+        var testObject2 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
+        Assert.True(testObject1 == testObject2);
+        Assert.True("ASDF" == testObject2);
+        Assert.True(testObject1 == "ASDF");
     }
 
     [Fact]
     public void Inequality()
     {
-        var TestObject1 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
-        var TestObject2 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF2");
-        Assert.False(TestObject1 == TestObject2);
-        Assert.False("ASDF" == TestObject2);
-        Assert.False(TestObject1 == "ASDF2");
+        var testObject1 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF");
+        var testObject2 = new Structure.Sketching.Formats.Png.Format.Helpers.ChunkTypes("ASDF2");
+        Assert.False(testObject1 == testObject2);
+        Assert.False("ASDF" == testObject2);
+        Assert.False(testObject1 == "ASDF2");
     }
 }

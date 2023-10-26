@@ -27,18 +27,14 @@ public class ImageException : Exception
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageException"/> class.
     /// </summary>
-    public ImageException()
-    {
-    }
+    public ImageException() { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageException"/> class.
     /// </summary>
     /// <param name="message">The message.</param>
     public ImageException(string message)
-        : base(message)
-    {
-    }
+        : base(message) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageException"/> class.
@@ -46,7 +42,5 @@ public class ImageException : Exception
     /// <param name="message">The message.</param>
     /// <param name="innerException">The inner exception.</param>
     public ImageException(string message, Exception innerException)
-        : base(message, innerException)
-    {
-    }
+        : base(message, innerException) { }
 }

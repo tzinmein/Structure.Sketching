@@ -59,17 +59,17 @@ public class Unsharp : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var BlurredImage = new Image(image);
-        new BoxBlur(Size).Apply(BlurredImage, targetLocation);
-        var Difference = new Image(image);
-        new Subtract(BlurredImage).Apply(Difference);
-        new ColorMatrix.ColorMatrix(new Matrix5x5(
+        var blurredImage = new Image(image);
+        new BoxBlur(Size).Apply(blurredImage, targetLocation);
+        var difference = new Image(image);
+        new Subtract(blurredImage).Apply(difference);
+        new ColorMatrix.ColorMatrix(new Matrix5X5(
             Constant, 0, 0, 0, 0,
             0, Constant, 0, 0, 0,
             0, 0, Constant, 0, 0,
             0, 0, 0, 1, 0,
-            0, 0, 0, 0, 1)).Apply(Difference, targetLocation);
-        new Add(Difference).Apply(image);
+            0, 0, 0, 0, 1)).Apply(difference, targetLocation);
+        new Add(difference).Apply(image);
         return image;
     }
 }

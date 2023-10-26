@@ -16,6 +16,7 @@ limitations under the License.
 
 using Structure.Sketching.ExtensionMethods;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -67,38 +68,38 @@ public partial struct Color : IEquatable<Color>
     /// <param name="blue">The blue.</param>
     /// <param name="alpha">The alpha.</param>
     public Color(byte red, byte green = 0, byte blue = 0, byte alpha = 255)
-        : this(new byte[] { red, green, blue, alpha })
-    {
-    }
+        : this(new[] { red, green, blue, alpha }) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Color"/> struct.
     /// </summary>
     /// <param name="hex">The hexadecimal.</param>
-    /// <exception cref="System.ArgumentException">Hex value is not convertable</exception>
+    /// <exception cref="System.ArgumentException">Hex value is not convertible</exception>
     public Color(string hex)
     {
         hex = hex.StartsWith("#", StringComparison.Ordinal) ? hex[1..] : hex;
         if (hex.Length == 3)
         {
-            hex = "FF"
-                  + char.ToString(hex[0])
-                  + char.ToString(hex[0])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[2])
-                  + char.ToString(hex[2]);
+            hex =
+                "FF"
+                + char.ToString(hex[0])
+                + char.ToString(hex[0])
+                + char.ToString(hex[1])
+                + char.ToString(hex[1])
+                + char.ToString(hex[2])
+                + char.ToString(hex[2]);
         }
         if (hex.Length == 4)
         {
-            hex = char.ToString(hex[0])
-                  + char.ToString(hex[0])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[2])
-                  + char.ToString(hex[2])
-                  + char.ToString(hex[3])
-                  + char.ToString(hex[3]);
+            hex =
+                char.ToString(hex[0])
+                + char.ToString(hex[0])
+                + char.ToString(hex[1])
+                + char.ToString(hex[1])
+                + char.ToString(hex[2])
+                + char.ToString(hex[2])
+                + char.ToString(hex[3])
+                + char.ToString(hex[3]);
         }
         if (hex.Length == 6)
         {
@@ -106,7 +107,7 @@ public partial struct Color : IEquatable<Color>
         }
         if (hex.Length < 8)
         {
-            throw new ArgumentException("Hex value is not convertable");
+            throw new ArgumentException("Hex value is not convertible");
         }
         IntData = 0;
         Red = Convert.ToByte(hex.Substring(2, 2), 16);
@@ -119,7 +120,7 @@ public partial struct Color : IEquatable<Color>
     /// Initializes a new instance of the <see cref="Color"/> struct.
     /// </summary>
     /// <param name="vector">The vector.</param>
-    public Color(byte[] vector)
+    public Color(IReadOnlyList<byte> vector)
     {
         IntData = 0;
         Red = vector[0];
@@ -158,9 +159,9 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator byte[] (Color color)
+    public static implicit operator byte[](Color color)
     {
-        return new byte[] { color.Red, color.Green, color.Blue, color.Alpha };
+        return new[] { color.Red, color.Green, color.Blue, color.Alpha };
     }
 
     /// <summary>
@@ -200,7 +201,12 @@ public partial struct Color : IEquatable<Color>
     /// <returns>The result of the conversion.</returns>
     public static implicit operator Vector4(Color color)
     {
-        return new Vector4(color.Red / 255f, color.Green / 255f, color.Blue / 255f, color.Alpha / 255f);
+        return new Vector4(
+            color.Red / 255f,
+            color.Green / 255f,
+            color.Blue / 255f,
+            color.Alpha / 255f
+        );
     }
 
     /// <summary>
@@ -211,10 +217,12 @@ public partial struct Color : IEquatable<Color>
     public static implicit operator Color(Vector4 color)
     {
         color = Vector4.Clamp(color, Vector4.Zero, Vector4.One);
-        return new Color((byte)(color.X * 255f),
+        return new Color(
+            (byte)(color.X * 255f),
             (byte)(color.Y * 255f),
             (byte)(color.Z * 255f),
-            (byte)(color.W * 255f));
+            (byte)(color.W * 255f)
+        );
     }
 
     /// <summary>
@@ -226,10 +234,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator -(Color color1, Color color2)
     {
-        return new Color((byte)(color1.Red - color2.Red).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red - color2.Red).Clamp(0, 255),
             (byte)(color1.Green - color2.Green).Clamp(0, 255),
             (byte)(color1.Blue - color2.Blue).Clamp(0, 255),
-            (byte)(color1.Alpha - color2.Alpha).Clamp(0, 255));
+            (byte)(color1.Alpha - color2.Alpha).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -313,11 +323,11 @@ public partial struct Color : IEquatable<Color>
     {
         if (factor == 0)
             return this;
-        var ScaledFactor = factor / 255f;
-        Red = (byte)(Red / 255f % ScaledFactor * 255f);
-        Green = (byte)(Green / 255f % ScaledFactor * 255f);
-        Blue = (byte)(Blue / 255f % ScaledFactor * 255f);
-        Alpha = (byte)(Alpha / 255f % ScaledFactor * 255f);
+        var scaledFactor = factor / 255f;
+        Red = (byte)(Red / 255f % scaledFactor * 255f);
+        Green = (byte)(Green / 255f % scaledFactor * 255f);
+        Blue = (byte)(Blue / 255f % scaledFactor * 255f);
+        Alpha = (byte)(Alpha / 255f % scaledFactor * 255f);
         return this;
     }
 
@@ -374,11 +384,11 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Multiply(byte factor)
     {
-        var ScaledFactor = factor / 255f;
-        Red = (byte)(Red / 255f * ScaledFactor * 255f).Clamp(0, 255);
-        Green = (byte)(Green / 255f * ScaledFactor * 255f).Clamp(0, 255);
-        Blue = (byte)(Blue / 255f * ScaledFactor * 255f).Clamp(0, 255);
-        Alpha = (byte)(Alpha / 255f * ScaledFactor * 255f).Clamp(0, 255);
+        var scaledFactor = factor / 255f;
+        Red = (byte)(Red / 255f * scaledFactor * 255f).Clamp(0, 255);
+        Green = (byte)(Green / 255f * scaledFactor * 255f).Clamp(0, 255);
+        Blue = (byte)(Blue / 255f * scaledFactor * 255f).Clamp(0, 255);
+        Alpha = (byte)(Alpha / 255f * scaledFactor * 255f).Clamp(0, 255);
         return this;
     }
 
@@ -427,10 +437,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator -(Color color1, byte factor)
     {
-        return new Color((byte)(color1.Red - factor).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red - factor).Clamp(0, 255),
             (byte)(color1.Green - factor).Clamp(0, 255),
             (byte)(color1.Blue - factor).Clamp(0, 255),
-            (byte)(color1.Alpha - factor).Clamp(0, 255));
+            (byte)(color1.Alpha - factor).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -442,10 +454,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator -(byte factor, Color color1)
     {
-        return new Color((byte)(factor - color1.Red).Clamp(0, 255),
+        return new Color(
+            (byte)(factor - color1.Red).Clamp(0, 255),
             (byte)(factor - color1.Green).Clamp(0, 255),
             (byte)(factor - color1.Blue).Clamp(0, 255),
-            (byte)(factor - color1.Alpha).Clamp(0, 255));
+            (byte)(factor - color1.Alpha).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -482,11 +496,13 @@ public partial struct Color : IEquatable<Color>
     {
         if (factor == 0)
             return new Color(color1.Red, color1.Green, color1.Blue, color1.Alpha);
-        var ScaledFactor = factor / 255f;
-        return new Color((byte)(color1.Red / 255f % ScaledFactor * 255f),
-            (byte)(color1.Green / 255f % ScaledFactor * 255f),
-            (byte)(color1.Blue / 255f % ScaledFactor * 255f),
-            (byte)(color1.Alpha / 255f % ScaledFactor * 255f));
+        var scaledFactor = factor / 255f;
+        return new Color(
+            (byte)(color1.Red / 255f % scaledFactor * 255f),
+            (byte)(color1.Green / 255f % scaledFactor * 255f),
+            (byte)(color1.Blue / 255f % scaledFactor * 255f),
+            (byte)(color1.Alpha / 255f % scaledFactor * 255f)
+        );
     }
 
     /// <summary>
@@ -498,10 +514,18 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator %(Color color1, Color color2)
     {
-        return new Color(color2.Red == 0 ? color1.Red : (byte)(color1.Red / 255f % (color2.Red / 255f) * 255f),
-            color2.Green == 0 ? color1.Green : (byte)(color1.Green / 255f % (color2.Green / 255f) * 255f),
-            color2.Blue == 0 ? color1.Blue : (byte)(color1.Blue / 255f % (color2.Blue / 255f) * 255f),
-            color2.Alpha == 0 ? color1.Alpha : (byte)(color1.Alpha / 255f % (color2.Alpha / 255f) * 255f));
+        return new Color(
+            color2.Red == 0 ? color1.Red : (byte)(color1.Red / 255f % (color2.Red / 255f) * 255f),
+            color2.Green == 0
+                ? color1.Green
+                : (byte)(color1.Green / 255f % (color2.Green / 255f) * 255f),
+            color2.Blue == 0
+                ? color1.Blue
+                : (byte)(color1.Blue / 255f % (color2.Blue / 255f) * 255f),
+            color2.Alpha == 0
+                ? color1.Alpha
+                : (byte)(color1.Alpha / 255f % (color2.Alpha / 255f) * 255f)
+        );
     }
 
     /// <summary>
@@ -513,10 +537,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(Color color1, Color color2)
     {
-        return new Color((byte)(color1.Red / 255f * (color2.Red / 255f) * 255f).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red / 255f * (color2.Red / 255f) * 255f).Clamp(0, 255),
             (byte)(color1.Green / 255f * (color2.Green / 255f) * 255f).Clamp(0, 255),
             (byte)(color1.Blue / 255f * (color2.Blue / 255f) * 255f).Clamp(0, 255),
-            (byte)(color1.Alpha / 255f * (color2.Alpha / 255f) * 255f).Clamp(0, 255));
+            (byte)(color1.Alpha / 255f * (color2.Alpha / 255f) * 255f).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -528,10 +554,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(Color color1, float factor)
     {
-        return new Color((byte)(color1.Red * factor).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red * factor).Clamp(0, 255),
             (byte)(color1.Green * factor).Clamp(0, 255),
             (byte)(color1.Blue * factor).Clamp(0, 255),
-            (byte)(color1.Alpha * factor).Clamp(0, 255));
+            (byte)(color1.Alpha * factor).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -555,11 +583,13 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(Color color1, byte factor)
     {
-        var ScaledFactor = factor / 255f;
-        return new Color((byte)(color1.Red / 255f * ScaledFactor * 255f).Clamp(0, 255),
-            (byte)(color1.Green / 255f * ScaledFactor * 255f).Clamp(0, 255),
-            (byte)(color1.Blue / 255f * ScaledFactor * 255f).Clamp(0, 255),
-            (byte)(color1.Alpha / 255f * ScaledFactor * 255f).Clamp(0, 255));
+        var scaledFactor = factor / 255f;
+        return new Color(
+            (byte)(color1.Red / 255f * scaledFactor * 255f).Clamp(0, 255),
+            (byte)(color1.Green / 255f * scaledFactor * 255f).Clamp(0, 255),
+            (byte)(color1.Blue / 255f * scaledFactor * 255f).Clamp(0, 255),
+            (byte)(color1.Alpha / 255f * scaledFactor * 255f).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -619,10 +649,18 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator /(Color color1, Color color2)
     {
-        return new Color(color2.Red == 0 ? color1.Red : (byte)(color1.Red / 255f / (color2.Red / 255f) * 255f),
-            color2.Green == 0 ? color1.Green : (byte)(color1.Green / 255f / (color2.Green / 255f) * 255f),
-            color2.Blue == 0 ? color1.Blue : (byte)(color1.Blue / 255f / (color2.Blue / 255f) * 255f),
-            color2.Alpha == 0 ? color1.Alpha : (byte)(color1.Alpha / 255f / (color2.Alpha / 255f) * 255f));
+        return new Color(
+            color2.Red == 0 ? color1.Red : (byte)(color1.Red / 255f / (color2.Red / 255f) * 255f),
+            color2.Green == 0
+                ? color1.Green
+                : (byte)(color1.Green / 255f / (color2.Green / 255f) * 255f),
+            color2.Blue == 0
+                ? color1.Blue
+                : (byte)(color1.Blue / 255f / (color2.Blue / 255f) * 255f),
+            color2.Alpha == 0
+                ? color1.Alpha
+                : (byte)(color1.Alpha / 255f / (color2.Alpha / 255f) * 255f)
+        );
     }
 
     /// <summary>
@@ -634,9 +672,16 @@ public partial struct Color : IEquatable<Color>
     public Color Divide(Color color)
     {
         Red = color.Red == 0 ? Red : (byte)(Red / 255f / (color.Red / 255f) * 255f).Clamp(0, 255);
-        Green = color.Green == 0 ? Green : (byte)(Green / 255f / (color.Green / 255f) * 255f).Clamp(0, 255);
-        Blue = color.Blue == 0 ? Blue : (byte)(Blue / 255f / (color.Blue / 255f) * 255f).Clamp(0, 255);
-        Alpha = color.Alpha == 0 ? Alpha : (byte)(Alpha / 255f / (color.Alpha / 255f) * 255f).Clamp(0, 255);
+        Green =
+            color.Green == 0
+                ? Green
+                : (byte)(Green / 255f / (color.Green / 255f) * 255f).Clamp(0, 255);
+        Blue =
+            color.Blue == 0 ? Blue : (byte)(Blue / 255f / (color.Blue / 255f) * 255f).Clamp(0, 255);
+        Alpha =
+            color.Alpha == 0
+                ? Alpha
+                : (byte)(Alpha / 255f / (color.Alpha / 255f) * 255f).Clamp(0, 255);
         return this;
     }
 
@@ -650,11 +695,11 @@ public partial struct Color : IEquatable<Color>
     {
         if (factor == 0)
             return this;
-        var ScaledFactor = factor / 255f;
-        Red = (byte)(Red / 255f / ScaledFactor * 255f).Clamp(0, 255);
-        Green = (byte)(Green / 255f / ScaledFactor * 255f).Clamp(0, 255);
-        Blue = (byte)(Blue / 255f / ScaledFactor * 255f).Clamp(0, 255);
-        Alpha = (byte)(Alpha / 255f / ScaledFactor * 255f).Clamp(0, 255);
+        var scaledFactor = factor / 255f;
+        Red = (byte)(Red / 255f / scaledFactor * 255f).Clamp(0, 255);
+        Green = (byte)(Green / 255f / scaledFactor * 255f).Clamp(0, 255);
+        Blue = (byte)(Blue / 255f / scaledFactor * 255f).Clamp(0, 255);
+        Alpha = (byte)(Alpha / 255f / scaledFactor * 255f).Clamp(0, 255);
         return this;
     }
 
@@ -686,11 +731,13 @@ public partial struct Color : IEquatable<Color>
     {
         if (factor == 0)
             return new Color(color1.Red, color1.Green, color1.Blue, color1.Alpha);
-        var ScaledFactor = factor / 255f;
-        return new Color((byte)(color1.Red / 255f / ScaledFactor * 255f).Clamp(0, 255),
-            (byte)(color1.Green / 255f / ScaledFactor * 255f).Clamp(0, 255),
-            (byte)(color1.Blue / 255f / ScaledFactor * 255f).Clamp(0, 255),
-            (byte)(color1.Alpha / 255f / ScaledFactor * 255f).Clamp(0, 255));
+        var scaledFactor = factor / 255f;
+        return new Color(
+            (byte)(color1.Red / 255f / scaledFactor * 255f).Clamp(0, 255),
+            (byte)(color1.Green / 255f / scaledFactor * 255f).Clamp(0, 255),
+            (byte)(color1.Blue / 255f / scaledFactor * 255f).Clamp(0, 255),
+            (byte)(color1.Alpha / 255f / scaledFactor * 255f).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -704,10 +751,12 @@ public partial struct Color : IEquatable<Color>
     {
         if (Math.Abs(factor) < EPSILON)
             return new Color(color1.Red, color1.Green, color1.Blue, color1.Alpha);
-        return new Color((byte)(color1.Red / factor).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red / factor).Clamp(0, 255),
             (byte)(color1.Green / factor).Clamp(0, 255),
             (byte)(color1.Blue / factor).Clamp(0, 255),
-            (byte)(color1.Alpha / factor).Clamp(0, 255));
+            (byte)(color1.Alpha / factor).Clamp(0, 255)
+        );
     }
 
     private static readonly float EPSILON = 0.01f;
@@ -721,10 +770,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator +(Color color1, Color color2)
     {
-        return new Color((byte)(color1.Red + color2.Red).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red + color2.Red).Clamp(0, 255),
             (byte)(color1.Green + color2.Green).Clamp(0, 255),
             (byte)(color1.Blue + color2.Blue).Clamp(0, 255),
-            (byte)(color1.Alpha + color2.Alpha).Clamp(0, 255));
+            (byte)(color1.Alpha + color2.Alpha).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -736,10 +787,12 @@ public partial struct Color : IEquatable<Color>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator +(Color color1, byte factor)
     {
-        return new Color((byte)(color1.Red + factor).Clamp(0, 255),
+        return new Color(
+            (byte)(color1.Red + factor).Clamp(0, 255),
             (byte)(color1.Green + factor).Clamp(0, 255),
             (byte)(color1.Blue + factor).Clamp(0, 255),
-            (byte)(color1.Alpha + factor).Clamp(0, 255));
+            (byte)(color1.Alpha + factor).Clamp(0, 255)
+        );
     }
 
     /// <summary>
@@ -831,10 +884,12 @@ public partial struct Color : IEquatable<Color>
     /// <returns>The resulting value</returns>
     public readonly Color Lerp(Color color, float amount)
     {
-        return new Color(Red.Lerp(color.Red, amount),
+        return new Color(
+            Red.Lerp(color.Red, amount),
             Green.Lerp(color.Green, amount),
             Blue.Lerp(color.Blue, amount),
-            Alpha.Lerp(color.Alpha, amount));
+            Alpha.Lerp(color.Alpha, amount)
+        );
     }
 
     /// <summary>

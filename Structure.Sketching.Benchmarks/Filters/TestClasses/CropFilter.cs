@@ -20,22 +20,22 @@ public class CropFilter : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var Result = new Color[targetLocation.Width * targetLocation.Height];
+        var result = new Color[targetLocation.Width * targetLocation.Height];
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* SourcePointer = image.Pixels)
+            fixed (Color* sourcePointer = image.Pixels)
             {
-                fixed (Color* TargetPointer = Result)
+                fixed (Color* targetPointer = result)
                 {
-                    Color* TargetPointer2 = TargetPointer + (y - targetLocation.Bottom) * targetLocation.Width;
-                    Color* SourcePointer2 = SourcePointer + (y * image.Width + targetLocation.Left);
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    var targetPointer2 = targetPointer + (y - targetLocation.Bottom) * targetLocation.Width;
+                    var sourcePointer2 = sourcePointer + (y * image.Width + targetLocation.Left);
+                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        *TargetPointer2++ = *SourcePointer2++;
+                        *targetPointer2++ = *sourcePointer2++;
                     }
                 }
             }
         });
-        return image.ReCreate(targetLocation.Width, targetLocation.Height, Result);
+        return image.ReCreate(targetLocation.Width, targetLocation.Height, result);
     }
 }

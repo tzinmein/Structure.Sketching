@@ -81,7 +81,7 @@ public class FileHeader
     /// <returns>The resulting FileHeader object</returns>
     public static FileHeader Read(Stream stream)
     {
-        byte[] data = new byte[Size];
+        var data = new byte[Size];
         stream.Read(data, 0, Size);
         return new FileHeader(data);
     }

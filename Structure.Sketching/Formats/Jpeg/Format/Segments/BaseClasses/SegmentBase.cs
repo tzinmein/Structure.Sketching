@@ -99,17 +99,17 @@ public abstract class SegmentBase
     /// <returns>The segment</returns>
     public static SegmentBase Read(ByteBuffer stream, List<SegmentBase> segmentsSeen)
     {
-        var SegmentMarker = GetSegmentMarker(stream);
-        if (!SegmentActions.ContainsKey((SegmentTypes)SegmentMarker))
+        var segmentMarker = GetSegmentMarker(stream);
+        if (!SegmentActions.ContainsKey((SegmentTypes)segmentMarker))
         {
-            var Length = GetLength(stream);
-            stream.Ignore(Length);
+            var length = GetLength(stream);
+            stream.Ignore(length);
             return null;
         }
-        var TempSegment = segmentsSeen.FirstOrDefault(x => x.Type == (SegmentTypes)SegmentMarker);
-        if (TempSegment != null)
-            return TempSegment;
-        return SegmentActions[(SegmentTypes)SegmentMarker](stream);
+        var tempSegment = segmentsSeen.FirstOrDefault(x => x.Type == (SegmentTypes)segmentMarker);
+        if (tempSegment != null)
+            return tempSegment;
+        return SegmentActions[(SegmentTypes)segmentMarker](stream);
     }
 
     /// <summary>
@@ -132,12 +132,12 @@ public abstract class SegmentBase
     /// <exception cref="ImageException">short segment length</exception>
     protected static int GetLength(ByteBuffer stream)
     {
-        var TempLength = new byte[2];
-        stream.ReadFull(TempLength, 0, 2);
-        int SegmentLength = ((int)TempLength[0] << 8) + (int)TempLength[1] - 2;
-        if (SegmentLength < 0)
+        var tempLength = new byte[2];
+        stream.ReadFull(tempLength, 0, 2);
+        var segmentLength = ((int)tempLength[0] << 8) + (int)tempLength[1] - 2;
+        if (segmentLength < 0)
             throw new ImageException("short segment length");
-        return SegmentLength;
+        return segmentLength;
     }
 
     /// <summary>
@@ -154,37 +154,37 @@ public abstract class SegmentBase
 
     private static int GetSegmentMarker(ByteBuffer stream)
     {
-        byte[] TempBuffer = new byte[2];
-        byte SegmentMarker;
+        var tempBuffer = new byte[2];
+        byte segmentMarker;
         while (true)
         {
-            stream.ReadFull(TempBuffer, 0, 2);
-            while (TempBuffer[0] != 0xff)
+            stream.ReadFull(tempBuffer, 0, 2);
+            while (tempBuffer[0] != 0xff)
             {
-                TempBuffer[0] = TempBuffer[1];
-                TempBuffer[1] = stream.ReadByte();
+                tempBuffer[0] = tempBuffer[1];
+                tempBuffer[1] = stream.ReadByte();
             }
-            SegmentMarker = TempBuffer[1];
-            if (SegmentMarker == 0)
+            segmentMarker = tempBuffer[1];
+            if (segmentMarker == 0)
             {
                 continue;
             }
 
-            while (SegmentMarker == 0xff)
+            while (segmentMarker == 0xff)
             {
-                SegmentMarker = stream.ReadByte();
+                segmentMarker = stream.ReadByte();
             }
-            if (SegmentMarker == SegmentTypes.EndOfImage)
+            if (segmentMarker == SegmentTypes.EndOfImage)
             {
                 break;
             }
 
-            if (SegmentTypes.Restart0 <= SegmentMarker && SegmentMarker <= SegmentTypes.Restart7)
+            if (SegmentTypes.Restart0 <= segmentMarker && segmentMarker <= SegmentTypes.Restart7)
             {
                 continue;
             }
-            return SegmentMarker;
+            return segmentMarker;
         }
-        return SegmentMarker;
+        return segmentMarker;
     }
 }

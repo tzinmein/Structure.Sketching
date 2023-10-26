@@ -56,12 +56,12 @@ public class Decoder : FormatTestBase
     [Fact]
     public void Decode()
     {
-        using var TempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
-        var TempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
-        var TempImage = TempDecoder.Decode(TempFile);
-        Assert.Equal(1760, TempImage.Pixels.Length);
-        Assert.Equal(44, TempImage.Width);
-        Assert.Equal(40, TempImage.Height);
-        Assert.Equal(1.1d, TempImage.PixelRatio);
+        using var tempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
+        var tempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
+        var tempImage = tempDecoder.Decode(tempFile);
+        Assert.Equal(1760, tempImage.Pixels.Length);
+        Assert.Equal(44, tempImage.Width);
+        Assert.Equal(40, tempImage.Height);
+        Assert.Equal(1.1d, tempImage.PixelRatio);
     }
 }

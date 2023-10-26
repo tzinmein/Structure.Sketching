@@ -87,57 +87,57 @@ public class Line : ShapeBaseClass
             (X2, X1) = (X1, X2);
             (Y2, Y1) = (Y1, Y2);
         }
-        var ChangeX = X2 - X1;
-        var ChangeY = Y2 - Y1;
-        float Gradiant = ChangeY / (float)ChangeX;
-        var XEnd = Round(X1);
-        var YEnd = Y1 + Gradiant * (XEnd - X1);
-        var XGap = RFPart(X1 + 0.5);
-        var XPixel1 = (int)XEnd;
-        var YPixel1 = (int)YEnd;
+        var changeX = X2 - X1;
+        var changeY = Y2 - Y1;
+        var gradiant = changeY / (float)changeX;
+        var xEnd = Round(X1);
+        var yEnd = Y1 + gradiant * (xEnd - X1);
+        var xGap = RfPart(X1 + 0.5);
+        var xPixel1 = (int)xEnd;
+        var yPixel1 = (int)yEnd;
         if (isSteep)
         {
-            Plot(image, YPixel1, XPixel1, (float)(RFPart(YEnd) * XGap), targetLocation);
-            Plot(image, YPixel1 + 1, XPixel1, (float)(FractionalPart(YEnd) * XGap), targetLocation);
+            Plot(image, yPixel1, xPixel1, (float)(RfPart(yEnd) * xGap), targetLocation);
+            Plot(image, yPixel1 + 1, xPixel1, (float)(FractionalPart(yEnd) * xGap), targetLocation);
         }
         else
         {
-            Plot(image, XPixel1, YPixel1, (float)(RFPart(YEnd) * XGap), targetLocation);
-            Plot(image, XPixel1, YPixel1 + 1, (float)(FractionalPart(YEnd) * XGap), targetLocation);
+            Plot(image, xPixel1, yPixel1, (float)(RfPart(yEnd) * xGap), targetLocation);
+            Plot(image, xPixel1, yPixel1 + 1, (float)(FractionalPart(yEnd) * xGap), targetLocation);
         }
-        var Intery = YEnd + Gradiant;
+        var intery = yEnd + gradiant;
 
-        XEnd = Round(X2);
-        YEnd = Y2 + Gradiant * (XEnd - X2);
-        XGap = FractionalPart(X2 + 0.5);
-        var XPixel2 = (int)XEnd;
-        var YPixel2 = (int)YEnd;
+        xEnd = Round(X2);
+        yEnd = Y2 + gradiant * (xEnd - X2);
+        xGap = FractionalPart(X2 + 0.5);
+        var xPixel2 = (int)xEnd;
+        var yPixel2 = (int)yEnd;
         if (isSteep)
         {
-            Plot(image, YPixel2, XPixel2, (float)(RFPart(YEnd) * XGap), targetLocation);
-            Plot(image, YPixel2 + 1, XPixel2, (float)(FractionalPart(YEnd) * XGap), targetLocation);
+            Plot(image, yPixel2, xPixel2, (float)(RfPart(yEnd) * xGap), targetLocation);
+            Plot(image, yPixel2 + 1, xPixel2, (float)(FractionalPart(yEnd) * xGap), targetLocation);
         }
         else
         {
-            Plot(image, XPixel2, YPixel2, (float)(RFPart(YEnd) * XGap), targetLocation);
-            Plot(image, XPixel2, YPixel2 + 1, (float)(FractionalPart(YEnd) * XGap), targetLocation);
+            Plot(image, xPixel2, yPixel2, (float)(RfPart(yEnd) * xGap), targetLocation);
+            Plot(image, xPixel2, yPixel2 + 1, (float)(FractionalPart(yEnd) * xGap), targetLocation);
         }
         if (isSteep)
         {
-            for (int x = XPixel1 + 1; x < XPixel2; ++x)
+            for (var x = xPixel1 + 1; x < xPixel2; ++x)
             {
-                Plot(image, (int)Intery, x, (float)RFPart(Intery), targetLocation);
-                Plot(image, (int)Intery + 1, x, (float)FractionalPart(Intery), targetLocation);
-                Intery += Gradiant;
+                Plot(image, (int)intery, x, (float)RfPart(intery), targetLocation);
+                Plot(image, (int)intery + 1, x, (float)FractionalPart(intery), targetLocation);
+                intery += gradiant;
             }
         }
         else
         {
-            for (int x = XPixel1 + 1; x < XPixel2; ++x)
+            for (var x = xPixel1 + 1; x < xPixel2; ++x)
             {
-                Plot(image, x, (int)Intery, (float)RFPart(Intery), targetLocation);
-                Plot(image, x, (int)Intery + 1, (float)FractionalPart(Intery), targetLocation);
-                Intery += Gradiant;
+                Plot(image, x, (int)intery, (float)RfPart(intery), targetLocation);
+                Plot(image, x, (int)intery + 1, (float)FractionalPart(intery), targetLocation);
+                intery += gradiant;
             }
         }
         return image;

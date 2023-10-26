@@ -35,10 +35,10 @@ public class Kuwahara : IFilter
     public Kuwahara(int apetureRadius)
     {
         ApetureRadius = apetureRadius;
-        ApetureMinX = new[] { -ApetureRadius, 0, -ApetureRadius, 0 };
-        ApetureMaxX = new[] { 0, ApetureRadius, 0, ApetureRadius };
-        ApetureMinY = new[] { -ApetureRadius, -ApetureRadius, 0, 0 };
-        ApetureMaxY = new[] { 0, 0, ApetureRadius, ApetureRadius };
+        _apetureMinX = new[] { -ApetureRadius, 0, -ApetureRadius, 0 };
+        _apetureMaxX = new[] { 0, ApetureRadius, 0, ApetureRadius };
+        _apetureMinY = new[] { -ApetureRadius, -ApetureRadius, 0, 0 };
+        _apetureMaxY = new[] { 0, 0, ApetureRadius, ApetureRadius };
     }
 
     /// <summary>
@@ -47,10 +47,10 @@ public class Kuwahara : IFilter
     /// <value>The apeture radius.</value>
     public int ApetureRadius { get; set; }
 
-    private readonly int[] ApetureMaxX;
-    private readonly int[] ApetureMaxY;
-    private readonly int[] ApetureMinX;
-    private readonly int[] ApetureMinY;
+    private readonly int[] _apetureMaxX;
+    private readonly int[] _apetureMaxY;
+    private readonly int[] _apetureMinX;
+    private readonly int[] _apetureMinY;
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -61,85 +61,85 @@ public class Kuwahara : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var Result = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, Result, Result.Length);
+        var result = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, result, result.Length);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* SourcePointer = Pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var sourcePointer = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    uint[] RValues = { 0, 0, 0, 0 };
-                    uint[] GValues = { 0, 0, 0, 0 };
-                    uint[] BValues = { 0, 0, 0, 0 };
-                    uint[] NumPixels = { 0, 0, 0, 0 };
-                    uint[] MaxRValue = { 0, 0, 0, 0 };
-                    uint[] MaxGValue = { 0, 0, 0, 0 };
-                    uint[] MaxBValue = { 0, 0, 0, 0 };
-                    uint[] MinRValue = { 255, 255, 255, 255 };
-                    uint[] MinGValue = { 255, 255, 255, 255 };
-                    uint[] MinBValue = { 255, 255, 255, 255 };
+                    uint[] rValues = { 0, 0, 0, 0 };
+                    uint[] gValues = { 0, 0, 0, 0 };
+                    uint[] bValues = { 0, 0, 0, 0 };
+                    uint[] numPixels = { 0, 0, 0, 0 };
+                    uint[] maxRValue = { 0, 0, 0, 0 };
+                    uint[] maxGValue = { 0, 0, 0, 0 };
+                    uint[] maxBValue = { 0, 0, 0, 0 };
+                    uint[] minRValue = { 255, 255, 255, 255 };
+                    uint[] minGValue = { 255, 255, 255, 255 };
+                    uint[] minBValue = { 255, 255, 255, 255 };
 
-                    for (int i = 0; i < 4; ++i)
+                    for (var i = 0; i < 4; ++i)
                     {
-                        for (int x2 = ApetureMinX[i]; x2 < ApetureMaxX[i]; ++x2)
+                        for (var x2 = _apetureMinX[i]; x2 < _apetureMaxX[i]; ++x2)
                         {
-                            int TempX = x + x2;
-                            if (TempX >= 0 && TempX < image.Width)
+                            var tempX = x + x2;
+                            if (tempX >= 0 && tempX < image.Width)
                             {
-                                for (int y2 = ApetureMinY[i]; y2 < ApetureMaxY[i]; ++y2)
+                                for (var y2 = _apetureMinY[i]; y2 < _apetureMaxY[i]; ++y2)
                                 {
-                                    int TempY = y + y2;
-                                    if (TempY >= 0 && TempY < image.Height)
+                                    var tempY = y + y2;
+                                    if (tempY >= 0 && tempY < image.Height)
                                     {
-                                        RValues[i] += image.Pixels[TempY * image.Width + TempX].Red;
-                                        GValues[i] += image.Pixels[TempY * image.Width + TempX].Green;
-                                        BValues[i] += image.Pixels[TempY * image.Width + TempX].Blue;
+                                        rValues[i] += image.Pixels[tempY * image.Width + tempX].Red;
+                                        gValues[i] += image.Pixels[tempY * image.Width + tempX].Green;
+                                        bValues[i] += image.Pixels[tempY * image.Width + tempX].Blue;
 
-                                        if (image.Pixels[TempY * image.Width + TempX].Red > MaxRValue[i])
-                                            MaxRValue[i] = image.Pixels[TempY * image.Width + TempX].Red;
-                                        else if (image.Pixels[TempY * image.Width + TempX].Red < MinRValue[i])
-                                            MinRValue[i] = image.Pixels[TempY * image.Width + TempX].Red;
+                                        if (image.Pixels[tempY * image.Width + tempX].Red > maxRValue[i])
+                                            maxRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
+                                        else if (image.Pixels[tempY * image.Width + tempX].Red < minRValue[i])
+                                            minRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
 
-                                        if (image.Pixels[TempY * image.Width + TempX].Green > MaxGValue[i])
-                                            MaxGValue[i] = image.Pixels[TempY * image.Width + TempX].Green;
-                                        else if (image.Pixels[TempY * image.Width + TempX].Green < MinGValue[i])
-                                            MinGValue[i] = image.Pixels[TempY * image.Width + TempX].Green;
+                                        if (image.Pixels[tempY * image.Width + tempX].Green > maxGValue[i])
+                                            maxGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
+                                        else if (image.Pixels[tempY * image.Width + tempX].Green < minGValue[i])
+                                            minGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
 
-                                        if (image.Pixels[TempY * image.Width + TempX].Blue > MaxBValue[i])
-                                            MaxBValue[i] = image.Pixels[TempY * image.Width + TempX].Blue;
-                                        else if (image.Pixels[TempY * image.Width + TempX].Blue < MinBValue[i])
-                                            MinBValue[i] = image.Pixels[TempY * image.Width + TempX].Blue;
+                                        if (image.Pixels[tempY * image.Width + tempX].Blue > maxBValue[i])
+                                            maxBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
+                                        else if (image.Pixels[tempY * image.Width + tempX].Blue < minBValue[i])
+                                            minBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
 
-                                        ++NumPixels[i];
+                                        ++numPixels[i];
                                     }
                                 }
                             }
                         }
                     }
 
-                    int j = 0;
-                    uint MinDifference = uint.MaxValue;
-                    for (int i = 0; i < 4; ++i)
+                    var j = 0;
+                    var minDifference = uint.MaxValue;
+                    for (var i = 0; i < 4; ++i)
                     {
-                        uint CurrentDifference = MaxRValue[i] - MinRValue[i] + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i]);
-                        if (CurrentDifference < MinDifference && NumPixels[i] > 0)
+                        var currentDifference = maxRValue[i] - minRValue[i] + (maxGValue[i] - minGValue[i]) + (maxBValue[i] - minBValue[i]);
+                        if (currentDifference < minDifference && numPixels[i] > 0)
                         {
                             j = i;
-                            MinDifference = CurrentDifference;
+                            minDifference = currentDifference;
                         }
                     }
-                    RValues[j] = RValues[j] / NumPixels[j];
-                    GValues[j] = GValues[j] / NumPixels[j];
-                    BValues[j] = BValues[j] / NumPixels[j];
+                    rValues[j] = rValues[j] / numPixels[j];
+                    gValues[j] = gValues[j] / numPixels[j];
+                    bValues[j] = bValues[j] / numPixels[j];
 
-                    Result[y * image.Width + x].Red = (byte)RValues[j];
-                    Result[y * image.Width + x].Green = (byte)GValues[j];
-                    Result[y * image.Width + x].Blue = (byte)BValues[j];
+                    result[y * image.Width + x].Red = (byte)rValues[j];
+                    result[y * image.Width + x].Green = (byte)gValues[j];
+                    result[y * image.Width + x].Blue = (byte)bValues[j];
                 }
             }
         });
-        return image.ReCreate(image.Width, image.Height, Result);
+        return image.ReCreate(image.Width, image.Height, result);
     }
 }

@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Structure.Sketching.Helpers;
+namespace Structure.Sketching.Formats.Gif.Format.Helpers;
 
 /// <summary>
 /// Packed field
@@ -31,9 +31,9 @@ public struct PackedField : IEquatable<PackedField>
     {
         get
         {
-            int returnValue = 0;
-            int bitShift = 7;
-            foreach (bool bit in Bits)
+            var returnValue = 0;
+            var bitShift = 7;
+            foreach (var bit in Bits)
             {
                 int bitValue;
                 if (bit)
@@ -118,12 +118,9 @@ public struct PackedField : IEquatable<PackedField>
     /// </returns>
     public readonly bool GetBit(int index)
     {
-        if (index < 0 || index > 7)
-        {
-            string message = $"Index must be between 0 and 7. Supplied index: {index}";
-            throw new ArgumentOutOfRangeException(nameof(index), message);
-        }
-        return Bits[index];
+        if (index is >= 0 and <= 7) return Bits[index];
+        var message = $"Index must be between 0 and 7. Supplied index: {index}";
+        throw new ArgumentOutOfRangeException(nameof(index), message);
     }
 
     /// <summary>
@@ -136,25 +133,25 @@ public struct PackedField : IEquatable<PackedField>
     /// </returns>
     public readonly int GetBits(int startIndex, int length)
     {
-        if (startIndex < 0 || startIndex > 7)
+        if (startIndex is < 0 or > 7)
         {
-            string message = $"Start index must be between 0 and 7. Supplied index: {startIndex}";
+            var message = $"Start index must be between 0 and 7. Supplied index: {startIndex}";
             throw new ArgumentOutOfRangeException(nameof(startIndex), message);
         }
 
         if (length < 1 || startIndex + length > 8)
         {
-            string message = "Length must be greater than zero and the sum of length and start index must be less than 8. "
-                             + $"Supplied length: {length}. Supplied start index: {startIndex}";
+            var message = "Length must be greater than zero and the sum of length and start index must be less than 8. "
+                          + $"Supplied length: {length}. Supplied start index: {startIndex}";
 
             throw new ArgumentOutOfRangeException(nameof(length), message);
         }
 
-        int returnValue = 0;
-        int bitShift = length - 1;
-        for (int i = startIndex; i < startIndex + length; i++)
+        var returnValue = 0;
+        var bitShift = length - 1;
+        for (var i = startIndex; i < startIndex + length; i++)
         {
-            int bitValue = (Bits[i] ? 1 : 0) << bitShift;
+            var bitValue = (Bits[i] ? 1 : 0) << bitShift;
             returnValue += bitValue;
             bitShift--;
         }
@@ -179,9 +176,9 @@ public struct PackedField : IEquatable<PackedField>
     /// </param>
     public readonly void SetBit(int index, bool valueToSet)
     {
-        if (index < 0 || index > 7)
+        if (index is < 0 or > 7)
         {
-            string message
+            var message
                 = "Index must be between 0 and 7. Supplied index: "
                   + index;
             throw new ArgumentOutOfRangeException(nameof(index), message);
@@ -198,25 +195,25 @@ public struct PackedField : IEquatable<PackedField>
     /// <param name="valueToSet">The value to set the bits to.</param>
     public readonly void SetBits(int startIndex, int length, int valueToSet)
     {
-        if (startIndex < 0 || startIndex > 7)
+        if (startIndex is < 0 or > 7)
         {
-            string message = $"Start index must be between 0 and 7. Supplied index: {startIndex}";
+            var message = $"Start index must be between 0 and 7. Supplied index: {startIndex}";
             throw new ArgumentOutOfRangeException(nameof(startIndex), message);
         }
 
         if (length < 1 || startIndex + length > 8)
         {
-            string message = "Length must be greater than zero and the sum of length and start index must be less than 8. "
-                             + $"Supplied length: {length}. Supplied start index: {startIndex}";
+            var message = "Length must be greater than zero and the sum of length and start index must be less than 8. "
+                          + $"Supplied length: {length}. Supplied start index: {startIndex}";
             throw new ArgumentOutOfRangeException(nameof(length), message);
         }
 
-        int bitShift = length - 1;
-        for (int i = startIndex; i < startIndex + length; i++)
+        var bitShift = length - 1;
+        for (var i = startIndex; i < startIndex + length; i++)
         {
-            int bitValueIfSet = 1 << bitShift;
-            int bitValue = valueToSet & bitValueIfSet;
-            int bitIsSet = bitValue >> bitShift;
+            var bitValueIfSet = 1 << bitShift;
+            var bitValue = valueToSet & bitValueIfSet;
+            var bitIsSet = bitValue >> bitShift;
             Bits[i] = bitIsSet == 1;
             bitShift--;
         }

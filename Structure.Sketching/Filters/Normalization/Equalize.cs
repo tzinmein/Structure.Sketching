@@ -34,7 +34,7 @@ public class Equalize : IFilter
     /// <param name="histogram">The histogram.</param>
     public Equalize(IHistogram histogram = null)
     {
-        Histogram = histogram ?? new RGBHistogram();
+        Histogram = histogram ?? new RgbHistogram();
     }
 
     /// <summary>
@@ -56,16 +56,16 @@ public class Equalize : IFilter
             .Equalize();
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var ResultColor = Histogram.EqualizeColor(*TargetPointer2);
-                    (*TargetPointer2).Red = ResultColor.Red;
-                    (*TargetPointer2).Green = ResultColor.Green;
-                    (*TargetPointer2).Blue = ResultColor.Blue;
-                    ++TargetPointer2;
+                    var resultColor = Histogram.EqualizeColor(*targetPointer2);
+                    (*targetPointer2).Red = resultColor.Red;
+                    (*targetPointer2).Green = resultColor.Green;
+                    (*targetPointer2).Blue = resultColor.Blue;
+                    ++targetPointer2;
                 }
             }
         });

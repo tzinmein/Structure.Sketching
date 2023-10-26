@@ -64,27 +64,27 @@ public class PaletteReader : IColorReader
 
         if (AlphaPalette.Data.Length > 0)
         {
-            for (int x = 0; x < header.Width; ++x)
+            for (var x = 0; x < header.Width; ++x)
             {
-                int Offset = row * header.Width + x;
-                int PixelOffset = scanline[x] * 3;
-                pixels[Offset].Red = Palette.Data[PixelOffset];
-                pixels[Offset].Green = Palette.Data[PixelOffset + 1];
-                pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
-                pixels[Offset].Alpha = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
+                var offset = row * header.Width + x;
+                var pixelOffset = scanline[x] * 3;
+                pixels[offset].Red = Palette.Data[pixelOffset];
+                pixels[offset].Green = Palette.Data[pixelOffset + 1];
+                pixels[offset].Blue = Palette.Data[pixelOffset + 2];
+                pixels[offset].Alpha = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
             }
         }
         else
         {
-            for (int x = 0; x < header.Width; ++x)
+            for (var x = 0; x < header.Width; ++x)
             {
-                int Offset = row * header.Width + x;
-                int PixelOffset = scanline[x] * 3;
+                var offset = row * header.Width + x;
+                var pixelOffset = scanline[x] * 3;
 
-                pixels[Offset].Red = Palette.Data[PixelOffset];
-                pixels[Offset].Green = Palette.Data[PixelOffset + 1];
-                pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
-                pixels[Offset].Alpha = 255;
+                pixels[offset].Red = Palette.Data[pixelOffset];
+                pixels[offset].Green = Palette.Data[pixelOffset + 1];
+                pixels[offset].Blue = Palette.Data[pixelOffset + 2];
+                pixels[offset].Alpha = 255;
             }
         }
     }

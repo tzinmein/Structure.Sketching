@@ -27,13 +27,13 @@ public class Random : System.Random
     /// <summary>
     /// The global seed
     /// </summary>
-    private static readonly Random GlobalSeed = new Random();
+    private static readonly Random GlobalSeed = new();
 
     /// <summary>
     /// The thread static local random object
     /// </summary>
     [ThreadStatic]
-    private static Random Local;
+    private static Random _local;
 
     /// <summary>
     /// A thread safe version of a random number generation
@@ -48,14 +48,14 @@ public class Random : System.Random
             min = max;
             max = min;
         }
-        if (Local == null)
+        if (_local == null)
         {
-            int Seed;
+            int seed;
             lock (GlobalSeed)
-                Seed = GlobalSeed.Next();
-            Local = new Random(Seed);
+                seed = GlobalSeed.Next();
+            _local = new Random(seed);
         }
-        return Local.Next(min, max);
+        return _local.Next(min, max);
     }
 
     /// <summary>
@@ -71,13 +71,13 @@ public class Random : System.Random
             min = max;
             max = min;
         }
-        if (Local == null)
+        if (_local == null)
         {
-            int Seed;
+            int seed;
             lock (GlobalSeed)
-                Seed = GlobalSeed.Next();
-            Local = new Random(Seed);
+                seed = GlobalSeed.Next();
+            _local = new Random(seed);
         }
-        return min + ((max - min) * Local.NextDouble());
+        return min + ((max - min) * _local.NextDouble());
     }
 }

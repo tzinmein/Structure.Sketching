@@ -61,20 +61,20 @@ public abstract class ProcessingPipelineBaseClass : IFilter
     {
         if (filter as MatrixBaseClass != null && Filters.Count > 0)
         {
-            var LastFilter = Filters[^1];
-            if (LastFilter as MatrixBaseClass != null)
+            var lastFilter = Filters[^1];
+            if (lastFilter as MatrixBaseClass != null)
             {
-                Filters.Remove(LastFilter);
-                filter = (MatrixBaseClass)LastFilter * (MatrixBaseClass)filter;
+                Filters.Remove(lastFilter);
+                filter = (MatrixBaseClass)lastFilter * (MatrixBaseClass)filter;
             }
         }
         else if (Combine && filter as ConvolutionBaseClass != null && Filters.Count > 0)
         {
-            var LastFilter = Filters[^1];
-            if (LastFilter as ConvolutionBaseClass != null)
+            var lastFilter = Filters[^1];
+            if (lastFilter as ConvolutionBaseClass != null)
             {
-                Filters.Remove(LastFilter);
-                filter = (ConvolutionBaseClass)LastFilter * (ConvolutionBaseClass)filter;
+                Filters.Remove(lastFilter);
+                filter = (ConvolutionBaseClass)lastFilter * (ConvolutionBaseClass)filter;
             }
         }
         Filters.Add(filter);
@@ -89,7 +89,7 @@ public abstract class ProcessingPipelineBaseClass : IFilter
     /// <returns>The resulting image</returns>
     public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        for (int x = 0; x < Filters.Count; ++x)
+        for (var x = 0; x < Filters.Count; ++x)
         {
             Filters[x].Apply(image, targetLocation);
         }

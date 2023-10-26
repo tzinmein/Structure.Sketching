@@ -87,7 +87,7 @@ public class Temperature : MatrixBaseClass
         }
 
 
-        Matrix = new Matrix5x5
+        Matrix = new Matrix5X5
         {
             M11 = red / 255f,
             M12 = 0,
@@ -107,7 +107,7 @@ public class Temperature : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5x5 Matrix { get; }
+    public override Matrix5X5 Matrix { get; }
 
     /// <summary>
     /// Temperature presets

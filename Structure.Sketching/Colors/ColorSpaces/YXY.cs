@@ -23,15 +23,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// <summary>
 /// YXY color space
 /// </summary>
-public struct YXY : IEquatable<YXY>, IColorSpace
+public struct Yxy : IEquatable<Yxy>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="YXY"/> class.
+    /// Initializes a new instance of the <see cref="Yxy"/> class.
     /// </summary>
     /// <param name="y1">The y1.</param>
     /// <param name="x">The x.</param>
     /// <param name="y2">The y2.</param>
-    public YXY(double y1, double x, double y2)
+    public Yxy(double y1, double x, double y2)
     {
         Y2 = y2;
         X = x;
@@ -59,53 +59,53 @@ public struct YXY : IEquatable<YXY>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="YXY"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="Yxy"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(YXY color)
+    public static implicit operator Color(Yxy color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="YXY"/> to <see cref="XYZ"/>.
+    /// Performs an implicit conversion from <see cref="Yxy"/> to <see cref="Xyz"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator XYZ(YXY color)
+    public static implicit operator Xyz(Yxy color)
     {
-        return new XYZ(color.X * (color.Y1 / color.Y2),
+        return new Xyz(color.X * (color.Y1 / color.Y2),
             color.Y1,
             (1.0 - color.X - color.Y2) * (color.Y1 / color.Y2));
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="YXY"/>.
+    /// Performs an implicit conversion from <see cref="Xyz"/> to <see cref="Yxy"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator YXY(XYZ color)
+    public static implicit operator Yxy(Xyz color)
     {
         var xyz = color;
         var xDividend = xyz.X + xyz.Y + xyz.Z;
         var y2Dividend = xyz.X + xyz.Y + xyz.Z;
-        return new YXY(xyz.Y,
-            Math.Abs(xDividend) < EPSILON ? 0.0 : xyz.X / xDividend,
-            Math.Abs(y2Dividend) < EPSILON ? 0.0 : xyz.Y / (xyz.X + xyz.Y + xyz.Z));
+        return new Yxy(xyz.Y,
+            Math.Abs(xDividend) < Epsilon ? 0.0 : xyz.X / xDividend,
+            Math.Abs(y2Dividend) < Epsilon ? 0.0 : xyz.Y / (xyz.X + xyz.Y + xyz.Z));
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="YXY"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Yxy"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator YXY(Color color)
+    public static implicit operator Yxy(Color color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ public struct YXY : IEquatable<YXY>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(YXY color1, YXY color2)
+    public static bool operator !=(Yxy color1, Yxy color2)
     {
         return !(color1 == color2);
     }
@@ -127,7 +127,7 @@ public struct YXY : IEquatable<YXY>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(YXY color1, YXY color2)
+    public static bool operator ==(Yxy color1, Yxy color2)
     {
         return color1.Equals(color2);
     }
@@ -142,7 +142,7 @@ public struct YXY : IEquatable<YXY>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is YXY yxy && Equals(yxy);
+        return obj is Yxy yxy && Equals(yxy);
     }
 
     /// <summary>
@@ -153,11 +153,11 @@ public struct YXY : IEquatable<YXY>, IColorSpace
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(YXY other)
+    public readonly bool Equals(Yxy other)
     {
-        return Math.Abs(other.X - X) < EPSILON
-               && Math.Abs(other.Y1 - Y1) < EPSILON
-               && Math.Abs(other.Y2 - Y2) < EPSILON;
+        return Math.Abs(other.X - X) < Epsilon
+               && Math.Abs(other.Y1 - Y1) < Epsilon
+               && Math.Abs(other.Y2 - Y2) < Epsilon;
     }
 
     /// <summary>

@@ -25,12 +25,12 @@ public class JpegFormat : FormatTestBase
     [MemberData(nameof(InputFileNames))]
     public void Encode(string fileName)
     {
-        using (var TempFile = File.OpenRead(InputDirectory + fileName))
+        using (var tempFile = File.OpenRead(InputDirectory + fileName))
         {
-            var ImageFormat = new Sketching.Formats.Jpeg.JpegFormat();
-            var TempImage = ImageFormat.Decode(TempFile);
-            using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
-            Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
+            var imageFormat = new Sketching.Formats.Jpeg.JpegFormat();
+            var tempImage = imageFormat.Decode(tempFile);
+            using var tempFile2 = File.OpenWrite(OutputDirectory + fileName);
+            Assert.True(imageFormat.Encode(new BinaryWriter(tempFile2), tempImage));
         }
         Assert.True(CheckFileCorrect(fileName));
     }

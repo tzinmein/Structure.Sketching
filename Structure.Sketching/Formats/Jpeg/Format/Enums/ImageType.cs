@@ -13,10 +13,10 @@ public enum ImageType
     /// <summary>
     /// The image is RGB or YCbCr
     /// </summary>
-    RGB = 3,
+    Rgb = 3,
 
     /// <summary>
     /// The image is CMYK or YCbCrK
     /// </summary>
-    CMYK = 4
+    Cmyk = 4
 }

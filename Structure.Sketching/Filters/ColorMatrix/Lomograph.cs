@@ -31,7 +31,7 @@ public class LomographColorMatrix : MatrixBaseClass
     /// <value>
     /// The matrix.
     /// </value>
-    public override Matrix5x5 Matrix => new Matrix5x5(
+    public override Matrix5X5 Matrix => new Matrix5X5(
         1.5f, 0f, 0f, 0f, 0f,
         0f, 1.45f, 0f, 0f, 0f,
         0f, 0f, 1.11f, 0f, 0f,

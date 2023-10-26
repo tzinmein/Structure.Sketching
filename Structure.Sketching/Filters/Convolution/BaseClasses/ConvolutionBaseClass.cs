@@ -71,33 +71,33 @@ public abstract class ConvolutionBaseClass : IFilter
         {
             (value2, value1) = (value1, value2);
         }
-        int Height = value1.Height + value2.Height - 1;
-        int Width = value1.Width + value2.Width - 1;
-        float[] Values = new float[Width * Height];
-        int Value2YPosition = -value2.Height + 1;
-        for (int y = 0; y < Height; ++y)
+        var height = value1.Height + value2.Height - 1;
+        var width = value1.Width + value2.Width - 1;
+        var values = new float[width * height];
+        var value2YPosition = -value2.Height + 1;
+        for (var y = 0; y < height; ++y)
         {
-            int Value2XPosition = -value2.Width + 1;
-            for (int x = 0; x < Width; ++x)
+            var value2XPosition = -value2.Width + 1;
+            for (var x = 0; x < width; ++x)
             {
-                float Value = 0;
-                for (int i = 0; i < value2.Width; ++i)
+                float value = 0;
+                for (var i = 0; i < value2.Width; ++i)
                 {
-                    for (int j = 0; j < value2.Height; ++j)
+                    for (var j = 0; j < value2.Height; ++j)
                     {
-                        if (i + Value2XPosition >= 0 && i + Value2XPosition < value1.Width
-                                                     && j + Value2YPosition >= 0 && j + Value2YPosition < value1.Height)
+                        if (i + value2XPosition >= 0 && i + value2XPosition < value1.Width
+                                                     && j + value2YPosition >= 0 && j + value2YPosition < value1.Height)
                         {
-                            Value += value1.Matrix[i + Value2XPosition + (j + Value2YPosition) * value1.Width] * value2.Matrix[i + j * value2.Width];
+                            value += value1.Matrix[i + value2XPosition + (j + value2YPosition) * value1.Width] * value2.Matrix[i + j * value2.Width];
                         }
                     }
                 }
-                Values[x + y * Width] = Value;
-                ++Value2XPosition;
+                values[x + y * width] = value;
+                ++value2XPosition;
             }
-            ++Value2YPosition;
+            ++value2YPosition;
         }
-        return new ConvolutionFilter(Values, Width, Height, value1.Absolute | value2.Absolute, value1.Offset + value2.Offset);
+        return new ConvolutionFilter(values, width, height, value1.Absolute | value2.Absolute, value1.Offset + value2.Offset);
     }
 
     /// <summary>
@@ -113,63 +113,63 @@ public abstract class ConvolutionBaseClass : IFilter
         Array.Copy(image.Pixels, tempPixels, image.Pixels.Length);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* OutputPointer = Pointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var outputPointer = pointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var Values = new Vector4(0, 0, 0, 0);
-                    float Weight = 0;
-                    int XCurrent = -Width >> 1;
-                    int YCurrent = -Height >> 1;
-                    int Start = 0;
-                    fixed (float* MatrixPointer = &Matrix[0])
+                    var values = new Vector4(0, 0, 0, 0);
+                    float weight = 0;
+                    var xCurrent = -Width >> 1;
+                    var yCurrent = -Height >> 1;
+                    var start = 0;
+                    fixed (float* matrixPointer = &Matrix[0])
                     {
-                        float* MatrixValue = MatrixPointer;
-                        for (int MatrixIndex = 0; MatrixIndex < Matrix.Length; ++MatrixIndex)
+                        var matrixValue = matrixPointer;
+                        for (var matrixIndex = 0; matrixIndex < Matrix.Length; ++matrixIndex)
                         {
-                            if (MatrixIndex % Width == 0 && MatrixIndex != 0)
+                            if (matrixIndex % Width == 0 && matrixIndex != 0)
                             {
-                                ++YCurrent;
-                                XCurrent = 0;
+                                ++yCurrent;
+                                xCurrent = 0;
                             }
-                            if (XCurrent + x < image.Width && XCurrent + x >= 0
-                                                           && YCurrent + y < image.Height && YCurrent + y >= 0)
+                            if (xCurrent + x < image.Width && xCurrent + x >= 0
+                                                           && yCurrent + y < image.Height && yCurrent + y >= 0)
                             {
-                                if (*MatrixValue != 0)
+                                if (*matrixValue != 0)
                                 {
-                                    Start = (YCurrent + y) * image.Width + x + XCurrent;
-                                    var TempPixel = tempPixels[Start];
-                                    Values += new Vector4(*MatrixValue * TempPixel.Red,
-                                        *MatrixValue * TempPixel.Green,
-                                        *MatrixValue * TempPixel.Blue,
-                                        TempPixel.Alpha);
-                                    Weight += *MatrixValue;
+                                    start = (yCurrent + y) * image.Width + x + xCurrent;
+                                    var tempPixel = tempPixels[start];
+                                    values += new Vector4(*matrixValue * tempPixel.Red,
+                                        *matrixValue * tempPixel.Green,
+                                        *matrixValue * tempPixel.Blue,
+                                        tempPixel.Alpha);
+                                    weight += *matrixValue;
                                 }
-                                ++MatrixValue;
+                                ++matrixValue;
                             }
-                            ++XCurrent;
+                            ++xCurrent;
                         }
                     }
-                    if (Weight == 0)
-                        Weight = 1;
-                    if (Weight > 0)
+                    if (weight == 0)
+                        weight = 1;
+                    if (weight > 0)
                     {
                         if (Absolute)
                         {
-                            Values = Vector4.Abs(Values);
+                            values = Vector4.Abs(values);
                         }
-                        Values /= Weight;
-                        Values = new Vector4(Values.X + Offset, Values.Y + Offset, Values.Z + Offset, 1);
-                        Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                        (*OutputPointer).Red = (byte)Values.X;
-                        (*OutputPointer).Green = (byte)Values.Y;
-                        (*OutputPointer).Blue = (byte)Values.Z;
-                        ++OutputPointer;
+                        values /= weight;
+                        values = new Vector4(values.X + Offset, values.Y + Offset, values.Z + Offset, 1);
+                        values = Vector4.Clamp(values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                        (*outputPointer).Red = (byte)values.X;
+                        (*outputPointer).Green = (byte)values.Y;
+                        (*outputPointer).Blue = (byte)values.Z;
+                        ++outputPointer;
                     }
                     else
                     {
-                        ++OutputPointer;
+                        ++outputPointer;
                     }
                 }
             }

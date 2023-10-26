@@ -24,15 +24,15 @@ namespace Structure.Sketching.Colors.ColorSpaces;
 /// <summary>
 /// LUV color space
 /// </summary>
-public struct CIELUV : IEquatable<CIELUV>, IColorSpace
+public struct Cieluv : IEquatable<Cieluv>, IColorSpace
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="CIELUV"/> class.
+    /// Initializes a new instance of the <see cref="Cieluv"/> class.
     /// </summary>
     /// <param name="l">The l.</param>
     /// <param name="u">The u.</param>
     /// <param name="v">The v.</param>
-    public CIELUV(double l, double u, double v)
+    public Cieluv(double l, double u, double v)
     {
         L = l;
         U = u;
@@ -60,7 +60,7 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     /// <summary>
     /// The epsilon
     /// </summary>
-    private const float EPSILON = 0.001f;
+    private const float Epsilon = 0.001f;
 
     /// <summary>
     /// Intent is 24389/27
@@ -70,70 +70,70 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     /// <summary>
     /// Intent is 216/24389
     /// </summary>
-    private const double XYZEpsilon = 0.008856;
+    private const double XyzEpsilon = 0.008856;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="CIELUV"/>.
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Cieluv"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELUV(Color color)
+    public static implicit operator Cieluv(Color color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="CIELUV"/>.
+    /// Performs an implicit conversion from <see cref="Xyz"/> to <see cref="Cieluv"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator CIELUV(XYZ color)
+    public static implicit operator Cieluv(Xyz color)
     {
-        var White = XYZ.WhiteReference;
+        var white = Xyz.WhiteReference;
 
-        var y = color.Y / White.Y;
-        var L = y > XYZEpsilon ? 116.0 * y.CubicRoot() - 16.0 : Kappa * y;
+        var y = color.Y / white.Y;
+        var l = y > XyzEpsilon ? 116.0 * y.CubicRoot() - 16.0 : Kappa * y;
 
         var targetDenominator = GetDenominator(color);
-        var referenceDenominator = GetDenominator(White);
-        var xTarget = targetDenominator == 0 ? 0 : 4.0 * color.X / targetDenominator - 4.0 * White.X / referenceDenominator;
-        var yTarget = targetDenominator == 0 ? 0 : 9.0 * color.Y / targetDenominator - 9.0 * White.Y / referenceDenominator;
-        var U = 13.0 * L * xTarget;
-        var V = 13.0 * L * yTarget;
-        return new CIELUV(L, U, V);
+        var referenceDenominator = GetDenominator(white);
+        var xTarget = targetDenominator == 0 ? 0 : 4.0 * color.X / targetDenominator - 4.0 * white.X / referenceDenominator;
+        var yTarget = targetDenominator == 0 ? 0 : 9.0 * color.Y / targetDenominator - 9.0 * white.Y / referenceDenominator;
+        var u = 13.0 * l * xTarget;
+        var v = 13.0 * l * yTarget;
+        return new Cieluv(l, u, v);
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELUV"/> to <see cref="Color"/>.
+    /// Performs an implicit conversion from <see cref="Cieluv"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Color(CIELUV color)
+    public static implicit operator Color(Cieluv color)
     {
-        return (XYZ)color;
+        return (Xyz)color;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CIELUV"/> to <see cref="XYZ"/>.
+    /// Performs an implicit conversion from <see cref="Cieluv"/> to <see cref="Xyz"/>.
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator XYZ(CIELUV color)
+    public static implicit operator Xyz(Cieluv color)
     {
-        var White = XYZ.WhiteReference;
-        var C = -1.0 / 3.0;
-        var UPrime = 4.0 * White.X / GetDenominator(White);
-        var VPrime = 9.0 * White.Y / GetDenominator(White);
-        var A = 1.0 / 3.0 * (52.0 * color.L / (color.U + 13 * color.L * UPrime) - 1.0);
-        var ImteL_16_116 = (color.L + 16.0) / 116.0;
-        var Y = color.L > Kappa * XYZEpsilon
-            ? ImteL_16_116 * ImteL_16_116 * ImteL_16_116
+        var white = Xyz.WhiteReference;
+        var c = -1.0 / 3.0;
+        var uPrime = 4.0 * white.X / GetDenominator(white);
+        var vPrime = 9.0 * white.Y / GetDenominator(white);
+        var a = 1.0 / 3.0 * (52.0 * color.L / (color.U + 13 * color.L * uPrime) - 1.0);
+        var imteL16116 = (color.L + 16.0) / 116.0;
+        var y = color.L > Kappa * XyzEpsilon
+            ? imteL16116 * imteL16116 * imteL16116
             : color.L / Kappa;
-        var B = -5.0 * Y;
-        var D = Y * (39.0 * color.L / (color.V + 13.0 * color.L * VPrime) - 5.0);
-        var X = (D - B) / (A - C);
-        var Z = X * A + B;
-        return new XYZ(100 * X, 100 * Y, 100 * Z);
+        var b = -5.0 * y;
+        var d = y * (39.0 * color.L / (color.V + 13.0 * color.L * vPrime) - 5.0);
+        var x = (d - b) / (a - c);
+        var z = x * a + b;
+        return new Xyz(100 * x, 100 * y, 100 * z);
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(CIELUV color1, CIELUV color2)
+    public static bool operator !=(Cieluv color1, Cieluv color2)
     {
         return !(color1 == color2);
     }
@@ -155,7 +155,7 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(CIELUV color1, CIELUV color2)
+    public static bool operator ==(Cieluv color1, Cieluv color2)
     {
         return color1.Equals(color2);
     }
@@ -170,7 +170,7 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
-        return obj is CIELUV cieluv && Equals(cieluv);
+        return obj is Cieluv cieluv && Equals(cieluv);
     }
 
     /// <summary>
@@ -181,11 +181,11 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(CIELUV other)
+    public readonly bool Equals(Cieluv other)
     {
-        return Math.Abs(other.L - L) < EPSILON
-               && Math.Abs(other.U - U) < EPSILON
-               && Math.Abs(other.V - V) < EPSILON;
+        return Math.Abs(other.L - L) < Epsilon
+               && Math.Abs(other.U - U) < Epsilon
+               && Math.Abs(other.V - V) < Epsilon;
     }
 
     /// <summary>
@@ -213,7 +213,7 @@ public struct CIELUV : IEquatable<CIELUV>, IColorSpace
     /// </summary>
     /// <param name="xyz">The xyz.</param>
     /// <returns>The denominator</returns>
-    private static double GetDenominator(XYZ xyz)
+    private static double GetDenominator(Xyz xyz)
     {
         return xyz.X + 15.0 * xyz.Y + 3.0 * xyz.Z;
     }

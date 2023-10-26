@@ -38,7 +38,7 @@ public class AdaptiveEqualize : IFilter
     public AdaptiveEqualize(int radius, Func<IHistogram> histogram = null)
     {
         Radius = radius;
-        Histogram = histogram ?? (() => new RGBHistogram());
+        Histogram = histogram ?? (() => new RgbHistogram());
     }
 
     /// <summary>
@@ -62,52 +62,52 @@ public class AdaptiveEqualize : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var TempValues = new Color[image.Pixels.Length];
-        Array.Copy(image.Pixels, TempValues, TempValues.Length);
-        int ApetureMin = -Radius;
-        int ApetureMax = Radius;
+        var tempValues = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, tempValues, tempValues.Length);
+        var apetureMin = -Radius;
+        var apetureMax = Radius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var ColorList = new List<Color>();
-                    for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
+                    var colorList = new List<Color>();
+                    for (var y2 = apetureMin; y2 < apetureMax; ++y2)
                     {
-                        int TempY = y + y2;
-                        int TempX = x + ApetureMin;
-                        if (TempY >= 0 && TempY < image.Height)
+                        var tempY = y + y2;
+                        var tempX = x + apetureMin;
+                        if (tempY >= 0 && tempY < image.Height)
                         {
-                            int Length = Radius * 2;
-                            if (TempX < 0)
+                            var length = Radius * 2;
+                            if (tempX < 0)
                             {
-                                Length += TempX;
-                                TempX = 0;
+                                length += tempX;
+                                tempX = 0;
                             }
-                            var Start = TempY * image.Width + TempX;
-                            fixed (Color* ImagePointer = &TempValues[Start])
+                            var start = tempY * image.Width + tempX;
+                            fixed (Color* imagePointer = &tempValues[start])
                             {
-                                Color* ImagePointer2 = ImagePointer;
-                                for (int x2 = 0; x2 < Length; ++x2)
+                                var imagePointer2 = imagePointer;
+                                for (var x2 = 0; x2 < length; ++x2)
                                 {
-                                    if (TempX >= image.Width)
+                                    if (tempX >= image.Width)
                                         break;
-                                    ColorList.Add(*ImagePointer2);
-                                    ++ImagePointer2;
-                                    ++TempX;
+                                    colorList.Add(*imagePointer2);
+                                    ++imagePointer2;
+                                    ++tempX;
                                 }
                             }
                         }
                     }
-                    var TempHistogram = Histogram().Load(ColorList.ToArray()).Equalize();
+                    var tempHistogram = Histogram().Load(colorList.ToArray()).Equalize();
 
-                    var ResultColor = TempHistogram.EqualizeColor(*TargetPointer2);
-                    (*TargetPointer2).Red = ResultColor.Red;
-                    (*TargetPointer2).Green = ResultColor.Green;
-                    (*TargetPointer2).Blue = ResultColor.Blue;
-                    ++TargetPointer2;
+                    var resultColor = tempHistogram.EqualizeColor(*targetPointer2);
+                    (*targetPointer2).Red = resultColor.Red;
+                    (*targetPointer2).Green = resultColor.Green;
+                    (*targetPointer2).Blue = resultColor.Blue;
+                    ++targetPointer2;
                 }
             }
         });

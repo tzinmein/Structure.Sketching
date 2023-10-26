@@ -31,7 +31,7 @@ public class PolaroidColorMatrix : MatrixBaseClass
     /// <value>
     /// The matrix.
     /// </value>
-    public override Matrix5x5 Matrix => new Matrix5x5(
+    public override Matrix5X5 Matrix => new Matrix5X5(
         1.538f, -0.062f, -0.262f, 0f, 0f,
         -0.022f, 1.578f, -0.022f, 0f, 0f,
         .216f, -.16f, 1.5831f, 0f, 0f,

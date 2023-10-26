@@ -23,13 +23,13 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats;
 /// RGB 32bit pixel format
 /// </summary>
 /// <seealso cref="Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces.IPixelFormat"/>
-public class RGB32bit : PixelFormatBase
+public class Rgb32Bit : PixelFormatBase
 {
     /// <summary>
     /// The bytes per pixel
     /// </summary>
     /// <value>The BPP.</value>
-    public override double BPP => 4;
+    public override double Bpp => 4;
 
     /// <summary>
     /// Decodes the specified data.
@@ -40,33 +40,33 @@ public class RGB32bit : PixelFormatBase
     /// <returns>The decoded data</returns>
     public override byte[] Decode(Header header, byte[] data, Palette palette)
     {
-        int width = header.Width;
-        int height = header.Height;
-        int alignment = (4 - width * (int)BPP % 4) % 4;
-        byte[] ReturnValue = new byte[width * height * 4];
+        var width = header.Width;
+        var height = header.Height;
+        var alignment = (4 - width * (int)Bpp % 4) % 4;
+        var returnValue = new byte[width * height * 4];
         Parallel.For(0, height, y =>
         {
-            int SourceY = height - y - 1;
-            if (SourceY < 0)
-                SourceY = 0;
-            if (SourceY >= height)
-                SourceY = height - 1;
-            int SourceRowOffset = SourceY * (width * (int)BPP + alignment);
-            int DestinationY = y;
-            int DestinationRowOffset = DestinationY * width * 4;
-            for (int x = 0; x < width; ++x)
+            var sourceY = height - y - 1;
+            if (sourceY < 0)
+                sourceY = 0;
+            if (sourceY >= height)
+                sourceY = height - 1;
+            var sourceRowOffset = sourceY * (width * (int)Bpp + alignment);
+            var destinationY = y;
+            var destinationRowOffset = destinationY * width * 4;
+            for (var x = 0; x < width; ++x)
             {
-                int SourceX = x * (int)BPP;
-                int SourceOffset = SourceX + SourceRowOffset;
-                int DestinationX = x * 4;
-                int DestinationOffset = DestinationX + DestinationRowOffset;
-                ReturnValue[DestinationOffset] = data[SourceOffset + 3];
-                ReturnValue[DestinationOffset + 1] = data[SourceOffset + 2];
-                ReturnValue[DestinationOffset + 2] = data[SourceOffset + 1];
-                ReturnValue[DestinationOffset + 3] = header.AlphaMask == 0 ? (byte)255 : data[SourceOffset];
+                var sourceX = x * (int)Bpp;
+                var sourceOffset = sourceX + sourceRowOffset;
+                var destinationX = x * 4;
+                var destinationOffset = destinationX + destinationRowOffset;
+                returnValue[destinationOffset] = data[sourceOffset + 3];
+                returnValue[destinationOffset + 1] = data[sourceOffset + 2];
+                returnValue[destinationOffset + 2] = data[sourceOffset + 1];
+                returnValue[destinationOffset + 3] = header.AlphaMask == 0 ? (byte)255 : data[sourceOffset];
             }
         });
-        return ReturnValue;
+        return returnValue;
     }
 
     /// <summary>
@@ -78,31 +78,31 @@ public class RGB32bit : PixelFormatBase
     /// <returns>The encoded data</returns>
     public override byte[] Encode(Header header, byte[] data, Palette palette)
     {
-        int width = header.Width;
-        int height = header.Height;
-        int alignment = (4 - width * (int)BPP % 4) % 4;
-        var ReturnValue = new byte[(width * (int)BPP + alignment) * height];
+        var width = header.Width;
+        var height = header.Height;
+        var alignment = (4 - width * (int)Bpp % 4) % 4;
+        var returnValue = new byte[(width * (int)Bpp + alignment) * height];
         Parallel.For(0, height, y =>
         {
-            int SourceY = height - y - 1;
-            if (SourceY < 0)
-                SourceY = 0;
-            if (SourceY >= height)
-                SourceY = height - 1;
-            int SourceRowOffset = SourceY * width * 4;
-            int DestinationY = y;
-            int DestinationRowOffset = DestinationY * (width * (int)BPP + alignment);
-            for (int x = 0; x < width; ++x)
+            var sourceY = height - y - 1;
+            if (sourceY < 0)
+                sourceY = 0;
+            if (sourceY >= height)
+                sourceY = height - 1;
+            var sourceRowOffset = sourceY * width * 4;
+            var destinationY = y;
+            var destinationRowOffset = destinationY * (width * (int)Bpp + alignment);
+            for (var x = 0; x < width; ++x)
             {
-                int SourceX = x * 4;
-                int SourceOffset = SourceX + SourceRowOffset;
-                int DestinationX = x * (int)BPP;
-                int DestinationOffset = DestinationX + DestinationRowOffset;
-                ReturnValue[DestinationOffset] = data[SourceOffset + 2];
-                ReturnValue[DestinationOffset + 1] = data[SourceOffset + 1];
-                ReturnValue[DestinationOffset + 2] = data[SourceOffset];
+                var sourceX = x * 4;
+                var sourceOffset = sourceX + sourceRowOffset;
+                var destinationX = x * (int)Bpp;
+                var destinationOffset = destinationX + destinationRowOffset;
+                returnValue[destinationOffset] = data[sourceOffset + 2];
+                returnValue[destinationOffset + 1] = data[sourceOffset + 1];
+                returnValue[destinationOffset + 2] = data[sourceOffset];
             }
         });
-        return ReturnValue;
+        return returnValue;
     }
 }

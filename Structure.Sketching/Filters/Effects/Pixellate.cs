@@ -52,42 +52,42 @@ public class Pixellate : IFilter
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        for (int y = targetLocation.Bottom; y < targetLocation.Top; y += PixelSize)
+        for (var y = targetLocation.Bottom; y < targetLocation.Top; y += PixelSize)
         {
-            var MinY = (y - PixelSize / 2).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var MaxY = (y + PixelSize / 2).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            var minY = (y - PixelSize / 2).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = (y + PixelSize / 2).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; x += PixelSize)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; x += PixelSize)
                 {
-                    uint RValue = 0;
-                    uint GValue = 0;
-                    uint BValue = 0;
-                    var MinX = (x - PixelSize / 2).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var MaxX = (x + PixelSize / 2).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    int NumberPixels = 0;
-                    for (int x2 = MinX; x2 < MaxX; ++x2)
+                    uint rValue = 0;
+                    uint gValue = 0;
+                    uint bValue = 0;
+                    var minX = (x - PixelSize / 2).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = (x + PixelSize / 2).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var numberPixels = 0;
+                    for (var x2 = minX; x2 < maxX; ++x2)
                     {
-                        for (int y2 = MinY; y2 < MaxY; ++y2)
+                        for (var y2 = minY; y2 < maxY; ++y2)
                         {
-                            var TempPixel = image.Pixels[y * image.Width + x];
-                            RValue += TempPixel.Red;
-                            GValue += TempPixel.Green;
-                            BValue += TempPixel.Blue;
-                            ++NumberPixels;
+                            var tempPixel = image.Pixels[y * image.Width + x];
+                            rValue += tempPixel.Red;
+                            gValue += tempPixel.Green;
+                            bValue += tempPixel.Blue;
+                            ++numberPixels;
                         }
                     }
-                    RValue /= (uint)NumberPixels;
-                    GValue /= (uint)NumberPixels;
-                    BValue /= (uint)NumberPixels;
-                    Parallel.For(MinX, MaxX, x2 =>
+                    rValue /= (uint)numberPixels;
+                    gValue /= (uint)numberPixels;
+                    bValue /= (uint)numberPixels;
+                    Parallel.For(minX, maxX, x2 =>
                     {
-                        for (int y2 = MinY; y2 < MaxY; ++y2)
+                        for (var y2 = minY; y2 < maxY; ++y2)
                         {
-                            image.Pixels[y2 * image.Width + x2].Red = (byte)RValue;
-                            image.Pixels[y2 * image.Width + x2].Green = (byte)GValue;
-                            image.Pixels[y2 * image.Width + x2].Blue = (byte)BValue;
+                            image.Pixels[y2 * image.Width + x2].Red = (byte)rValue;
+                            image.Pixels[y2 * image.Width + x2].Green = (byte)gValue;
+                            image.Pixels[y2 * image.Width + x2].Blue = (byte)bValue;
                         }
                     });
                 }

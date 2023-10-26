@@ -116,17 +116,17 @@ public class Frame : SectionBase
     /// </returns>
     public static Frame Read(Stream stream, ColorTable globalColorTable, GraphicsControl graphicsControl, LogicalScreenDescriptor screenDescriptor, List<Frame> frames)
     {
-        var TempDescriptor = ImageDescriptor.Read(stream);
-        ColorTable LocalColorTable = TempDescriptor.LocalColorTableExists ?
-            ColorTable.Read(stream, TempDescriptor.LocalColorTableSize) :
+        var tempDescriptor = ImageDescriptor.Read(stream);
+        var localColorTable = tempDescriptor.LocalColorTableExists ?
+            ColorTable.Read(stream, tempDescriptor.LocalColorTableSize) :
             globalColorTable;
-        var TempIndices = FrameIndices.Read(stream, TempDescriptor);
+        var tempIndices = FrameIndices.Read(stream, tempDescriptor);
 
-        var Data = ReadFrameColors(TempIndices, LocalColorTable, graphicsControl, TempDescriptor, screenDescriptor, frames);
+        var data = ReadFrameColors(tempIndices, localColorTable, graphicsControl, tempDescriptor, screenDescriptor, frames);
 
         Skip(stream, 0);
 
-        return new Frame(graphicsControl, TempDescriptor, LocalColorTable, TempIndices, Data);
+        return new Frame(graphicsControl, tempDescriptor, localColorTable, tempIndices, data);
     }
 
     /// <summary>
@@ -149,25 +149,25 @@ public class Frame : SectionBase
     {
         int imageWidth = screenDescriptor.Width;
         int imageHeight = screenDescriptor.Height;
-        byte[] CurrentFrame;
+        byte[] currentFrame;
         if (frames.Count > 0 &&
             graphicsControl != null &&
             graphicsControl.DisposalMethod == DisposalMethod.RestoreToPrevious)
         {
-            CurrentFrame = new byte[imageWidth * imageHeight * 4];
-            Array.Copy(frames[^1].Data, CurrentFrame, CurrentFrame.Length);
-            byte[] LastFrame = new byte[imageWidth * imageHeight * 4];
-            Array.Copy(CurrentFrame, LastFrame, LastFrame.Length);
+            currentFrame = new byte[imageWidth * imageHeight * 4];
+            Array.Copy(frames[^1].Data, currentFrame, currentFrame.Length);
+            var lastFrame = new byte[imageWidth * imageHeight * 4];
+            Array.Copy(currentFrame, lastFrame, lastFrame.Length);
         }
         else
         {
-            CurrentFrame = new byte[imageWidth * imageHeight * 4];
+            currentFrame = new byte[imageWidth * imageHeight * 4];
         }
 
         int offset, i = 0;
-        int interlacePass = 0;
-        int interlaceIncrement = 8;
-        int interlaceY = 0;
+        var interlacePass = 0;
+        var interlaceIncrement = 8;
+        var interlaceY = 0;
 
         for (int y = descriptor.Top; y < descriptor.Top + descriptor.Height; y++)
         {
@@ -213,16 +213,16 @@ public class Frame : SectionBase
                     graphicsControl.TransparencyFlag == false ||
                     graphicsControl.TransparencyIndex != index)
                 {
-                    int indexOffset = index * 3;
-                    CurrentFrame[offset + 0] = colorTable.Data[indexOffset];
-                    CurrentFrame[offset + 1] = colorTable.Data[indexOffset + 1];
-                    CurrentFrame[offset + 2] = colorTable.Data[indexOffset + 2];
-                    CurrentFrame[offset + 3] = 255;
+                    var indexOffset = index * 3;
+                    currentFrame[offset + 0] = colorTable.Data[indexOffset];
+                    currentFrame[offset + 1] = colorTable.Data[indexOffset + 1];
+                    currentFrame[offset + 2] = colorTable.Data[indexOffset + 2];
+                    currentFrame[offset + 3] = 255;
                 }
 
                 i++;
             }
         }
-        return CurrentFrame;
+        return currentFrame;
     }
 }

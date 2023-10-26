@@ -71,13 +71,13 @@ public class Threshold : IFilter
         new Greyscale709().Apply(image, targetLocation);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                Color* TargetPointer2 = TargetPointer;
-                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                var targetPointer2 = targetPointer;
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    *TargetPointer2 = (*TargetPointer2).Red / 255f >= ThresholdValue ? Color1 : Color2;
-                    ++TargetPointer2;
+                    *targetPointer2 = (*targetPointer2).Red / 255f >= ThresholdValue ? Color1 : Color2;
+                    ++targetPointer2;
                 }
             }
         });

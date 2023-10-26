@@ -63,15 +63,15 @@ public partial class Image
             ReCreate(width, height, null);
             return;
         }
-        var ReturnValues = new Color[width * height];
-        for (int x = 0; x < ReturnValues.Length; ++x)
+        var returnValues = new Color[width * height];
+        for (var x = 0; x < returnValues.Length; ++x)
         {
-            ReturnValues[x].Red = data[x * 4];
-            ReturnValues[x].Green = data[x * 4 + 1];
-            ReturnValues[x].Blue = data[x * 4 + 2];
-            ReturnValues[x].Alpha = data[x * 4 + 3];
+            returnValues[x].Red = data[x * 4];
+            returnValues[x].Green = data[x * 4 + 1];
+            returnValues[x].Blue = data[x * 4 + 2];
+            returnValues[x].Alpha = data[x * 4 + 3];
         }
-        ReCreate(width, height, ReturnValues);
+        ReCreate(width, height, returnValues);
     }
 
     /// <summary>
@@ -80,9 +80,9 @@ public partial class Image
     /// <param name="fileName">Name of the file.</param>
     public Image(string fileName)
     {
-        using var Stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-        var TempImage = new Manager().Decode(Stream);
-        ReCreate(TempImage.Width, TempImage.Height, TempImage.Pixels);
+        using var stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        var tempImage = new Manager().Decode(stream);
+        ReCreate(tempImage.Width, tempImage.Height, tempImage.Pixels);
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ public partial class Image
     /// <summary>
     /// The ASCII characters used
     /// </summary>
-    private static readonly string[] _ASCIICharacters = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+    private static readonly string[] AsciiCharacters = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
 
     /// <summary>
     /// Makes a copy of this image.
@@ -210,32 +210,32 @@ public partial class Image
     /// Converts the image to ASCII art.
     /// </summary>
     /// <returns>The image as ASCII art</returns>
-    public string ToASCIIArt()
+    public string ToAsciiArt()
     {
-        bool ShowLine = true;
-        var TempImage = new Greyscale601().Apply(Copy());
-        var Builder = new StringBuilder();
-        for (int y = 0; y < TempImage.Height; ++y)
+        var showLine = true;
+        var tempImage = new Greyscale601().Apply(Copy());
+        var builder = new StringBuilder();
+        for (var y = 0; y < tempImage.Height; ++y)
         {
-            for (int x = 0; x < TempImage.Width; ++x)
+            for (var x = 0; x < tempImage.Width; ++x)
             {
-                if (ShowLine)
+                if (showLine)
                 {
-                    var RValue = TempImage.Pixels[y * TempImage.Width + x].Red / 255f;
-                    Builder.Append(_ASCIICharacters[(int)(RValue * _ASCIICharacters.Length)]);
+                    var rValue = tempImage.Pixels[y * tempImage.Width + x].Red / 255f;
+                    builder.Append(AsciiCharacters[(int)(rValue * AsciiCharacters.Length)]);
                 }
             }
-            if (ShowLine)
+            if (showLine)
             {
-                Builder.AppendLine();
-                ShowLine = false;
+                builder.AppendLine();
+                showLine = false;
             }
             else
             {
-                ShowLine = true;
+                showLine = true;
             }
         }
-        return Builder.ToString();
+        return builder.ToString();
     }
 
     /// <summary>
@@ -245,11 +245,11 @@ public partial class Image
     /// <returns>A <see cref="string"/> that represents this instance as a base64 instance.</returns>
     public string ToString(FileFormats desiredFormat)
     {
-        using MemoryStream Stream = new MemoryStream();
-        if (Save(Stream, desiredFormat))
+        using var stream = new MemoryStream();
+        if (Save(stream, desiredFormat))
         {
-            var TempArray = Stream.ToArray();
-            return Convert.ToBase64String(TempArray, 0, TempArray.Length);
+            var tempArray = stream.ToArray();
+            return Convert.ToBase64String(tempArray, 0, tempArray.Length);
         }
         return string.Empty;
     }

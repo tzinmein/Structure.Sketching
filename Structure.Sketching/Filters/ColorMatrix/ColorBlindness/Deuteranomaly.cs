@@ -29,7 +29,7 @@ public class Deuteranomaly : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5x5 Matrix => new Matrix5x5(
+    public override Matrix5X5 Matrix => new Matrix5X5(
         .8f, .258f, 0f, 0f, 0f,
         .2f, .742f, .142f, 0f, 0f,
         0f, 0f, .858f, 0f, 0f,
