@@ -17,24 +17,23 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix.ColorBlindness
+namespace Structure.Sketching.Filters.ColorMatrix.ColorBlindness;
+
+/// <summary>
+/// Protanomaly matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Protanomaly : MatrixBaseClass
 {
     /// <summary>
-    /// Protanomaly matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Protanomaly : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            .817f, .333f, 0f, 0f, 0f,
-            .183f, .667f, .125f, 0f, 0f,
-            0f, 0f, .875f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0f, 0f, 0f, 0f, 1f
-        );
-    }
+    /// <value>The matrix.</value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        .817f, .333f, 0f, 0f, 0f,
+        .183f, .667f, .125f, 0f, 0f,
+        0f, 0f, .875f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0f, 0f, 0f, 0f, 1f
+    );
 }

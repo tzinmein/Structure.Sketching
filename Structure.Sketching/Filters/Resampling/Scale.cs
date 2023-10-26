@@ -19,36 +19,35 @@ using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Numerics;
 using System.Numerics;
 
-namespace Structure.Sketching.Filters.Resampling
+namespace Structure.Sketching.Filters.Resampling;
+
+/// <summary>
+/// Scales an image to the specified width/height
+/// </summary>
+/// <seealso cref="AffineBaseClass"/>
+public class Scale : AffineBaseClass
 {
     /// <summary>
-    /// Scales an image to the specified width/height
+    /// Initializes a new instance of the <see cref="Scale"/> class.
     /// </summary>
-    /// <seealso cref="AffineBaseClass"/>
-    public class Scale : AffineBaseClass
+    /// <param name="width">The width.</param>
+    /// <param name="height">The height.</param>
+    /// <param name="filter">The filter to use (defaults to nearest neighbor).</param>
+    public Scale(int width, int height, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
+        : base(width, height, filter)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Scale"/> class.
-        /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="filter">The filter to use (defaults to nearest neighbor).</param>
-        public Scale(int width, int height, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
-            : base(width, height, filter)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The transformation matrix</returns>
-        protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
-        {
-            float XScale = (float)image.Width / Width;
-            float YScale = (float)image.Height / Height;
-            return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
-        }
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The transformation matrix</returns>
+    protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
+    {
+        float XScale = (float)image.Width / Width;
+        float YScale = (float)image.Height / Height;
+        return Matrix3x2.CreateScale(XScale, YScale, targetLocation.Center);
     }
 }

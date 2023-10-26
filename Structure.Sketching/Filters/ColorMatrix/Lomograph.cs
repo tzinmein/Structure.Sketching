@@ -17,26 +17,25 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Lomograph color matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class LomographColorMatrix : MatrixBaseClass
 {
     /// <summary>
-    /// Lomograph color matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class LomographColorMatrix : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix.
-        /// </value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            1.5f, 0f, 0f, 0f, 0f,
-            0f, 1.45f, 0f, 0f, 0f,
-            0f, 0f, 1.11f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            -.1f, 0f, -.08f, 0f, 1f
-        );
-    }
+    /// <value>
+    /// The matrix.
+    /// </value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        1.5f, 0f, 0f, 0f, 0f,
+        0f, 1.45f, 0f, 0f, 0f,
+        0f, 0f, 1.11f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        -.1f, 0f, -.08f, 0f, 1f
+    );
 }

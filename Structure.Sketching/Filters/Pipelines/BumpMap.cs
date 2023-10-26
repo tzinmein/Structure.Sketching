@@ -19,23 +19,22 @@ using Structure.Sketching.Filters.Convolution;
 using Structure.Sketching.Filters.Convolution.Enums;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
-namespace Structure.Sketching.Filters.Pipelines
+namespace Structure.Sketching.Filters.Pipelines;
+
+/// <summary>
+/// Bump map processing pipeline
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass" />
+public class BumpMap : ProcessingPipelineBaseClass
 {
     /// <summary>
-    /// Bump map processing pipeline
+    /// Initializes a new instance of the <see cref="BumpMap"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass" />
-    public class BumpMap : ProcessingPipelineBaseClass
+    /// <param name="direction">The direction.</param>
+    public BumpMap(Direction direction)
+        : base(false)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BumpMap"/> class.
-        /// </summary>
-        /// <param name="direction">The direction.</param>
-        public BumpMap(Direction direction)
-            : base(false)
-        {
-            AddFilter(new SobelEmboss(direction))
-                .AddFilter(new Greyscale601());
-        }
+        AddFilter(new SobelEmboss(direction))
+            .AddFilter(new Greyscale601());
     }
 }

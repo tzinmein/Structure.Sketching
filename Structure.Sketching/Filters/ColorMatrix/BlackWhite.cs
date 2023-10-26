@@ -17,25 +17,24 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Black/white matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class BlackWhite : MatrixBaseClass
 {
     /// <summary>
-    /// Black/white matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class BlackWhite : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => new Matrix5x5
-        (
-            1f, 1f, 1f, 0f, 0f,
-            1f, 1f, 1f, 0f, 0f,
-            1f, 1f, 1f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            -1f, -1f, -1f, 0f, 1f
-        );
-    }
+    /// <value>The matrix.</value>
+    public override Matrix5x5 Matrix => new Matrix5x5
+    (
+        1f, 1f, 1f, 0f, 0f,
+        1f, 1f, 1f, 0f, 0f,
+        1f, 1f, 1f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        -1f, -1f, -1f, 0f, 1f
+    );
 }

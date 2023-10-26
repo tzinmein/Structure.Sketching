@@ -19,47 +19,46 @@ using Structure.Sketching.Filters.Resampling.BaseClasses;
 using Structure.Sketching.Numerics;
 using System.Numerics;
 
-namespace Structure.Sketching.Filters.Resampling
+namespace Structure.Sketching.Filters.Resampling;
+
+/// <summary>
+/// Translate the image
+/// </summary>
+/// <seealso cref="AffineBaseClass"/>
+/// <seealso cref="IFilter"/>
+public class Translate : AffineBaseClass
 {
     /// <summary>
-    /// Translate the image
+    /// Initializes a new instance of the <see cref="Translate"/> class.
     /// </summary>
-    /// <seealso cref="AffineBaseClass"/>
-    /// <seealso cref="IFilter"/>
-    public class Translate : AffineBaseClass
+    /// <param name="xDelta">The x delta.</param>
+    /// <param name="yDelta">The y delta.</param>
+    public Translate(int xDelta, int yDelta)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Translate"/> class.
-        /// </summary>
-        /// <param name="xDelta">The x delta.</param>
-        /// <param name="yDelta">The y delta.</param>
-        public Translate(int xDelta, int yDelta)
-        {
-            YDelta = -yDelta;
-            XDelta = -xDelta;
-        }
+        YDelta = -yDelta;
+        XDelta = -xDelta;
+    }
 
-        /// <summary>
-        /// Gets or sets the x delta.
-        /// </summary>
-        /// <value>The x delta.</value>
-        public int XDelta { get; set; }
+    /// <summary>
+    /// Gets or sets the x delta.
+    /// </summary>
+    /// <value>The x delta.</value>
+    public int XDelta { get; set; }
 
-        /// <summary>
-        /// Gets or sets the y delta.
-        /// </summary>
-        /// <value>The y delta.</value>
-        public int YDelta { get; set; }
+    /// <summary>
+    /// Gets or sets the y delta.
+    /// </summary>
+    /// <value>The y delta.</value>
+    public int YDelta { get; set; }
 
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The matrix used for the transformation</returns>
-        protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
-        {
-            return Matrix3x2.CreateTranslation(XDelta, YDelta);
-        }
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The matrix used for the transformation</returns>
+    protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
+    {
+        return Matrix3x2.CreateTranslation(XDelta, YDelta);
     }
 }

@@ -16,20 +16,19 @@ limitations under the License.
 
 using Structure.Sketching.IO;
 
-namespace Structure.Sketching.Formats.Gif.Format.Interfaces
+namespace Structure.Sketching.Formats.Gif.Format.Interfaces;
+
+/// <summary>
+/// Section interface
+/// </summary>
+public interface ISection
 {
     /// <summary>
-    /// Section interface
+    /// Writes this instance.
     /// </summary>
-    public interface ISection
-    {
-        /// <summary>
-        /// Writes this instance.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>
-        /// True if it saved correctly, false otherwise.
-        /// </returns>
-        bool Write(EndianBinaryWriter writer);
-    }
+    /// <param name="writer">The writer.</param>
+    /// <returns>
+    /// True if it saved correctly, false otherwise.
+    /// </returns>
+    bool Write(EndianBinaryWriter writer);
 }

@@ -22,77 +22,76 @@ using Structure.Sketching.Procedural;
 using System;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Adds turbulence to an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Turbulence : IFilter
 {
     /// <summary>
-    /// Adds turbulence to an image
+    /// Initializes a new instance of the <see cref="SinWave"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Turbulence : IFilter
+    /// <param name="roughness">The roughness.</param>
+    /// <param name="power">The power.</param>
+    /// <param name="seed">The seed.</param>
+    public Turbulence(int roughness = 8, float power = 0.02f, int seed = 25123864)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SinWave"/> class.
-        /// </summary>
-        /// <param name="roughness">The roughness.</param>
-        /// <param name="power">The power.</param>
-        /// <param name="seed">The seed.</param>
-        public Turbulence(int roughness = 8, float power = 0.02f, int seed = 25123864)
+        Seed = seed;
+        Power = power;
+        Roughness = roughness;
+    }
+
+    /// <summary>
+    /// Gets or sets the power.
+    /// </summary>
+    /// <value>The power.</value>
+    public float Power { get; set; }
+
+    /// <summary>
+    /// Gets or sets the roughness.
+    /// </summary>
+    /// <value>The roughness.</value>
+    public int Roughness { get; set; }
+
+    /// <summary>
+    /// Gets or sets the seed.
+    /// </summary>
+    /// <value>The seed.</value>
+    public int Seed { get; set; }
+
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        var Result = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, Result, Result.Length);
+        var XNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);
+        var YNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            Seed = seed;
-            Power = power;
-            Roughness = roughness;
-        }
-
-        /// <summary>
-        /// Gets or sets the power.
-        /// </summary>
-        /// <value>The power.</value>
-        public float Power { get; set; }
-
-        /// <summary>
-        /// Gets or sets the roughness.
-        /// </summary>
-        /// <value>The roughness.</value>
-        public int Roughness { get; set; }
-
-        /// <summary>
-        /// Gets or sets the seed.
-        /// </summary>
-        /// <value>The seed.</value>
-        public int Seed { get; set; }
-
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
-        {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new Color[image.Pixels.Length];
-            Array.Copy(image.Pixels, Result, Result.Length);
-            var XNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);
-            var YNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* TargetPointer2 = TargetPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        float XDistortion = x + XNoise.Pixels[y * image.Width + x].Red * Power;
-                        float YDistortion = y + YNoise.Pixels[y * image.Width + x].Red * Power;
-                        var X1 = (int)XDistortion.Clamp(0, image.Width - 1);
-                        var Y1 = (int)YDistortion.Clamp(0, image.Height - 1);
-                        int ResultOffset = y * image.Width + x;
-                        int SourceOffset = Y1 * image.Width + X1;
+                    float XDistortion = x + XNoise.Pixels[y * image.Width + x].Red * Power;
+                    float YDistortion = y + YNoise.Pixels[y * image.Width + x].Red * Power;
+                    var X1 = (int)XDistortion.Clamp(0, image.Width - 1);
+                    var Y1 = (int)YDistortion.Clamp(0, image.Height - 1);
+                    int ResultOffset = y * image.Width + x;
+                    int SourceOffset = Y1 * image.Width + X1;
 
-                        Result[ResultOffset] = image.Pixels[SourceOffset];
-                    }
+                    Result[ResultOffset] = image.Pixels[SourceOffset];
                 }
-            });
-            return image.ReCreate(image.Width, image.Height, Result);
-        }
+            }
+        });
+        return image.ReCreate(image.Width, image.Height, Result);
     }
 }

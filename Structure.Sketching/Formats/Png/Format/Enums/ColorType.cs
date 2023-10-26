@@ -14,36 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Png.Format.Enums
+namespace Structure.Sketching.Formats.Png.Format.Enums;
+
+/// <summary>
+/// Color type enum
+/// </summary>
+public enum ColorType : byte
 {
     /// <summary>
-    /// Color type enum
+    /// The greyscale
     /// </summary>
-    public enum ColorType : byte
-    {
-        /// <summary>
-        /// The greyscale
-        /// </summary>
-        Greyscale = 0,
+    Greyscale = 0,
 
-        /// <summary>
-        /// The RGB
-        /// </summary>
-        TrueColor = 2,
+    /// <summary>
+    /// The RGB
+    /// </summary>
+    TrueColor = 2,
 
-        /// <summary>
-        /// The palette
-        /// </summary>
-        Palette = 3,
+    /// <summary>
+    /// The palette
+    /// </summary>
+    Palette = 3,
 
-        /// <summary>
-        /// The grayscale with alpha
-        /// </summary>
-        GreyscaleWithAlpha = 4,
+    /// <summary>
+    /// The grayscale with alpha
+    /// </summary>
+    GreyscaleWithAlpha = 4,
 
-        /// <summary>
-        /// The RGB with alpha
-        /// </summary>
-        TrueColorWithAlpha = 6
-    }
+    /// <summary>
+    /// The RGB with alpha
+    /// </summary>
+    TrueColorWithAlpha = 6
 }

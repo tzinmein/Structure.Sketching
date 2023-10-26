@@ -14,41 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums;
+
+/// <summary>
+/// Subsample ratio
+/// </summary>
+public enum YCbCrSubsampleRatio
 {
     /// <summary>
-    /// Subsample ratio
+    /// The subsample ratio 444
     /// </summary>
-    public enum YCbCrSubsampleRatio
-    {
-        /// <summary>
-        /// The subsample ratio 444
-        /// </summary>
-        YCbCrSubsampleRatio444,
+    YCbCrSubsampleRatio444,
 
-        /// <summary>
-        /// The subsample ratio 422
-        /// </summary>
-        YCbCrSubsampleRatio422,
+    /// <summary>
+    /// The subsample ratio 422
+    /// </summary>
+    YCbCrSubsampleRatio422,
 
-        /// <summary>
-        /// The subsample ratio 420
-        /// </summary>
-        YCbCrSubsampleRatio420,
+    /// <summary>
+    /// The subsample ratio 420
+    /// </summary>
+    YCbCrSubsampleRatio420,
 
-        /// <summary>
-        /// The subsample ratio 440
-        /// </summary>
-        YCbCrSubsampleRatio440,
+    /// <summary>
+    /// The subsample ratio 440
+    /// </summary>
+    YCbCrSubsampleRatio440,
 
-        /// <summary>
-        /// The subsample ratio 411
-        /// </summary>
-        YCbCrSubsampleRatio411,
+    /// <summary>
+    /// The subsample ratio 411
+    /// </summary>
+    YCbCrSubsampleRatio411,
 
-        /// <summary>
-        /// The subsample ratio 410
-        /// </summary>
-        YCbCrSubsampleRatio410
-    }
+    /// <summary>
+    /// The subsample ratio 410
+    /// </summary>
+    YCbCrSubsampleRatio410
 }

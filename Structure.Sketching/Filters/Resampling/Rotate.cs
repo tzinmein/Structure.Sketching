@@ -20,39 +20,38 @@ using Structure.Sketching.Numerics;
 using System;
 using System.Numerics;
 
-namespace Structure.Sketching.Filters.Resampling
+namespace Structure.Sketching.Filters.Resampling;
+
+/// <summary>
+/// Rotates an image
+/// </summary>
+/// <seealso cref="AffineBaseClass"/>
+/// <seealso cref="IFilter"/>
+public class Rotate : AffineBaseClass
 {
     /// <summary>
-    /// Rotates an image
+    /// Initializes a new instance of the <see cref="Rotate"/> class.
     /// </summary>
-    /// <seealso cref="AffineBaseClass"/>
-    /// <seealso cref="IFilter"/>
-    public class Rotate : AffineBaseClass
+    /// <param name="angle">The angle.</param>
+    public Rotate(float angle)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Rotate"/> class.
-        /// </summary>
-        /// <param name="angle">The angle.</param>
-        public Rotate(float angle)
-        {
-            Angle = -angle * (float)(Math.PI / 180f);
-        }
+        Angle = -angle * (float)(Math.PI / 180f);
+    }
 
-        /// <summary>
-        /// Gets or sets the angle.
-        /// </summary>
-        /// <value>The angle.</value>
-        public float Angle { get; private set; }
+    /// <summary>
+    /// Gets or sets the angle.
+    /// </summary>
+    /// <value>The angle.</value>
+    public float Angle { get; private set; }
 
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The matrix used for the transformation</returns>
-        protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
-        {
-            return Matrix3x2.CreateRotation(Angle, targetLocation.Center);
-        }
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The matrix used for the transformation</returns>
+    protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
+    {
+        return Matrix3x2.CreateRotation(Angle, targetLocation.Center);
     }
 }

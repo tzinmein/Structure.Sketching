@@ -14,22 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters.HelperClasses
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters.HelperClasses;
+
+/// <summary>
+/// Weights holder class
+/// </summary>
+public class Weights
 {
     /// <summary>
-    /// Weights holder class
+    /// Gets or sets the sum.
     /// </summary>
-    public class Weights
-    {
-        /// <summary>
-        /// Gets or sets the sum.
-        /// </summary>
-        /// <value>The sum.</value>
-        public double TotalWeight { get; set; }
+    /// <value>The sum.</value>
+    public double TotalWeight { get; set; }
 
-        /// <summary>
-        /// The values
-        /// </summary>
-        public double[] Values;
-    }
+    /// <summary>
+    /// The values
+    /// </summary>
+    public double[] Values;
 }

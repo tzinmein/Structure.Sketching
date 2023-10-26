@@ -18,39 +18,38 @@ using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Jpeg.Format.Segments
+namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
+
+/// <summary>
+/// End of image segment
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase" />
+public class EndOfImage : SegmentBase
 {
     /// <summary>
-    /// End of image segment
+    /// Initializes a new instance of the <see cref="EndOfImage" /> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase" />
-    public class EndOfImage : SegmentBase
+    /// <param name="buffer">The buffer.</param>
+    public EndOfImage(ByteBuffer buffer)
+        : base(SegmentTypes.EndOfImage, buffer)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EndOfImage" /> class.
-        /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        public EndOfImage(ByteBuffer buffer)
-            : base(SegmentTypes.EndOfImage, buffer)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Setups the specified segments.
-        /// </summary>
-        /// <param name="segments">The segments.</param>
-        public override void Setup(IEnumerable<SegmentBase> segments)
-        {
-        }
+    /// <summary>
+    /// Setups the specified segments.
+    /// </summary>
+    /// <param name="segments">The segments.</param>
+    public override void Setup(IEnumerable<SegmentBase> segments)
+    {
+    }
 
-        /// <summary>
-        /// Writes the information to the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        public override void Write(BinaryWriter writer)
-        {
-            writer.Write((byte)0xFF);
-            writer.Write(Type);
-        }
+    /// <summary>
+    /// Writes the information to the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    public override void Write(BinaryWriter writer)
+    {
+        writer.Write((byte)0xFF);
+        writer.Write(Type);
     }
 }

@@ -16,38 +16,37 @@ limitations under the License.
 
 using System;
 
-namespace Structure.Sketching.Exceptions
+namespace Structure.Sketching.Exceptions;
+
+/// <summary>
+/// Image exception
+/// </summary>
+/// <seealso cref="System.Exception" />
+public class ImageException : Exception
 {
     /// <summary>
-    /// Image exception
+    /// Initializes a new instance of the <see cref="ImageException"/> class.
     /// </summary>
-    /// <seealso cref="System.Exception" />
-    public class ImageException : Exception
+    public ImageException()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageException"/> class.
-        /// </summary>
-        public ImageException()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public ImageException(string message)
-            : base(message)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageException"/> class.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    public ImageException(string message)
+        : base(message)
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        public ImageException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageException"/> class.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="innerException">The inner exception.</param>
+    public ImageException(string message, Exception innerException)
+        : base(message, innerException)
+    {
     }
 }

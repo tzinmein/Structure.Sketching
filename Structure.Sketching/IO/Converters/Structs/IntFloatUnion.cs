@@ -16,44 +16,43 @@ limitations under the License.
 
 using System.Runtime.InteropServices;
 
-namespace Structure.Sketching.IO.Converters.Structs
+namespace Structure.Sketching.IO.Converters.Structs;
+
+/// <summary>
+/// Int/float union struct.
+/// </summary>
+[StructLayout(LayoutKind.Explicit)]
+public readonly struct IntFloatUnion
 {
     /// <summary>
-    /// Int/float union struct.
+    /// The integer value
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public readonly struct IntFloatUnion
+    [FieldOffset(0)]
+    public readonly int IntegerValue;
+
+    /// <summary>
+    /// The float value
+    /// </summary>
+    [FieldOffset(0)]
+    public readonly float FloatValue;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IntFloatUnion"/> struct.
+    /// </summary>
+    /// <param name="integerValue">The integer value.</param>
+    public IntFloatUnion(int integerValue)
     {
-        /// <summary>
-        /// The integer value
-        /// </summary>
-        [FieldOffset(0)]
-        public readonly int IntegerValue;
+        FloatValue = 0;
+        IntegerValue = integerValue;
+    }
 
-        /// <summary>
-        /// The float value
-        /// </summary>
-        [FieldOffset(0)]
-        public readonly float FloatValue;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IntFloatUnion"/> struct.
-        /// </summary>
-        /// <param name="integerValue">The integer value.</param>
-        public IntFloatUnion(int integerValue)
-        {
-            FloatValue = 0;
-            IntegerValue = integerValue;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IntFloatUnion"/> struct.
-        /// </summary>
-        /// <param name="floatValue">The float value.</param>
-        public IntFloatUnion(float floatValue)
-        {
-            IntegerValue = 0;
-            FloatValue = floatValue;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IntFloatUnion"/> struct.
+    /// </summary>
+    /// <param name="floatValue">The float value.</param>
+    public IntFloatUnion(float floatValue)
+    {
+        IntegerValue = 0;
+        FloatValue = floatValue;
     }
 }

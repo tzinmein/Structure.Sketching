@@ -16,20 +16,19 @@ limitations under the License.
 
 using Structure.Sketching.Formats.BaseClasses;
 
-namespace Structure.Sketching.Formats.Jpeg
+namespace Structure.Sketching.Formats.Jpeg;
+
+/// <summary>
+/// JPEG Encoder
+/// </summary>
+/// <seealso cref="EncoderBase{File}" />
+public class Encoder : EncoderBase<Format.File>
 {
     /// <summary>
-    /// JPEG Encoder
+    /// Gets the file extensions.
     /// </summary>
-    /// <seealso cref="EncoderBase{File}" />
-    public class Encoder : EncoderBase<Format.File>
-    {
-        /// <summary>
-        /// Gets the file extensions.
-        /// </summary>
-        /// <value>
-        /// The file extensions.
-        /// </value>
-        protected override string[] FileExtensions => new[] { ".JPEG", ".JPG", ".JPE", ".JIF", ".JFIF", ".JFI" };
-    }
+    /// <value>
+    /// The file extensions.
+    /// </value>
+    protected override string[] FileExtensions => new[] { ".JPEG", ".JPG", ".JPE", ".JIF", ".JFIF", ".JFI" };
 }

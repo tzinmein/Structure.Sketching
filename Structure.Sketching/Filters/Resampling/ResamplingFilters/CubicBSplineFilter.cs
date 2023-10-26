@@ -17,39 +17,38 @@ limitations under the License.
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 using System;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Cubic B Spline filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class CubicBSplineFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Cubic B Spline filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class CubicBSplineFilter : ResamplingFilterBase
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 2f;
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 2f;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
+    {
+        if (value < 0) value = -value;
+        if (value < 1)
         {
-            if (value < 0) value = -value;
-            if (value < 1)
-            {
-                var temp = value * value;
-                return 0.5 * temp * value - temp + 2f / 3f;
-            }
-            if (value < 2)
-            {
-                value = 2f - value;
-                return Math.Pow(value, 3) / 6f;
-            }
-            return 0;
+            var temp = value * value;
+            return 0.5 * temp * value - temp + 2f / 3f;
         }
+        if (value < 2)
+        {
+            value = 2f - value;
+            return Math.Pow(value, 3) / 6f;
+        }
+        return 0;
     }
 }

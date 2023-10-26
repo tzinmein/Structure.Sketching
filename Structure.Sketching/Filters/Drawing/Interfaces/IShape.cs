@@ -16,13 +16,12 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 
-namespace Structure.Sketching.Filters.Drawing.Interfaces
+namespace Structure.Sketching.Filters.Drawing.Interfaces;
+
+/// <summary>
+/// Shape drawing interface
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public interface IShape : IFilter
 {
-    /// <summary>
-    /// Shape drawing interface
-    /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public interface IShape : IFilter
-    {
-    }
 }

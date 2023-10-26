@@ -17,58 +17,57 @@ limitations under the License.
 using Structure.Sketching.Formats.Png.Format.Helpers;
 using System.Text;
 
-namespace Structure.Sketching.Formats.Png.Format
+namespace Structure.Sketching.Formats.Png.Format;
+
+/// <summary>
+/// A key, value property
+/// </summary>
+public class Property
 {
     /// <summary>
-    /// A key, value property
+    /// Initializes a new instance of the <see cref="Property"/> class.
     /// </summary>
-    public class Property
+    /// <param name="key">The key.</param>
+    /// <param name="value">The value.</param>
+    public Property(string key, string value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Property"/> class.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        public Property(string key, string value)
+        Value = value ?? string.Empty;
+        Key = key ?? string.Empty;
+    }
+
+    /// <summary>
+    /// Gets or sets the key.
+    /// </summary>
+    /// <value>
+    /// The key.
+    /// </value>
+    public string Key { get; set; }
+
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
+    /// <value>
+    /// The value.
+    /// </value>
+    public string Value { get; set; }
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="Chunk"/> to <see cref="Property"/>.
+    /// </summary>
+    /// <param name="chunk">The chunk.</param>
+    /// <returns>
+    /// The result of the conversion.
+    /// </returns>
+    public static implicit operator Property(Chunk chunk)
+    {
+        int Count = 0;
+        for (int x = 0; x < chunk.Data.Length; ++x, ++Count)
         {
-            Value = value ?? string.Empty;
-            Key = key ?? string.Empty;
+            if (chunk.Data[x] == 0)
+                break;
         }
 
-        /// <summary>
-        /// Gets or sets the key.
-        /// </summary>
-        /// <value>
-        /// The key.
-        /// </value>
-        public string Key { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Chunk"/> to <see cref="Property"/>.
-        /// </summary>
-        /// <param name="chunk">The chunk.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
-        public static implicit operator Property(Chunk chunk)
-        {
-            int Count = 0;
-            for (int x = 0; x < chunk.Data.Length; ++x, ++Count)
-            {
-                if (chunk.Data[x] == 0)
-                    break;
-            }
-
-            return new Property(Encoding.UTF8.GetString(chunk.Data, 0, Count),
-                Encoding.UTF8.GetString(chunk.Data, Count + 1, chunk.Data.Length - Count - 1));
-        }
+        return new Property(Encoding.UTF8.GetString(chunk.Data, 0, Count),
+            Encoding.UTF8.GetString(chunk.Data, Count + 1, chunk.Data.Length - Count - 1));
     }
 }

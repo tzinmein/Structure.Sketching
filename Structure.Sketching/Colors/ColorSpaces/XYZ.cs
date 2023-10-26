@@ -19,191 +19,190 @@ using Structure.Sketching.ExtensionMethods;
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Structure.Sketching.Colors.ColorSpaces
+namespace Structure.Sketching.Colors.ColorSpaces;
+
+/// <summary>
+/// XYZ color space
+/// </summary>
+public struct XYZ : IEquatable<XYZ>, IColorSpace
 {
     /// <summary>
-    /// XYZ color space
+    /// Initializes a new instance of the <see cref="XYZ"/> class.
     /// </summary>
-    public struct XYZ : IEquatable<XYZ>, IColorSpace
+    /// <param name="x">The x.</param>
+    /// <param name="y">The y.</param>
+    /// <param name="z">The z.</param>
+    public XYZ(double x, double y, double z)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XYZ"/> class.
-        /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
-        /// <param name="z">The z.</param>
-        public XYZ(double x, double y, double z)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-        }
+        X = x;
+        Y = y;
+        Z = z;
+    }
 
-        /// <summary>
-        /// Gets the white reference.
-        /// </summary>
-        /// <value>The white reference.</value>
-        public static XYZ WhiteReference => new XYZ(95.047, 100, 108.883);
+    /// <summary>
+    /// Gets the white reference.
+    /// </summary>
+    /// <value>The white reference.</value>
+    public static XYZ WhiteReference => new XYZ(95.047, 100, 108.883);
 
-        /// <summary>
-        /// Gets or sets the x.
-        /// </summary>
-        /// <value>The x.</value>
-        public double X { get; set; }
+    /// <summary>
+    /// Gets or sets the x.
+    /// </summary>
+    /// <value>The x.</value>
+    public double X { get; set; }
 
-        /// <summary>
-        /// Gets or sets the y.
-        /// </summary>
-        /// <value>The y.</value>
-        public double Y { get; set; }
+    /// <summary>
+    /// Gets or sets the y.
+    /// </summary>
+    /// <value>The y.</value>
+    public double Y { get; set; }
 
-        /// <summary>
-        /// Gets or sets the z.
-        /// </summary>
-        /// <value>The z.</value>
-        public double Z { get; set; }
+    /// <summary>
+    /// Gets or sets the z.
+    /// </summary>
+    /// <value>The z.</value>
+    public double Z { get; set; }
 
-        /// <summary>
-        /// The epsilon
-        /// </summary>
-        private const float EPSILON = 0.001f;
+    /// <summary>
+    /// The epsilon
+    /// </summary>
+    private const float EPSILON = 0.001f;
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="Color"/>.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color(XYZ color)
-        {
-            var x = color.X / 100.0;
-            var y = color.Y / 100.0;
-            var z = color.Z / 100.0;
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="XYZ"/> to <see cref="Color"/>.
+    /// </summary>
+    /// <param name="color">The color.</param>
+    /// <returns>The result of the conversion.</returns>
+    public static implicit operator Color(XYZ color)
+    {
+        var x = color.X / 100.0;
+        var y = color.Y / 100.0;
+        var z = color.Z / 100.0;
 
-            var r = x * 3.2406 + y * -1.5372 + z * -0.4986;
-            var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
-            var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
+        var r = x * 3.2406 + y * -1.5372 + z * -0.4986;
+        var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
+        var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
 
-            return new Colors.Color(ToRgb(r > 0.0031308 ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055 : 12.92 * r),
+        return new Colors.Color(ToRgb(r > 0.0031308 ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055 : 12.92 * r),
             ToRgb(g > 0.0031308 ? 1.055 * Math.Pow(g, 1 / 2.4) - 0.055 : 12.92 * g),
             ToRgb(b > 0.0031308 ? 1.055 * Math.Pow(b, 1 / 2.4) - 0.055 : 12.92 * b));
-        }
+    }
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Color"/> to <see cref="XYZ"/>.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator XYZ(Color color)
-        {
-            var r = PivotRgb(color.Red / 255.0);
-            var g = PivotRgb(color.Green / 255.0);
-            var b = PivotRgb(color.Blue / 255.0);
-            return new XYZ(r * 0.4124 + g * 0.3576 + b * 0.1805,
-                            r * 0.2126 + g * 0.7152 + b * 0.0722,
-                            r * 0.0193 + g * 0.1192 + b * 0.9505);
-        }
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="Color"/> to <see cref="XYZ"/>.
+    /// </summary>
+    /// <param name="color">The color.</param>
+    /// <returns>The result of the conversion.</returns>
+    public static implicit operator XYZ(Color color)
+    {
+        var r = PivotRgb(color.Red / 255.0);
+        var g = PivotRgb(color.Green / 255.0);
+        var b = PivotRgb(color.Blue / 255.0);
+        return new XYZ(r * 0.4124 + g * 0.3576 + b * 0.1805,
+            r * 0.2126 + g * 0.7152 + b * 0.0722,
+            r * 0.0193 + g * 0.1192 + b * 0.9505);
+    }
 
-        /// <summary>
-        /// Implements the operator !=.
-        /// </summary>
-        /// <param name="color1">The color1.</param>
-        /// <param name="color2">The color2.</param>
-        /// <returns>The result of the operator.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(XYZ color1, XYZ color2)
-        {
-            return !(color1 == color2);
-        }
+    /// <summary>
+    /// Implements the operator !=.
+    /// </summary>
+    /// <param name="color1">The color1.</param>
+    /// <param name="color2">The color2.</param>
+    /// <returns>The result of the operator.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator !=(XYZ color1, XYZ color2)
+    {
+        return !(color1 == color2);
+    }
 
-        /// <summary>
-        /// Implements the operator ==.
-        /// </summary>
-        /// <param name="color1">The color1.</param>
-        /// <param name="color2">The color2.</param>
-        /// <returns>The result of the operator.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(XYZ color1, XYZ color2)
-        {
-            return color1.Equals(color2);
-        }
+    /// <summary>
+    /// Implements the operator ==.
+    /// </summary>
+    /// <param name="color1">The color1.</param>
+    /// <param name="color2">The color2.</param>
+    /// <returns>The result of the operator.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator ==(XYZ color1, XYZ color2)
+    {
+        return color1.Equals(color2);
+    }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="object"/>, is equal to this instance.
-        /// </summary>
-        /// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
-        /// <returns>
-        /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly override bool Equals(object obj)
-        {
-            return obj is XYZ xyz && Equals(xyz);
-        }
+    /// <summary>
+    /// Determines whether the specified <see cref="object"/>, is equal to this instance.
+    /// </summary>
+    /// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
+    /// <returns>
+    /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly override bool Equals(object obj)
+    {
+        return obj is XYZ xyz && Equals(xyz);
+    }
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns>
-        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool Equals(XYZ other)
-        {
-            return Math.Abs(other.X - X) < EPSILON
-                && Math.Abs(other.Y - Y) < EPSILON
-                && Math.Abs(other.Z - Z) < EPSILON;
-        }
+    /// <summary>
+    /// Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this object.</param>
+    /// <returns>
+    /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Equals(XYZ other)
+    {
+        return Math.Abs(other.X - X) < EPSILON
+               && Math.Abs(other.Y - Y) < EPSILON
+               && Math.Abs(other.Z - Z) < EPSILON;
+    }
 
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures
-        /// like a hash table.
-        /// </returns>
-        public readonly override int GetHashCode()
-        {
-            var hash = X.GetHashCode();
-            hash = ComputeHash(hash, Y);
-            return ComputeHash(hash, Z);
-        }
+    /// <summary>
+    /// Returns a hash code for this instance.
+    /// </summary>
+    /// <returns>
+    /// A hash code for this instance, suitable for use in hashing algorithms and data structures
+    /// like a hash table.
+    /// </returns>
+    public readonly override int GetHashCode()
+    {
+        var hash = X.GetHashCode();
+        hash = ComputeHash(hash, Y);
+        return ComputeHash(hash, Z);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents this instance.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents this instance.</returns>
-        public readonly override string ToString() => $"({X:#0.##},{Y:#0.##},{Z:#0.##})";
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents this instance.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents this instance.</returns>
+    public readonly override string ToString() => $"({X:#0.##},{Y:#0.##},{Z:#0.##})";
 
-        /// <summary>
-        /// Pivots the RGB.
-        /// </summary>
-        /// <param name="n">The n.</param>
-        /// <returns></returns>
-        private static double PivotRgb(double n)
-        {
-            return (n > 0.04045 ? Math.Pow((n + 0.055) / 1.055, 2.4) : n / 12.92) * 100.0;
-        }
+    /// <summary>
+    /// Pivots the RGB.
+    /// </summary>
+    /// <param name="n">The n.</param>
+    /// <returns></returns>
+    private static double PivotRgb(double n)
+    {
+        return (n > 0.04045 ? Math.Pow((n + 0.055) / 1.055, 2.4) : n / 12.92) * 100.0;
+    }
 
-        /// <summary>
-        /// To the RGB.
-        /// </summary>
-        /// <param name="n">The n.</param>
-        /// <returns></returns>
-        private static byte ToRgb(double n)
-        {
-            return (byte)Math.Round((255.0 * n).Clamp(0, 255), MidpointRounding.AwayFromZero);
-        }
+    /// <summary>
+    /// To the RGB.
+    /// </summary>
+    /// <param name="n">The n.</param>
+    /// <returns></returns>
+    private static byte ToRgb(double n)
+    {
+        return (byte)Math.Round((255.0 * n).Clamp(0, 255), MidpointRounding.AwayFromZero);
+    }
 
-        /// <summary>
-        /// Computes the hash.
-        /// </summary>
-        /// <param name="hash">The existing hash.</param>
-        /// <param name="component">The component.</param>
-        /// <returns>The resulting hash</returns>
-        private readonly int ComputeHash(int hash, double component)
-        {
-            return ((hash << 5) + hash) ^ component.GetHashCode();
-        }
+    /// <summary>
+    /// Computes the hash.
+    /// </summary>
+    /// <param name="hash">The existing hash.</param>
+    /// <param name="component">The component.</param>
+    /// <returns>The resulting hash</returns>
+    private readonly int ComputeHash(int hash, double component)
+    {
+        return ((hash << 5) + hash) ^ component.GetHashCode();
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace Structure.Sketching.Tests.Formats.Png.Format
+﻿namespace Structure.Sketching.Tests.Formats.Png.Format;
+
+public class File
 {
-    public class File
-    {
-    }
 }

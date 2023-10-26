@@ -17,61 +17,60 @@ limitations under the License.
 using System;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Bmp.Format
+namespace Structure.Sketching.Formats.Bmp.Format;
+
+/// <summary>
+/// Palette used by the bitmap
+/// </summary>
+public class Palette
 {
     /// <summary>
-    /// Palette used by the bitmap
+    /// Initializes a new instance of the <see cref="Palette" /> class.
     /// </summary>
-    public class Palette
+    /// <param name="numberOfColors">The number of colors.</param>
+    /// <param name="data">The data.</param>
+    public Palette(int numberOfColors, byte[] data)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Palette" /> class.
-        /// </summary>
-        /// <param name="numberOfColors">The number of colors.</param>
-        /// <param name="data">The data.</param>
-        public Palette(int numberOfColors, byte[] data)
+        NumberOfColors = numberOfColors;
+        if (NumberOfColors > 0)
         {
-            NumberOfColors = numberOfColors;
-            if (NumberOfColors > 0)
-            {
-                Data = new byte[NumberOfColors * 4];
-                Array.Copy(data, Data, NumberOfColors * 4);
-            }
+            Data = new byte[NumberOfColors * 4];
+            Array.Copy(data, Data, NumberOfColors * 4);
         }
+    }
 
-        /// <summary>
-        /// Gets the data inside the palette
-        /// </summary>
-        /// <value>The data inside the palette</value>
-        public byte[] Data { get; private set; }
+    /// <summary>
+    /// Gets the data inside the palette
+    /// </summary>
+    /// <value>The data inside the palette</value>
+    public byte[] Data { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the number of colors.
-        /// </summary>
-        /// <value>The number of colors.</value>
-        public int NumberOfColors { get; private set; }
+    /// <summary>
+    /// Gets or sets the number of colors.
+    /// </summary>
+    /// <value>The number of colors.</value>
+    public int NumberOfColors { get; private set; }
 
-        /// <summary>
-        /// Reads the specified palette information
-        /// </summary>
-        /// <param name="header">The header.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The resulting palette information</returns>
-        public static Palette Read(Header header, Stream stream)
-        {
-            var NumberOfColors = header.ColorsUsed == 0 && header.BPP < 16 ? (int)Math.Pow(2, header.BPP) : header.ColorsUsed;
-            var Data = new byte[NumberOfColors * 4];
-            if (NumberOfColors > 0)
-                stream.Read(Data, 0, NumberOfColors * 4);
-            return new Palette(NumberOfColors, Data);
-        }
+    /// <summary>
+    /// Reads the specified palette information
+    /// </summary>
+    /// <param name="header">The header.</param>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The resulting palette information</returns>
+    public static Palette Read(Header header, Stream stream)
+    {
+        var NumberOfColors = header.ColorsUsed == 0 && header.BPP < 16 ? (int)Math.Pow(2, header.BPP) : header.ColorsUsed;
+        var Data = new byte[NumberOfColors * 4];
+        if (NumberOfColors > 0)
+            stream.Read(Data, 0, NumberOfColors * 4);
+        return new Palette(NumberOfColors, Data);
+    }
 
-        /// <summary>
-        /// Writes the data to the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        public void Write(BinaryWriter writer)
-        {
-        }
+    /// <summary>
+    /// Writes the data to the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    public void Write(BinaryWriter writer)
+    {
     }
 }

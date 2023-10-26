@@ -14,21 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums;
+
+/// <summary>
+/// Quant index
+/// </summary>
+public enum QuantIndex
 {
     /// <summary>
-    /// Quant index
+    /// The quant index luminance
     /// </summary>
-    public enum QuantIndex
-    {
-        /// <summary>
-        /// The quant index luminance
-        /// </summary>
-        QuantIndexLuminance = 0,
+    QuantIndexLuminance = 0,
 
-        /// <summary>
-        /// The quant index chrominance
-        /// </summary>
-        QuantIndexChrominance = 1,
-    }
+    /// <summary>
+    /// The quant index chrominance
+    /// </summary>
+    QuantIndexChrominance = 1,
 }

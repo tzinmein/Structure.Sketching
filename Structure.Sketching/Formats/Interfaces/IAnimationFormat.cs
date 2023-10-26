@@ -16,26 +16,25 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.Formats.Interfaces
+namespace Structure.Sketching.Formats.Interfaces;
+
+/// <summary>
+/// Animation format interface
+/// </summary>
+public interface IAnimationFormat : IFormat
 {
     /// <summary>
-    /// Animation format interface
+    /// Decodes the specified stream and returns an image
     /// </summary>
-    public interface IAnimationFormat : IFormat
-    {
-        /// <summary>
-        /// Decodes the specified stream and returns an image
-        /// </summary>
-        /// <param name="stream">The stream containing the image data.</param>
-        /// <returns>The resulting image</returns>
-        Animation DecodeAnimation(Stream stream);
+    /// <param name="stream">The stream containing the image data.</param>
+    /// <returns>The resulting image</returns>
+    Animation DecodeAnimation(Stream stream);
 
-        /// <summary>
-        /// Encodes an image and places it in the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        /// <param name="image">The image to encode.</param>
-        /// <returns>True if it is encoded successfully, false otherwise.</returns>
-        bool Encode(BinaryWriter writer, Animation image);
-    }
+    /// <summary>
+    /// Encodes an image and places it in the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    /// <param name="image">The image to encode.</param>
+    /// <returns>True if it is encoded successfully, false otherwise.</returns>
+    bool Encode(BinaryWriter writer, Animation image);
 }

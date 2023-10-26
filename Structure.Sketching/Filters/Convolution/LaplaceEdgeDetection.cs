@@ -16,49 +16,48 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Convolution.BaseClasses;
 
-namespace Structure.Sketching.Filters.Convolution
+namespace Structure.Sketching.Filters.Convolution;
+
+/// <summary>
+/// Laplace edge detection convolution filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Convolution.BaseClasses.ConvolutionBaseClass" />
+public class LaplaceEdgeDetection : ConvolutionBaseClass
 {
     /// <summary>
-    /// Laplace edge detection convolution filter
+    /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Convolution.BaseClasses.ConvolutionBaseClass" />
-    public class LaplaceEdgeDetection : ConvolutionBaseClass
+    /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
+    public override bool Absolute => false;
+
+    /// <summary>
+    /// Gets the height.
+    /// </summary>
+    /// <value>The height.</value>
+    public override int Height => 5;
+
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <value>The matrix.</value>
+    public override float[] Matrix => new float[]
     {
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
-        /// </summary>
-        /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
-        public override bool Absolute => false;
+        -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1,
+        -1, -1, 24, -1, -1,
+        -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1
+    };
 
-        /// <summary>
-        /// Gets the height.
-        /// </summary>
-        /// <value>The height.</value>
-        public override int Height => 5;
+    /// <summary>
+    /// Gets the offset.
+    /// </summary>
+    /// <value>The offset.</value>
+    public override float Offset => 0;
 
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override float[] Matrix => new float[]
-        {
-            -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1,
-            -1, -1, 24, -1, -1,
-            -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1
-        };
-
-        /// <summary>
-        /// Gets the offset.
-        /// </summary>
-        /// <value>The offset.</value>
-        public override float Offset => 0;
-
-        /// <summary>
-        /// Gets the width.
-        /// </summary>
-        /// <value>The width.</value>
-        public override int Width => 5;
-    }
+    /// <summary>
+    /// Gets the width.
+    /// </summary>
+    /// <value>The width.</value>
+    public override int Width => 5;
 }

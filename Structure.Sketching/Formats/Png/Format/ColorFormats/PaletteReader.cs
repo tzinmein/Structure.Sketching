@@ -20,72 +20,71 @@ using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 using Structure.Sketching.Formats.Png.Format.Enums;
 
-namespace Structure.Sketching.Formats.Png.Format.ColorFormats
+namespace Structure.Sketching.Formats.Png.Format.ColorFormats;
+
+/// <summary>
+/// Palette reader
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
+public class PaletteReader : IColorReader
 {
     /// <summary>
-    /// Palette reader
+    /// Initializes a new instance of the <see cref="PaletteReader"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
-    public class PaletteReader : IColorReader
+    /// <param name="palette">The palette.</param>
+    /// <param name="alphaPalette">The alpha palette.</param>
+    public PaletteReader(Palette palette, Palette alphaPalette)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PaletteReader"/> class.
-        /// </summary>
-        /// <param name="palette">The palette.</param>
-        /// <param name="alphaPalette">The alpha palette.</param>
-        public PaletteReader(Palette palette, Palette alphaPalette)
+        Palette = palette ?? new Palette(Array.Empty<byte>(), PaletteType.Color);
+        AlphaPalette = alphaPalette ?? new Palette(Array.Empty<byte>(), PaletteType.Alpha);
+    }
+
+    /// <summary>
+    /// Gets or sets the alpha palette.
+    /// </summary>
+    /// <value>The alpha palette.</value>
+    public Palette AlphaPalette { get; set; }
+
+    /// <summary>
+    /// Gets or sets the palette.
+    /// </summary>
+    /// <value>The palette.</value>
+    public Palette Palette { get; set; }
+
+    /// <summary>
+    /// Reads the scanline.
+    /// </summary>
+    /// <param name="scanline">The scanline.</param>
+    /// <param name="pixels">The pixels.</param>
+    /// <param name="header">The header.</param>
+    /// <param name="row">The row.</param>
+    public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
+    {
+        scanline = scanline.ExpandArray(header.BitDepth);
+
+        if (AlphaPalette.Data.Length > 0)
         {
-            Palette = palette ?? new Palette(Array.Empty<byte>(), PaletteType.Color);
-            AlphaPalette = alphaPalette ?? new Palette(Array.Empty<byte>(), PaletteType.Alpha);
-        }
-
-        /// <summary>
-        /// Gets or sets the alpha palette.
-        /// </summary>
-        /// <value>The alpha palette.</value>
-        public Palette AlphaPalette { get; set; }
-
-        /// <summary>
-        /// Gets or sets the palette.
-        /// </summary>
-        /// <value>The palette.</value>
-        public Palette Palette { get; set; }
-
-        /// <summary>
-        /// Reads the scanline.
-        /// </summary>
-        /// <param name="scanline">The scanline.</param>
-        /// <param name="pixels">The pixels.</param>
-        /// <param name="header">The header.</param>
-        /// <param name="row">The row.</param>
-        public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
-        {
-            scanline = scanline.ExpandArray(header.BitDepth);
-
-            if (AlphaPalette.Data.Length > 0)
+            for (int x = 0; x < header.Width; ++x)
             {
-                for (int x = 0; x < header.Width; ++x)
-                {
-                    int Offset = row * header.Width + x;
-                    int PixelOffset = scanline[x] * 3;
-                    pixels[Offset].Red = Palette.Data[PixelOffset];
-                    pixels[Offset].Green = Palette.Data[PixelOffset + 1];
-                    pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
-                    pixels[Offset].Alpha = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
-                }
+                int Offset = row * header.Width + x;
+                int PixelOffset = scanline[x] * 3;
+                pixels[Offset].Red = Palette.Data[PixelOffset];
+                pixels[Offset].Green = Palette.Data[PixelOffset + 1];
+                pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
+                pixels[Offset].Alpha = (byte)(AlphaPalette.Data.Length > scanline[x] ? AlphaPalette.Data[scanline[x]] : 255);
             }
-            else
+        }
+        else
+        {
+            for (int x = 0; x < header.Width; ++x)
             {
-                for (int x = 0; x < header.Width; ++x)
-                {
-                    int Offset = row * header.Width + x;
-                    int PixelOffset = scanline[x] * 3;
+                int Offset = row * header.Width + x;
+                int PixelOffset = scanline[x] * 3;
 
-                    pixels[Offset].Red = Palette.Data[PixelOffset];
-                    pixels[Offset].Green = Palette.Data[PixelOffset + 1];
-                    pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
-                    pixels[Offset].Alpha = 255;
-                }
+                pixels[Offset].Red = Palette.Data[PixelOffset];
+                pixels[Offset].Green = Palette.Data[PixelOffset + 1];
+                pixels[Offset].Blue = Palette.Data[PixelOffset + 2];
+                pixels[Offset].Alpha = 255;
             }
         }
     }

@@ -17,36 +17,35 @@ limitations under the License.
 using Structure.Sketching.Formats.BaseClasses;
 using Structure.Sketching.Formats.Interfaces;
 
-namespace Structure.Sketching.Formats.Jpeg
+namespace Structure.Sketching.Formats.Jpeg;
+
+/// <summary>
+/// JPEG format
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.BaseClasses.FormatBase" />
+public class JpegFormat : FormatBase
 {
     /// <summary>
-    /// JPEG format
+    /// Gets the format.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.BaseClasses.FormatBase" />
-    public class JpegFormat : FormatBase
-    {
-        /// <summary>
-        /// Gets the format.
-        /// </summary>
-        /// <value>
-        /// The format.
-        /// </value>
-        public override FileFormats Format => FileFormats.JPEG;
+    /// <value>
+    /// The format.
+    /// </value>
+    public override FileFormats Format => FileFormats.JPEG;
 
-        /// <summary>
-        /// Gets the decoder.
-        /// </summary>
-        /// <value>
-        /// The decoder.
-        /// </value>
-        protected override IDecoder Decoder => new Decoder();
+    /// <summary>
+    /// Gets the decoder.
+    /// </summary>
+    /// <value>
+    /// The decoder.
+    /// </value>
+    protected override IDecoder Decoder => new Decoder();
 
-        /// <summary>
-        /// Gets the encoder.
-        /// </summary>
-        /// <value>
-        /// The encoder.
-        /// </value>
-        protected override IEncoder Encoder => new Encoder();
-    }
+    /// <summary>
+    /// Gets the encoder.
+    /// </summary>
+    /// <value>
+    /// The encoder.
+    /// </value>
+    protected override IEncoder Encoder => new Encoder();
 }

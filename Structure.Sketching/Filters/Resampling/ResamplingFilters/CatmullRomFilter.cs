@@ -16,32 +16,31 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Catmull Rom filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class CatmullRomFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Catmull Rom filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class CatmullRomFilter : ResamplingFilterBase
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 2f;
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 2f;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
-        {
-            if (value < 0) value = -value;
-            var temp = value * value;
-            if (value <= 1) return 1.5 * temp * value - 2.5 * temp + 1;
-            if (value <= 2) return -0.5 * temp * value + 2.5 * temp - 4 * value + 2;
-            return 0;
-        }
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
+    {
+        if (value < 0) value = -value;
+        var temp = value * value;
+        if (value <= 1) return 1.5 * temp * value - 2.5 * temp + 1;
+        if (value <= 2) return -0.5 * temp * value + 2.5 * temp - 4 * value + 2;
+        return 0;
     }
 }

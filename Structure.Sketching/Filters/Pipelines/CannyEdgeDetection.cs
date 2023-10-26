@@ -19,26 +19,25 @@ using Structure.Sketching.Filters.Binary;
 using Structure.Sketching.Filters.Convolution;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
-namespace Structure.Sketching.Filters.Pipelines
+namespace Structure.Sketching.Filters.Pipelines;
+
+/// <summary>
+/// Canny edge detection processing pipeline
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass" />
+public class CannyEdgeDetection : ProcessingPipelineBaseClass
 {
     /// <summary>
-    /// Canny edge detection processing pipeline
+    /// Initializes a new instance of the <see cref="CannyEdgeDetection" /> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass" />
-    public class CannyEdgeDetection : ProcessingPipelineBaseClass
+    /// <param name="color1">The color1.</param>
+    /// <param name="color2">The color2.</param>
+    /// <param name="threshold1">The threshold1.</param>
+    /// <param name="threshold2">The threshold2.</param>
+    public CannyEdgeDetection(Color color1, Color color2, float threshold1, float threshold2)
+        : base(false)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CannyEdgeDetection" /> class.
-        /// </summary>
-        /// <param name="color1">The color1.</param>
-        /// <param name="color2">The color2.</param>
-        /// <param name="threshold1">The threshold1.</param>
-        /// <param name="threshold2">The threshold2.</param>
-        public CannyEdgeDetection(Color color1, Color color2, float threshold1, float threshold2)
-            : base(false)
-        {
-            AddFilter(new RobertsCross())
+        AddFilter(new RobertsCross())
             .AddFilter(new NonMaximalSuppression(color1, color2, threshold1, threshold2));
-        }
     }
 }

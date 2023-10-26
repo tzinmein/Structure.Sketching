@@ -19,60 +19,59 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Solarizes an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Solarize : IFilter
 {
     /// <summary>
-    /// Solarizes an image
+    /// Initializes a new instance of the <see cref="Solarize"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Solarize : IFilter
+    /// <param name="threshold">The threshold (between 0 and 3).</param>
+    public Solarize(float threshold)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Solarize"/> class.
-        /// </summary>
-        /// <param name="threshold">The threshold (between 0 and 3).</param>
-        public Solarize(float threshold)
-        {
-            Threshold = threshold * 255;
-        }
+        Threshold = threshold * 255;
+    }
 
-        /// <summary>
-        /// Gets or sets the threshold.
-        /// </summary>
-        /// <value>The threshold.</value>
-        public float Threshold { get; set; }
+    /// <summary>
+    /// Gets or sets the threshold.
+    /// </summary>
+    /// <value>The threshold.</value>
+    public float Threshold { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* OutputPointer = Pointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* OutputPointer = Pointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    if (Distance.Euclidean(*OutputPointer, Color.Black) < Threshold)
                     {
-                        if (Distance.Euclidean(*OutputPointer, Color.Black) < Threshold)
-                        {
-                            (*OutputPointer).Red = (byte)(255 - (*OutputPointer).Red);
-                            (*OutputPointer).Green = (byte)(255 - (*OutputPointer).Green);
-                            (*OutputPointer).Blue = (byte)(255 - (*OutputPointer).Blue);
-                            ++OutputPointer;
-                        }
-                        else
-                        {
-                            ++OutputPointer;
-                        }
+                        (*OutputPointer).Red = (byte)(255 - (*OutputPointer).Red);
+                        (*OutputPointer).Green = (byte)(255 - (*OutputPointer).Green);
+                        (*OutputPointer).Blue = (byte)(255 - (*OutputPointer).Blue);
+                        ++OutputPointer;
+                    }
+                    else
+                    {
+                        ++OutputPointer;
                     }
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

@@ -2,34 +2,33 @@
 using System.IO;
 using Xunit;
 
-namespace Structure.Sketching.Tests.Formats.Gif
+namespace Structure.Sketching.Tests.Formats.Gif;
+
+public class GifFormat : FormatTestBase
 {
-    public class GifFormat : FormatTestBase
+    public override string ExpectedDirectory => "./ExpectedResults/Formats/Gif/";
+
+    public override string InputDirectory => "./TestImages/Formats/Gif/";
+
+    public override string OutputDirectory => "./TestOutput/Formats/Gif/";
+
+    public static readonly TheoryData<string> InputFileNames = new()
     {
-        public override string ExpectedDirectory => "./ExpectedResults/Formats/Gif/";
+        {"giphy.gif"},
+        {"rings.gif"}
+    };
 
-        public override string InputDirectory => "./TestImages/Formats/Gif/";
-
-        public override string OutputDirectory => "./TestOutput/Formats/Gif/";
-
-        public static readonly TheoryData<string> InputFileNames = new()
+    [Theory]
+    [MemberData(nameof(InputFileNames))]
+    public void Encode(string fileName)
+    {
+        using (var TempFile = File.OpenRead(InputDirectory + fileName))
         {
-            {"giphy.gif"},
-            {"rings.gif"}
-        };
-
-        [Theory]
-        [MemberData(nameof(InputFileNames))]
-        public void Encode(string fileName)
-        {
-            using (var TempFile = File.OpenRead(InputDirectory + fileName))
-            {
-                var ImageFormat = new Sketching.Formats.Gif.GifFormat();
-                var TempImage = ImageFormat.DecodeAnimation(TempFile);
-                using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
-                Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
-            }
-            Assert.True(CheckFileCorrect(fileName));
+            var ImageFormat = new Sketching.Formats.Gif.GifFormat();
+            var TempImage = ImageFormat.DecodeAnimation(TempFile);
+            using var TempFile2 = File.OpenWrite(OutputDirectory + fileName);
+            Assert.True(ImageFormat.Encode(new BinaryWriter(TempFile2), TempImage));
         }
+        Assert.True(CheckFileCorrect(fileName));
     }
 }

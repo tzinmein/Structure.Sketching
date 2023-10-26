@@ -17,63 +17,62 @@ limitations under the License.
 using Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats
+namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats;
+
+/// <summary>
+/// RGB 8bit pixel format
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces.IPixelFormat"/>
+public class RGB8bit : PixelFormatBase
 {
     /// <summary>
-    /// RGB 8bit pixel format
+    /// The bytes per pixel
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces.IPixelFormat"/>
-    public class RGB8bit : PixelFormatBase
+    /// <value>The BPP.</value>
+    public override double BPP => 1;
+
+    /// <summary>
+    /// Decodes the specified data.
+    /// </summary>
+    /// <param name="header">The header.</param>
+    /// <param name="data">The data.</param>
+    /// <param name="palette">The palette.</param>
+    /// <returns>The decoded data</returns>
+    public override byte[] Decode(Header header, byte[] data, Palette palette)
     {
-        /// <summary>
-        /// The bytes per pixel
-        /// </summary>
-        /// <value>The BPP.</value>
-        public override double BPP => 1;
-
-        /// <summary>
-        /// Decodes the specified data.
-        /// </summary>
-        /// <param name="header">The header.</param>
-        /// <param name="data">The data.</param>
-        /// <param name="palette">The palette.</param>
-        /// <returns>The decoded data</returns>
-        public override byte[] Decode(Header header, byte[] data, Palette palette)
+        int width = header.Width;
+        int height = header.Height;
+        int alignment = (4 - width % 4) % 4;
+        byte[] ReturnValue = new byte[width * height * 4];
+        Parallel.For(0, height, y =>
         {
-            int width = header.Width;
-            int height = header.Height;
-            int alignment = (4 - width % 4) % 4;
-            byte[] ReturnValue = new byte[width * height * 4];
-            Parallel.For(0, height, y =>
+            int SourceY = y * (width + alignment);
+            int DestinationY = height - y - 1;
+            int SourceOffset = SourceY;
+            int DestinationOffset = DestinationY * width * 4;
+            for (int x = 0; x < width; ++x)
             {
-                int SourceY = y * (width + alignment);
-                int DestinationY = height - y - 1;
-                int SourceOffset = SourceY;
-                int DestinationOffset = DestinationY * width * 4;
-                for (int x = 0; x < width; ++x)
-                {
-                    int ColorIndex = data[SourceOffset] * 4;
-                    ReturnValue[DestinationOffset] = palette.Data[ColorIndex + 2];
-                    ReturnValue[DestinationOffset + 1] = palette.Data[ColorIndex + 1];
-                    ReturnValue[DestinationOffset + 2] = palette.Data[ColorIndex];
-                    ReturnValue[DestinationOffset + 3] = palette.Data[ColorIndex + 3];
-                    DestinationOffset += 4;
-                    ++SourceOffset;
-                }
-            });
-            return ReturnValue;
-        }
+                int ColorIndex = data[SourceOffset] * 4;
+                ReturnValue[DestinationOffset] = palette.Data[ColorIndex + 2];
+                ReturnValue[DestinationOffset + 1] = palette.Data[ColorIndex + 1];
+                ReturnValue[DestinationOffset + 2] = palette.Data[ColorIndex];
+                ReturnValue[DestinationOffset + 3] = palette.Data[ColorIndex + 3];
+                DestinationOffset += 4;
+                ++SourceOffset;
+            }
+        });
+        return ReturnValue;
+    }
 
-        /// <summary>
-        /// Encodes the specified data.
-        /// </summary>
-        /// <param name="header">The header.</param>
-        /// <param name="data">The data.</param>
-        /// <param name="palette">The palette.</param>
-        /// <returns>The encoded data</returns>
-        public override byte[] Encode(Header header, byte[] data, Palette palette)
-        {
-            return data;
-        }
+    /// <summary>
+    /// Encodes the specified data.
+    /// </summary>
+    /// <param name="header">The header.</param>
+    /// <param name="data">The data.</param>
+    /// <param name="palette">The palette.</param>
+    /// <returns>The encoded data</returns>
+    public override byte[] Encode(Header header, byte[] data, Palette palette)
+    {
+        return data;
     }
 }

@@ -14,36 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Png.Format.Enums
+namespace Structure.Sketching.Formats.Png.Format.Enums;
+
+/// <summary>
+/// Scan line filter type
+/// </summary>
+public enum FilterType : byte
 {
     /// <summary>
-    /// Scan line filter type
+    /// As is, no filter
     /// </summary>
-    public enum FilterType : byte
-    {
-        /// <summary>
-        /// As is, no filter
-        /// </summary>
-        None = 0,
+    None = 0,
 
-        /// <summary>
-        /// Byte to the left is used
-        /// </summary>
-        Sub = 1,
+    /// <summary>
+    /// Byte to the left is used
+    /// </summary>
+    Sub = 1,
 
-        /// <summary>
-        /// Byte above is used
-        /// </summary>
-        Up = 2,
+    /// <summary>
+    /// Byte above is used
+    /// </summary>
+    Up = 2,
 
-        /// <summary>
-        /// The average of left and above
-        /// </summary>
-        Average = 3,
+    /// <summary>
+    /// The average of left and above
+    /// </summary>
+    Average = 3,
 
-        /// <summary>
-        /// Up, Left, or Upper Left. Whichever is closest to p = A + B - C.
-        /// </summary>
-        Paeth = 4
-    }
+    /// <summary>
+    /// Up, Left, or Upper Left. Whichever is closest to p = A + B - C.
+    /// </summary>
+    Paeth = 4
 }

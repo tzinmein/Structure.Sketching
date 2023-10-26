@@ -14,27 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Quantizers.Interfaces
+namespace Structure.Sketching.Quantizers.Interfaces;
+
+/// <summary>
+/// Quantizer interface
+/// </summary>
+public interface IQuantizer
 {
     /// <summary>
-    /// Quantizer interface
+    /// Gets or sets the transparency threshold.
     /// </summary>
-    public interface IQuantizer
-    {
-        /// <summary>
-        /// Gets or sets the transparency threshold.
-        /// </summary>
-        /// <value>
-        /// The transparency threshold.
-        /// </value>
-        byte TransparencyThreshold { get; set; }
+    /// <value>
+    /// The transparency threshold.
+    /// </value>
+    byte TransparencyThreshold { get; set; }
 
-        /// <summary>
-        /// Quantizes the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="maxColors">The maximum colors.</param>
-        /// <returns>The resulting quantized image</returns>
-        QuantizedImage Quantize(Image image, int maxColors);
-    }
+    /// <summary>
+    /// Quantizes the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="maxColors">The maximum colors.</param>
+    /// <returns>The resulting quantized image</returns>
+    QuantizedImage Quantize(Image image, int maxColors);
 }

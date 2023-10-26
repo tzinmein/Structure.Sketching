@@ -14,21 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums;
+
+/// <summary>
+/// Subsample enum
+/// </summary>
+public enum JpegSubsample
 {
     /// <summary>
-    /// Subsample enum
+    /// Higher quality
     /// </summary>
-    public enum JpegSubsample
-    {
-        /// <summary>
-        /// Higher quality
-        /// </summary>
-        Ratio444,
+    Ratio444,
 
-        /// <summary>
-        /// Medium quality
-        /// </summary>
-        Ratio420
-    }
+    /// <summary>
+    /// Medium quality
+    /// </summary>
+    Ratio420
 }

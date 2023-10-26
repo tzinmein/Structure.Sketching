@@ -16,24 +16,23 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.ExtensionMethods
+namespace Structure.Sketching.ExtensionMethods;
+
+/// <summary>
+/// Stream extensions
+/// </summary>
+public static class StreamExtensions
 {
     /// <summary>
-    /// Stream extensions
+    /// Reads the number of bytes specified from a stream.
     /// </summary>
-    public static class StreamExtensions
+    /// <param name="stream">The stream.</param>
+    /// <param name="length">The length of bytes to read.</param>
+    /// <returns>The byte array read from the stream</returns>
+    public static byte[] ReadBytes(this Stream stream, int length)
     {
-        /// <summary>
-        /// Reads the number of bytes specified from a stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="length">The length of bytes to read.</param>
-        /// <returns>The byte array read from the stream</returns>
-        public static byte[] ReadBytes(this Stream stream, int length)
-        {
-            byte[] buffer = new byte[length];
-            stream.Read(buffer, 0, length);
-            return buffer;
-        }
+        byte[] buffer = new byte[length];
+        stream.Read(buffer, 0, length);
+        return buffer;
     }
 }

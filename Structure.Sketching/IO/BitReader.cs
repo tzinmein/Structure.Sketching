@@ -17,94 +17,105 @@ limitations under the License.
 using System;
 using System.IO;
 
-namespace Structure.Sketching.IO
+namespace Structure.Sketching.IO;
+
+/// <summary>
+/// Bit reader
+/// </summary>
+public class BitReader : IDisposable
 {
     /// <summary>
-    /// Bit reader
+    /// Initializes a new instance of the <see cref="BitReader"/> class.
     /// </summary>
-    public class BitReader : IDisposable
+    /// <param name="stream">The stream.</param>
+    public BitReader(Stream stream)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitReader"/> class.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        public BitReader(Stream stream)
+        InternalStream = stream;
+        CurrentBit = 8;
+        CurrentByte = 0;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BitReader"/> class.
+    /// </summary>
+    /// <param name="byteArray">The byte array.</param>
+    public BitReader(byte[] byteArray)
+        : this(new MemoryStream(byteArray))
+    {
+    }
+
+    /// <summary>
+    /// Gets the current bit.
+    /// </summary>
+    /// <value>The current bit.</value>
+    private int CurrentBit { get; set; }
+
+    /// <summary>
+    /// Gets or sets the current byte.
+    /// </summary>
+    /// <value>The current byte.</value>
+    private byte CurrentByte { get; set; }
+
+    /// <summary>
+    /// Gets or sets the internal stream.
+    /// </summary>
+    /// <value>The internal stream.</value>
+    private Stream InternalStream { get; set; }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting
+    /// unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        if (InternalStream != null)
         {
-            InternalStream = stream;
-            CurrentBit = 8;
-            CurrentByte = 0;
+            InternalStream.Dispose();
+            InternalStream = null;
         }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitReader"/> class.
-        /// </summary>
-        /// <param name="byteArray">The byte array.</param>
-        public BitReader(byte[] byteArray)
-            : this(new MemoryStream(byteArray))
+    /// <summary>
+    /// Reads the next bit.
+    /// </summary>
+    /// <param name="bigEndian">if set to <c>true</c> [big endian].</param>
+    /// <returns>The next bit value in the stream</returns>
+    public bool? ReadBit(bool bigEndian = false)
+    {
+        if (CurrentBit == 8)
         {
+            var TempByte = InternalStream.ReadByte();
+            if (TempByte == -1)
+                return null;
+            CurrentBit = 0;
+            CurrentByte = (byte)TempByte;
         }
+        bool TempValue;
+        if (bigEndian)
+            TempValue = (CurrentByte & (1 << CurrentBit)) > 0;
+        else
+            TempValue = (CurrentByte & (1 << (7 - CurrentBit))) > 0;
+        ++CurrentBit;
+        return TempValue;
+    }
 
-        /// <summary>
-        /// Gets the current bit.
-        /// </summary>
-        /// <value>The current bit.</value>
-        private int CurrentBit { get; set; }
-
-        /// <summary>
-        /// Gets or sets the current byte.
-        /// </summary>
-        /// <value>The current byte.</value>
-        private byte CurrentByte { get; set; }
-
-        /// <summary>
-        /// Gets or sets the internal stream.
-        /// </summary>
-        /// <value>The internal stream.</value>
-        private Stream InternalStream { get; set; }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting
-        /// unmanaged resources.
-        /// </summary>
-        public void Dispose()
+    /// <summary>
+    /// Skips the specified bit count.
+    /// </summary>
+    /// <param name="bitCount">The bit count.</param>
+    public void Skip(int bitCount)
+    {
+        if (CurrentBit == 8)
         {
-            if (InternalStream != null)
-            {
-                InternalStream.Dispose();
-                InternalStream = null;
-            }
+            var TempByte = InternalStream.ReadByte();
+            if (TempByte == -1)
+                return;
+            CurrentBit = 0;
+            CurrentByte = (byte)TempByte;
         }
-
-        /// <summary>
-        /// Reads the next bit.
-        /// </summary>
-        /// <param name="bigEndian">if set to <c>true</c> [big endian].</param>
-        /// <returns>The next bit value in the stream</returns>
-        public bool? ReadBit(bool bigEndian = false)
+        for (int x = 0; x < bitCount; ++x)
         {
-            if (CurrentBit == 8)
-            {
-                var TempByte = InternalStream.ReadByte();
-                if (TempByte == -1)
-                    return null;
-                CurrentBit = 0;
-                CurrentByte = (byte)TempByte;
-            }
-            bool TempValue;
-            if (bigEndian)
-                TempValue = (CurrentByte & (1 << CurrentBit)) > 0;
-            else
-                TempValue = (CurrentByte & (1 << (7 - CurrentBit))) > 0;
             ++CurrentBit;
-            return TempValue;
-        }
-
-        /// <summary>
-        /// Skips the specified bit count.
-        /// </summary>
-        /// <param name="bitCount">The bit count.</param>
-        public void Skip(int bitCount)
-        {
             if (CurrentBit == 8)
             {
                 var TempByte = InternalStream.ReadByte();
@@ -112,18 +123,6 @@ namespace Structure.Sketching.IO
                     return;
                 CurrentBit = 0;
                 CurrentByte = (byte)TempByte;
-            }
-            for (int x = 0; x < bitCount; ++x)
-            {
-                ++CurrentBit;
-                if (CurrentBit == 8)
-                {
-                    var TempByte = InternalStream.ReadByte();
-                    if (TempByte == -1)
-                        return;
-                    CurrentBit = 0;
-                    CurrentByte = (byte)TempByte;
-                }
             }
         }
     }

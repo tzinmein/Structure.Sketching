@@ -17,59 +17,58 @@ limitations under the License.
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 using System;
 
-namespace Structure.Sketching.Formats.Png.Format.ColorFormats
+namespace Structure.Sketching.Formats.Png.Format.ColorFormats;
+
+/// <summary>
+/// Color type information
+/// </summary>
+public class ColorTypeInformation
 {
     /// <summary>
-    /// Color type information
+    /// Initializes a new instance of the <see cref="ColorTypeInformation"/> class.
     /// </summary>
-    public class ColorTypeInformation
+    /// <param name="scanlineFactor">The scanline factor.</param>
+    /// <param name="supportedBitDepths">The supported bit depths.</param>
+    /// <param name="scanlineReaderFactory">The scanline reader factory.</param>
+    public ColorTypeInformation(int scanlineFactor, int[] supportedBitDepths, Func<Palette, Palette, IColorReader> scanlineReaderFactory)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ColorTypeInformation"/> class.
-        /// </summary>
-        /// <param name="scanlineFactor">The scanline factor.</param>
-        /// <param name="supportedBitDepths">The supported bit depths.</param>
-        /// <param name="scanlineReaderFactory">The scanline reader factory.</param>
-        public ColorTypeInformation(int scanlineFactor, int[] supportedBitDepths, Func<Palette, Palette, IColorReader> scanlineReaderFactory)
-        {
-            ScanlineReaderFactory = scanlineReaderFactory;
-            SupportedBitDepths = supportedBitDepths;
-            ScanlineFactor = scanlineFactor;
-        }
+        ScanlineReaderFactory = scanlineReaderFactory;
+        SupportedBitDepths = supportedBitDepths;
+        ScanlineFactor = scanlineFactor;
+    }
 
-        /// <summary>
-        /// Gets or sets the scanline factor.
-        /// </summary>
-        /// <value>
-        /// The scanline factor.
-        /// </value>
-        public int ScanlineFactor { get; set; }
+    /// <summary>
+    /// Gets or sets the scanline factor.
+    /// </summary>
+    /// <value>
+    /// The scanline factor.
+    /// </value>
+    public int ScanlineFactor { get; set; }
 
-        /// <summary>
-        /// Gets or sets the scanline reader factory.
-        /// </summary>
-        /// <value>
-        /// The scanline reader factory.
-        /// </value>
-        public Func<Palette, Palette, IColorReader> ScanlineReaderFactory { get; set; }
+    /// <summary>
+    /// Gets or sets the scanline reader factory.
+    /// </summary>
+    /// <value>
+    /// The scanline reader factory.
+    /// </value>
+    public Func<Palette, Palette, IColorReader> ScanlineReaderFactory { get; set; }
 
-        /// <summary>
-        /// Gets or sets the supported bit depths.
-        /// </summary>
-        /// <value>
-        /// The supported bit depths.
-        /// </value>
-        public int[] SupportedBitDepths { get; set; }
+    /// <summary>
+    /// Gets or sets the supported bit depths.
+    /// </summary>
+    /// <value>
+    /// The supported bit depths.
+    /// </value>
+    public int[] SupportedBitDepths { get; set; }
 
-        /// <summary>
-        /// Creates the color reader.
-        /// </summary>
-        /// <param name="palette">The palette.</param>
-        /// <param name="alphaPalette">The alpha palette.</param>
-        /// <returns>The color reader</returns>
-        public IColorReader CreateColorReader(Palette palette, Palette alphaPalette)
-        {
-            return ScanlineReaderFactory(palette, alphaPalette);
-        }
+    /// <summary>
+    /// Creates the color reader.
+    /// </summary>
+    /// <param name="palette">The palette.</param>
+    /// <param name="alphaPalette">The alpha palette.</param>
+    /// <returns>The color reader</returns>
+    public IColorReader CreateColorReader(Palette palette, Palette alphaPalette)
+    {
+        return ScanlineReaderFactory(palette, alphaPalette);
     }
 }

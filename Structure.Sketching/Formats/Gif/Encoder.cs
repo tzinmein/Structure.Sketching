@@ -16,20 +16,19 @@ limitations under the License.
 
 using Structure.Sketching.Formats.BaseClasses;
 
-namespace Structure.Sketching.Formats.Gif
+namespace Structure.Sketching.Formats.Gif;
+
+/// <summary>
+/// Gif Encoder
+/// </summary>
+/// <seealso cref="EncoderBase{File}" />
+public class Encoder : EncoderBase<Format.File>
 {
     /// <summary>
-    /// Gif Encoder
+    /// Gets the file extensions.
     /// </summary>
-    /// <seealso cref="EncoderBase{File}" />
-    public class Encoder : EncoderBase<Format.File>
-    {
-        /// <summary>
-        /// Gets the file extensions.
-        /// </summary>
-        /// <value>
-        /// The file extensions.
-        /// </value>
-        protected override string[] FileExtensions => new[] { ".GIF" };
-    }
+    /// <value>
+    /// The file extensions.
+    /// </value>
+    protected override string[] FileExtensions => new[] { ".GIF" };
 }

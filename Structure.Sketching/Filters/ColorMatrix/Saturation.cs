@@ -17,57 +17,56 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Saturation matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Saturation : MatrixBaseClass
 {
     /// <summary>
-    /// Saturation matrix
+    /// Initializes a new instance of the <see cref="Saturation"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Saturation : MatrixBaseClass
+    /// <param name="value">The saturation value (-1 to 1).</param>
+    public Saturation(float value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Saturation"/> class.
-        /// </summary>
-        /// <param name="value">The saturation value (-1 to 1).</param>
-        public Saturation(float value)
-        {
-            ++value;
-            Value = 1f - value;
-            float saturationComplementR = 0.3086f * Value;
-            float saturationComplementG = 0.6094f * Value;
-            float saturationComplementB = 0.0820f * Value;
-            _Matrix = new Matrix5x5
-            (
-                saturationComplementR + value, saturationComplementR, saturationComplementR, 0f, 0f,
-                saturationComplementG, saturationComplementG + value, saturationComplementG, 0f, 0f,
-                saturationComplementB, saturationComplementB, saturationComplementB + value, 0f, 0f,
-                0f, 0f, 0f, 1f, 0f,
-                0f, 0f, 0f, 0f, 1f
-            );
-        }
-
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => _Matrix;
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <value>The value.</value>
-        public float Value { get; }
-
-        /// <summary>
-        /// The matrix backing field
-        /// </summary>
-        private Matrix5x5 _Matrix = new Matrix5x5
+        ++value;
+        Value = 1f - value;
+        float saturationComplementR = 0.3086f * Value;
+        float saturationComplementG = 0.6094f * Value;
+        float saturationComplementB = 0.0820f * Value;
+        _Matrix = new Matrix5x5
         (
-            1f, 0f, 0f, 0f, 0f,
-            0f, 1f, 0f, 0f, 0f,
-            0f, 0f, 1f, 0f, 0f,
+            saturationComplementR + value, saturationComplementR, saturationComplementR, 0f, 0f,
+            saturationComplementG, saturationComplementG + value, saturationComplementG, 0f, 0f,
+            saturationComplementB, saturationComplementB, saturationComplementB + value, 0f, 0f,
             0f, 0f, 0f, 1f, 0f,
             0f, 0f, 0f, 0f, 1f
         );
     }
+
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <value>The matrix.</value>
+    public override Matrix5x5 Matrix => _Matrix;
+
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <value>The value.</value>
+    public float Value { get; }
+
+    /// <summary>
+    /// The matrix backing field
+    /// </summary>
+    private Matrix5x5 _Matrix = new Matrix5x5
+    (
+        1f, 0f, 0f, 0f, 0f,
+        0f, 1f, 0f, 0f, 0f,
+        0f, 0f, 1f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0f, 0f, 0f, 0f, 1f
+    );
 }

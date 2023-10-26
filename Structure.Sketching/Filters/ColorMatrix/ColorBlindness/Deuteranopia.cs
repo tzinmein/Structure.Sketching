@@ -17,24 +17,23 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix.ColorBlindness
+namespace Structure.Sketching.Filters.ColorMatrix.ColorBlindness;
+
+/// <summary>
+/// Deuteranopia matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Deuteranopia : MatrixBaseClass
 {
     /// <summary>
-    /// Deuteranopia matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Deuteranopia : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            .625f, .7f, 0f, 0f, 0f,
-            .375f, .3f, .3f, 0f, 0f,
-            0f, 0f, .7f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0f, 0f, 0f, 0f, 1f
-        );
-    }
+    /// <value>The matrix.</value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        .625f, .7f, 0f, 0f, 0f,
+        .375f, .3f, .3f, 0f, 0f,
+        0f, 0f, .7f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0f, 0f, 0f, 0f, 1f
+    );
 }

@@ -14,21 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Filters.Resampling.Enums
+namespace Structure.Sketching.Filters.Resampling.Enums;
+
+/// <summary>
+/// Resize options
+/// </summary>
+public enum ResizeOptions
 {
     /// <summary>
-    /// Resize options
+    /// Keep the image in the upper left corner
     /// </summary>
-    public enum ResizeOptions
-    {
-        /// <summary>
-        /// Keep the image in the upper left corner
-        /// </summary>
-        UpperLeft = 0,
+    UpperLeft = 0,
 
-        /// <summary>
-        /// Center the image when resizing
-        /// </summary>
-        Center
-    }
+    /// <summary>
+    /// Center the image when resizing
+    /// </summary>
+    Center
 }

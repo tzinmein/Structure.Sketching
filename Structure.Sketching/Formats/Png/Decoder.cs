@@ -16,45 +16,44 @@ limitations under the License.
 
 using Structure.Sketching.Formats.BaseClasses;
 
-namespace Structure.Sketching.Formats.Png
+namespace Structure.Sketching.Formats.Png;
+
+/// <summary>
+/// PNG Decoder
+/// </summary>
+/// <seealso cref="DecoderBase{File}" />
+public class Decoder : DecoderBase<Format.File>
 {
     /// <summary>
-    /// PNG Decoder
+    /// Gets the size of the header.
     /// </summary>
-    /// <seealso cref="DecoderBase{File}" />
-    public class Decoder : DecoderBase<Format.File>
+    /// <value>
+    /// The size of the header.
+    /// </value>
+    public override int HeaderSize => 8;
+
+    /// <summary>
+    /// Gets the file extensions.
+    /// </summary>
+    /// <value>
+    /// The file extensions.
+    /// </value>
+    protected override string[] FileExtensions => new[] { ".PNG" };
+
+    /// <summary>
+    /// Determines whether this instance can decode the specified header.
+    /// </summary>
+    /// <param name="header">The header data</param>
+    /// <returns>
+    /// True if it can, false otherwise
+    /// </returns>
+    public override bool CanDecode(byte[] header)
     {
-        /// <summary>
-        /// Gets the size of the header.
-        /// </summary>
-        /// <value>
-        /// The size of the header.
-        /// </value>
-        public override int HeaderSize => 8;
-
-        /// <summary>
-        /// Gets the file extensions.
-        /// </summary>
-        /// <value>
-        /// The file extensions.
-        /// </value>
-        protected override string[] FileExtensions => new[] { ".PNG" };
-
-        /// <summary>
-        /// Determines whether this instance can decode the specified header.
-        /// </summary>
-        /// <param name="header">The header data</param>
-        /// <returns>
-        /// True if it can, false otherwise
-        /// </returns>
-        public override bool CanDecode(byte[] header)
-        {
-            if (header == null || header.Length < 8)
-                return false;
-            return header[0] == 0x89 && header[1] == 0x50 &&
-                   header[2] == 0x4E && header[3] == 0x47 &&
-                   header[4] == 0x0D && header[5] == 0x0A &&
-                   header[6] == 0x1A && header[7] == 0x0A;
-        }
+        if (header == null || header.Length < 8)
+            return false;
+        return header[0] == 0x89 && header[1] == 0x50 &&
+               header[2] == 0x4E && header[3] == 0x47 &&
+               header[4] == 0x0D && header[5] == 0x0A &&
+               header[6] == 0x1A && header[7] == 0x0A;
     }
 }

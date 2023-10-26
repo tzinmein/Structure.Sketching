@@ -18,76 +18,75 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Structure.Sketching.ExtensionMethods
+namespace Structure.Sketching.ExtensionMethods;
+
+/// <summary>
+/// Float extensions
+/// </summary>
+public static class Extensions
 {
     /// <summary>
-    /// Float extensions
+    /// Clamps the value based on the minimum and maximum specified.
     /// </summary>
-    public static class Extensions
+    /// <param name="Value">The value.</param>
+    /// <param name="Min">The minimum.</param>
+    /// <param name="Max">The maximum.</param>
+    /// <returns>The clamped value.</returns>
+    public static float Clamp(this float Value, float Min, float Max)
     {
-        /// <summary>
-        /// Clamps the value based on the minimum and maximum specified.
-        /// </summary>
-        /// <param name="Value">The value.</param>
-        /// <param name="Min">The minimum.</param>
-        /// <param name="Max">The maximum.</param>
-        /// <returns>The clamped value.</returns>
-        public static float Clamp(this float Value, float Min, float Max)
-        {
-            return Value < Min ? Min : Value > Max ? Max : Value;
-        }
+        return Value < Min ? Min : Value > Max ? Max : Value;
+    }
 
-        /// <summary>
-        /// Clamps the value based on the minimum and maximum specified.
-        /// </summary>
-        /// <param name="Value">The value.</param>
-        /// <param name="Min">The minimum.</param>
-        /// <param name="Max">The maximum.</param>
-        /// <returns>The clamped value.</returns>
-        public static double Clamp(this double Value, double Min, double Max)
-        {
-            return Value < Min ? Min : Value > Max ? Max : Value;
-        }
+    /// <summary>
+    /// Clamps the value based on the minimum and maximum specified.
+    /// </summary>
+    /// <param name="Value">The value.</param>
+    /// <param name="Min">The minimum.</param>
+    /// <param name="Max">The maximum.</param>
+    /// <returns>The clamped value.</returns>
+    public static double Clamp(this double Value, double Min, double Max)
+    {
+        return Value < Min ? Min : Value > Max ? Max : Value;
+    }
 
-        /// <summary>
-        /// Clamps the value based on the minimum and maximum specified.
-        /// </summary>
-        /// <param name="Value">The value.</param>
-        /// <param name="Min">The minimum.</param>
-        /// <param name="Max">The maximum.</param>
-        /// <returns>The clamped value.</returns>
-        public static int Clamp(this int Value, int Min, int Max)
-        {
-            return Value < Min ? Min : Value > Max ? Max : Value;
-        }
+    /// <summary>
+    /// Clamps the value based on the minimum and maximum specified.
+    /// </summary>
+    /// <param name="Value">The value.</param>
+    /// <param name="Min">The minimum.</param>
+    /// <param name="Max">The maximum.</param>
+    /// <returns>The clamped value.</returns>
+    public static int Clamp(this int Value, int Min, int Max)
+    {
+        return Value < Min ? Min : Value > Max ? Max : Value;
+    }
 
-        /// <summary>
-        /// Gets the cubic root of a value
-        /// </summary>
-        /// <param name="n">The value</param>
-        /// <returns>The result</returns>
-        public static double CubicRoot(this double n)
-        {
-            return Math.Pow(n, 1.0 / 3.0);
-        }
+    /// <summary>
+    /// Gets the cubic root of a value
+    /// </summary>
+    /// <param name="n">The value</param>
+    /// <returns>The result</returns>
+    public static double CubicRoot(this double n)
+    {
+        return Math.Pow(n, 1.0 / 3.0);
+    }
 
-        /// <summary>
-        /// Converts a float array to a vector4 array.
-        /// </summary>
-        /// <param name="values">The values.</param>
-        /// <returns>The resulting array after converting</returns>
-        public static Vector4[] ToVector4(this float[] values)
+    /// <summary>
+    /// Converts a float array to a vector4 array.
+    /// </summary>
+    /// <param name="values">The values.</param>
+    /// <returns>The resulting array after converting</returns>
+    public static Vector4[] ToVector4(this float[] values)
+    {
+        if (values == null || values.Length == 0)
         {
-            if (values == null || values.Length == 0)
-            {
-                return Array.Empty<Vector4>();
-            }
-            var NewData = new List<Vector4>();
-            for (int x = 0; x < values.Length; x += 4)
-            {
-                NewData.Add(new Vector4(values[x], values[x + 1], values[x + 2], values[x + 3]));
-            }
-            return NewData.ToArray();
+            return Array.Empty<Vector4>();
         }
+        var NewData = new List<Vector4>();
+        for (int x = 0; x < values.Length; x += 4)
+        {
+            NewData.Add(new Vector4(values[x], values[x + 1], values[x + 2], values[x + 3]));
+        }
+        return NewData.ToArray();
     }
 }

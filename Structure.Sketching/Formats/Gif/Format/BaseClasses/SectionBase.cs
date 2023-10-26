@@ -18,44 +18,43 @@ using Structure.Sketching.Formats.Gif.Format.Interfaces;
 using Structure.Sketching.IO;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Gif.Format.BaseClasses
+namespace Structure.Sketching.Formats.Gif.Format.BaseClasses;
+
+/// <summary>
+/// Section base class
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Gif.Format.Interfaces.ISection" />
+public abstract class SectionBase : ISection
 {
     /// <summary>
-    /// Section base class
+    /// Initializes a new instance of the <see cref="SectionBase"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Gif.Format.Interfaces.ISection" />
-    public abstract class SectionBase : ISection
+    protected SectionBase()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SectionBase"/> class.
-        /// </summary>
-        protected SectionBase()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Writes to the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>True if it writes successfully, false otherwise</returns>
-        public abstract bool Write(EndianBinaryWriter writer);
+    /// <summary>
+    /// Writes to the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    /// <returns>True if it writes successfully, false otherwise</returns>
+    public abstract bool Write(EndianBinaryWriter writer);
 
-        /// <summary>
-        /// Skips the specified number of bytes in the stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="length">The length.</param>
-        /// <returns>The stream</returns>
-        protected static Stream Skip(Stream stream, int length)
+    /// <summary>
+    /// Skips the specified number of bytes in the stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <param name="length">The length.</param>
+    /// <returns>The stream</returns>
+    protected static Stream Skip(Stream stream, int length)
+    {
+        stream.Seek(length, SeekOrigin.Current);
+        var flag = stream.ReadByte();
+        while (flag != 0)
         {
-            stream.Seek(length, SeekOrigin.Current);
-            var flag = stream.ReadByte();
-            while (flag != 0)
-            {
-                stream.Seek(flag, SeekOrigin.Current);
-                flag = stream.ReadByte();
-            }
-            return stream;
+            stream.Seek(flag, SeekOrigin.Current);
+            flag = stream.ReadByte();
         }
+        return stream;
     }
 }

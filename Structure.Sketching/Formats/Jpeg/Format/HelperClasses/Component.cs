@@ -14,43 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
+
+/// <summary>
+/// Component data holder
+/// </summary>
+public class Component
 {
     /// <summary>
-    /// Component data holder
+    /// Gets or sets the component identifier.
     /// </summary>
-    public class Component
-    {
-        /// <summary>
-        /// Gets or sets the component identifier.
-        /// </summary>
-        /// <value>
-        /// The component identifier.
-        /// </value>
-        public byte ComponentIdentifier { get; set; }
+    /// <value>
+    /// The component identifier.
+    /// </value>
+    public byte ComponentIdentifier { get; set; }
 
-        /// <summary>
-        /// Gets or sets the horizontal sampling factor.
-        /// </summary>
-        /// <value>
-        /// The horizontal sampling factor.
-        /// </value>
-        public int HorizontalSamplingFactor { get; set; }
+    /// <summary>
+    /// Gets or sets the horizontal sampling factor.
+    /// </summary>
+    /// <value>
+    /// The horizontal sampling factor.
+    /// </value>
+    public int HorizontalSamplingFactor { get; set; }
 
-        /// <summary>
-        /// Gets or sets the quatization table dest selector.
-        /// </summary>
-        /// <value>
-        /// The quatization table dest selector.
-        /// </value>
-        public byte QuatizationTableDestSelector { get; set; }
+    /// <summary>
+    /// Gets or sets the quatization table dest selector.
+    /// </summary>
+    /// <value>
+    /// The quatization table dest selector.
+    /// </value>
+    public byte QuatizationTableDestSelector { get; set; }
 
-        /// <summary>
-        /// Gets or sets the vertical sampling factor.
-        /// </summary>
-        /// <value>
-        /// The vertical sampling factor.
-        /// </value>
-        public int VerticalSamplingFactor { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the vertical sampling factor.
+    /// </summary>
+    /// <value>
+    /// The vertical sampling factor.
+    /// </value>
+    public int VerticalSamplingFactor { get; set; }
 }

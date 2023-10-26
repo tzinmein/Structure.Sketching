@@ -19,66 +19,65 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Arithmetic
+namespace Structure.Sketching.Filters.Arithmetic;
+
+/// <summary>
+/// Does an add operation between two images.
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Add : IFilter
 {
     /// <summary>
-    /// Does an add operation between two images.
+    /// Initializes a new instance of the <see cref="Add"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Add : IFilter
+    /// <param name="secondImage">The second image.</param>
+    public Add(Image secondImage)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Add"/> class.
-        /// </summary>
-        /// <param name="secondImage">The second image.</param>
-        public Add(Image secondImage)
-        {
-            SecondImage = secondImage;
-        }
+        SecondImage = secondImage;
+    }
 
-        /// <summary>
-        /// Gets or sets the second image.
-        /// </summary>
-        /// <value>The second image.</value>
-        public Image SecondImage { get; set; }
+    /// <summary>
+    /// Gets or sets the second image.
+    /// </summary>
+    /// <value>The second image.</value>
+    public Image SecondImage { get; set; }
 
-        /// <summary>
-        /// Applies the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            if (y >= SecondImage.Height)
             {
-                if (y >= SecondImage.Height)
+                return;
+            }
+            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            {
+                Color* OutputPointer = Pointer;
+                fixed (Color* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
                 {
-                    return;
-                }
-                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
-                {
-                    Color* OutputPointer = Pointer;
-                    fixed (Color* Image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
+                    Color* Image2Pointer2 = Image2Pointer;
+                    int x2 = 0;
+                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        Color* Image2Pointer2 = Image2Pointer;
-                        int x2 = 0;
-                        for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                        if (x2 > SecondImage.Width)
                         {
-                            if (x2 > SecondImage.Width)
-                            {
-                                break;
-                            }
-                            ++x2;
-                            (*OutputPointer).Add(*Image2Pointer2);
-                            ++OutputPointer;
-                            ++Image2Pointer2;
+                            break;
                         }
+                        ++x2;
+                        (*OutputPointer).Add(*Image2Pointer2);
+                        ++OutputPointer;
+                        ++Image2Pointer2;
                     }
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

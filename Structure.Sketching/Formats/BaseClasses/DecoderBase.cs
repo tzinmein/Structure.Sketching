@@ -20,90 +20,89 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Structure.Sketching.Formats.BaseClasses
+namespace Structure.Sketching.Formats.BaseClasses;
+
+/// <summary>
+/// Decoder base class
+/// </summary>
+/// <typeparam name="TFile">The type of the file format class.</typeparam>
+/// <seealso cref="Structure.Sketching.Formats.Interfaces.IDecoder"/>
+public abstract class DecoderBase<TFile> : IDecoder
+    where TFile : FileBase, new()
 {
     /// <summary>
-    /// Decoder base class
+    /// Initializes a new instance of the <see cref="DecoderBase{TFile}"/> class.
     /// </summary>
-    /// <typeparam name="TFile">The type of the file format class.</typeparam>
-    /// <seealso cref="Structure.Sketching.Formats.Interfaces.IDecoder"/>
-    public abstract class DecoderBase<TFile> : IDecoder
-        where TFile : FileBase, new()
+    protected DecoderBase() { }
+
+    /// <summary>
+    /// Gets the size of the header.
+    /// </summary>
+    /// <value>The size of the header.</value>
+    public abstract int HeaderSize { get; }
+
+    /// <summary>
+    /// Gets the file extensions.
+    /// </summary>
+    /// <value>The file extensions.</value>
+    protected abstract string[] FileExtensions { get; }
+
+    /// <summary>
+    /// Determines whether this instance can decode the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    public bool CanDecode(Stream stream)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DecoderBase{TFile}"/> class.
-        /// </summary>
-        protected DecoderBase() { }
+        if (stream == null)
+            return false;
+        byte[] TempBuffer = new byte[HeaderSize];
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.Read(TempBuffer, 0, HeaderSize);
+        var value = CanDecode(TempBuffer);
+        stream.Seek(0, SeekOrigin.Begin);
+        return value;
+    }
 
-        /// <summary>
-        /// Gets the size of the header.
-        /// </summary>
-        /// <value>The size of the header.</value>
-        public abstract int HeaderSize { get; }
+    /// <summary>
+    /// Determines whether this instance can decode the specified header.
+    /// </summary>
+    /// <param name="header">The header data</param>
+    /// <returns>True if it can, false otherwise</returns>
+    public abstract bool CanDecode(byte[] header);
 
-        /// <summary>
-        /// Gets the file extensions.
-        /// </summary>
-        /// <value>The file extensions.</value>
-        protected abstract string[] FileExtensions { get; }
+    /// <summary>
+    /// Determines whether this instance can decode the specified file name.
+    /// </summary>
+    /// <param name="fileName">Name of the file.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    public bool CanDecode(string fileName)
+    {
+        return !string.IsNullOrEmpty(fileName)
+               && FileExtensions.Any(
+                   x => fileName.EndsWith(x, StringComparison.OrdinalIgnoreCase)
+               );
+    }
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        public bool CanDecode(Stream stream)
-        {
-            if (stream == null)
-                return false;
-            byte[] TempBuffer = new byte[HeaderSize];
-            stream.Seek(0, SeekOrigin.Begin);
-            stream.Read(TempBuffer, 0, HeaderSize);
-            var value = CanDecode(TempBuffer);
-            stream.Seek(0, SeekOrigin.Begin);
-            return value;
-        }
+    /// <summary>
+    /// Decodes the specified stream and returns an image
+    /// </summary>
+    /// <param name="stream">The stream containing the image data.</param>
+    /// <returns>The resulting image</returns>
+    public Image Decode(Stream stream)
+    {
+        return stream != null ? new TFile().Decode(stream) : new Image(1, 1, new Color[1]);
+    }
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified header.
-        /// </summary>
-        /// <param name="header">The header data</param>
-        /// <returns>True if it can, false otherwise</returns>
-        public abstract bool CanDecode(byte[] header);
-
-        /// <summary>
-        /// Determines whether this instance can decode the specified file name.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        public bool CanDecode(string fileName)
-        {
-            return !string.IsNullOrEmpty(fileName)
-                && FileExtensions.Any(
-                    x => fileName.EndsWith(x, StringComparison.OrdinalIgnoreCase)
-                );
-        }
-
-        /// <summary>
-        /// Decodes the specified stream and returns an image
-        /// </summary>
-        /// <param name="stream">The stream containing the image data.</param>
-        /// <returns>The resulting image</returns>
-        public Image Decode(Stream stream)
-        {
-            return stream != null ? new TFile().Decode(stream) : new Image(1, 1, new Color[1]);
-        }
-
-        /// <summary>
-        /// Decodes the specified stream and returns an animation
-        /// </summary>
-        /// <param name="stream">The stream containing the animation data.</param>
-        /// <returns>The resulting animation</returns>
-        public Animation DecodeAnimation(Stream stream)
-        {
-            return stream != null
-                ? new TFile().Decode(stream)
-                : new Animation(new[] { new Image(1, 1, new Color[1]) }, 0);
-        }
+    /// <summary>
+    /// Decodes the specified stream and returns an animation
+    /// </summary>
+    /// <param name="stream">The stream containing the animation data.</param>
+    /// <returns>The resulting animation</returns>
+    public Animation DecodeAnimation(Stream stream)
+    {
+        return stream != null
+            ? new TFile().Decode(stream)
+            : new Animation(new[] { new Image(1, 1, new Color[1]) }, 0);
     }
 }

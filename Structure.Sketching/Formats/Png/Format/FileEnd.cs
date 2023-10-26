@@ -17,35 +17,34 @@ limitations under the License.
 using System;
 using Structure.Sketching.Formats.Png.Format.Helpers;
 
-namespace Structure.Sketching.Formats.Png.Format
+namespace Structure.Sketching.Formats.Png.Format;
+
+/// <summary>
+/// The end of file indicator
+/// </summary>
+public class FileEnd
 {
     /// <summary>
-    /// The end of file indicator
+    /// Performs an implicit conversion from <see cref="FileEnd"/> to <see cref="Chunk"/>.
     /// </summary>
-    public class FileEnd
+    /// <param name="fileEnd">The file end.</param>
+    /// <returns>
+    /// The result of the conversion.
+    /// </returns>
+    public static implicit operator Chunk(FileEnd fileEnd)
     {
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="FileEnd"/> to <see cref="Chunk"/>.
-        /// </summary>
-        /// <param name="fileEnd">The file end.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
-        public static implicit operator Chunk(FileEnd fileEnd)
-        {
-            return new Chunk(0, ChunkTypes.End, Array.Empty<byte>());
-        }
+        return new Chunk(0, ChunkTypes.End, Array.Empty<byte>());
+    }
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Chunk"/> to <see cref="FileEnd"/>.
-        /// </summary>
-        /// <param name="chunk">The chunk.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
-        public static implicit operator FileEnd(Chunk chunk)
-        {
-            return new FileEnd();
-        }
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="Chunk"/> to <see cref="FileEnd"/>.
+    /// </summary>
+    /// <param name="chunk">The chunk.</param>
+    /// <returns>
+    /// The result of the conversion.
+    /// </returns>
+    public static implicit operator FileEnd(Chunk chunk)
+    {
+        return new FileEnd();
     }
 }

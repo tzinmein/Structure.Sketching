@@ -14,51 +14,50 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
+
+/// <summary>
+/// Huffman look up table
+/// </summary>
+public class HuffmanLookUpTable
 {
     /// <summary>
-    /// Huffman look up table
+    /// Initializes a new instance of the <see cref="HuffmanLookUpTable"/> class.
     /// </summary>
-    public class HuffmanLookUpTable
+    /// <param name="spec">The spec.</param>
+    public HuffmanLookUpTable(HuffmanSpec spec)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HuffmanLookUpTable"/> class.
-        /// </summary>
-        /// <param name="spec">The spec.</param>
-        public HuffmanLookUpTable(HuffmanSpec spec)
+        int maxValue = 0;
+
+        foreach (var v in spec.Values)
         {
-            int maxValue = 0;
-
-            foreach (var v in spec.Values)
-            {
-                if (v > maxValue)
-                    maxValue = v;
-            }
-
-            Values = new uint[maxValue + 1];
-
-            int code = 0;
-            int k = 0;
-
-            for (int i = 0; i < spec.Count.Length; i++)
-            {
-                int nBits = (i + 1) << 24;
-                for (int j = 0; j < spec.Count[i]; j++)
-                {
-                    Values[spec.Values[k]] = (uint)(nBits | code);
-                    code++;
-                    k++;
-                }
-                code <<= 1;
-            }
+            if (v > maxValue)
+                maxValue = v;
         }
 
-        /// <summary>
-        /// Gets the values.
-        /// </summary>
-        /// <value>
-        /// The values.
-        /// </value>
-        public uint[] Values { get; private set; }
+        Values = new uint[maxValue + 1];
+
+        int code = 0;
+        int k = 0;
+
+        for (int i = 0; i < spec.Count.Length; i++)
+        {
+            int nBits = (i + 1) << 24;
+            for (int j = 0; j < spec.Count[i]; j++)
+            {
+                Values[spec.Values[k]] = (uint)(nBits | code);
+                code++;
+                k++;
+            }
+            code <<= 1;
+        }
     }
+
+    /// <summary>
+    /// Gets the values.
+    /// </summary>
+    /// <value>
+    /// The values.
+    /// </value>
+    public uint[] Values { get; private set; }
 }

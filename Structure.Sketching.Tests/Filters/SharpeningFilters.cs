@@ -4,25 +4,24 @@ using Structure.Sketching.Numerics;
 using Structure.Sketching.Tests.BaseClasses;
 using Xunit;
 
-namespace Structure.Sketching.Tests.Filters
+namespace Structure.Sketching.Tests.Filters;
+
+public class SharpeningFilters : FilterTestBaseClass
 {
-    public class SharpeningFilters : FilterTestBaseClass
+    public override string ExpectedDirectory => "./ExpectedResults/Filters/";
+
+    public override string OutputDirectory => "./TestOutput/Filters/";
+
+    public static readonly TheoryData<string, IFilter, Rectangle> Filters = new()
     {
-        public override string ExpectedDirectory => "./ExpectedResults/Filters/";
+        { "Unsharp", new Unsharp(3,0.2f),default },
+        { "Unsharp-Partial", new Unsharp(3,0.2f),new Rectangle(100,100,500,500) }
+    };
 
-        public override string OutputDirectory => "./TestOutput/Filters/";
-
-        public static readonly TheoryData<string, IFilter, Rectangle> Filters = new()
-        {
-            { "Unsharp", new Unsharp(3,0.2f),default },
-            { "Unsharp-Partial", new Unsharp(3,0.2f),new Rectangle(100,100,500,500) }
-        };
-
-        [Theory]
-        [MemberData(nameof(Filters))]
-        public void Run(string name, IFilter filter, Rectangle target)
-        {
-            CheckCorrect(name, filter, target);
-        }
+    [Theory]
+    [MemberData(nameof(Filters))]
+    public void Run(string name, IFilter filter, Rectangle target)
+    {
+        CheckCorrect(name, filter, target);
     }
 }

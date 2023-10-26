@@ -19,33 +19,32 @@ using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Formats.Png.Format.ColorFormats
+namespace Structure.Sketching.Formats.Png.Format.ColorFormats;
+
+/// <summary>
+/// Greyscale no alpha reader
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
+public class GreyscaleNoAlphaReader : IColorReader
 {
     /// <summary>
-    /// Greyscale no alpha reader
+    /// Reads the scanline.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
-    public class GreyscaleNoAlphaReader : IColorReader
+    /// <param name="scanline">The scanline.</param>
+    /// <param name="pixels">The pixels.</param>
+    /// <param name="header">The header.</param>
+    /// <param name="row">The row.</param>
+    public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
     {
-        /// <summary>
-        /// Reads the scanline.
-        /// </summary>
-        /// <param name="scanline">The scanline.</param>
-        /// <param name="pixels">The pixels.</param>
-        /// <param name="header">The header.</param>
-        /// <param name="row">The row.</param>
-        public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
+        scanline = scanline.ExpandArray(header.BitDepth);
+        Parallel.For(0, header.Width, x =>
         {
-            scanline = scanline.ExpandArray(header.BitDepth);
-            Parallel.For(0, header.Width, x =>
-            {
-                int Offset = row * header.Width + x;
+            int Offset = row * header.Width + x;
 
-                pixels[Offset].Red = scanline[x];
-                pixels[Offset].Green = scanline[x];
-                pixels[Offset].Blue = scanline[x];
-                pixels[Offset].Alpha = 255;
-            });
-        }
+            pixels[Offset].Red = scanline[x];
+            pixels[Offset].Green = scanline[x];
+            pixels[Offset].Blue = scanline[x];
+            pixels[Offset].Alpha = 255;
+        });
     }
 }

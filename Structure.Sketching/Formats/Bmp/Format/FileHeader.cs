@@ -17,85 +17,84 @@ limitations under the License.
 using System;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Bmp.Format
+namespace Structure.Sketching.Formats.Bmp.Format;
+
+/// <summary>
+/// Bitmap file header
+/// </summary>
+public class FileHeader
 {
     /// <summary>
-    /// Bitmap file header
+    /// Initializes a new instance of the <see cref="FileHeader"/> class.
     /// </summary>
-    public class FileHeader
+    /// <param name="fileSize">Size of the file.</param>
+    /// <param name="offset">The offset.</param>
+    public FileHeader(int fileSize, int offset)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileHeader"/> class.
-        /// </summary>
-        /// <param name="fileSize">Size of the file.</param>
-        /// <param name="offset">The offset.</param>
-        public FileHeader(int fileSize, int offset)
-        {
-            FileSize = fileSize;
-            Offset = offset;
-        }
+        FileSize = fileSize;
+        Offset = offset;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileHeader"/> class.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public FileHeader(byte[] data)
-            : this(BitConverter.ToInt32(data, 2), BitConverter.ToInt32(data, 10))
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FileHeader"/> class.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    public FileHeader(byte[] data)
+        : this(BitConverter.ToInt32(data, 2), BitConverter.ToInt32(data, 10))
+    {
+    }
 
-        /// <summary>
-        /// Gets the size of the file.
-        /// </summary>
-        /// <value>The size of the file.</value>
-        public int FileSize { get; private set; }
+    /// <summary>
+    /// Gets the size of the file.
+    /// </summary>
+    /// <value>The size of the file.</value>
+    public int FileSize { get; private set; }
 
-        /// <summary>
-        /// Gets the offset.
-        /// </summary>
-        /// <value>The offset.</value>
-        public int Offset { get; private set; }
+    /// <summary>
+    /// Gets the offset.
+    /// </summary>
+    /// <value>The offset.</value>
+    public int Offset { get; private set; }
 
-        /// <summary>
-        /// Gets the reserved.
-        /// </summary>
-        /// <value>The reserved.</value>
-        public int Reserved => 0;
+    /// <summary>
+    /// Gets the reserved.
+    /// </summary>
+    /// <value>The reserved.</value>
+    public int Reserved => 0;
 
-        /// <summary>
-        /// Gets the file header size.
-        /// </summary>
-        /// <value>The file header size.</value>
-        public static int Size => 14;
+    /// <summary>
+    /// Gets the file header size.
+    /// </summary>
+    /// <value>The file header size.</value>
+    public static int Size => 14;
 
-        /// <summary>
-        /// Gets the file type, 'BM'
-        /// </summary>
-        /// <value>The file type.</value>
-        public short Type => 19778;
+    /// <summary>
+    /// Gets the file type, 'BM'
+    /// </summary>
+    /// <value>The file type.</value>
+    public short Type => 19778;
 
-        /// <summary>
-        /// Reads the header information from the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The resulting FileHeader object</returns>
-        public static FileHeader Read(Stream stream)
-        {
-            byte[] data = new byte[Size];
-            stream.Read(data, 0, Size);
-            return new FileHeader(data);
-        }
+    /// <summary>
+    /// Reads the header information from the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The resulting FileHeader object</returns>
+    public static FileHeader Read(Stream stream)
+    {
+        byte[] data = new byte[Size];
+        stream.Read(data, 0, Size);
+        return new FileHeader(data);
+    }
 
-        /// <summary>
-        /// Writes the information to the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        public void Write(BinaryWriter writer)
-        {
-            writer.Write(Type);
-            writer.Write(FileSize);
-            writer.Write(Reserved);
-            writer.Write(Offset);
-        }
+    /// <summary>
+    /// Writes the information to the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    public void Write(BinaryWriter writer)
+    {
+        writer.Write(Type);
+        writer.Write(FileSize);
+        writer.Write(Reserved);
+        writer.Write(Offset);
     }
 }

@@ -18,45 +18,44 @@ using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
 
-namespace Structure.Sketching.Formats.Png.Format.ColorFormats
+namespace Structure.Sketching.Formats.Png.Format.ColorFormats;
+
+/// <summary>
+/// True color with alpha reader
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
+public class TrueColorAlphaReader : IColorReader
 {
     /// <summary>
-    /// True color with alpha reader
+    /// Reads the scanline.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces.IColorReader"/>
-    public class TrueColorAlphaReader : IColorReader
+    /// <param name="scanline">The scanline.</param>
+    /// <param name="pixels">The pixels.</param>
+    /// <param name="header">The header.</param>
+    /// <param name="row">The row.</param>
+    public unsafe void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
     {
-        /// <summary>
-        /// Reads the scanline.
-        /// </summary>
-        /// <param name="scanline">The scanline.</param>
-        /// <param name="pixels">The pixels.</param>
-        /// <param name="header">The header.</param>
-        /// <param name="row">The row.</param>
-        public unsafe void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
-        {
-            scanline = scanline.ExpandArray(header.BitDepth);
-            int BytesPerPixel = header.BitDepth * 4 / 8;
-            int BytesPerChannel = header.BitDepth / 8;
+        scanline = scanline.ExpandArray(header.BitDepth);
+        int BytesPerPixel = header.BitDepth * 4 / 8;
+        int BytesPerChannel = header.BitDepth / 8;
 
-            fixed (Color* PixelPointer = &pixels[row * header.Width])
+        fixed (Color* PixelPointer = &pixels[row * header.Width])
+        {
+            Color* PixelPointer2 = PixelPointer;
+            fixed (byte* ScanlinePointer = &scanline[0])
             {
-                Color* PixelPointer2 = PixelPointer;
-                fixed (byte* ScanlinePointer = &scanline[0])
+                byte* ScanlinePointer2 = ScanlinePointer;
+                for (int x = 0; x < scanline.Length; x += BytesPerPixel)
                 {
-                    byte* ScanlinePointer2 = ScanlinePointer;
-                    for (int x = 0; x < scanline.Length; x += BytesPerPixel)
-                    {
-                        (*PixelPointer2).Red = *ScanlinePointer2;
-                        ScanlinePointer2 += BytesPerChannel;
-                        (*PixelPointer2).Green = *ScanlinePointer2;
-                        ScanlinePointer2 += BytesPerChannel;
-                        (*PixelPointer2).Blue = *ScanlinePointer2;
-                        ScanlinePointer2 += BytesPerChannel;
-                        (*PixelPointer2).Alpha = *ScanlinePointer2;
-                        ++PixelPointer2;
-                        ScanlinePointer2 += BytesPerChannel;
-                    }
+                    (*PixelPointer2).Red = *ScanlinePointer2;
+                    ScanlinePointer2 += BytesPerChannel;
+                    (*PixelPointer2).Green = *ScanlinePointer2;
+                    ScanlinePointer2 += BytesPerChannel;
+                    (*PixelPointer2).Blue = *ScanlinePointer2;
+                    ScanlinePointer2 += BytesPerChannel;
+                    (*PixelPointer2).Alpha = *ScanlinePointer2;
+                    ++PixelPointer2;
+                    ScanlinePointer2 += BytesPerChannel;
                 }
             }
         }

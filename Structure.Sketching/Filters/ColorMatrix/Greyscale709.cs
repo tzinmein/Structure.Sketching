@@ -17,26 +17,25 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Greyscale 709 color matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Greyscale709 : MatrixBaseClass
 {
     /// <summary>
-    /// Greyscale 709 color matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Greyscale709 : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix.
-        /// </value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            .2126f, .2126f, .2126f, 0f, 0f,
-            .7152f, .7152f, .7152f, 0f, 0f,
-            .0722f, .0722f, .0722f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0f, 0f, 0f, 0f, 1f
-        );
-    }
+    /// <value>
+    /// The matrix.
+    /// </value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        .2126f, .2126f, .2126f, 0f, 0f,
+        .7152f, .7152f, .7152f, 0f, 0f,
+        .0722f, .0722f, .0722f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0f, 0f, 0f, 0f, 1f
+    );
 }

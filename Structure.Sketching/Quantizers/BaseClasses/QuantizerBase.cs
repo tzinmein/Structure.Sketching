@@ -17,68 +17,67 @@ limitations under the License.
 using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.Quantizers.Interfaces;
 
-namespace Structure.Sketching.Quantizers.BaseClasses
+namespace Structure.Sketching.Quantizers.BaseClasses;
+
+/// <summary>
+/// Quantizer base class
+/// </summary>
+/// <seealso cref="IQuantizer" />
+public abstract class QuantizerBase : IQuantizer
 {
     /// <summary>
-    /// Quantizer base class
+    /// Initializes a new instance of the <see cref="QuantizerBase"/> class.
     /// </summary>
-    /// <seealso cref="IQuantizer" />
-    public abstract class QuantizerBase : IQuantizer
+    protected QuantizerBase()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuantizerBase"/> class.
-        /// </summary>
-        protected QuantizerBase()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets the transparency threshold.
-        /// </summary>
-        /// <value>
-        /// The transparency threshold.
-        /// </value>
-        public byte TransparencyThreshold { get; set; }
-
-        /// <summary>
-        /// Gets or sets the index of the transparent.
-        /// </summary>
-        /// <value>
-        /// The index of the transparent.
-        /// </value>
-        public int TransparentIndex { get; protected set; } = -1;
-
-        /// <summary>
-        /// Quantizes the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="maxColors">The maximum colors.</param>
-        /// <returns>The resulting quantized image</returns>
-        public QuantizedImage Quantize(Image image, int maxColors)
-        {
-            Initialize(image, maxColors);
-            var Palette = GetPalette();
-
-            var Pixels = Process(image);
-            return new QuantizedImage(image.Width, image.Height, Palette, Pixels, TransparentIndex);
-        }
-
-        /// <summary>
-        /// Gets the palette.
-        /// </summary>
-        /// <returns>The list of colors in the palette</returns>
-        protected abstract Bgra[] GetPalette();
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        protected abstract void Initialize(Image image, int maxColors);
-
-        /// <summary>
-        /// Processes the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <returns>The resulting byte array.</returns>
-        protected abstract byte[] Process(Image image);
     }
+
+    /// <summary>
+    /// Gets or sets the transparency threshold.
+    /// </summary>
+    /// <value>
+    /// The transparency threshold.
+    /// </value>
+    public byte TransparencyThreshold { get; set; }
+
+    /// <summary>
+    /// Gets or sets the index of the transparent.
+    /// </summary>
+    /// <value>
+    /// The index of the transparent.
+    /// </value>
+    public int TransparentIndex { get; protected set; } = -1;
+
+    /// <summary>
+    /// Quantizes the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="maxColors">The maximum colors.</param>
+    /// <returns>The resulting quantized image</returns>
+    public QuantizedImage Quantize(Image image, int maxColors)
+    {
+        Initialize(image, maxColors);
+        var Palette = GetPalette();
+
+        var Pixels = Process(image);
+        return new QuantizedImage(image.Width, image.Height, Palette, Pixels, TransparentIndex);
+    }
+
+    /// <summary>
+    /// Gets the palette.
+    /// </summary>
+    /// <returns>The list of colors in the palette</returns>
+    protected abstract Bgra[] GetPalette();
+
+    /// <summary>
+    /// Initializes this instance.
+    /// </summary>
+    protected abstract void Initialize(Image image, int maxColors);
+
+    /// <summary>
+    /// Processes the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <returns>The resulting byte array.</returns>
+    protected abstract byte[] Process(Image image);
 }

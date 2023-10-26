@@ -16,13 +16,12 @@ limitations under the License.
 
 using System;
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Exceptions
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Exceptions;
+
+/// <summary>
+/// Short huffman data exception
+/// </summary>
+/// <seealso cref="System.Exception" />
+public class ShortHuffmanData : Exception
 {
-    /// <summary>
-    /// Short huffman data exception
-    /// </summary>
-    /// <seealso cref="System.Exception" />
-    public class ShortHuffmanData : Exception
-    {
-    }
 }

@@ -20,80 +20,79 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Collections.Generic;
 
-namespace Structure.Sketching.Filters.Pipelines.BaseClasses
+namespace Structure.Sketching.Filters.Pipelines.BaseClasses;
+
+/// <summary>
+/// Processing pipeline base class
+/// </summary>
+public abstract class ProcessingPipelineBaseClass : IFilter
 {
     /// <summary>
-    /// Processing pipeline base class
+    /// Initializes a new instance of the <see cref="ProcessingPipelineBaseClass"/> class.
     /// </summary>
-    public abstract class ProcessingPipelineBaseClass : IFilter
+    /// <param name="combine">
+    /// if set to <c>true</c> [combine] the convolution filters when possible.
+    /// </param>
+    protected ProcessingPipelineBaseClass(bool combine)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessingPipelineBaseClass"/> class.
-        /// </summary>
-        /// <param name="combine">
-        /// if set to <c>true</c> [combine] the convolution filters when possible.
-        /// </param>
-        protected ProcessingPipelineBaseClass(bool combine)
+        Combine = combine;
+        Filters = new List<IFilter>();
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="ProcessingPipelineBaseClass"/>
+    /// should combine the filters or not.
+    /// </summary>
+    /// <value><c>true</c> if combine; otherwise, <c>false</c>.</value>
+    public bool Combine { get; private set; }
+
+    /// <summary>
+    /// Gets the filters.
+    /// </summary>
+    /// <value>The filters.</value>
+    public List<IFilter> Filters { get; private set; }
+
+    /// <summary>
+    /// Adds the filter to the pipeline
+    /// </summary>
+    /// <param name="filter">The filter.</param>
+    /// <returns>This</returns>
+    public ProcessingPipelineBaseClass AddFilter(IFilter filter)
+    {
+        if (filter as MatrixBaseClass != null && Filters.Count > 0)
         {
-            Combine = combine;
-            Filters = new List<IFilter>();
+            var LastFilter = Filters[^1];
+            if (LastFilter as MatrixBaseClass != null)
+            {
+                Filters.Remove(LastFilter);
+                filter = (MatrixBaseClass)LastFilter * (MatrixBaseClass)filter;
+            }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ProcessingPipelineBaseClass"/>
-        /// should combine the filters or not.
-        /// </summary>
-        /// <value><c>true</c> if combine; otherwise, <c>false</c>.</value>
-        public bool Combine { get; private set; }
-
-        /// <summary>
-        /// Gets the filters.
-        /// </summary>
-        /// <value>The filters.</value>
-        public List<IFilter> Filters { get; private set; }
-
-        /// <summary>
-        /// Adds the filter to the pipeline
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns>This</returns>
-        public ProcessingPipelineBaseClass AddFilter(IFilter filter)
+        else if (Combine && filter as ConvolutionBaseClass != null && Filters.Count > 0)
         {
-            if (filter as MatrixBaseClass != null && Filters.Count > 0)
+            var LastFilter = Filters[^1];
+            if (LastFilter as ConvolutionBaseClass != null)
             {
-                var LastFilter = Filters[^1];
-                if (LastFilter as MatrixBaseClass != null)
-                {
-                    Filters.Remove(LastFilter);
-                    filter = (MatrixBaseClass)LastFilter * (MatrixBaseClass)filter;
-                }
+                Filters.Remove(LastFilter);
+                filter = (ConvolutionBaseClass)LastFilter * (ConvolutionBaseClass)filter;
             }
-            else if (Combine && filter as ConvolutionBaseClass != null && Filters.Count > 0)
-            {
-                var LastFilter = Filters[^1];
-                if (LastFilter as ConvolutionBaseClass != null)
-                {
-                    Filters.Remove(LastFilter);
-                    filter = (ConvolutionBaseClass)LastFilter * (ConvolutionBaseClass)filter;
-                }
-            }
-            Filters.Add(filter);
-            return this;
         }
+        Filters.Add(filter);
+        return this;
+    }
 
-        /// <summary>
-        /// Executes the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The resulting image</returns>
-        public Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Executes the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The resulting image</returns>
+    public Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        for (int x = 0; x < Filters.Count; ++x)
         {
-            for (int x = 0; x < Filters.Count; ++x)
-            {
-                Filters[x].Apply(image, targetLocation);
-            }
-            return image;
+            Filters[x].Apply(image, targetLocation);
         }
+        return image;
     }
 }

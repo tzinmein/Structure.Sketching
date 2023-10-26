@@ -14,31 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Bmp.Format
+namespace Structure.Sketching.Formats.Bmp.Format;
+
+/// <summary>
+/// Compression type used by the bitmap file.
+/// </summary>
+public enum Compression
 {
     /// <summary>
-    /// Compression type used by the bitmap file.
+    /// Basic RGB bitmap
     /// </summary>
-    public enum Compression
-    {
-        /// <summary>
-        /// Basic RGB bitmap
-        /// </summary>
-        RGB = 0,
+    RGB = 0,
 
-        /// <summary>
-        /// RLE8, only used with 8-BPP bitmaps
-        /// </summary>
-        RLE8 = 1,
+    /// <summary>
+    /// RLE8, only used with 8-BPP bitmaps
+    /// </summary>
+    RLE8 = 1,
 
-        /// <summary>
-        /// RLE4, only used with 4-BPP bitmaps
-        /// </summary>
-        RLE4 = 2,
+    /// <summary>
+    /// RLE4, only used with 4-BPP bitmaps
+    /// </summary>
+    RLE4 = 2,
 
-        /// <summary>
-        /// Uses bitfields to determine pixel layout
-        /// </summary>
-        BITFIELDS = 3
-    }
+    /// <summary>
+    /// Uses bitfields to determine pixel layout
+    /// </summary>
+    BITFIELDS = 3
 }

@@ -17,29 +17,28 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Generic ColorMatrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass"/>
+public class ColorMatrix : MatrixBaseClass
 {
     /// <summary>
-    /// Generic ColorMatrix
+    /// Initializes a new instance of the <see cref="ColorMatrix"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass"/>
-    public class ColorMatrix : MatrixBaseClass
+    /// <param name="matrix">The matrix.</param>
+    public ColorMatrix(Matrix5x5 matrix)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ColorMatrix"/> class.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        public ColorMatrix(Matrix5x5 matrix)
-        {
-            _Matrix = matrix;
-        }
-
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => _Matrix;
-
-        private Matrix5x5 _Matrix;
+        _Matrix = matrix;
     }
+
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <value>The matrix.</value>
+    public override Matrix5x5 Matrix => _Matrix;
+
+    private Matrix5x5 _Matrix;
 }

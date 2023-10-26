@@ -14,31 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats
+namespace Structure.Sketching.Formats;
+
+/// <summary>
+/// File formats available
+/// </summary>
+public enum FileFormats
 {
     /// <summary>
-    /// File formats available
+    /// BMP file format
     /// </summary>
-    public enum FileFormats
-    {
-        /// <summary>
-        /// BMP file format
-        /// </summary>
-        BMP = 0,
+    BMP = 0,
 
-        /// <summary>
-        /// PNG file format
-        /// </summary>
-        PNG = 1,
+    /// <summary>
+    /// PNG file format
+    /// </summary>
+    PNG = 1,
 
-        /// <summary>
-        /// JPEG file format
-        /// </summary>
-        JPEG = 2,
+    /// <summary>
+    /// JPEG file format
+    /// </summary>
+    JPEG = 2,
 
-        /// <summary>
-        /// GIF file format
-        /// </summary>
-        GIF = 3
-    }
+    /// <summary>
+    /// GIF file format
+    /// </summary>
+    GIF = 3
 }

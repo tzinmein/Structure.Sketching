@@ -19,89 +19,88 @@ using Structure.Sketching.IO;
 using System;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Gif.Format
+namespace Structure.Sketching.Formats.Gif.Format;
+
+/// <summary>
+/// Application extension
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
+public class ApplicationExtension : SectionBase
 {
     /// <summary>
-    /// Application extension
+    /// Initializes a new instance of the <see cref="ApplicationExtension"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
-    public class ApplicationExtension : SectionBase
+    /// <param name="repeatCount">The repeat count.</param>
+    /// <param name="frameCount">The frame count.</param>
+    public ApplicationExtension(ushort repeatCount, int frameCount)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationExtension"/> class.
-        /// </summary>
-        /// <param name="repeatCount">The repeat count.</param>
-        /// <param name="frameCount">The frame count.</param>
-        public ApplicationExtension(ushort repeatCount, int frameCount)
+        FrameCount = frameCount;
+        RepeatCount = repeatCount;
+    }
+
+    /// <summary>
+    /// Gets or sets the frame count.
+    /// </summary>
+    /// <value>
+    /// The frame count.
+    /// </value>
+    public int FrameCount { get; set; }
+
+    /// <summary>
+    /// Gets or sets the repeat count.
+    /// </summary>
+    /// <value>
+    /// The repeat count.
+    /// </value>
+    public int RepeatCount { get; set; }
+
+    /// <summary>
+    /// Gets the size.
+    /// </summary>
+    /// <value>
+    /// The size.
+    /// </value>
+    public static int Size => 12;
+
+    /// <summary>
+    /// Reads the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>Reads an application extension.</returns>
+    public static ApplicationExtension Read(Stream stream)
+    {
+        Skip(stream, Size);
+        return new ApplicationExtension(0, 0);
+    }
+
+    /// <summary>
+    /// Writes the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    /// <returns>True if it writes successfully, false otherwise</returns>
+    public override bool Write(EndianBinaryWriter writer)
+    {
+        if (RepeatCount != 1 && FrameCount > 0)
         {
-            FrameCount = frameCount;
-            RepeatCount = repeatCount;
-        }
-
-        /// <summary>
-        /// Gets or sets the frame count.
-        /// </summary>
-        /// <value>
-        /// The frame count.
-        /// </value>
-        public int FrameCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the repeat count.
-        /// </summary>
-        /// <value>
-        /// The repeat count.
-        /// </value>
-        public int RepeatCount { get; set; }
-
-        /// <summary>
-        /// Gets the size.
-        /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
-        public static int Size => 12;
-
-        /// <summary>
-        /// Reads the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>Reads an application extension.</returns>
-        public static ApplicationExtension Read(Stream stream)
-        {
-            Skip(stream, Size);
-            return new ApplicationExtension(0, 0);
-        }
-
-        /// <summary>
-        /// Writes the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>True if it writes successfully, false otherwise</returns>
-        public override bool Write(EndianBinaryWriter writer)
-        {
-            if (RepeatCount != 1 && FrameCount > 0)
+            byte[] ext =
             {
-                byte[] ext =
-                {
-                    SectionTypes.ExtensionIntroducer,
-                    SectionTypes.ApplicationExtensionLabel,
-                    (byte)Size
-                };
+                SectionTypes.ExtensionIntroducer,
+                SectionTypes.ApplicationExtensionLabel,
+                (byte)Size
+            };
 
-                writer.Write(ext);
+            writer.Write(ext);
 
-                writer.Write("NETSCAPE2.0");
-                writer.Write((byte)3);
-                writer.Write((byte)1);
+            writer.Write("NETSCAPE2.0");
+            writer.Write((byte)3);
+            writer.Write((byte)1);
 
-                RepeatCount = (ushort)(Math.Max((ushort)0, RepeatCount) - 1);
+            RepeatCount = (ushort)(Math.Max((ushort)0, RepeatCount) - 1);
 
-                writer.Write(RepeatCount);
+            writer.Write(RepeatCount);
 
-                writer.Write(SectionTypes.Terminator);
-            }
-            return true;
+            writer.Write(SectionTypes.Terminator);
         }
+        return true;
     }
 }

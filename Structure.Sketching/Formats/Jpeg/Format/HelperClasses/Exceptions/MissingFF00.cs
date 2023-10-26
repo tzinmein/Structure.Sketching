@@ -16,13 +16,12 @@ limitations under the License.
 
 using System;
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Exceptions
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Exceptions;
+
+/// <summary>
+/// Missing FF00 exception
+/// </summary>
+/// <seealso cref="System.Exception" />
+public class MissingFF00 : Exception
 {
-    /// <summary>
-    /// Missing FF00 exception
-    /// </summary>
-    /// <seealso cref="System.Exception" />
-    public class MissingFF00 : Exception
-    {
-    }
 }

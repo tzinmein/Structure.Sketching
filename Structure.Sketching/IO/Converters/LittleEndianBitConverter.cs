@@ -16,56 +16,55 @@ limitations under the License.
 
 using Structure.Sketching.IO.Converters.BaseClasses;
 
-namespace Structure.Sketching.IO.Converters
+namespace Structure.Sketching.IO.Converters;
+
+/// <summary>
+/// Little endian bit converter
+/// </summary>
+/// <seealso cref="EndianBitConverterBase" />
+public class LittleEndianBitConverter : EndianBitConverterBase
 {
     /// <summary>
-    /// Little endian bit converter
+    /// Gets a value indicating whether this instance is little endian.
     /// </summary>
-    /// <seealso cref="EndianBitConverterBase" />
-    public class LittleEndianBitConverter : EndianBitConverterBase
+    /// <value>
+    /// <c>true</c> if this instance is little endian; otherwise, <c>false</c>.
+    /// </value>
+    public override bool IsLittleEndian => true;
+
+    /// <summary>
+    /// Copies the bytes implementation.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <param name="bytes">The bytes.</param>
+    /// <param name="buffer">The buffer.</param>
+    /// <param name="index">The index.</param>
+    protected override void CopyBytesImpl(long value, int bytes, byte[] buffer, int index)
     {
-        /// <summary>
-        /// Gets a value indicating whether this instance is little endian.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is little endian; otherwise, <c>false</c>.
-        /// </value>
-        public override bool IsLittleEndian => true;
-
-        /// <summary>
-        /// Copies the bytes implementation.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="bytes">The bytes.</param>
-        /// <param name="buffer">The buffer.</param>
-        /// <param name="index">The index.</param>
-        protected override void CopyBytesImpl(long value, int bytes, byte[] buffer, int index)
+        for (int i = 0; i < bytes; i++)
         {
-            for (int i = 0; i < bytes; i++)
-            {
-                buffer[i + index] = unchecked((byte)(value & 0xff));
-                value >>= 8;
-            }
+            buffer[i + index] = unchecked((byte)(value & 0xff));
+            value >>= 8;
+        }
+    }
+
+    /// <summary>
+    /// Converts a byte array to a long.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <param name="startIndex">The start index.</param>
+    /// <param name="bytesToConvert">The bytes to convert.</param>
+    /// <returns>
+    /// The resulting long.
+    /// </returns>
+    protected override long FromBytes(byte[] value, int startIndex, int bytesToConvert)
+    {
+        long ret = 0;
+        for (int i = 0; i < bytesToConvert; i++)
+        {
+            ret = unchecked((ret << 8) | value[startIndex + bytesToConvert - 1 - i]);
         }
 
-        /// <summary>
-        /// Converts a byte array to a long.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="startIndex">The start index.</param>
-        /// <param name="bytesToConvert">The bytes to convert.</param>
-        /// <returns>
-        /// The resulting long.
-        /// </returns>
-        protected override long FromBytes(byte[] value, int startIndex, int bytesToConvert)
-        {
-            long ret = 0;
-            for (int i = 0; i < bytesToConvert; i++)
-            {
-                ret = unchecked((ret << 8) | value[startIndex + bytesToConvert - 1 - i]);
-            }
-
-            return ret;
-        }
+        return ret;
     }
 }

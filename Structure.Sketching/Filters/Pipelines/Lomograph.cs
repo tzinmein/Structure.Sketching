@@ -19,22 +19,21 @@ using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Overlays;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
-namespace Structure.Sketching.Filters.Pipelines
+namespace Structure.Sketching.Filters.Pipelines;
+
+/// <summary>
+/// Lomograph processing pipeline
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
+public class Lomograph : ProcessingPipelineBaseClass
 {
     /// <summary>
-    /// Lomograph processing pipeline
+    /// Initializes a new instance of the <see cref="Lomograph"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
-    public class Lomograph : ProcessingPipelineBaseClass
+    public Lomograph()
+        : base(true)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Lomograph"/> class.
-        /// </summary>
-        public Lomograph()
-            : base(true)
-        {
-            AddFilter(new LomographColorMatrix())
-                .AddFilter(new Vignette(new Color(0, 10, 0, 255), 0, 0));
-        }
+        AddFilter(new LomographColorMatrix())
+            .AddFilter(new Vignette(new Color(0, 10, 0, 255), 0, 0));
     }
 }

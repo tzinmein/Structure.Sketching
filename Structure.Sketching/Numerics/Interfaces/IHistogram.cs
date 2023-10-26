@@ -1,43 +1,42 @@
 ﻿using Structure.Sketching.Colors;
 
-namespace Structure.Sketching.Numerics.Interfaces
+namespace Structure.Sketching.Numerics.Interfaces;
+
+/// <summary>
+/// Histogram interface
+/// </summary>
+public interface IHistogram
 {
     /// <summary>
-    /// Histogram interface
+    /// Equalizes the histogram
     /// </summary>
-    public interface IHistogram
-    {
-        /// <summary>
-        /// Equalizes the histogram
-        /// </summary>
-        /// <returns>this</returns>
-        IHistogram Equalize();
+    /// <returns>this</returns>
+    IHistogram Equalize();
 
-        /// <summary>
-        /// Equalizes the color.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        /// <returns>The resulting color</returns>
-        Color EqualizeColor(Color color);
+    /// <summary>
+    /// Equalizes the color.
+    /// </summary>
+    /// <param name="color">The color.</param>
+    /// <returns>The resulting color</returns>
+    Color EqualizeColor(Color color);
 
-        /// <summary>
-        /// Loads the specified colors.
-        /// </summary>
-        /// <param name="colors">The colors.</param>
-        /// <returns>This</returns>
-        IHistogram Load(params Color[] colors);
+    /// <summary>
+    /// Loads the specified colors.
+    /// </summary>
+    /// <param name="colors">The colors.</param>
+    /// <returns>This</returns>
+    IHistogram Load(params Color[] colors);
 
-        /// <summary>
-        /// Loads an image
-        /// </summary>
-        /// <param name="image">Image to load</param>
-        /// <returns>this</returns>
-        IHistogram LoadImage(Image image);
+    /// <summary>
+    /// Loads an image
+    /// </summary>
+    /// <param name="image">Image to load</param>
+    /// <returns>this</returns>
+    IHistogram LoadImage(Image image);
 
-        /// <summary>
-        /// Normalizes the histogram
-        /// </summary>
-        /// <returns>this</returns>
-        IHistogram Normalize();
-    }
+    /// <summary>
+    /// Normalizes the histogram
+    /// </summary>
+    /// <returns>this</returns>
+    IHistogram Normalize();
 }

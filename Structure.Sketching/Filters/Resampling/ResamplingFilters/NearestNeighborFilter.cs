@@ -16,29 +16,28 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Nearest neighbor resampling filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class NearestNeighborFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Nearest neighbor resampling filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class NearestNeighborFilter : ResamplingFilterBase
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 0f;
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 0f;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
-        {
-            if (value < 0) value = -value;
-            return value;
-        }
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
+    {
+        if (value < 0) value = -value;
+        return value;
     }
 }

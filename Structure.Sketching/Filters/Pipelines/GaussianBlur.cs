@@ -17,24 +17,23 @@ limitations under the License.
 using Structure.Sketching.Filters.Convolution;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
-namespace Structure.Sketching.Filters.Pipelines
+namespace Structure.Sketching.Filters.Pipelines;
+
+/// <summary>
+/// GaussianBlur pipeline
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass" />
+public class GaussianBlur : ProcessingPipelineBaseClass
 {
     /// <summary>
-    /// GaussianBlur pipeline
+    /// Initializes a new instance of the <see cref="GaussianBlur"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass" />
-    public class GaussianBlur : ProcessingPipelineBaseClass
+    /// <param name="size">The size.</param>
+    public GaussianBlur(int size)
+        : base(true)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GaussianBlur"/> class.
-        /// </summary>
-        /// <param name="size">The size.</param>
-        public GaussianBlur(int size)
-            : base(true)
-        {
-            AddFilter(new BoxBlur(size))
-                .AddFilter(new BoxBlur(size))
-                .AddFilter(new BoxBlur(size));
-        }
+        AddFilter(new BoxBlur(size))
+            .AddFilter(new BoxBlur(size))
+            .AddFilter(new BoxBlur(size));
     }
 }

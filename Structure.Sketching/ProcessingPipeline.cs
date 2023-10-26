@@ -16,23 +16,22 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
-namespace Structure.Sketching
+namespace Structure.Sketching;
+
+/// <summary>
+/// Generic processing pipeline
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
+public class ProcessingPipeline : ProcessingPipelineBaseClass
 {
     /// <summary>
-    /// Generic processing pipeline
+    /// Initializes a new instance of the <see cref="ProcessingPipeline"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
-    public class ProcessingPipeline : ProcessingPipelineBaseClass
+    /// <param name="combine">
+    /// if set to <c>true</c> [combine] the convolution filters when possible.
+    /// </param>
+    public ProcessingPipeline(bool combine)
+        : base(combine)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessingPipeline"/> class.
-        /// </summary>
-        /// <param name="combine">
-        /// if set to <c>true</c> [combine] the convolution filters when possible.
-        /// </param>
-        public ProcessingPipeline(bool combine)
-            : base(combine)
-        {
-        }
     }
 }

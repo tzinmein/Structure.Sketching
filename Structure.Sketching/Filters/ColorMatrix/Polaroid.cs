@@ -17,26 +17,25 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Polaroid color matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class PolaroidColorMatrix : MatrixBaseClass
 {
     /// <summary>
-    /// Polaroid color matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class PolaroidColorMatrix : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix.
-        /// </value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            1.538f, -0.062f, -0.262f, 0f, 0f,
-            -0.022f, 1.578f, -0.022f, 0f, 0f,
-            .216f, -.16f, 1.5831f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            -0.02f, -0.05f, -0.05f, 0f, 1f
-        );
-    }
+    /// <value>
+    /// The matrix.
+    /// </value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        1.538f, -0.062f, -0.262f, 0f, 0f,
+        -0.022f, 1.578f, -0.022f, 0f, 0f,
+        .216f, -.16f, 1.5831f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        -0.02f, -0.05f, -0.05f, 0f, 1f
+    );
 }

@@ -17,26 +17,25 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Kodachrome color matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Kodachrome : MatrixBaseClass
 {
     /// <summary>
-    /// Kodachrome color matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Kodachrome : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix.
-        /// </value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            0.6997023f, 0f, 0f, 0f, 0f,
-            0f, 0.4609577f, 0f, 0f, 0f,
-            0f, 0f, 0.397218f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0.005f, -0.005f, 0.005f, 0f, 1f
-        );
-    }
+    /// <value>
+    /// The matrix.
+    /// </value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        0.6997023f, 0f, 0f, 0f, 0f,
+        0f, 0.4609577f, 0f, 0f, 0f,
+        0f, 0f, 0.397218f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0.005f, -0.005f, 0.005f, 0f, 1f
+    );
 }

@@ -16,22 +16,21 @@ limitations under the License.
 
 using System;
 
-namespace Structure.Sketching.Filters.Resampling.Enums
+namespace Structure.Sketching.Filters.Resampling.Enums;
+
+/// <summary>
+/// Flip direction
+/// </summary>
+[Flags]
+public enum FlipDirection
 {
     /// <summary>
-    /// Flip direction
+    /// The horizontal
     /// </summary>
-    [Flags]
-    public enum FlipDirection
-    {
-        /// <summary>
-        /// The horizontal
-        /// </summary>
-        Horizontal = 1,
+    Horizontal = 1,
 
-        /// <summary>
-        /// The vertical
-        /// </summary>
-        Vertical = 2
-    }
+    /// <summary>
+    /// The vertical
+    /// </summary>
+    Vertical = 2
 }

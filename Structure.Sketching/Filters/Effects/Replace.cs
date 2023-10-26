@@ -19,70 +19,69 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Replaces a color with another color in the image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Replace : IFilter
 {
     /// <summary>
-    /// Replaces a color with another color in the image
+    /// Initializes a new instance of the <see cref="Replace"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Replace : IFilter
+    /// <param name="sourceColor">Color in the image to replace.</param>
+    /// <param name="targetColor">Color to replace the sourceColor with.</param>
+    /// <param name="epsilon">The epsilon.</param>
+    public Replace(Color sourceColor, Color targetColor, float epsilon)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Replace"/> class.
-        /// </summary>
-        /// <param name="sourceColor">Color in the image to replace.</param>
-        /// <param name="targetColor">Color to replace the sourceColor with.</param>
-        /// <param name="epsilon">The epsilon.</param>
-        public Replace(Color sourceColor, Color targetColor, float epsilon)
+        Epsilon = epsilon * 255;
+        TargetColor = targetColor;
+        SourceColor = sourceColor;
+    }
+
+    /// <summary>
+    /// Gets or sets the epsilon.
+    /// </summary>
+    /// <value>The epsilon.</value>
+    public float Epsilon { get; set; }
+
+    /// <summary>
+    /// Gets or sets the color of the source.
+    /// </summary>
+    /// <value>The color of the source.</value>
+    public Color SourceColor { get; set; }
+
+    /// <summary>
+    /// Gets or sets the color of the target.
+    /// </summary>
+    /// <value>The color of the target.</value>
+    public Color TargetColor { get; set; }
+
+    /// <summary>
+    /// Applies the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            Epsilon = epsilon * 255;
-            TargetColor = targetColor;
-            SourceColor = sourceColor;
-        }
-
-        /// <summary>
-        /// Gets or sets the epsilon.
-        /// </summary>
-        /// <value>The epsilon.</value>
-        public float Epsilon { get; set; }
-
-        /// <summary>
-        /// Gets or sets the color of the source.
-        /// </summary>
-        /// <value>The color of the source.</value>
-        public Color SourceColor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the color of the target.
-        /// </summary>
-        /// <value>The color of the target.</value>
-        public Color TargetColor { get; set; }
-
-        /// <summary>
-        /// Applies the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
-        {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* OutputPointer = Pointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* OutputPointer = Pointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    if (Distance.Euclidean(*OutputPointer, SourceColor) < Epsilon)
                     {
-                        if (Distance.Euclidean(*OutputPointer, SourceColor) < Epsilon)
-                        {
-                            *OutputPointer = TargetColor;
-                            ++OutputPointer;
-                        }
+                        *OutputPointer = TargetColor;
+                        ++OutputPointer;
                     }
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

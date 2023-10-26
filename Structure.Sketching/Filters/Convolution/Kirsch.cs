@@ -16,58 +16,57 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Convolution.BaseClasses;
 
-namespace Structure.Sketching.Filters.Convolution
+namespace Structure.Sketching.Filters.Convolution;
+
+/// <summary>
+/// Kirsch edge detection
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
+public class Kirsch : Convolution2DBaseClass
 {
     /// <summary>
-    /// Kirsch edge detection
+    /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
-    public class Kirsch : Convolution2DBaseClass
+    /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
+    public override bool Absolute => false;
+
+    /// <summary>
+    /// Gets the height.
+    /// </summary>
+    /// <value>The height.</value>
+    public override int Height => 3;
+
+    /// <summary>
+    /// Gets the offset.
+    /// </summary>
+    /// <value>The offset.</value>
+    public override float Offset => 0;
+
+    /// <summary>
+    /// Gets the width.
+    /// </summary>
+    /// <value>The width.</value>
+    public override int Width => 3;
+
+    /// <summary>
+    /// Gets the x matrix.
+    /// </summary>
+    /// <value>The x matrix.</value>
+    public override float[] XMatrix => new float[]
     {
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
-        /// </summary>
-        /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
-        public override bool Absolute => false;
+        5, 5, 5,
+        -3, 0, -3,
+        -3, -3, -3
+    };
 
-        /// <summary>
-        /// Gets the height.
-        /// </summary>
-        /// <value>The height.</value>
-        public override int Height => 3;
-
-        /// <summary>
-        /// Gets the offset.
-        /// </summary>
-        /// <value>The offset.</value>
-        public override float Offset => 0;
-
-        /// <summary>
-        /// Gets the width.
-        /// </summary>
-        /// <value>The width.</value>
-        public override int Width => 3;
-
-        /// <summary>
-        /// Gets the x matrix.
-        /// </summary>
-        /// <value>The x matrix.</value>
-        public override float[] XMatrix => new float[]
-        {
-            5, 5, 5,
-            -3, 0, -3,
-            -3, -3, -3
-        };
-
-        /// <summary>
-        /// Gets the y matrix.
-        /// </summary>
-        /// <value>The y matrix.</value>
-        public override float[] YMatrix => new float[]
-        {
-            5, -3, -3,
-            5, 0, -3,
-            5, -3, -3
-        };
-    }
+    /// <summary>
+    /// Gets the y matrix.
+    /// </summary>
+    /// <value>The y matrix.</value>
+    public override float[] YMatrix => new float[]
+    {
+        5, -3, -3,
+        5, 0, -3,
+        5, -3, -3
+    };
 }

@@ -16,31 +16,30 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Quadratic B Spline filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class QuadraticBSplineFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Quadratic B Spline filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class QuadraticBSplineFilter : ResamplingFilterBase
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 1.5f;
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 1.5f;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
-        {
-            if (value < 0) value = -value;
-            if (value <= 0.5) return -value * value + 0.75;
-            if (value <= 1.5) return 0.5 * value * value - 1.5 * value + 1.125;
-            return 0;
-        }
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
+    {
+        if (value < 0) value = -value;
+        if (value <= 0.5) return -value * value + 0.75;
+        if (value <= 1.5) return 0.5 * value * value - 1.5 * value + 1.125;
+        return 0;
     }
 }

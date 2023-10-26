@@ -21,49 +21,48 @@ using Structure.Sketching.Numerics;
 using System;
 using System.Numerics;
 
-namespace Structure.Sketching.Filters.Resampling
+namespace Structure.Sketching.Filters.Resampling;
+
+/// <summary>
+/// Skews an image
+/// </summary>
+/// <seealso cref="AffineBaseClass"/>
+/// <seealso cref="IFilter"/>
+public class Skew : AffineBaseClass
 {
     /// <summary>
-    /// Skews an image
+    /// Initializes a new instance of the <see cref="Skew"/> class.
     /// </summary>
-    /// <seealso cref="AffineBaseClass"/>
-    /// <seealso cref="IFilter"/>
-    public class Skew : AffineBaseClass
+    /// <param name="xAngle">The x angle.</param>
+    /// <param name="yAngle">The y angle.</param>
+    /// <param name="filter">The filter.</param>
+    public Skew(float xAngle, float yAngle, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
+        : base(filter: filter)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Skew"/> class.
-        /// </summary>
-        /// <param name="xAngle">The x angle.</param>
-        /// <param name="yAngle">The y angle.</param>
-        /// <param name="filter">The filter.</param>
-        public Skew(float xAngle, float yAngle, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
-            : base(filter: filter)
-        {
-            XAngle = -xAngle * (float)(Math.PI / 180f);
-            YAngle = -yAngle * (float)(Math.PI / 180f);
-        }
+        XAngle = -xAngle * (float)(Math.PI / 180f);
+        YAngle = -yAngle * (float)(Math.PI / 180f);
+    }
 
-        /// <summary>
-        /// Gets or sets the x angle.
-        /// </summary>
-        /// <value>The x angle.</value>
-        public float XAngle { get; private set; }
+    /// <summary>
+    /// Gets or sets the x angle.
+    /// </summary>
+    /// <value>The x angle.</value>
+    public float XAngle { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the y angle.
-        /// </summary>
-        /// <value>The y angle.</value>
-        public float YAngle { get; private set; }
+    /// <summary>
+    /// Gets or sets the y angle.
+    /// </summary>
+    /// <value>The y angle.</value>
+    public float YAngle { get; private set; }
 
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The matrix used for the transformation</returns>
-        protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
-        {
-            return Matrix3x2.CreateSkew(XAngle, YAngle, targetLocation.Center);
-        }
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The matrix used for the transformation</returns>
+    protected override Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
+    {
+        return Matrix3x2.CreateSkew(XAngle, YAngle, targetLocation.Center);
     }
 }

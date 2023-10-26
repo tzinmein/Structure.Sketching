@@ -19,42 +19,41 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Resampling
+namespace Structure.Sketching.Filters.Resampling;
+
+/// <summary>
+/// Crops the image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Crop : IFilter
 {
     /// <summary>
-    /// Crops the image
+    /// Applies the filter to the specified image.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Crop : IFilter
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        var Result = new Color[targetLocation.Width * targetLocation.Height];
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new Color[targetLocation.Width * targetLocation.Height];
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &Result[(y - targetLocation.Bottom) * targetLocation.Width])
             {
-                fixed (Color* TargetPointer = &Result[(y - targetLocation.Bottom) * targetLocation.Width])
+                Color* TargetPointer2 = TargetPointer;
+                fixed (Color* SourcePointer = &image.Pixels[y * image.Width + targetLocation.Left])
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    fixed (Color* SourcePointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                    Color* SourcePointer2 = SourcePointer;
+                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        Color* SourcePointer2 = SourcePointer;
-                        for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                        {
-                            *TargetPointer2 = *SourcePointer2;
-                            ++TargetPointer2;
-                            ++SourcePointer2;
-                        }
+                        *TargetPointer2 = *SourcePointer2;
+                        ++TargetPointer2;
+                        ++SourcePointer2;
                     }
                 }
-            });
-            return image.ReCreate(targetLocation.Width, targetLocation.Height, Result);
-        }
+            }
+        });
+        return image.ReCreate(targetLocation.Width, targetLocation.Height, Result);
     }
 }

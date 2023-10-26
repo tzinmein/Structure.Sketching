@@ -16,19 +16,18 @@ limitations under the License.
 
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.Interfaces
+namespace Structure.Sketching.Filters.Interfaces;
+
+/// <summary>
+/// Filter interface
+/// </summary>
+public interface IFilter
 {
     /// <summary>
-    /// Filter interface
+    /// Applies the filter to the specified image.
     /// </summary>
-    public interface IFilter
-    {
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        Image Apply(Image image, Rectangle targetLocation = default);
-    }
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    Image Apply(Image image, Rectangle targetLocation = default);
 }

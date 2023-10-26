@@ -20,56 +20,55 @@ using Structure.Sketching.Numerics;
 using Structure.Sketching.Numerics.Interfaces;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Normalization
+namespace Structure.Sketching.Filters.Normalization;
+
+/// <summary>
+/// Equalizes of an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Equalize : IFilter
 {
     /// <summary>
-    /// Equalizes of an image
+    /// Initializes a new instance of the <see cref="Equalize"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Equalize : IFilter
+    /// <param name="histogram">The histogram.</param>
+    public Equalize(IHistogram histogram = null)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Equalize"/> class.
-        /// </summary>
-        /// <param name="histogram">The histogram.</param>
-        public Equalize(IHistogram histogram = null)
-        {
-            Histogram = histogram ?? new RGBHistogram();
-        }
+        Histogram = histogram ?? new RGBHistogram();
+    }
 
-        /// <summary>
-        /// Gets or sets the histogram.
-        /// </summary>
-        /// <value>The histogram.</value>
-        private IHistogram Histogram { get; set; }
+    /// <summary>
+    /// Gets or sets the histogram.
+    /// </summary>
+    /// <value>The histogram.</value>
+    private IHistogram Histogram { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Histogram.LoadImage(image)
+            .Equalize();
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Histogram.LoadImage(image)
-                     .Equalize();
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* TargetPointer2 = TargetPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        var ResultColor = Histogram.EqualizeColor(*TargetPointer2);
-                        (*TargetPointer2).Red = ResultColor.Red;
-                        (*TargetPointer2).Green = ResultColor.Green;
-                        (*TargetPointer2).Blue = ResultColor.Blue;
-                        ++TargetPointer2;
-                    }
+                    var ResultColor = Histogram.EqualizeColor(*TargetPointer2);
+                    (*TargetPointer2).Red = ResultColor.Red;
+                    (*TargetPointer2).Green = ResultColor.Green;
+                    (*TargetPointer2).Blue = ResultColor.Blue;
+                    ++TargetPointer2;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

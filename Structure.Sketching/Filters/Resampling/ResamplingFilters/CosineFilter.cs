@@ -17,29 +17,28 @@ limitations under the License.
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 using System;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Cosine filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class CosineFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Cosine filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class CosineFilter : ResamplingFilterBase
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 1f;
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 1f;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
-        {
-            if (value >= -1 && value <= 1) return (Math.Cos(value * Math.PI) + 1) / 2f;
-            return 0;
-        }
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
+    {
+        if (value >= -1 && value <= 1) return (Math.Cos(value * Math.PI) + 1) / 2f;
+        return 0;
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace Structure.Sketching.Tests.Colors
+﻿namespace Structure.Sketching.Tests.Colors;
+
+public class Color
 {
-    public class Color
-    {
-    }
 }

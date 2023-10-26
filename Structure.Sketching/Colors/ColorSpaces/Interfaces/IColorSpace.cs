@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Colors.ColorSpaces.Interfaces
+namespace Structure.Sketching.Colors.ColorSpaces.Interfaces;
+
+/// <summary>
+/// Color space interface
+/// </summary>
+public interface IColorSpace
 {
-    /// <summary>
-    /// Color space interface
-    /// </summary>
-    public interface IColorSpace
-    {
-    }
 }

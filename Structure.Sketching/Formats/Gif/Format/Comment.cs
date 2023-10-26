@@ -20,61 +20,60 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Structure.Sketching.Formats.Gif.Format
+namespace Structure.Sketching.Formats.Gif.Format;
+
+/// <summary>
+/// Comment section
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
+public class Comment : SectionBase
 {
     /// <summary>
-    /// Comment section
+    /// Initializes a new instance of the <see cref="Comment"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
-    public class Comment : SectionBase
+    /// <param name="data">The data.</param>
+    public Comment(string data)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Comment"/> class.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public Comment(string data)
+        Data = data;
+    }
+
+    /// <summary>
+    /// Gets the data.
+    /// </summary>
+    /// <value>
+    /// The data.
+    /// </value>
+    public string Data { get; private set; }
+
+    /// <summary>
+    /// Reads from the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The resulting comment</returns>
+    public static Comment Read(Stream stream)
+    {
+        var Size = stream.ReadByte();
+        var Builder = new StringBuilder();
+
+        while (Size != 0)
         {
-            Data = data;
+            byte[] TempBuffer = new byte[Size];
+            stream.Read(TempBuffer, 0, Size);
+            Size = stream.ReadByte();
+            Builder.Append(BitConverter.ToString(TempBuffer));
         }
+        return new Comment(Builder.ToString());
+    }
 
-        /// <summary>
-        /// Gets the data.
-        /// </summary>
-        /// <value>
-        /// The data.
-        /// </value>
-        public string Data { get; private set; }
-
-        /// <summary>
-        /// Reads from the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The resulting comment</returns>
-        public static Comment Read(Stream stream)
-        {
-            var Size = stream.ReadByte();
-            var Builder = new StringBuilder();
-
-            while (Size != 0)
-            {
-                byte[] TempBuffer = new byte[Size];
-                stream.Read(TempBuffer, 0, Size);
-                Size = stream.ReadByte();
-                Builder.Append(BitConverter.ToString(TempBuffer));
-            }
-            return new Comment(Builder.ToString());
-        }
-
-        /// <summary>
-        /// Writes to the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>
-        /// True if it writes successfully, false otherwise
-        /// </returns>
-        public override bool Write(EndianBinaryWriter writer)
-        {
-            return true;
-        }
+    /// <summary>
+    /// Writes to the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    /// <returns>
+    /// True if it writes successfully, false otherwise
+    /// </returns>
+    public override bool Write(EndianBinaryWriter writer)
+    {
+        return true;
     }
 }

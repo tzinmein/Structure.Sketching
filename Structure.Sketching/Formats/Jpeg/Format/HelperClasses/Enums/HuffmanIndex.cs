@@ -14,31 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses.Enums;
+
+/// <summary>
+/// Huffman index
+/// </summary>
+public enum HuffmanIndex
 {
     /// <summary>
-    /// Huffman index
+    /// The huffman index luminance dc
     /// </summary>
-    public enum HuffmanIndex
-    {
-        /// <summary>
-        /// The huffman index luminance dc
-        /// </summary>
-        HuffmanIndexLuminanceDC = 0,
+    HuffmanIndexLuminanceDC = 0,
 
-        /// <summary>
-        /// The huffman index luminance ac
-        /// </summary>
-        HuffmanIndexLuminanceAC = 1,
+    /// <summary>
+    /// The huffman index luminance ac
+    /// </summary>
+    HuffmanIndexLuminanceAC = 1,
 
-        /// <summary>
-        /// The huffman index chrominance dc
-        /// </summary>
-        HuffmanIndexChrominanceDC = 2,
+    /// <summary>
+    /// The huffman index chrominance dc
+    /// </summary>
+    HuffmanIndexChrominanceDC = 2,
 
-        /// <summary>
-        /// The huffman index chrominance ac
-        /// </summary>
-        HuffmanIndexChrominanceAC = 3,
-    }
+    /// <summary>
+    /// The huffman index chrominance ac
+    /// </summary>
+    HuffmanIndexChrominanceAC = 3,
 }

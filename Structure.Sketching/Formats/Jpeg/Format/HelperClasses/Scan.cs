@@ -14,26 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
+
+/// <summary>
+/// Scan struct
+/// </summary>
+public struct Scan
 {
     /// <summary>
-    /// Scan struct
+    /// The component index
     /// </summary>
-    public struct Scan
-    {
-        /// <summary>
-        /// The component index
-        /// </summary>
-        public byte ComponentIndex;
+    public byte ComponentIndex;
 
-        /// <summary>
-        /// The ta
-        /// </summary>
-        public byte Ta;
+    /// <summary>
+    /// The ta
+    /// </summary>
+    public byte Ta;
 
-        /// <summary>
-        /// The td
-        /// </summary>
-        public byte Td;
-    }
+    /// <summary>
+    /// The td
+    /// </summary>
+    public byte Td;
 }

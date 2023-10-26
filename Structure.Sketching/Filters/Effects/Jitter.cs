@@ -19,57 +19,56 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Adds randomization to each pixel in an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Jitter : IFilter
 {
     /// <summary>
-    /// Adds randomization to each pixel in an image
+    /// Initializes a new instance of the <see cref="Jitter"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Jitter : IFilter
+    /// <param name="amount">The amount of potential randomization.</param>
+    public Jitter(int amount)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Jitter"/> class.
-        /// </summary>
-        /// <param name="amount">The amount of potential randomization.</param>
-        public Jitter(int amount)
-        {
-            Amount = amount;
-        }
+        Amount = amount;
+    }
 
-        /// <summary>
-        /// Gets or sets the amount.
-        /// </summary>
-        /// <value>The amount.</value>
-        public int Amount { get; set; }
+    /// <summary>
+    /// Gets or sets the amount.
+    /// </summary>
+    /// <value>The amount.</value>
+    public int Amount { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* SourcePointer = Pointer;
+                for (int x = 0; x < image.Width; ++x)
                 {
-                    Color* SourcePointer = Pointer;
-                    for (int x = 0; x < image.Width; ++x)
-                    {
-                        var NewX = Random.ThreadSafeNext(-Amount, Amount);
-                        var NewY = Random.ThreadSafeNext(-Amount, Amount);
-                        NewX += x;
-                        NewY += y;
-                        NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
-                        NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
-                        image.Pixels[NewY * image.Width + NewX] = *SourcePointer;
-                        ++SourcePointer;
-                    }
+                    var NewX = Random.ThreadSafeNext(-Amount, Amount);
+                    var NewY = Random.ThreadSafeNext(-Amount, Amount);
+                    NewX += x;
+                    NewY += y;
+                    NewX = NewX < targetLocation.Left ? targetLocation.Left : NewX >= targetLocation.Right ? targetLocation.Right - 1 : NewX;
+                    NewY = NewY < targetLocation.Bottom ? targetLocation.Bottom : NewY >= targetLocation.Top ? targetLocation.Top - 1 : NewY;
+                    image.Pixels[NewY * image.Width + NewX] = *SourcePointer;
+                    ++SourcePointer;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

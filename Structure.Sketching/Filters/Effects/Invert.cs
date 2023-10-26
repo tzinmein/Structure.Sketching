@@ -19,38 +19,37 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Inverts the image's colors
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Invert : IFilter
 {
     /// <summary>
-    /// Inverts the image's colors
+    /// Applies the filter to the specified image.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Invert : IFilter
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* TargetPointer2 = TargetPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        (*TargetPointer2).Red = (byte)(255 - (*TargetPointer2).Red);
-                        (*TargetPointer2).Green = (byte)(255 - (*TargetPointer2).Green);
-                        (*TargetPointer2).Blue = (byte)(255 - (*TargetPointer2).Blue);
-                        ++TargetPointer2;
-                    }
+                    (*TargetPointer2).Red = (byte)(255 - (*TargetPointer2).Red);
+                    (*TargetPointer2).Green = (byte)(255 - (*TargetPointer2).Green);
+                    (*TargetPointer2).Blue = (byte)(255 - (*TargetPointer2).Blue);
+                    ++TargetPointer2;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

@@ -16,45 +16,44 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.HelperClasses;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
+
+/// <summary>
+/// Resampling filter interface
+/// </summary>
+public interface IResamplingFilter
 {
     /// <summary>
-    /// Resampling filter interface
+    /// Gets the filter radius.
     /// </summary>
-    public interface IResamplingFilter
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        float FilterRadius { get; }
+    /// <value>The filter radius.</value>
+    float FilterRadius { get; }
 
-        /// <summary>
-        /// Gets the precomputed x axis weights.
-        /// </summary>
-        /// <value>The precomputed x axis weights.</value>
-        Weights[] XWeights { get; }
+    /// <summary>
+    /// Gets the precomputed x axis weights.
+    /// </summary>
+    /// <value>The precomputed x axis weights.</value>
+    Weights[] XWeights { get; }
 
-        /// <summary>
-        /// Gets the precomputed y axis weights.
-        /// </summary>
-        /// <value>The precomputed y axis weights.</value>
-        Weights[] YWeights { get; }
+    /// <summary>
+    /// Gets the precomputed y axis weights.
+    /// </summary>
+    /// <value>The precomputed y axis weights.</value>
+    Weights[] YWeights { get; }
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        double GetValue(double value);
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    double GetValue(double value);
 
-        /// <summary>
-        /// Precomputes the weights based on the values passed in.
-        /// </summary>
-        /// <param name="oldWidth">The old width.</param>
-        /// <param name="oldHeight">The old height.</param>
-        /// <param name="newWidth">The new width.</param>
-        /// <param name="newHeight">The new height.</param>
-        void Precompute(int oldWidth, int oldHeight, int newWidth, int newHeight);
-    }
+    /// <summary>
+    /// Precomputes the weights based on the values passed in.
+    /// </summary>
+    /// <param name="oldWidth">The old width.</param>
+    /// <param name="oldHeight">The old height.</param>
+    /// <param name="newWidth">The new width.</param>
+    /// <param name="newHeight">The new height.</param>
+    void Precompute(int oldWidth, int oldHeight, int newWidth, int newHeight);
 }

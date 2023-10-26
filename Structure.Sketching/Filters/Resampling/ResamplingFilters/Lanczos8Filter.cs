@@ -17,40 +17,39 @@ limitations under the License.
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 using System;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Lanczos8 filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class Lanczos8Filter : ResamplingFilterBase
 {
     /// <summary>
-    /// Lanczos8 filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class Lanczos8Filter : ResamplingFilterBase
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 8f;
+
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
     {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 8f;
+        if (value < 0) value = -value;
+        if (value < 8) return Sin(value) * Sin(value / 8f);
+        return 0;
+    }
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
+    private double Sin(double value)
+    {
+        if (value != 0)
         {
-            if (value < 0) value = -value;
-            if (value < 8) return Sin(value) * Sin(value / 8f);
-            return 0;
+            value *= Math.PI;
+            return Math.Sin(value) / value;
         }
-
-        private double Sin(double value)
-        {
-            if (value != 0)
-            {
-                value *= Math.PI;
-                return Math.Sin(value) / value;
-            }
-            return 1;
-        }
+        return 1;
     }
 }

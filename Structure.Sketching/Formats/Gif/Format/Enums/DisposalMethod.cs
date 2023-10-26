@@ -14,31 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Gif.Format.Enums
+namespace Structure.Sketching.Formats.Gif.Format.Enums;
+
+/// <summary>
+/// Disposal method used when GIF hits the end of the animation.
+/// </summary>
+public enum DisposalMethod
 {
     /// <summary>
-    /// Disposal method used when GIF hits the end of the animation.
+    /// The undefined method... Do nothing.
     /// </summary>
-    public enum DisposalMethod
-    {
-        /// <summary>
-        /// The undefined method... Do nothing.
-        /// </summary>
-        Undefined = 0,
+    Undefined = 0,
 
-        /// <summary>
-        /// The do not dispose method.
-        /// </summary>
-        DoNotDispose = 1,
+    /// <summary>
+    /// The do not dispose method.
+    /// </summary>
+    DoNotDispose = 1,
 
-        /// <summary>
-        /// Restore to background color.
-        /// </summary>
-        RestoreToBackground = 2,
+    /// <summary>
+    /// Restore to background color.
+    /// </summary>
+    RestoreToBackground = 2,
 
-        /// <summary>
-        /// Restore to previous.
-        /// </summary>
-        RestoreToPrevious = 3
-    }
+    /// <summary>
+    /// Restore to previous.
+    /// </summary>
+    RestoreToPrevious = 3
 }

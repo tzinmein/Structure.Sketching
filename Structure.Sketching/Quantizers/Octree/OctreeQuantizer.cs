@@ -21,103 +21,102 @@ using Structure.Sketching.Quantizers.BaseClasses;
 using System;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Quantizers.Octree
+namespace Structure.Sketching.Quantizers.Octree;
+
+/// <summary>
+/// Octree quantizer class
+/// </summary>
+/// <seealso cref="QuantizerBase"/>
+public class OctreeQuantizer : QuantizerBase
 {
     /// <summary>
-    /// Octree quantizer class
+    /// Maximum allowed color depth
     /// </summary>
-    /// <seealso cref="QuantizerBase"/>
-    public class OctreeQuantizer : QuantizerBase
+    private int colors;
+
+    /// <summary>
+    /// Stores the tree
+    /// </summary>
+    private Octree octree;
+
+    /// <summary>
+    /// Gets the palette.
+    /// </summary>
+    /// <returns>The list of colors in the palette</returns>
+    protected override Bgra[] GetPalette()
     {
-        /// <summary>
-        /// Maximum allowed color depth
-        /// </summary>
-        private int colors;
+        var palette = octree.Palletize(Math.Max(colors, 1));
+        palette.Add(new Color(0, 0, 0, 0));
+        TransparentIndex = colors;
+        return palette.ToArray();
+    }
 
-        /// <summary>
-        /// Stores the tree
-        /// </summary>
-        private Octree octree;
+    /// <summary>
+    /// Initializes this instance.
+    /// </summary>
+    /// <param name="image">Image</param>
+    /// <param name="maxColors">Maximum colors</param>
+    protected override void Initialize(Image image, int maxColors)
+    {
+        colors = maxColors.Clamp(1, 255);
 
-        /// <summary>
-        /// Gets the palette.
-        /// </summary>
-        /// <returns>The list of colors in the palette</returns>
-        protected override Bgra[] GetPalette()
+        octree ??= new Octree(GetBitsNeededForColorDepth(maxColors));
+        for (int y = 0; y < image.Height; y++)
         {
-            var palette = octree.Palletize(Math.Max(colors, 1));
-            palette.Add(new Color(0, 0, 0, 0));
-            TransparentIndex = colors;
-            return palette.ToArray();
+            for (int x = 0; x < image.Width; x++)
+            {
+                int TempOffset = y * image.Width + x;
+                octree.AddColor(image.Pixels[TempOffset]);
+            }
         }
+    }
 
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        /// <param name="image">Image</param>
-        /// <param name="maxColors">Maximum colors</param>
-        protected override void Initialize(Image image, int maxColors)
-        {
-            colors = maxColors.Clamp(1, 255);
-
-            octree ??= new Octree(GetBitsNeededForColorDepth(maxColors));
-            for (int y = 0; y < image.Height; y++)
+    /// <summary>
+    /// Processes the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <returns>The resulting byte array.</returns>
+    protected override byte[] Process(Image image)
+    {
+        byte[] quantizedPixels = new byte[image.Width * image.Height];
+        Parallel.For(
+            0,
+            image.Height,
+            y =>
             {
                 for (int x = 0; x < image.Width; x++)
                 {
                     int TempOffset = y * image.Width + x;
-                    octree.AddColor(image.Pixels[TempOffset]);
+                    quantizedPixels[TempOffset] = QuantizePixel((Bgra)image.Pixels[TempOffset]);
                 }
-            }
-        }
+            });
 
-        /// <summary>
-        /// Processes the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <returns>The resulting byte array.</returns>
-        protected override byte[] Process(Image image)
+        return quantizedPixels;
+    }
+
+    /// <summary>
+    /// Quantizes the pixel.
+    /// </summary>
+    /// <param name="pixel">The pixel.</param>
+    /// <returns>The resulting byte</returns>
+    protected byte QuantizePixel(Bgra pixel)
+    {
+        var paletteIndex = (byte)colors;
+        if (pixel.Alpha > TransparencyThreshold)
         {
-            byte[] quantizedPixels = new byte[image.Width * image.Height];
-            Parallel.For(
-                0,
-                image.Height,
-                y =>
-                {
-                    for (int x = 0; x < image.Width; x++)
-                    {
-                        int TempOffset = y * image.Width + x;
-                        quantizedPixels[TempOffset] = QuantizePixel((Bgra)image.Pixels[TempOffset]);
-                    }
-                });
-
-            return quantizedPixels;
+            paletteIndex = (byte)octree.GetPaletteIndex(pixel);
         }
 
-        /// <summary>
-        /// Quantizes the pixel.
-        /// </summary>
-        /// <param name="pixel">The pixel.</param>
-        /// <returns>The resulting byte</returns>
-        protected byte QuantizePixel(Bgra pixel)
-        {
-            var paletteIndex = (byte)colors;
-            if (pixel.Alpha > TransparencyThreshold)
-            {
-                paletteIndex = (byte)octree.GetPaletteIndex(pixel);
-            }
+        return paletteIndex;
+    }
 
-            return paletteIndex;
-        }
-
-        /// <summary>
-        /// Gets the bits needed for color depth.
-        /// </summary>
-        /// <param name="colorCount">The color count.</param>
-        /// <returns>The bits needed</returns>
-        private int GetBitsNeededForColorDepth(int colorCount)
-        {
-            return (int)Math.Ceiling(Math.Log(colorCount, 2));
-        }
+    /// <summary>
+    /// Gets the bits needed for color depth.
+    /// </summary>
+    /// <param name="colorCount">The color count.</param>
+    /// <returns>The bits needed</returns>
+    private int GetBitsNeededForColorDepth(int colorCount)
+    {
+        return (int)Math.Ceiling(Math.Log(colorCount, 2));
     }
 }

@@ -19,23 +19,22 @@ using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Overlays;
 using Structure.Sketching.Filters.Pipelines.BaseClasses;
 
-namespace Structure.Sketching.Filters.Pipelines
+namespace Structure.Sketching.Filters.Pipelines;
+
+/// <summary>
+/// Polaroid processing pipeline
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
+public class Polaroid : ProcessingPipelineBaseClass
 {
     /// <summary>
-    /// Polaroid processing pipeline
+    /// Initializes a new instance of the <see cref="Polaroid"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Pipelines.BaseClasses.ProcessingPipelineBaseClass"/>
-    public class Polaroid : ProcessingPipelineBaseClass
+    public Polaroid()
+        : base(true)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Polaroid"/> class.
-        /// </summary>
-        public Polaroid()
-            : base(true)
-        {
-            AddFilter(new PolaroidColorMatrix())
-                .AddFilter(new Vignette(new Color(102, 34, 0, 255), .75f, .75f))
-                .AddFilter(new Glow(new Color(255, 153, 102, 179), .25f, .25f));
-        }
+        AddFilter(new PolaroidColorMatrix())
+            .AddFilter(new Vignette(new Color(102, 34, 0, 255), .75f, .75f))
+            .AddFilter(new Glow(new Color(255, 153, 102, 179), .25f, .25f));
     }
 }

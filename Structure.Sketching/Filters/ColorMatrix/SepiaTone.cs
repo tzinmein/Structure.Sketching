@@ -17,26 +17,25 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Sepiatone color matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Sepiatone : MatrixBaseClass
 {
     /// <summary>
-    /// Sepiatone color matrix
+    /// Gets the matrix.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Sepiatone : MatrixBaseClass
-    {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix.
-        /// </value>
-        public override Matrix5x5 Matrix => new Matrix5x5(
-            .393f, .349f, .272f, 0f, 0f,
-            .769f, .686f, .534f, 0f, 0f,
-            .189f, .168f, .131f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
-            0f, 0f, 0f, 0f, 1f
-        );
-    }
+    /// <value>
+    /// The matrix.
+    /// </value>
+    public override Matrix5x5 Matrix => new Matrix5x5(
+        .393f, .349f, .272f, 0f, 0f,
+        .769f, .686f, .534f, 0f, 0f,
+        .189f, .168f, .131f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0f, 0f, 0f, 0f, 1f
+    );
 }

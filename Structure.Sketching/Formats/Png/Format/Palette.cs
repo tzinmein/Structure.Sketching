@@ -17,50 +17,49 @@ limitations under the License.
 using Structure.Sketching.Formats.Png.Format.Enums;
 using Structure.Sketching.Formats.Png.Format.Helpers;
 
-namespace Structure.Sketching.Formats.Png.Format
+namespace Structure.Sketching.Formats.Png.Format;
+
+/// <summary>
+/// Palette class
+/// </summary>
+public class Palette
 {
     /// <summary>
-    /// Palette class
+    /// Initializes a new instance of the <see cref="Palette" /> class.
     /// </summary>
-    public class Palette
+    /// <param name="data">The data.</param>
+    /// <param name="type">The type.</param>
+    public Palette(byte[] data, PaletteType type)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Palette" /> class.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="type">The type.</param>
-        public Palette(byte[] data, PaletteType type)
-        {
-            Type = type;
-            Data = data;
-        }
+        Type = type;
+        Data = data;
+    }
 
-        /// <summary>
-        /// Gets or sets the data.
-        /// </summary>
-        /// <value>
-        /// The data.
-        /// </value>
-        public byte[] Data { get; set; }
+    /// <summary>
+    /// Gets or sets the data.
+    /// </summary>
+    /// <value>
+    /// The data.
+    /// </value>
+    public byte[] Data { get; set; }
 
-        /// <summary>
-        /// Gets or sets the type.
-        /// </summary>
-        /// <value>
-        /// The type.
-        /// </value>
-        public PaletteType Type { get; set; }
+    /// <summary>
+    /// Gets or sets the type.
+    /// </summary>
+    /// <value>
+    /// The type.
+    /// </value>
+    public PaletteType Type { get; set; }
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Structure.Sketching.Formats.Png.Format.Helpers.Chunk" /> to <see cref="Structure.Sketching.Formats.Png.Format.Palette" />.
-        /// </summary>
-        /// <param name="chunk">The chunk.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
-        public static implicit operator Palette(Chunk chunk)
-        {
-            return new Palette(chunk.Data, chunk.Type == ChunkTypes.Palette ? PaletteType.Color : PaletteType.Alpha);
-        }
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="Structure.Sketching.Formats.Png.Format.Helpers.Chunk" /> to <see cref="Structure.Sketching.Formats.Png.Format.Palette" />.
+    /// </summary>
+    /// <param name="chunk">The chunk.</param>
+    /// <returns>
+    /// The result of the conversion.
+    /// </returns>
+    public static implicit operator Palette(Chunk chunk)
+    {
+        return new Palette(chunk.Data, chunk.Type == ChunkTypes.Palette ? PaletteType.Color : PaletteType.Alpha);
     }
 }

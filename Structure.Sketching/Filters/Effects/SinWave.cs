@@ -21,84 +21,83 @@ using Structure.Sketching.Numerics;
 using System;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Does a sin wave on an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class SinWave : IFilter
 {
     /// <summary>
-    /// Does a sin wave on an image
+    /// Initializes a new instance of the <see cref="SinWave"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class SinWave : IFilter
+    /// <param name="amplitude">The amplitude.</param>
+    /// <param name="frequency">The frequency.</param>
+    /// <param name="direction">The direction.</param>
+    public SinWave(float amplitude, float frequency, Direction direction)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SinWave"/> class.
-        /// </summary>
-        /// <param name="amplitude">The amplitude.</param>
-        /// <param name="frequency">The frequency.</param>
-        /// <param name="direction">The direction.</param>
-        public SinWave(float amplitude, float frequency, Direction direction)
+        Direction = direction;
+        Frequency = frequency;
+        Amplitude = amplitude;
+    }
+
+    /// <summary>
+    /// Gets or sets the amplitude.
+    /// </summary>
+    /// <value>The amplitude.</value>
+    public float Amplitude { get; set; }
+
+    /// <summary>
+    /// Gets or sets the direction.
+    /// </summary>
+    /// <value>The direction.</value>
+    public Direction Direction { get; set; }
+
+    /// <summary>
+    /// Gets or sets the frequency.
+    /// </summary>
+    /// <value>The frequency.</value>
+    public float Frequency { get; set; }
+
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        var Result = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, Result, Result.Length);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            Direction = direction;
-            Frequency = frequency;
-            Amplitude = amplitude;
-        }
-
-        /// <summary>
-        /// Gets or sets the amplitude.
-        /// </summary>
-        /// <value>The amplitude.</value>
-        public float Amplitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the direction.
-        /// </summary>
-        /// <value>The direction.</value>
-        public Direction Direction { get; set; }
-
-        /// <summary>
-        /// Gets or sets the frequency.
-        /// </summary>
-        /// <value>The frequency.</value>
-        public float Frequency { get; set; }
-
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
-        {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Result = new Color[image.Pixels.Length];
-            Array.Copy(image.Pixels, Result, Result.Length);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* TargetPointer2 = TargetPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        double Value1 = 0;
-                        double Value2 = 0;
-                        if (Direction == Direction.RightToLeft || Direction == Direction.LeftToRight)
-                            Value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
-                        if (Direction == Direction.BottomToTop || Direction == Direction.TopToBottom)
-                            Value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
-                        Value1 = y - (int)Value1;
-                        Value2 = x - (int)Value2;
-                        while (Value1 < 0)
-                            Value1 += image.Height;
-                        while (Value2 < 0)
-                            Value2 += image.Width;
-                        while (Value1 >= image.Height)
-                            Value1 -= image.Height;
-                        while (Value2 >= image.Width)
-                            Value2 -= image.Width;
-                        Result[y * image.Width + x] = image.Pixels[(int)Value1 * image.Width + (int)Value2];
-                    }
+                    double Value1 = 0;
+                    double Value2 = 0;
+                    if (Direction == Direction.RightToLeft || Direction == Direction.LeftToRight)
+                        Value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
+                    if (Direction == Direction.BottomToTop || Direction == Direction.TopToBottom)
+                        Value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
+                    Value1 = y - (int)Value1;
+                    Value2 = x - (int)Value2;
+                    while (Value1 < 0)
+                        Value1 += image.Height;
+                    while (Value2 < 0)
+                        Value2 += image.Width;
+                    while (Value1 >= image.Height)
+                        Value1 -= image.Height;
+                    while (Value2 >= image.Width)
+                        Value2 -= image.Width;
+                    Result[y * image.Width + x] = image.Pixels[(int)Value1 * image.Width + (int)Value2];
                 }
-            });
-            return image.ReCreate(image.Width, image.Height, Result);
-        }
+            }
+        });
+        return image.ReCreate(image.Width, image.Height, Result);
     }
 }

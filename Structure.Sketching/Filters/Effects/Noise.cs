@@ -19,59 +19,58 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Effects
+namespace Structure.Sketching.Filters.Effects;
+
+/// <summary>
+/// Adds randomization to an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Noise : IFilter
 {
     /// <summary>
-    /// Adds randomization to an image
+    /// Initializes a new instance of the <see cref="Noise"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Noise : IFilter
+    /// <param name="amount">The amount of potential randomization (0 to 1).</param>
+    public Noise(byte amount)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Noise"/> class.
-        /// </summary>
-        /// <param name="amount">The amount of potential randomization (0 to 1).</param>
-        public Noise(byte amount)
-        {
-            Amount = amount;
-        }
+        Amount = amount;
+    }
 
-        /// <summary>
-        /// Gets or sets the amount.
-        /// </summary>
-        /// <value>The amount.</value>
-        public byte Amount { get; set; }
+    /// <summary>
+    /// Gets or sets the amount.
+    /// </summary>
+    /// <value>The amount.</value>
+    public byte Amount { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* OutputPointer = Pointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* OutputPointer = Pointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        int R = (*OutputPointer).Red + Random.ThreadSafeNext(-Amount, Amount);
-                        int G = (*OutputPointer).Green + Random.ThreadSafeNext(-Amount, Amount);
-                        int B = (*OutputPointer).Blue + Random.ThreadSafeNext(-Amount, Amount);
-                        R = R < 0 ? 0 : R > 255 ? 255 : R;
-                        G = G < 0 ? 0 : G > 255 ? 255 : G;
-                        B = B < 0 ? 0 : B > 255 ? 255 : B;
-                        (*OutputPointer).Red = (byte)R;
-                        (*OutputPointer).Green = (byte)G;
-                        (*OutputPointer).Blue = (byte)B;
-                        ++OutputPointer;
-                    }
+                    int R = (*OutputPointer).Red + Random.ThreadSafeNext(-Amount, Amount);
+                    int G = (*OutputPointer).Green + Random.ThreadSafeNext(-Amount, Amount);
+                    int B = (*OutputPointer).Blue + Random.ThreadSafeNext(-Amount, Amount);
+                    R = R < 0 ? 0 : R > 255 ? 255 : R;
+                    G = G < 0 ? 0 : G > 255 ? 255 : G;
+                    B = B < 0 ? 0 : B > 255 ? 255 : B;
+                    (*OutputPointer).Red = (byte)R;
+                    (*OutputPointer).Green = (byte)G;
+                    (*OutputPointer).Blue = (byte)B;
+                    ++OutputPointer;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

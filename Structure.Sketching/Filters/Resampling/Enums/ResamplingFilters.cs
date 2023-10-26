@@ -14,101 +14,100 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Filters.Resampling.Enums
+namespace Structure.Sketching.Filters.Resampling.Enums;
+
+/// <summary>
+/// Resampling filters available
+/// </summary>
+public enum ResamplingFiltersAvailable
 {
     /// <summary>
-    /// Resampling filters available
+    /// The nearest neighbor
     /// </summary>
-    public enum ResamplingFiltersAvailable
-    {
-        /// <summary>
-        /// The nearest neighbor
-        /// </summary>
-        NearestNeighbor = 0,
+    NearestNeighbor = 0,
 
-        /// <summary>
-        /// The bilinear
-        /// </summary>
-        Bilinear,
+    /// <summary>
+    /// The bilinear
+    /// </summary>
+    Bilinear,
 
-        /// <summary>
-        /// The triangle
-        /// </summary>
-        Triangle,
+    /// <summary>
+    /// The triangle
+    /// </summary>
+    Triangle,
 
-        /// <summary>
-        /// The hermite
-        /// </summary>
-        Hermite,
+    /// <summary>
+    /// The hermite
+    /// </summary>
+    Hermite,
 
-        /// <summary>
-        /// The bell
-        /// </summary>
-        Bell,
+    /// <summary>
+    /// The bell
+    /// </summary>
+    Bell,
 
-        /// <summary>
-        /// The cubic b spline
-        /// </summary>
-        CubicBSpline,
+    /// <summary>
+    /// The cubic b spline
+    /// </summary>
+    CubicBSpline,
 
-        /// <summary>
-        /// The lanczos3
-        /// </summary>
-        Lanczos3,
+    /// <summary>
+    /// The lanczos3
+    /// </summary>
+    Lanczos3,
 
-        /// <summary>
-        /// The mitchell
-        /// </summary>
-        Mitchell,
+    /// <summary>
+    /// The mitchell
+    /// </summary>
+    Mitchell,
 
-        /// <summary>
-        /// The cosine
-        /// </summary>
-        Cosine,
+    /// <summary>
+    /// The cosine
+    /// </summary>
+    Cosine,
 
-        /// <summary>
-        /// The catmull rom
-        /// </summary>
-        CatmullRom,
+    /// <summary>
+    /// The catmull rom
+    /// </summary>
+    CatmullRom,
 
-        /// <summary>
-        /// The quadratic
-        /// </summary>
-        Quadratic,
+    /// <summary>
+    /// The quadratic
+    /// </summary>
+    Quadratic,
 
-        /// <summary>
-        /// The quadratic b spline
-        /// </summary>
-        QuadraticBSpline,
+    /// <summary>
+    /// The quadratic b spline
+    /// </summary>
+    QuadraticBSpline,
 
-        /// <summary>
-        /// The cubic convolution
-        /// </summary>
-        CubicConvolution,
+    /// <summary>
+    /// The cubic convolution
+    /// </summary>
+    CubicConvolution,
 
-        /// <summary>
-        /// The lanczos8
-        /// </summary>
-        Lanczos8,
+    /// <summary>
+    /// The lanczos8
+    /// </summary>
+    Lanczos8,
 
-        /// <summary>
-        /// The robidoux
-        /// </summary>
-        Robidoux,
+    /// <summary>
+    /// The robidoux
+    /// </summary>
+    Robidoux,
 
-        /// <summary>
-        /// The robidoux sharp
-        /// </summary>
-        RobidouxSharp,
+    /// <summary>
+    /// The robidoux sharp
+    /// </summary>
+    RobidouxSharp,
 
-        /// <summary>
-        /// The robidoux soft
-        /// </summary>
-        RobidouxSoft,
+    /// <summary>
+    /// The robidoux soft
+    /// </summary>
+    RobidouxSoft,
 
-        /// <summary>
-        /// The bicubic
-        /// </summary>
-        Bicubic
-    }
+    /// <summary>
+    /// The bicubic
+    /// </summary>
+    Bicubic
 }

@@ -16,34 +16,33 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.Formats.Interfaces
+namespace Structure.Sketching.Formats.Interfaces;
+
+/// <summary>
+/// Encoder interface
+/// </summary>
+public interface IEncoder
 {
     /// <summary>
-    /// Encoder interface
+    /// Determines whether this instance can encode the specified file name.
     /// </summary>
-    public interface IEncoder
-    {
-        /// <summary>
-        /// Determines whether this instance can encode the specified file name.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanEncode(string fileName);
+    /// <param name="fileName">Name of the file.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanEncode(string fileName);
 
-        /// <summary>
-        /// Encodes an image and places it in the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        /// <param name="image">The image to encode.</param>
-        /// <returns>True if it encoded successfully, false otherwise</returns>
-        bool Encode(BinaryWriter writer, Image image);
+    /// <summary>
+    /// Encodes an image and places it in the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    /// <param name="image">The image to encode.</param>
+    /// <returns>True if it encoded successfully, false otherwise</returns>
+    bool Encode(BinaryWriter writer, Image image);
 
-        /// <summary>
-        /// Encodes an animation and places it in the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        /// <param name="animation">The animation to encode.</param>
-        /// <returns>True if it encoded successfully, false otherwise</returns>
-        bool Encode(BinaryWriter writer, Animation animation);
-    }
+    /// <summary>
+    /// Encodes an animation and places it in the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    /// <param name="animation">The animation to encode.</param>
+    /// <returns>True if it encoded successfully, false otherwise</returns>
+    bool Encode(BinaryWriter writer, Animation animation);
 }

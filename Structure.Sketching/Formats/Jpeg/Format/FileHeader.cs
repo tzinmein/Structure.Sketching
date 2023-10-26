@@ -16,44 +16,43 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.Formats.Jpeg.Format
+namespace Structure.Sketching.Formats.Jpeg.Format;
+
+/// <summary>
+/// File header
+/// </summary>
+public class FileHeader
 {
     /// <summary>
-    /// File header
+    /// Gets the file header size.
     /// </summary>
-    public class FileHeader
+    /// <value>The file header size.</value>
+    public static int Size => 2;
+
+    /// <summary>
+    /// Gets the file type, 0xFF and 0xD8
+    /// </summary>
+    /// <value>The file type.</value>
+    public byte[] Type => new byte[] { 0xFF, 0xD8 };
+
+    /// <summary>
+    /// Reads the header information from the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The resulting FileHeader object</returns>
+    public static FileHeader Read(Stream stream)
     {
-        /// <summary>
-        /// Gets the file header size.
-        /// </summary>
-        /// <value>The file header size.</value>
-        public static int Size => 2;
+        var TempBuffer = new byte[2];
+        stream.Read(TempBuffer, 0, 2);
+        return new FileHeader();
+    }
 
-        /// <summary>
-        /// Gets the file type, 0xFF and 0xD8
-        /// </summary>
-        /// <value>The file type.</value>
-        public byte[] Type => new byte[] { 0xFF, 0xD8 };
-
-        /// <summary>
-        /// Reads the header information from the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The resulting FileHeader object</returns>
-        public static FileHeader Read(Stream stream)
-        {
-            var TempBuffer = new byte[2];
-            stream.Read(TempBuffer, 0, 2);
-            return new FileHeader();
-        }
-
-        /// <summary>
-        /// Writes the information to the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        public void Write(BinaryWriter writer)
-        {
-            writer.Write(Type);
-        }
+    /// <summary>
+    /// Writes the information to the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    public void Write(BinaryWriter writer)
+    {
+        writer.Write(Type);
     }
 }

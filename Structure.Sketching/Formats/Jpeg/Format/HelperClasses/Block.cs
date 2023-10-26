@@ -14,46 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
+
+/// <summary>
+/// Block class
+/// </summary>
+public class Block
 {
     /// <summary>
-    /// Block class
+    /// Initializes a new instance of the <see cref="Block"/> class.
     /// </summary>
-    public class Block
+    public Block()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Block"/> class.
-        /// </summary>
-        public Block()
-        {
-            Data = new int[BlockSize];
-        }
-
-        /// <summary>
-        /// Gets or sets the data.
-        /// </summary>
-        /// <value>
-        /// The data.
-        /// </value>
-        public int[] Data { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="int"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="int"/>.
-        /// </value>
-        /// <param name="Index">The index.</param>
-        /// <returns>The value specified.</returns>
-        public int this[int Index]
-        {
-            get { return Data[Index]; }
-            set { Data[Index] = value; }
-        }
-
-        /// <summary>
-        /// The block size
-        /// </summary>
-        public const int BlockSize = 64;
+        Data = new int[BlockSize];
     }
+
+    /// <summary>
+    /// Gets or sets the data.
+    /// </summary>
+    /// <value>
+    /// The data.
+    /// </value>
+    public int[] Data { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the <see cref="int"/> at the specified index.
+    /// </summary>
+    /// <value>
+    /// The <see cref="int"/>.
+    /// </value>
+    /// <param name="Index">The index.</param>
+    /// <returns>The value specified.</returns>
+    public int this[int Index]
+    {
+        get { return Data[Index]; }
+        set { Data[Index] = value; }
+    }
+
+    /// <summary>
+    /// The block size
+    /// </summary>
+    public const int BlockSize = 64;
 }

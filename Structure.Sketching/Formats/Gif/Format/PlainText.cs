@@ -18,41 +18,40 @@ using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.IO;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Gif.Format
+namespace Structure.Sketching.Formats.Gif.Format;
+
+/// <summary>
+/// Plain text
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
+public class PlainText : SectionBase
 {
     /// <summary>
-    /// Plain text
+    /// Gets the size.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
-    public class PlainText : SectionBase
+    /// <value>
+    /// The size.
+    /// </value>
+    public static int Size => 13;
+
+    /// <summary>
+    /// Reads the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The plain text object</returns>
+    public static PlainText Read(Stream stream)
     {
-        /// <summary>
-        /// Gets the size.
-        /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
-        public static int Size => 13;
+        Skip(stream, Size);
+        return new PlainText();
+    }
 
-        /// <summary>
-        /// Reads the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The plain text object</returns>
-        public static PlainText Read(Stream stream)
-        {
-            Skip(stream, Size);
-            return new PlainText();
-        }
-
-        /// <summary>
-        /// Writes the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>True if it writes successfully, false otherwise</returns>
-        public override bool Write(EndianBinaryWriter writer)
-        {
-            return true;
-        }
+    /// <summary>
+    /// Writes the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    /// <returns>True if it writes successfully, false otherwise</returns>
+    public override bool Write(EndianBinaryWriter writer)
+    {
+        return true;
     }
 }

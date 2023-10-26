@@ -16,39 +16,38 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.Formats.Png.Format
+namespace Structure.Sketching.Formats.Png.Format;
+
+/// <summary>
+/// PNG file header
+/// </summary>
+public class FileHeader
 {
     /// <summary>
-    /// PNG file header
+    /// Gets the header.
     /// </summary>
-    public class FileHeader
+    /// <value>
+    /// The header.
+    /// </value>
+    public byte[] Header => new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+
+    /// <summary>
+    /// Reads the header information from the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The resulting FileHeader object</returns>
+    public static FileHeader Read(Stream stream)
     {
-        /// <summary>
-        /// Gets the header.
-        /// </summary>
-        /// <value>
-        /// The header.
-        /// </value>
-        public byte[] Header => new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+        stream.Seek(8, SeekOrigin.Begin);
+        return new FileHeader();
+    }
 
-        /// <summary>
-        /// Reads the header information from the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The resulting FileHeader object</returns>
-        public static FileHeader Read(Stream stream)
-        {
-            stream.Seek(8, SeekOrigin.Begin);
-            return new FileHeader();
-        }
-
-        /// <summary>
-        /// Writes the information to the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        public void Write(BinaryWriter writer)
-        {
-            writer.Write(Header);
-        }
+    /// <summary>
+    /// Writes the information to the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    public void Write(BinaryWriter writer)
+    {
+        writer.Write(Header);
     }
 }

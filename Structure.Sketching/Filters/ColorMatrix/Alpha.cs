@@ -17,53 +17,52 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 
-namespace Structure.Sketching.Filters.ColorMatrix
+namespace Structure.Sketching.Filters.ColorMatrix;
+
+/// <summary>
+/// Alpha matrix
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
+public class Alpha : MatrixBaseClass
 {
     /// <summary>
-    /// Alpha matrix
+    /// Initializes a new instance of the <see cref="Alpha"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.ColorMatrix.BaseClasses.MatrixBaseClass" />
-    public class Alpha : MatrixBaseClass
+    /// <param name="value">The alpha value (0 to 1).</param>
+    public Alpha(float value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Alpha"/> class.
-        /// </summary>
-        /// <param name="value">The alpha value (0 to 1).</param>
-        public Alpha(float value)
-        {
-            Value = value;
-            _Matrix = new Matrix5x5
-            (
-                1f, 0f, 0f, 0f, 0f,
-                0f, 1f, 0f, 0f, 0f,
-                0f, 0f, 1f, 0f, 0f,
-                0f, 0f, 0f, value, 0f,
-                0f, 0f, 0f, 0f, 1f
-            );
-        }
-
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override Matrix5x5 Matrix => _Matrix;
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <value>The value.</value>
-        public float Value { get; }
-
-        /// <summary>
-        /// The matrix backing field
-        /// </summary>
-        private Matrix5x5 _Matrix = new Matrix5x5
+        Value = value;
+        _Matrix = new Matrix5x5
         (
             1f, 0f, 0f, 0f, 0f,
             0f, 1f, 0f, 0f, 0f,
             0f, 0f, 1f, 0f, 0f,
-            0f, 0f, 0f, 1f, 0f,
+            0f, 0f, 0f, value, 0f,
             0f, 0f, 0f, 0f, 1f
         );
     }
+
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <value>The matrix.</value>
+    public override Matrix5x5 Matrix => _Matrix;
+
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <value>The value.</value>
+    public float Value { get; }
+
+    /// <summary>
+    /// The matrix backing field
+    /// </summary>
+    private Matrix5x5 _Matrix = new Matrix5x5
+    (
+        1f, 0f, 0f, 0f, 0f,
+        0f, 1f, 0f, 0f, 0f,
+        0f, 0f, 1f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f,
+        0f, 0f, 0f, 0f, 1f
+    );
 }

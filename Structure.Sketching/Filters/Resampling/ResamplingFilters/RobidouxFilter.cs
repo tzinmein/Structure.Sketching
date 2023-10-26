@@ -16,37 +16,36 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Robidoux filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class RobidouxFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Robidoux filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class RobidouxFilter : ResamplingFilterBase
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 2f;
+
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
     {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 2f;
+        const float B = 0.3782158F;
+        const float C = 0.3108921F;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
-        {
-            const float B = 0.3782158F;
-            const float C = 0.3108921F;
-
-            if (value < 0) value = -value;
-            var temp = value * value;
-            if (value < 1)
-                return ((12 - 9 * B - 6 * C) * (value * temp) + (-18 + 12 * B + 6 * C) * temp + (6 - 2 * B)) / 6;
-            if (value < 2)
-                return ((-B - 6 * C) * (value * temp) + (6 * B + 30 * C) * temp + (-12 * B - 48 * C) * value + (8 * B + 24 * C)) / 6;
-            return 0;
-        }
+        if (value < 0) value = -value;
+        var temp = value * value;
+        if (value < 1)
+            return ((12 - 9 * B - 6 * C) * (value * temp) + (-18 + 12 * B + 6 * C) * temp + (6 - 2 * B)) / 6;
+        if (value < 2)
+            return ((-B - 6 * C) * (value * temp) + (6 * B + 30 * C) * temp + (-12 * B - 48 * C) * value + (8 * B + 24 * C)) / 6;
+        return 0;
     }
 }

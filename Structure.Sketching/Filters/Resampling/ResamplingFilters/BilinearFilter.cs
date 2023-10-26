@@ -16,30 +16,29 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 
-namespace Structure.Sketching.Filters.Resampling.ResamplingFilters
+namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
+
+/// <summary>
+/// Bilinear resampling filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+public class BilinearFilter : ResamplingFilterBase
 {
     /// <summary>
-    /// Bilinear resampling filter
+    /// Gets the filter radius.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
-    public class BilinearFilter : ResamplingFilterBase
-    {
-        /// <summary>
-        /// Gets the filter radius.
-        /// </summary>
-        /// <value>The filter radius.</value>
-        public override float FilterRadius => 0.5f;
+    /// <value>The filter radius.</value>
+    public override float FilterRadius => 0.5f;
 
-        /// <summary>
-        /// Gets the value based on the resampling filter.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The new value based on the input.</returns>
-        public override double GetValue(double value)
-        {
-            value = value < 0 ? -value : value;
-            if (value <= 0.5) return 1;
-            return 0;
-        }
+    /// <summary>
+    /// Gets the value based on the resampling filter.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The new value based on the input.</returns>
+    public override double GetValue(double value)
+    {
+        value = value < 0 ? -value : value;
+        if (value <= 0.5) return 1;
+        return 0;
     }
 }

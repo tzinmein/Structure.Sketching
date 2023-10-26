@@ -16,38 +16,37 @@ limitations under the License.
 
 using Structure.Sketching.Formats.BaseClasses;
 
-namespace Structure.Sketching.Formats.Bmp
+namespace Structure.Sketching.Formats.Bmp;
+
+/// <summary>
+/// BMP decoder
+/// </summary>
+/// <seealso cref="DecoderBase{File}" />
+public class Decoder : DecoderBase<Format.File>
 {
     /// <summary>
-    /// BMP decoder
+    /// Gets the size of the header.
     /// </summary>
-    /// <seealso cref="DecoderBase{File}" />
-    public class Decoder : DecoderBase<Format.File>
+    /// <value>The size of the header.</value>
+    public override int HeaderSize => 2;
+
+    /// <summary>
+    /// Gets the file extensions.
+    /// </summary>
+    /// <value>
+    /// The file extensions.
+    /// </value>
+    protected override string[] FileExtensions => new[] { ".BMP", ".DIB" };
+
+    /// <summary>
+    /// Determines whether this instance can decode the specified header.
+    /// </summary>
+    /// <param name="header">The header data</param>
+    /// <returns>True if it can, false otherwise</returns>
+    public override bool CanDecode(byte[] header)
     {
-        /// <summary>
-        /// Gets the size of the header.
-        /// </summary>
-        /// <value>The size of the header.</value>
-        public override int HeaderSize => 2;
-
-        /// <summary>
-        /// Gets the file extensions.
-        /// </summary>
-        /// <value>
-        /// The file extensions.
-        /// </value>
-        protected override string[] FileExtensions => new[] { ".BMP", ".DIB" };
-
-        /// <summary>
-        /// Determines whether this instance can decode the specified header.
-        /// </summary>
-        /// <param name="header">The header data</param>
-        /// <returns>True if it can, false otherwise</returns>
-        public override bool CanDecode(byte[] header)
-        {
-            if (header == null || header.Length < 2)
-                return false;
-            return header[0] == 0x42 && header[1] == 0x4D;
-        }
+        if (header == null || header.Length < 2)
+            return false;
+        return header[0] == 0x42 && header[1] == 0x4D;
     }
 }

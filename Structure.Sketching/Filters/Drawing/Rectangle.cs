@@ -18,89 +18,88 @@ using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Drawing.BaseClasses;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Drawing
+namespace Structure.Sketching.Filters.Drawing;
+
+/// <summary>
+/// Rectangle drawing class
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Drawing.BaseClasses.ShapeBaseClass"/>
+public class Rectangle : ShapeBaseClass
 {
     /// <summary>
-    /// Rectangle drawing class
+    /// Initializes a new instance of the <see cref="Rectangle"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Drawing.BaseClasses.ShapeBaseClass"/>
-    public class Rectangle : ShapeBaseClass
+    /// <param name="color">The color.</param>
+    /// <param name="fill">if set to <c>true</c> [fill].</param>
+    /// <param name="bounds">The bounds.</param>
+    public Rectangle(Color color, bool fill, Numerics.Rectangle bounds)
+        : base(color)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Rectangle"/> class.
-        /// </summary>
-        /// <param name="color">The color.</param>
-        /// <param name="fill">if set to <c>true</c> [fill].</param>
-        /// <param name="bounds">The bounds.</param>
-        public Rectangle(Color color, bool fill, Numerics.Rectangle bounds)
-            : base(color)
+        Bounds = bounds;
+        Fill = fill;
+    }
+
+    /// <summary>
+    /// Gets or sets the bounds.
+    /// </summary>
+    /// <value>The bounds.</value>
+    public Numerics.Rectangle Bounds { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="Rectangle"/> is fill.
+    /// </summary>
+    /// <value><c>true</c> if fill; otherwise, <c>false</c>.</value>
+    public bool Fill { get; set; }
+
+    /// <summary>
+    /// Applies the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns></returns>
+    public override unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Bounds = Bounds.Clamp(targetLocation);
+        return Fill ? DrawFilledRectangle(image, Bounds)
+            : DrawRectangleOutline(image, targetLocation);
+    }
+
+    /// <summary>
+    /// Draws the filled rectangle.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The resulting image</returns>
+    private unsafe Image DrawFilledRectangle(Image image, Numerics.Rectangle targetLocation)
+    {
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            Bounds = bounds;
-            Fill = fill;
-        }
-
-        /// <summary>
-        /// Gets or sets the bounds.
-        /// </summary>
-        /// <value>The bounds.</value>
-        public Numerics.Rectangle Bounds { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Rectangle"/> is fill.
-        /// </summary>
-        /// <value><c>true</c> if fill; otherwise, <c>false</c>.</value>
-        public bool Fill { get; set; }
-
-        /// <summary>
-        /// Applies the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns></returns>
-        public override unsafe Image Apply(Image image, Numerics.Rectangle targetLocation = default)
-        {
-            targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Bounds = Bounds.Clamp(targetLocation);
-            return Fill ? DrawFilledRectangle(image, Bounds)
-                        : DrawRectangleOutline(image, targetLocation);
-        }
-
-        /// <summary>
-        /// Draws the filled rectangle.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The resulting image</returns>
-        private unsafe Image DrawFilledRectangle(Image image, Numerics.Rectangle targetLocation)
-        {
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* TargetPointer2 = TargetPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        *TargetPointer2 = Color;
-                        ++TargetPointer2;
-                    }
+                    *TargetPointer2 = Color;
+                    ++TargetPointer2;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
+    }
 
-        /// <summary>
-        /// Draws the rectangle outline.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The resulting image</returns>
-        private Image DrawRectangleOutline(Image image, Numerics.Rectangle targetLocation)
-        {
-            new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Right, Bounds.Bottom).Apply(image, targetLocation);
-            new Line(Color, Bounds.Left, Bounds.Top, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
-            new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Left, Bounds.Top).Apply(image, targetLocation);
-            new Line(Color, Bounds.Right, Bounds.Bottom, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
-            return image;
-        }
+    /// <summary>
+    /// Draws the rectangle outline.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The resulting image</returns>
+    private Image DrawRectangleOutline(Image image, Numerics.Rectangle targetLocation)
+    {
+        new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Right, Bounds.Bottom).Apply(image, targetLocation);
+        new Line(Color, Bounds.Left, Bounds.Top, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
+        new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Left, Bounds.Top).Apply(image, targetLocation);
+        new Line(Color, Bounds.Right, Bounds.Bottom, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
+        return image;
     }
 }

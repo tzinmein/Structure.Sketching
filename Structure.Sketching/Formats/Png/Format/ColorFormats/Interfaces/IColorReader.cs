@@ -16,20 +16,19 @@ limitations under the License.
 
 using Structure.Sketching.Colors;
 
-namespace Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces
+namespace Structure.Sketching.Formats.Png.Format.ColorFormats.Interfaces;
+
+/// <summary>
+/// Color reader interface
+/// </summary>
+public interface IColorReader
 {
     /// <summary>
-    /// Color reader interface
+    /// Reads a scan line and inserts it into the pixels array
     /// </summary>
-    public interface IColorReader
-    {
-        /// <summary>
-        /// Reads a scan line and inserts it into the pixels array
-        /// </summary>
-        /// <param name="scanline">Scanline</param>
-        /// <param name="pixels">Resulting pixels</param>
-        /// <param name="header">Header information</param>
-        /// <param name="row">Current row</param>
-        void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row);
-    }
+    /// <param name="scanline">Scanline</param>
+    /// <param name="pixels">Resulting pixels</param>
+    /// <param name="header">Header information</param>
+    /// <param name="row">Current row</param>
+    void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row);
 }

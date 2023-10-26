@@ -20,81 +20,80 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Structure.Sketching.Formats.Bmp.Format
+namespace Structure.Sketching.Formats.Bmp.Format;
+
+/// <summary>
+/// BMP body
+/// </summary>
+public class Body
 {
     /// <summary>
-    /// BMP body
+    /// Initializes a new instance of the <see cref="Body"/> class.
     /// </summary>
-    public class Body
+    /// <param name="data">The data.</param>
+    public Body(byte[] data)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Body"/> class.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public Body(byte[] data)
+        Data = data;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Body" /> class.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="header">The header.</param>
+    public Body(Image image, Header header)
+        : this(new RGB24bit().Encode(header, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
+    {
+    }
+
+    /// <summary>
+    /// Gets or sets the data.
+    /// </summary>
+    /// <value>The data.</value>
+    public byte[] Data { get; set; }
+
+    /// <summary>
+    /// The pixel formats
+    /// </summary>
+    private static readonly Dictionary<int, IPixelFormat> PixelFormats = new Dictionary<int, IPixelFormat>
+    {
+        [32] = new RGB32bit(),
+        [24] = new RGB24bit(),
+        [16] = new RGB16bit(),
+        [8] = new RGB8bit(),
+        [4] = new RGB4bit(),
+        [1] = new RGB1bit()
+    };
+
+    /// <summary>
+    /// Reads the specified stream.
+    /// </summary>
+    /// <param name="header">The header.</param>
+    /// <param name="palette">The palette.</param>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The resulting Body information</returns>
+    public static Body Read(Header header, Palette palette, Stream stream)
+    {
+        var Data = PixelFormats[header.BPP].Read(header, stream);
+        var Data2 = PixelFormats[header.BPP].Decode(header, Data, palette);
+        return new Body(Data2);
+    }
+
+    /// <summary>
+    /// Writes to the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    public void Write(BinaryWriter writer)
+    {
+        int Amount = Data.Length * 3 % 4;
+        if (Amount != 0)
         {
-            Data = data;
+            Amount = 4 - Amount;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Body" /> class.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="header">The header.</param>
-        public Body(Image image, Header header)
-            : this(new RGB24bit().Encode(header, image.Pixels.SelectMany(x => (byte[])x).ToArray(), null))
+        writer.Write(Data, 0, Data.Length);
+        for (int x = 0; x < Amount; ++x)
         {
-        }
-
-        /// <summary>
-        /// Gets or sets the data.
-        /// </summary>
-        /// <value>The data.</value>
-        public byte[] Data { get; set; }
-
-        /// <summary>
-        /// The pixel formats
-        /// </summary>
-        private static readonly Dictionary<int, IPixelFormat> PixelFormats = new Dictionary<int, IPixelFormat>
-        {
-            [32] = new RGB32bit(),
-            [24] = new RGB24bit(),
-            [16] = new RGB16bit(),
-            [8] = new RGB8bit(),
-            [4] = new RGB4bit(),
-            [1] = new RGB1bit()
-        };
-
-        /// <summary>
-        /// Reads the specified stream.
-        /// </summary>
-        /// <param name="header">The header.</param>
-        /// <param name="palette">The palette.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The resulting Body information</returns>
-        public static Body Read(Header header, Palette palette, Stream stream)
-        {
-            var Data = PixelFormats[header.BPP].Read(header, stream);
-            var Data2 = PixelFormats[header.BPP].Decode(header, Data, palette);
-            return new Body(Data2);
-        }
-
-        /// <summary>
-        /// Writes to the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        public void Write(BinaryWriter writer)
-        {
-            int Amount = Data.Length * 3 % 4;
-            if (Amount != 0)
-            {
-                Amount = 4 - Amount;
-            }
-            writer.Write(Data, 0, Data.Length);
-            for (int x = 0; x < Amount; ++x)
-            {
-                writer.Write((byte)0);
-            }
+            writer.Write((byte)0);
         }
     }
 }

@@ -1,20 +1,19 @@
 ﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 
-namespace Structure.Sketching.Benchmarks
+namespace Structure.Sketching.Benchmarks;
+
+/// <summary>
+/// Benchmark config
+/// </summary>
+/// <seealso cref="BenchmarkDotNet.Configs.ManualConfig"/>
+public class Config : ManualConfig
 {
     /// <summary>
-    /// Benchmark config
+    /// Initializes a new instance of the <see cref="Config"/> class.
     /// </summary>
-    /// <seealso cref="BenchmarkDotNet.Configs.ManualConfig"/>
-    public class Config : ManualConfig
+    public Config()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Config"/> class.
-        /// </summary>
-        public Config()
-        {
-            AddDiagnoser(new MemoryDiagnoser(new MemoryDiagnoserConfig()));
-        }
+        AddDiagnoser(new MemoryDiagnoser(new MemoryDiagnoserConfig()));
     }
 }

@@ -21,76 +21,75 @@ using System;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Overlays
+namespace Structure.Sketching.Filters.Overlays;
+
+/// <summary>
+/// Adds a vignette effect to an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Vignette : IFilter
 {
     /// <summary>
-    /// Adds a vignette effect to an image
+    /// Initializes a new instance of the <see cref="Vignette"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Vignette : IFilter
+    /// <param name="color">The vignette color.</param>
+    /// <param name="xRadius">The x radius (between 0 and 1).</param>
+    /// <param name="yRadius">The y radius (between 0 and 1).</param>
+    public Vignette(Color color, float xRadius, float yRadius)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vignette"/> class.
-        /// </summary>
-        /// <param name="color">The vignette color.</param>
-        /// <param name="xRadius">The x radius (between 0 and 1).</param>
-        /// <param name="yRadius">The y radius (between 0 and 1).</param>
-        public Vignette(Color color, float xRadius, float yRadius)
+        XRadius = xRadius > 0 ? xRadius : 0.5f;
+        YRadius = yRadius > 0 ? yRadius : 0.5f;
+        Color = color;
+    }
+
+    /// <summary>
+    /// Gets or sets the color.
+    /// </summary>
+    /// <value>The color.</value>
+    public Color Color { get; private set; }
+
+    /// <summary>
+    /// Gets the x radius.
+    /// </summary>
+    /// <value>The x radius.</value>
+    public float XRadius { get; private set; }
+
+    /// <summary>
+    /// Gets the y radius.
+    /// </summary>
+    /// <value>The y radius.</value>
+    public float YRadius { get; private set; }
+
+    /// <summary>
+    /// Applies the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        var TempX = XRadius * image.Width;
+        var TempY = YRadius * image.Height;
+        var MaxDistance = (float)Math.Sqrt(TempX * TempX + TempY * TempY);
+
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            XRadius = xRadius > 0 ? xRadius : 0.5f;
-            YRadius = yRadius > 0 ? yRadius : 0.5f;
-            Color = color;
-        }
-
-        /// <summary>
-        /// Gets or sets the color.
-        /// </summary>
-        /// <value>The color.</value>
-        public Color Color { get; private set; }
-
-        /// <summary>
-        /// Gets the x radius.
-        /// </summary>
-        /// <value>The x radius.</value>
-        public float XRadius { get; private set; }
-
-        /// <summary>
-        /// Gets the y radius.
-        /// </summary>
-        /// <value>The y radius.</value>
-        public float YRadius { get; private set; }
-
-        /// <summary>
-        /// Applies the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
-        {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var TempX = XRadius * image.Width;
-            var TempY = YRadius * image.Height;
-            var MaxDistance = (float)Math.Sqrt(TempX * TempX + TempY * TempY);
-
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* Pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* Pointer2 = Pointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* Pointer2 = Pointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        var Distance = Vector2.Distance(image.Center, new Vector2(x, y));
-                        var SourceColor = (Vector4)(*Pointer2);
-                        var Result = Vector4.Lerp(Color, SourceColor, 1 - .9f * (Distance / MaxDistance));
-                        var TempAlpha = Result.W;
-                        Result = SourceColor * (1 - TempAlpha) + Result * SourceColor * TempAlpha;
-                        *Pointer2 = (Color)Result;
-                        ++Pointer2;
-                    }
+                    var Distance = Vector2.Distance(image.Center, new Vector2(x, y));
+                    var SourceColor = (Vector4)(*Pointer2);
+                    var Result = Vector4.Lerp(Color, SourceColor, 1 - .9f * (Distance / MaxDistance));
+                    var TempAlpha = Result.W;
+                    Result = SourceColor * (1 - TempAlpha) + Result * SourceColor * TempAlpha;
+                    *Pointer2 = (Color)Result;
+                    ++Pointer2;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

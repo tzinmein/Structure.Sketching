@@ -17,90 +17,89 @@ limitations under the License.
 using Structure.Sketching.Filters.Convolution.BaseClasses;
 using Structure.Sketching.Filters.Convolution.Enums;
 
-namespace Structure.Sketching.Filters.Convolution
+namespace Structure.Sketching.Filters.Convolution;
+
+/// <summary>
+/// Sobel emboss convolution filter
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Convolution.BaseClasses.ConvolutionBaseClass" />
+public class SobelEmboss : ConvolutionBaseClass
 {
     /// <summary>
-    /// Sobel emboss convolution filter
+    /// Initializes a new instance of the <see cref="SobelEmboss"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Convolution.BaseClasses.ConvolutionBaseClass" />
-    public class SobelEmboss : ConvolutionBaseClass
+    /// <param name="direction">The direction.</param>
+    public SobelEmboss(Direction direction = Direction.LeftToRight)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SobelEmboss"/> class.
-        /// </summary>
-        /// <param name="direction">The direction.</param>
-        public SobelEmboss(Direction direction = Direction.LeftToRight)
+        switch (direction)
         {
-            switch (direction)
-            {
-                case Direction.TopToBottom:
-                    _Matrix = new float[]
-                    {
-                        1, 2, 1,
-                        0, 0, 0,
-                        -1, -2, -1
-                    };
-                    break;
+            case Direction.TopToBottom:
+                _Matrix = new float[]
+                {
+                    1, 2, 1,
+                    0, 0, 0,
+                    -1, -2, -1
+                };
+                break;
 
-                case Direction.BottomToTop:
-                    _Matrix = new float[]
-                    {
-                        -1, -2, -1,
-                        0, 0, 0,
-                        1, 2, 1
-                    };
-                    break;
+            case Direction.BottomToTop:
+                _Matrix = new float[]
+                {
+                    -1, -2, -1,
+                    0, 0, 0,
+                    1, 2, 1
+                };
+                break;
 
-                case Direction.LeftToRight:
-                    _Matrix = new float[]
-                    {
-                        -1, 0, 1,
-                        -2, 0, 2,
-                        -1, 0, 1
-                    };
-                    break;
+            case Direction.LeftToRight:
+                _Matrix = new float[]
+                {
+                    -1, 0, 1,
+                    -2, 0, 2,
+                    -1, 0, 1
+                };
+                break;
 
-                default:
-                    _Matrix = new float[]
-                    {
-                        1, 0, -1,
-                        2, 0, -2,
-                        1, 0, -1
-                    };
-                    break;
-            }
+            default:
+                _Matrix = new float[]
+                {
+                    1, 0, -1,
+                    2, 0, -2,
+                    1, 0, -1
+                };
+                break;
         }
-
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
-        /// </summary>
-        /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
-        public override bool Absolute => false;
-
-        /// <summary>
-        /// Gets the height.
-        /// </summary>
-        /// <value>The height.</value>
-        public override int Height => 3;
-
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public override float[] Matrix => _Matrix;
-
-        /// <summary>
-        /// Gets the offset.
-        /// </summary>
-        /// <value>The offset.</value>
-        public override float Offset => 127.5f;
-
-        /// <summary>
-        /// Gets the width.
-        /// </summary>
-        /// <value>The width.</value>
-        public override int Width => 3;
-
-        private readonly float[] _Matrix;
     }
+
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
+    /// </summary>
+    /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
+    public override bool Absolute => false;
+
+    /// <summary>
+    /// Gets the height.
+    /// </summary>
+    /// <value>The height.</value>
+    public override int Height => 3;
+
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <value>The matrix.</value>
+    public override float[] Matrix => _Matrix;
+
+    /// <summary>
+    /// Gets the offset.
+    /// </summary>
+    /// <value>The offset.</value>
+    public override float Offset => 127.5f;
+
+    /// <summary>
+    /// Gets the width.
+    /// </summary>
+    /// <value>The width.</value>
+    public override int Width => 3;
+
+    private readonly float[] _Matrix;
 }

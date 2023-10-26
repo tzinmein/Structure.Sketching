@@ -2,46 +2,45 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Structure.Sketching.Benchmarks.GenericSpeedTests
+namespace Structure.Sketching.Benchmarks.GenericSpeedTests;
+
+public class ArrayCopyTests
 {
-    public class ArrayCopyTests
+    [Params(100, 1000, 10000)]
+    public int Count { get; set; }
+
+    private byte[] source, destination;
+
+    [Benchmark(Baseline = true, Description = "Copy using Array.Copy()")]
+    public void CopyArray()
     {
-        [Params(100, 1000, 10000)]
-        public int Count { get; set; }
+        Array.Copy(source, destination, Count);
+    }
 
-        private byte[] source, destination;
-
-        [Benchmark(Baseline = true, Description = "Copy using Array.Copy()")]
-        public void CopyArray()
+    [Benchmark(Description = "Copy using Unsafe<T>")]
+    public unsafe void CopyUnsafe()
+    {
+        fixed (byte* pinnedDestination = destination)
+        fixed (byte* pinnedSource = source)
         {
-            Array.Copy(source, destination, Count);
+            Unsafe.CopyBlock(pinnedSource, pinnedDestination, (uint)Count);
         }
+    }
 
-        [Benchmark(Description = "Copy using Unsafe<T>")]
-        public unsafe void CopyUnsafe()
+    [Benchmark(Description = "Copy using Buffer.MemoryCopy<T>")]
+    public unsafe void CopyUsingBufferMemoryCopy()
+    {
+        fixed (byte* pinnedDestination = destination)
+        fixed (byte* pinnedSource = source)
         {
-            fixed (byte* pinnedDestination = destination)
-            fixed (byte* pinnedSource = source)
-            {
-                Unsafe.CopyBlock(pinnedSource, pinnedDestination, (uint)Count);
-            }
+            Buffer.MemoryCopy(pinnedSource, pinnedDestination, Count, Count);
         }
+    }
 
-        [Benchmark(Description = "Copy using Buffer.MemoryCopy<T>")]
-        public unsafe void CopyUsingBufferMemoryCopy()
-        {
-            fixed (byte* pinnedDestination = destination)
-            fixed (byte* pinnedSource = source)
-            {
-                Buffer.MemoryCopy(pinnedSource, pinnedDestination, Count, Count);
-            }
-        }
-
-        [IterationSetup]
-        public void SetUp()
-        {
-            source = new byte[Count];
-            destination = new byte[Count];
-        }
+    [IterationSetup]
+    public void SetUp()
+    {
+        source = new byte[Count];
+        destination = new byte[Count];
     }
 }

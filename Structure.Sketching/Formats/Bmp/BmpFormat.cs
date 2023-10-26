@@ -17,32 +17,31 @@ limitations under the License.
 using Structure.Sketching.Formats.BaseClasses;
 using Structure.Sketching.Formats.Interfaces;
 
-namespace Structure.Sketching.Formats.Bmp
+namespace Structure.Sketching.Formats.Bmp;
+
+/// <summary>
+/// BMP Format class
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.BaseClasses.FormatBase"/>
+public class BmpFormat : FormatBase
 {
     /// <summary>
-    /// BMP Format class
+    /// Gets the format.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.BaseClasses.FormatBase"/>
-    public class BmpFormat : FormatBase
-    {
-        /// <summary>
-        /// Gets the format.
-        /// </summary>
-        /// <value>
-        /// The format.
-        /// </value>
-        public override FileFormats Format => FileFormats.BMP;
+    /// <value>
+    /// The format.
+    /// </value>
+    public override FileFormats Format => FileFormats.BMP;
 
-        /// <summary>
-        /// Gets the decoder.
-        /// </summary>
-        /// <value>The decoder.</value>
-        protected override IDecoder Decoder => new Decoder();
+    /// <summary>
+    /// Gets the decoder.
+    /// </summary>
+    /// <value>The decoder.</value>
+    protected override IDecoder Decoder => new Decoder();
 
-        /// <summary>
-        /// Gets the encoder.
-        /// </summary>
-        /// <value>The encoder.</value>
-        protected override IEncoder Encoder => new Encoder();
-    }
+    /// <summary>
+    /// Gets the encoder.
+    /// </summary>
+    /// <value>The encoder.</value>
+    protected override IEncoder Encoder => new Encoder();
 }

@@ -19,61 +19,60 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Normalization
+namespace Structure.Sketching.Filters.Normalization;
+
+/// <summary>
+/// Adjusts gamma of an image
+/// </summary>
+/// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
+public class Gamma : IFilter
 {
     /// <summary>
-    /// Adjusts gamma of an image
+    /// Initializes a new instance of the <see cref="Gamma"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Filters.Interfaces.IFilter"/>
-    public class Gamma : IFilter
+    /// <param name="value">The value.</param>
+    public Gamma(float value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Gamma"/> class.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        public Gamma(float value)
+        Value = value;
+        Ramp = new int[256];
+        Parallel.For(0, 256, x =>
         {
-            Value = value;
-            Ramp = new int[256];
-            Parallel.For(0, 256, x =>
-            {
-                Ramp[x] = (int)(255.0 * System.Math.Pow(x / 255.0, 1.0 / Value) + 0.5);
-                Ramp[x] = Ramp[x] < 0 ? 0 : Ramp[x] > 255 ? 255 : Ramp[x];
-            });
-        }
+            Ramp[x] = (int)(255.0 * System.Math.Pow(x / 255.0, 1.0 / Value) + 0.5);
+            Ramp[x] = Ramp[x] < 0 ? 0 : Ramp[x] > 255 ? 255 : Ramp[x];
+        });
+    }
 
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>The value.</value>
-        public float Value { get; set; }
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
+    /// <value>The value.</value>
+    public float Value { get; set; }
 
-        private int[] Ramp { get; set; }
+    private int[] Ramp { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* TargetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* TargetPointer2 = TargetPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* TargetPointer2 = TargetPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        (*TargetPointer2).Red = (byte)Ramp[(*TargetPointer2).Red];
-                        (*TargetPointer2).Green = (byte)Ramp[(*TargetPointer2).Green];
-                        (*TargetPointer2).Blue = (byte)Ramp[(*TargetPointer2).Blue];
-                        ++TargetPointer2;
-                    }
+                    (*TargetPointer2).Red = (byte)Ramp[(*TargetPointer2).Red];
+                    (*TargetPointer2).Green = (byte)Ramp[(*TargetPointer2).Green];
+                    (*TargetPointer2).Blue = (byte)Ramp[(*TargetPointer2).Blue];
+                    ++TargetPointer2;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

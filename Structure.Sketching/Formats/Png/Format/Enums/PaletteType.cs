@@ -14,21 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Png.Format.Enums
+namespace Structure.Sketching.Formats.Png.Format.Enums;
+
+/// <summary>
+/// Palette type
+/// </summary>
+public enum PaletteType
 {
     /// <summary>
-    /// Palette type
+    /// The color palette
     /// </summary>
-    public enum PaletteType
-    {
-        /// <summary>
-        /// The color palette
-        /// </summary>
-        Color = 0,
+    Color = 0,
 
-        /// <summary>
-        /// The alpha palette
-        /// </summary>
-        Alpha
-    }
+    /// <summary>
+    /// The alpha palette
+    /// </summary>
+    Alpha
 }

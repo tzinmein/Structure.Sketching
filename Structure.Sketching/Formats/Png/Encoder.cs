@@ -16,20 +16,19 @@ limitations under the License.
 
 using Structure.Sketching.Formats.BaseClasses;
 
-namespace Structure.Sketching.Formats.Png
+namespace Structure.Sketching.Formats.Png;
+
+/// <summary>
+/// PNG Encoder
+/// </summary>
+/// <seealso cref="EncoderBase{File}" />
+public class Encoder : EncoderBase<Format.File>
 {
     /// <summary>
-    /// PNG Encoder
+    /// Gets the file extensions.
     /// </summary>
-    /// <seealso cref="EncoderBase{File}" />
-    public class Encoder : EncoderBase<Format.File>
-    {
-        /// <summary>
-        /// Gets the file extensions.
-        /// </summary>
-        /// <value>
-        /// The file extensions.
-        /// </value>
-        protected override string[] FileExtensions => new[] { ".PNG" };
-    }
+    /// <value>
+    /// The file extensions.
+    /// </value>
+    protected override string[] FileExtensions => new[] { ".PNG" };
 }

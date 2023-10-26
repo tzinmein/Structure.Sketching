@@ -14,35 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
+
+/// <summary>
+/// Bits buffer
+/// </summary>
+public class BitsBuffer
 {
     /// <summary>
-    /// Bits buffer
+    /// Gets or sets the accumulator.
     /// </summary>
-    public class BitsBuffer
-    {
-        /// <summary>
-        /// Gets or sets the accumulator.
-        /// </summary>
-        /// <value>
-        /// The accumulator.
-        /// </value>
-        public uint Accumulator { get; set; }
+    /// <value>
+    /// The accumulator.
+    /// </value>
+    public uint Accumulator { get; set; }
 
-        /// <summary>
-        /// Gets or sets the mask.
-        /// </summary>
-        /// <value>
-        /// The mask.
-        /// </value>
-        public uint Mask { get; set; }
+    /// <summary>
+    /// Gets or sets the mask.
+    /// </summary>
+    /// <value>
+    /// The mask.
+    /// </value>
+    public uint Mask { get; set; }
 
-        /// <summary>
-        /// Gets or sets the number of unread bits.
-        /// </summary>
-        /// <value>
-        /// The number of unread bits.
-        /// </value>
-        public int NumberOfUnreadBits { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the number of unread bits.
+    /// </summary>
+    /// <value>
+    /// The number of unread bits.
+    /// </value>
+    public int NumberOfUnreadBits { get; set; }
 }

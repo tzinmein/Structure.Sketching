@@ -20,78 +20,77 @@ using Structure.Sketching.IO;
 using Structure.Sketching.Quantizers;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Gif.Format
+namespace Structure.Sketching.Formats.Gif.Format;
+
+/// <summary>
+/// Frame indices
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
+public class FrameIndices : SectionBase
 {
     /// <summary>
-    /// Frame indices
+    /// Initializes a new instance of the <see cref="FrameIndices"/> class.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
-    public class FrameIndices : SectionBase
+    /// <param name="quantizedImage">The quantized image.</param>
+    /// <param name="bitDepth">The bit depth.</param>
+    public FrameIndices(QuantizedImage quantizedImage, int bitDepth)
+        : this(quantizedImage.Pixels, (byte)bitDepth)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FrameIndices"/> class.
-        /// </summary>
-        /// <param name="quantizedImage">The quantized image.</param>
-        /// <param name="bitDepth">The bit depth.</param>
-        public FrameIndices(QuantizedImage quantizedImage, int bitDepth)
-            : this(quantizedImage.Pixels, (byte)bitDepth)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FrameIndices" /> class.
-        /// </summary>
-        /// <param name="indices">The indices.</param>
-        /// <param name="bitDepth">The bit depth.</param>
-        public FrameIndices(byte[] indices, byte bitDepth)
-        {
-            Indices = indices;
-            BitDepth = bitDepth;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FrameIndices" /> class.
+    /// </summary>
+    /// <param name="indices">The indices.</param>
+    /// <param name="bitDepth">The bit depth.</param>
+    public FrameIndices(byte[] indices, byte bitDepth)
+    {
+        Indices = indices;
+        BitDepth = bitDepth;
+    }
 
-        /// <summary>
-        /// Gets or sets the bit depth.
-        /// </summary>
-        /// <value>
-        /// The bit depth.
-        /// </value>
-        public byte BitDepth { get; set; }
+    /// <summary>
+    /// Gets or sets the bit depth.
+    /// </summary>
+    /// <value>
+    /// The bit depth.
+    /// </value>
+    public byte BitDepth { get; set; }
 
-        /// <summary>
-        /// Gets or sets the indices.
-        /// </summary>
-        /// <value>
-        /// The indices.
-        /// </value>
-        public byte[] Indices { get; set; }
+    /// <summary>
+    /// Gets or sets the indices.
+    /// </summary>
+    /// <value>
+    /// The indices.
+    /// </value>
+    public byte[] Indices { get; set; }
 
-        /// <summary>
-        /// Reads from the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="descriptor">The descriptor.</param>
-        /// <returns>
-        /// The resulting FrameIndices object
-        /// </returns>
-        public static FrameIndices Read(Stream stream, ImageDescriptor descriptor)
-        {
-            var DataSize = stream.ReadByte();
-            var Decoder = new LZWDecoder(stream);
-            return new FrameIndices(Decoder.Decode(descriptor.Width, descriptor.Height, DataSize), 0);
-        }
+    /// <summary>
+    /// Reads from the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <param name="descriptor">The descriptor.</param>
+    /// <returns>
+    /// The resulting FrameIndices object
+    /// </returns>
+    public static FrameIndices Read(Stream stream, ImageDescriptor descriptor)
+    {
+        var DataSize = stream.ReadByte();
+        var Decoder = new LZWDecoder(stream);
+        return new FrameIndices(Decoder.Decode(descriptor.Width, descriptor.Height, DataSize), 0);
+    }
 
-        /// <summary>
-        /// Writes to the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>
-        /// True if it writes successfully, false otherwise
-        /// </returns>
-        public override bool Write(EndianBinaryWriter writer)
-        {
-            var encoder = new LZWEncoder(Indices, BitDepth);
-            encoder.Encode(writer.BaseStream);
-            return true;
-        }
+    /// <summary>
+    /// Writes to the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    /// <returns>
+    /// True if it writes successfully, false otherwise
+    /// </returns>
+    public override bool Write(EndianBinaryWriter writer)
+    {
+        var encoder = new LZWEncoder(Indices, BitDepth);
+        encoder.Encode(writer.BaseStream);
+        return true;
     }
 }

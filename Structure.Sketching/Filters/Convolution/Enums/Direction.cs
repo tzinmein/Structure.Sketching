@@ -14,63 +14,62 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Filters.Convolution.Enums
+namespace Structure.Sketching.Filters.Convolution.Enums;
+
+/// <summary>
+/// Direction
+/// </summary>
+public enum Direction
 {
     /// <summary>
-    /// Direction
+    /// Top to bottom
     /// </summary>
-    public enum Direction
-    {
-        /// <summary>
-        /// Top to bottom
-        /// </summary>
-        TopToBottom = 0,
-
-        /// <summary>
-        /// Bottom to top
-        /// </summary>
-        BottomToTop = 1,
-
-        /// <summary>
-        /// Left to right
-        /// </summary>
-        LeftToRight = 2,
-
-        /// <summary>
-        /// Right to left
-        /// </summary>
-        RightToLeft = 3
-    }
+    TopToBottom = 0,
 
     /// <summary>
-    /// X Direction
+    /// Bottom to top
     /// </summary>
-    public enum XDirection
-    {
-        /// <summary>
-        /// Left to right
-        /// </summary>
-        LeftToRight = 0,
-
-        /// <summary>
-        /// Right to left
-        /// </summary>
-        RightToLeft = 1
-    }
+    BottomToTop = 1,
 
     /// <summary>
-    /// Y Direction
+    /// Left to right
     /// </summary>
-    public enum YDirection
-    {
-        /// <summary>
-        /// Top to bottom
-        /// </summary>
-        TopToBottom = 0,
+    LeftToRight = 2,
 
-        /// <summary>
-        /// Bottom to top
-        /// </summary>
-        BottomToTop = 1
-    }
+    /// <summary>
+    /// Right to left
+    /// </summary>
+    RightToLeft = 3
+}
+
+/// <summary>
+/// X Direction
+/// </summary>
+public enum XDirection
+{
+    /// <summary>
+    /// Left to right
+    /// </summary>
+    LeftToRight = 0,
+
+    /// <summary>
+    /// Right to left
+    /// </summary>
+    RightToLeft = 1
+}
+
+/// <summary>
+/// Y Direction
+/// </summary>
+public enum YDirection
+{
+    /// <summary>
+    /// Top to bottom
+    /// </summary>
+    TopToBottom = 0,
+
+    /// <summary>
+    /// Bottom to top
+    /// </summary>
+    BottomToTop = 1
 }

@@ -17,36 +17,35 @@ limitations under the License.
 using Structure.Sketching.Formats.BaseClasses;
 using Structure.Sketching.Formats.Interfaces;
 
-namespace Structure.Sketching.Formats.Gif
+namespace Structure.Sketching.Formats.Gif;
+
+/// <summary>
+/// Gif format
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.BaseClasses.FormatBase" />
+public class GifFormat : AnimationFormatBase
 {
     /// <summary>
-    /// Gif format
+    /// Gets the format.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.BaseClasses.FormatBase" />
-    public class GifFormat : AnimationFormatBase
-    {
-        /// <summary>
-        /// Gets the format.
-        /// </summary>
-        /// <value>
-        /// The format.
-        /// </value>
-        public override FileFormats Format => FileFormats.GIF;
+    /// <value>
+    /// The format.
+    /// </value>
+    public override FileFormats Format => FileFormats.GIF;
 
-        /// <summary>
-        /// Gets the decoder.
-        /// </summary>
-        /// <value>
-        /// The decoder.
-        /// </value>
-        protected override IDecoder Decoder => new Decoder();
+    /// <summary>
+    /// Gets the decoder.
+    /// </summary>
+    /// <value>
+    /// The decoder.
+    /// </value>
+    protected override IDecoder Decoder => new Decoder();
 
-        /// <summary>
-        /// Gets the encoder.
-        /// </summary>
-        /// <value>
-        /// The encoder.
-        /// </value>
-        protected override IEncoder Encoder => new Encoder();
-    }
+    /// <summary>
+    /// Gets the encoder.
+    /// </summary>
+    /// <value>
+    /// The encoder.
+    /// </value>
+    protected override IEncoder Encoder => new Encoder();
 }

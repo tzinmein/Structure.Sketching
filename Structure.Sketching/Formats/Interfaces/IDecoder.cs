@@ -16,52 +16,51 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.Formats.Interfaces
+namespace Structure.Sketching.Formats.Interfaces;
+
+/// <summary>
+/// Decoder interface
+/// </summary>
+public interface IDecoder
 {
     /// <summary>
-    /// Decoder interface
+    /// Gets the size of the header.
     /// </summary>
-    public interface IDecoder
-    {
-        /// <summary>
-        /// Gets the size of the header.
-        /// </summary>
-        /// <value>The size of the header.</value>
-        int HeaderSize { get; }
+    /// <value>The size of the header.</value>
+    int HeaderSize { get; }
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified file name.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanDecode(string fileName);
+    /// <summary>
+    /// Determines whether this instance can decode the specified file name.
+    /// </summary>
+    /// <param name="fileName">Name of the file.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanDecode(string fileName);
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified header.
-        /// </summary>
-        /// <param name="header">The header data</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanDecode(byte[] header);
+    /// <summary>
+    /// Determines whether this instance can decode the specified header.
+    /// </summary>
+    /// <param name="header">The header data</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanDecode(byte[] header);
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanDecode(Stream stream);
+    /// <summary>
+    /// Determines whether this instance can decode the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanDecode(Stream stream);
 
-        /// <summary>
-        /// Decodes the specified stream and returns an image
-        /// </summary>
-        /// <param name="stream">The stream containing the image data.</param>
-        /// <returns>The resulting image</returns>
-        Image Decode(Stream stream);
+    /// <summary>
+    /// Decodes the specified stream and returns an image
+    /// </summary>
+    /// <param name="stream">The stream containing the image data.</param>
+    /// <returns>The resulting image</returns>
+    Image Decode(Stream stream);
 
-        /// <summary>
-        /// Decodes the specified stream and returns an animation
-        /// </summary>
-        /// <param name="stream">The stream containing the animation data.</param>
-        /// <returns>The resulting animation</returns>
-        Animation DecodeAnimation(Stream stream);
-    }
+    /// <summary>
+    /// Decodes the specified stream and returns an animation
+    /// </summary>
+    /// <param name="stream">The stream containing the animation data.</param>
+    /// <returns>The resulting animation</returns>
+    Animation DecodeAnimation(Stream stream);
 }

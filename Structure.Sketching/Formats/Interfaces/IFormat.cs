@@ -16,62 +16,61 @@ limitations under the License.
 
 using System.IO;
 
-namespace Structure.Sketching.Formats.Interfaces
+namespace Structure.Sketching.Formats.Interfaces;
+
+/// <summary>
+/// Format interface
+/// </summary>
+public interface IFormat
 {
     /// <summary>
-    /// Format interface
+    /// Gets the format.
     /// </summary>
-    public interface IFormat
-    {
-        /// <summary>
-        /// Gets the format.
-        /// </summary>
-        /// <value>
-        /// The format.
-        /// </value>
-        FileFormats Format { get; }
+    /// <value>
+    /// The format.
+    /// </value>
+    FileFormats Format { get; }
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified file name.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanDecode(string fileName);
+    /// <summary>
+    /// Determines whether this instance can decode the specified file name.
+    /// </summary>
+    /// <param name="fileName">Name of the file.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanDecode(string fileName);
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified header.
-        /// </summary>
-        /// <param name="header">The header data</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanDecode(byte[] header);
+    /// <summary>
+    /// Determines whether this instance can decode the specified header.
+    /// </summary>
+    /// <param name="header">The header data</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanDecode(byte[] header);
 
-        /// <summary>
-        /// Determines whether this instance can decode the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanDecode(Stream stream);
+    /// <summary>
+    /// Determines whether this instance can decode the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanDecode(Stream stream);
 
-        /// <summary>
-        /// Determines whether this instance can encode the specified file name.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>True if it can, false otherwise</returns>
-        bool CanEncode(string fileName);
+    /// <summary>
+    /// Determines whether this instance can encode the specified file name.
+    /// </summary>
+    /// <param name="fileName">Name of the file.</param>
+    /// <returns>True if it can, false otherwise</returns>
+    bool CanEncode(string fileName);
 
-        /// <summary>
-        /// Decodes the specified stream and returns an image
-        /// </summary>
-        /// <param name="stream">The stream containing the image data.</param>
-        /// <returns>The resulting image</returns>
-        Image Decode(Stream stream);
+    /// <summary>
+    /// Decodes the specified stream and returns an image
+    /// </summary>
+    /// <param name="stream">The stream containing the image data.</param>
+    /// <returns>The resulting image</returns>
+    Image Decode(Stream stream);
 
-        /// <summary>
-        /// Encodes an image and places it in the specified writer.
-        /// </summary>
-        /// <param name="writer">The binary writer.</param>
-        /// <param name="image">The image to encode.</param>
-        /// <returns>True if it is encoded successfully, false otherwise.</returns>
-        bool Encode(BinaryWriter writer, Image image);
-    }
+    /// <summary>
+    /// Encodes an image and places it in the specified writer.
+    /// </summary>
+    /// <param name="writer">The binary writer.</param>
+    /// <param name="image">The image to encode.</param>
+    /// <returns>True if it is encoded successfully, false otherwise.</returns>
+    bool Encode(BinaryWriter writer, Image image);
 }

@@ -5,105 +5,104 @@ using System;
 using System.IO;
 using Xunit;
 
-namespace Structure.Sketching.Tests
+namespace Structure.Sketching.Tests;
+
+public class ImageTests : FilterTestBaseClass
 {
-    public class ImageTests : FilterTestBaseClass
+    public override string ExpectedDirectory => "./ExpectedResults/Image/";
+
+    public override string OutputDirectory => "./TestOutput/Image/";
+
+    public string SecondImage => "./TestImages/Formats/Bmp/Car.bmp";
+
+    public static readonly TheoryData<string, Func<Image, int, Image>, int> ShiftOperations = new()
     {
-        public override string ExpectedDirectory => "./ExpectedResults/Image/";
+        {"ShiftLeft",(x,y)=>x<<y,128 },
+        {"ShiftRight",(x,y)=>x>>y,128 }
+    };
 
-        public override string OutputDirectory => "./TestOutput/Image/";
+    public static readonly TheoryData<string, Func<Image, Image>> UnaryOperations = new()
+    {
+        {"Not",(x)=>!x }
+    };
 
-        public string SecondImage => "./TestImages/Formats/Bmp/Car.bmp";
+    [Fact]
+    public void BadDataConstructor()
+    {
+        var TempImage = new Image(-1, -1, (byte[])null);
+        Assert.Equal(1, TempImage.Width);
+        Assert.Equal(1, TempImage.Height);
+        Assert.Equal(1, TempImage.PixelRatio);
+        Assert.Null(TempImage.Pixels);
+    }
 
-        public static readonly TheoryData<string, Func<Image, int, Image>, int> ShiftOperations = new()
+    [Theory]
+    [MemberData(nameof(ShiftOperations))]
+    public void CheckShiftOperators(string name, Func<Image, int, Image> operation, int value)
+    {
+        foreach (var file in Files)
         {
-            {"ShiftLeft",(x,y)=>x<<y,128 },
-            {"ShiftRight",(x,y)=>x>>y,128 }
-        };
-
-        public static readonly TheoryData<string, Func<Image, Image>> UnaryOperations = new()
-        {
-            {"Not",(x)=>!x }
-        };
-
-        [Fact]
-        public void BadDataConstructor()
-        {
-            var TempImage = new Image(-1, -1, (byte[])null);
-            Assert.Equal(1, TempImage.Width);
-            Assert.Equal(1, TempImage.Height);
-            Assert.Equal(1, TempImage.PixelRatio);
-            Assert.Null(TempImage.Pixels);
+            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var TestImage = new Image(file);
+            var ResultImage = operation(TestImage, value);
+            ResultImage.Save(OutputDirectory + outputFileName);
         }
-
-        [Theory]
-        [MemberData(nameof(ShiftOperations))]
-        public void CheckShiftOperators(string name, Func<Image, int, Image> operation, int value)
+        foreach (string file in Files)
         {
-            foreach (var file in Files)
-            {
-                string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                var TestImage = new Image(file);
-                var ResultImage = operation(TestImage, value);
-                ResultImage.Save(OutputDirectory + outputFileName);
-            }
-            foreach (string file in Files)
-            {
-                string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
-            }
+            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
         }
+    }
 
-        [Theory]
-        [MemberData(nameof(UnaryOperations))]
-        public void CheckUnaryOperators(string name, Func<Image, Image> operation)
+    [Theory]
+    [MemberData(nameof(UnaryOperations))]
+    public void CheckUnaryOperators(string name, Func<Image, Image> operation)
+    {
+        foreach (var file in Files)
         {
-            foreach (var file in Files)
-            {
-                string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                var TestImage = new Image(file);
-                var ResultImage = operation(TestImage);
-                ResultImage.Save(OutputDirectory + outputFileName);
-            }
-            foreach (string file in Files)
-            {
-                string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
-                Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
-            }
+            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            var TestImage = new Image(file);
+            var ResultImage = operation(TestImage);
+            ResultImage.Save(OutputDirectory + outputFileName);
         }
+        foreach (string file in Files)
+        {
+            string outputFileName = Path.GetFileNameWithoutExtension(file) + "-" + name + Path.GetExtension(file);
+            Assert.True(CheckFileCorrect(ExpectedDirectory + Path.GetFileName(outputFileName), OutputDirectory + Path.GetFileName(outputFileName)), outputFileName);
+        }
+    }
 
-        [Fact]
-        public void NoDataConstructor()
-        {
-            var TempImage = new Image(1, 1);
-            Assert.Equal(1, TempImage.Width);
-            Assert.Equal(1, TempImage.Height);
-            Assert.Equal(1, TempImage.PixelRatio);
-            Assert.Equal(new Color(0, 0, 0, 0), TempImage.Pixels[0]);
-        }
+    [Fact]
+    public void NoDataConstructor()
+    {
+        var TempImage = new Image(1, 1);
+        Assert.Equal(1, TempImage.Width);
+        Assert.Equal(1, TempImage.Height);
+        Assert.Equal(1, TempImage.PixelRatio);
+        Assert.Equal(new Color(0, 0, 0, 0), TempImage.Pixels[0]);
+    }
 
-        [Fact]
-        public void ToASCIIArt()
-        {
-            var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102,
-                127, 153, 178, 204,
-                229, 255, 25, 51,
-                76, 102, 127, 153,
-                178, 204, 229, 255,
-                25, 51, 76, 102,
-                127, 153, 178, 204,
-                229, 255, 25, 51,
-                76, 102, 127, 153,
-                178, 204, 229, 255 });
-            var s = Environment.NewLine;
-            Assert.Equal($"#{s}.{s}-{s}*{s}={s}", TestImage.ToASCIIArt());
-        }
+    [Fact]
+    public void ToASCIIArt()
+    {
+        var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102,
+            127, 153, 178, 204,
+            229, 255, 25, 51,
+            76, 102, 127, 153,
+            178, 204, 229, 255,
+            25, 51, 76, 102,
+            127, 153, 178, 204,
+            229, 255, 25, 51,
+            76, 102, 127, 153,
+            178, 204, 229, 255 });
+        var s = Environment.NewLine;
+        Assert.Equal($"#{s}.{s}-{s}*{s}={s}", TestImage.ToASCIIArt());
+    }
 
-        [Fact]
-        public void ToBase64String()
-        {
-            var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255 });
-            Assert.Equal("Qk1eAAAAAAAAADYAAAAoAAAAAQAAAAoAAAABABgAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAA5cyyAH9mTAAZ/+UAspl/AEwzGQDlzLIAf2ZMABn/5QCymX8ATDMZAA==", TestImage.ToString(FileFormats.BMP));
-        }
+    [Fact]
+    public void ToBase64String()
+    {
+        var TestImage = new Image(1, 10, new byte[] { 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255, 25, 51, 76, 102, 127, 153, 178, 204, 229, 255 });
+        Assert.Equal("Qk1eAAAAAAAAADYAAAAoAAAAAQAAAAoAAAABABgAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAA5cyyAH9mTAAZ/+UAspl/AEwzGQDlzLIAf2ZMABn/5QCymX8ATDMZAA==", TestImage.ToString(FileFormats.BMP));
     }
 }

@@ -25,200 +25,199 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.Resampling.BaseClasses
+namespace Structure.Sketching.Filters.Resampling.BaseClasses;
+
+/// <summary>
+/// Affine transformation base class
+/// </summary>
+/// <seealso cref="IFilter"/>
+public abstract class AffineBaseClass : IFilter
 {
     /// <summary>
-    /// Affine transformation base class
+    /// Initializes a new instance of the <see cref="AffineBaseClass"/> class.
     /// </summary>
-    /// <seealso cref="IFilter"/>
-    public abstract class AffineBaseClass : IFilter
+    /// <param name="width">The new width.</param>
+    /// <param name="height">The new height.</param>
+    /// <param name="filter">The filter to use (defaults to nearest neighbor).</param>
+    protected AffineBaseClass(int width = -1, int height = -1, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AffineBaseClass"/> class.
-        /// </summary>
-        /// <param name="width">The new width.</param>
-        /// <param name="height">The new height.</param>
-        /// <param name="filter">The filter to use (defaults to nearest neighbor).</param>
-        protected AffineBaseClass(int width = -1, int height = -1, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
+        Width = width;
+        Height = height;
+        ResamplingFilter = new Dictionary<ResamplingFiltersAvailable, IResamplingFilter>
         {
-            Width = width;
-            Height = height;
-            ResamplingFilter = new Dictionary<ResamplingFiltersAvailable, IResamplingFilter>
-            {
-                { ResamplingFiltersAvailable.Bell, new BellFilter() },
-                { ResamplingFiltersAvailable.CatmullRom, new CatmullRomFilter() },
-                { ResamplingFiltersAvailable.Cosine, new CosineFilter() },
-                { ResamplingFiltersAvailable.CubicBSpline, new CubicBSplineFilter() },
-                { ResamplingFiltersAvailable.CubicConvolution, new CubicConvolutionFilter() },
-                { ResamplingFiltersAvailable.Hermite, new HermiteFilter() },
-                { ResamplingFiltersAvailable.Lanczos3, new Lanczos3Filter() },
-                { ResamplingFiltersAvailable.Lanczos8, new Lanczos8Filter() },
-                { ResamplingFiltersAvailable.Mitchell, new MitchellFilter() },
-                { ResamplingFiltersAvailable.Quadratic, new QuadraticFilter() },
-                { ResamplingFiltersAvailable.QuadraticBSpline, new QuadraticBSplineFilter() },
-                { ResamplingFiltersAvailable.Triangle, new TriangleFilter() },
-                { ResamplingFiltersAvailable.Bilinear, new BilinearFilter() },
-                { ResamplingFiltersAvailable.NearestNeighbor, new NearestNeighborFilter() },
-                { ResamplingFiltersAvailable.Robidoux, new RobidouxFilter() },
-                { ResamplingFiltersAvailable.RobidouxSharp, new RobidouxSharpFilter() },
-                { ResamplingFiltersAvailable.RobidouxSoft, new RobidouxSoftFilter() },
-                { ResamplingFiltersAvailable.Bicubic, new BicubicFilter() }
-            };
-            Filter = ResamplingFilter[filter];
-        }
+            { ResamplingFiltersAvailable.Bell, new BellFilter() },
+            { ResamplingFiltersAvailable.CatmullRom, new CatmullRomFilter() },
+            { ResamplingFiltersAvailable.Cosine, new CosineFilter() },
+            { ResamplingFiltersAvailable.CubicBSpline, new CubicBSplineFilter() },
+            { ResamplingFiltersAvailable.CubicConvolution, new CubicConvolutionFilter() },
+            { ResamplingFiltersAvailable.Hermite, new HermiteFilter() },
+            { ResamplingFiltersAvailable.Lanczos3, new Lanczos3Filter() },
+            { ResamplingFiltersAvailable.Lanczos8, new Lanczos8Filter() },
+            { ResamplingFiltersAvailable.Mitchell, new MitchellFilter() },
+            { ResamplingFiltersAvailable.Quadratic, new QuadraticFilter() },
+            { ResamplingFiltersAvailable.QuadraticBSpline, new QuadraticBSplineFilter() },
+            { ResamplingFiltersAvailable.Triangle, new TriangleFilter() },
+            { ResamplingFiltersAvailable.Bilinear, new BilinearFilter() },
+            { ResamplingFiltersAvailable.NearestNeighbor, new NearestNeighborFilter() },
+            { ResamplingFiltersAvailable.Robidoux, new RobidouxFilter() },
+            { ResamplingFiltersAvailable.RobidouxSharp, new RobidouxSharpFilter() },
+            { ResamplingFiltersAvailable.RobidouxSoft, new RobidouxSoftFilter() },
+            { ResamplingFiltersAvailable.Bicubic, new BicubicFilter() }
+        };
+        Filter = ResamplingFilter[filter];
+    }
 
-        /// <summary>
-        /// Gets or sets the filter.
-        /// </summary>
-        /// <value>The filter.</value>
-        public IResamplingFilter Filter { get; set; }
+    /// <summary>
+    /// Gets or sets the filter.
+    /// </summary>
+    /// <value>The filter.</value>
+    public IResamplingFilter Filter { get; set; }
 
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        /// <value>The height.</value>
-        protected int Height { get; set; }
+    /// <summary>
+    /// Gets or sets the height.
+    /// </summary>
+    /// <value>The height.</value>
+    protected int Height { get; set; }
 
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        /// <value>The width.</value>
-        protected int Width { get; set; }
+    /// <summary>
+    /// Gets or sets the width.
+    /// </summary>
+    /// <value>The width.</value>
+    protected int Width { get; set; }
 
-        /// <summary>
-        /// Gets or sets the resampling filter dictionary.
-        /// </summary>
-        /// <value>The resampling filter.</value>
-        private Dictionary<ResamplingFiltersAvailable, IResamplingFilter> ResamplingFilter { get; set; }
+    /// <summary>
+    /// Gets or sets the resampling filter dictionary.
+    /// </summary>
+    /// <value>The resampling filter.</value>
+    private Dictionary<ResamplingFiltersAvailable, IResamplingFilter> ResamplingFilter { get; set; }
 
-        /// <summary>
-        /// Gets the transformation matrix.
-        /// </summary>
-        /// <value>The transformation matrix.</value>
-        private Matrix3x2 TransformationMatrix { get; set; }
+    /// <summary>
+    /// Gets the transformation matrix.
+    /// </summary>
+    /// <value>The transformation matrix.</value>
+    private Matrix3x2 TransformationMatrix { get; set; }
 
-        /// <summary>
-        /// Gets or sets the x radius for the sampling filter.
-        /// </summary>
-        /// <value>The x radius.</value>
-        private double XRadius { get; set; }
+    /// <summary>
+    /// Gets or sets the x radius for the sampling filter.
+    /// </summary>
+    /// <value>The x radius.</value>
+    private double XRadius { get; set; }
 
-        /// <summary>
-        /// Gets or sets the y radius for the sampling filter.
-        /// </summary>
-        /// <value>The y radius.</value>
-        private double YRadius { get; set; }
+    /// <summary>
+    /// Gets or sets the y radius for the sampling filter.
+    /// </summary>
+    /// <value>The y radius.</value>
+    private double YRadius { get; set; }
 
-        /// <summary>
-        /// Applies the filter to the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <summary>
+    /// Applies the filter to the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        Filter.Precompute(image.Width, image.Height, Width, Height);
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        var Copy = new Color[image.Pixels.Length];
+        Array.Copy(image.Pixels, Copy, Copy.Length);
+        TransformationMatrix = GetMatrix(image, targetLocation);
+        double TempWidth = Width < 0 ? image.Width : Width;
+        double TempHeight = Height < 0 ? image.Width : Height;
+        double XScale = TempWidth / image.Width;
+        double YScale = TempHeight / image.Height;
+        YRadius = YScale < 1f ? Filter.FilterRadius / YScale : Filter.FilterRadius;
+        XRadius = XScale < 1f ? Filter.FilterRadius / XScale : Filter.FilterRadius;
+
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
-            Filter.Precompute(image.Width, image.Height, Width, Height);
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            var Copy = new Color[image.Pixels.Length];
-            Array.Copy(image.Pixels, Copy, Copy.Length);
-            TransformationMatrix = GetMatrix(image, targetLocation);
-            double TempWidth = Width < 0 ? image.Width : Width;
-            double TempHeight = Height < 0 ? image.Width : Height;
-            double XScale = TempWidth / image.Width;
-            double YScale = TempHeight / image.Height;
-            YRadius = YScale < 1f ? Filter.FilterRadius / YScale : Filter.FilterRadius;
-            XRadius = XScale < 1f ? Filter.FilterRadius / XScale : Filter.FilterRadius;
-
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+            fixed (Color* OutputPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* OutputPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* OutputPointer2 = OutputPointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* OutputPointer2 = OutputPointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    var Values = new Vector4(0, 0, 0, 0);
+                    float Weight = 0;
+
+                    var rotated = Vector2.Transform(new Vector2(x, y), TransformationMatrix);
+                    var rotatedY = (int)rotated.Y;
+                    var rotatedX = (int)rotated.X;
+                    if (rotatedY >= image.Height
+                        || rotatedY < 0
+                        || rotatedX >= image.Width
+                        || rotatedX < 0)
                     {
-                        var Values = new Vector4(0, 0, 0, 0);
-                        float Weight = 0;
-
-                        var rotated = Vector2.Transform(new Vector2(x, y), TransformationMatrix);
-                        var rotatedY = (int)rotated.Y;
-                        var rotatedX = (int)rotated.X;
-                        if (rotatedY >= image.Height
-                            || rotatedY < 0
-                            || rotatedX >= image.Width
-                            || rotatedX < 0)
+                        (*OutputPointer2).Red = 0;
+                        (*OutputPointer2).Green = 0;
+                        (*OutputPointer2).Blue = 0;
+                        (*OutputPointer2).Alpha = 255;
+                        ++OutputPointer2;
+                        continue;
+                    }
+                    var Left = (int)(rotatedX - XRadius);
+                    var Right = (int)(rotatedX + XRadius);
+                    var Top = (int)(rotatedY - YRadius);
+                    var Bottom = (int)(rotatedY + YRadius);
+                    if (Top < 0)
+                        Top = 0;
+                    if (Bottom >= image.Height)
+                        Bottom = image.Height - 1;
+                    if (Left < 0)
+                        Left = 0;
+                    if (Right >= image.Width)
+                        Right = image.Width - 1;
+                    for (int i = Top, YCount = 0; i <= Bottom; ++i, ++YCount)
+                    {
+                        fixed (Color* PixelPointer = &Copy[i * image.Width])
                         {
-                            (*OutputPointer2).Red = 0;
-                            (*OutputPointer2).Green = 0;
-                            (*OutputPointer2).Blue = 0;
-                            (*OutputPointer2).Alpha = 255;
-                            ++OutputPointer2;
-                            continue;
-                        }
-                        var Left = (int)(rotatedX - XRadius);
-                        var Right = (int)(rotatedX + XRadius);
-                        var Top = (int)(rotatedY - YRadius);
-                        var Bottom = (int)(rotatedY + YRadius);
-                        if (Top < 0)
-                            Top = 0;
-                        if (Bottom >= image.Height)
-                            Bottom = image.Height - 1;
-                        if (Left < 0)
-                            Left = 0;
-                        if (Right >= image.Width)
-                            Right = image.Width - 1;
-                        for (int i = Top, YCount = 0; i <= Bottom; ++i, ++YCount)
-                        {
-                            fixed (Color* PixelPointer = &Copy[i * image.Width])
+                            Color* PixelPointer2 = PixelPointer + Left;
+                            for (int j = Left, XCount = 0; j <= Right; ++j, ++XCount)
                             {
-                                Color* PixelPointer2 = PixelPointer + Left;
-                                for (int j = Left, XCount = 0; j <= Right; ++j, ++XCount)
+                                var TempYWeight = Filter.YWeights[rotatedY].Values[YCount];
+                                var TempXWeight = Filter.XWeights[rotatedX].Values[XCount];
+                                var TempWeight = TempYWeight * TempXWeight;
+
+                                if (YRadius == 0 && XRadius == 0)
+                                    TempWeight = 1;
+
+                                if (TempWeight == 0)
                                 {
-                                    var TempYWeight = Filter.YWeights[rotatedY].Values[YCount];
-                                    var TempXWeight = Filter.XWeights[rotatedX].Values[XCount];
-                                    var TempWeight = TempYWeight * TempXWeight;
-
-                                    if (YRadius == 0 && XRadius == 0)
-                                        TempWeight = 1;
-
-                                    if (TempWeight == 0)
-                                    {
-                                        ++PixelPointer2;
-                                        continue;
-                                    }
-                                    Values.X += (*PixelPointer2).Red * (float)TempWeight;
-                                    Values.Y += (*PixelPointer2).Green * (float)TempWeight;
-                                    Values.Z += (*PixelPointer2).Blue * (float)TempWeight;
-                                    Values.W += (*PixelPointer2).Alpha * (float)TempWeight;
                                     ++PixelPointer2;
-                                    Weight += (float)TempWeight;
+                                    continue;
                                 }
+                                Values.X += (*PixelPointer2).Red * (float)TempWeight;
+                                Values.Y += (*PixelPointer2).Green * (float)TempWeight;
+                                Values.Z += (*PixelPointer2).Blue * (float)TempWeight;
+                                Values.W += (*PixelPointer2).Alpha * (float)TempWeight;
+                                ++PixelPointer2;
+                                Weight += (float)TempWeight;
                             }
                         }
-                        if (Weight == 0)
-                            Weight = 1;
-                        if (Weight > 0)
-                        {
-                            Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                            (*OutputPointer2).Red = (byte)Values.X;
-                            (*OutputPointer2).Green = (byte)Values.Y;
-                            (*OutputPointer2).Blue = (byte)Values.Z;
-                            (*OutputPointer2).Alpha = (byte)Values.W;
-                            ++OutputPointer2;
-                        }
-                        else
-                            ++OutputPointer2;
                     }
+                    if (Weight == 0)
+                        Weight = 1;
+                    if (Weight > 0)
+                    {
+                        Values = Vector4.Clamp(Values, Vector4.Zero, new Vector4(255, 255, 255, 255));
+                        (*OutputPointer2).Red = (byte)Values.X;
+                        (*OutputPointer2).Green = (byte)Values.Y;
+                        (*OutputPointer2).Blue = (byte)Values.Z;
+                        (*OutputPointer2).Alpha = (byte)Values.W;
+                        ++OutputPointer2;
+                    }
+                    else
+                        ++OutputPointer2;
                 }
-            });
-            return image;
-        }
-
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The matrix used for the transformation</returns>
-        protected abstract Matrix3x2 GetMatrix(Image image, Rectangle targetLocation);
+            }
+        });
+        return image;
     }
+
+    /// <summary>
+    /// Gets the matrix.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The matrix used for the transformation</returns>
+    protected abstract Matrix3x2 GetMatrix(Image image, Rectangle targetLocation);
 }

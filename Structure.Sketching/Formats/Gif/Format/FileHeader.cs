@@ -18,50 +18,49 @@ using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.IO;
 using System.IO;
 
-namespace Structure.Sketching.Formats.Gif.Format
+namespace Structure.Sketching.Formats.Gif.Format;
+
+/// <summary>
+/// File header
+/// </summary>
+/// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
+public class FileHeader : SectionBase
 {
     /// <summary>
-    /// File header
+    /// Gets the header.
     /// </summary>
-    /// <seealso cref="Structure.Sketching.Formats.Gif.Format.BaseClasses.SectionBase" />
-    public class FileHeader : SectionBase
+    /// <value>
+    /// The header.
+    /// </value>
+    public byte[] Header => new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 };
+
+    /// <summary>
+    /// Gets the size.
+    /// </summary>
+    /// <value>
+    /// The size.
+    /// </value>
+    public static int Size => 6;
+
+    /// <summary>
+    /// Reads the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The FileHeader section read from the stream</returns>
+    public static FileHeader Read(Stream stream)
     {
-        /// <summary>
-        /// Gets the header.
-        /// </summary>
-        /// <value>
-        /// The header.
-        /// </value>
-        public byte[] Header => new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 };
+        stream.Seek(Size, SeekOrigin.Current);
+        return new FileHeader();
+    }
 
-        /// <summary>
-        /// Gets the size.
-        /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
-        public static int Size => 6;
-
-        /// <summary>
-        /// Reads the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The FileHeader section read from the stream</returns>
-        public static FileHeader Read(Stream stream)
-        {
-            stream.Seek(Size, SeekOrigin.Current);
-            return new FileHeader();
-        }
-
-        /// <summary>
-        /// Writes the specified writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <returns>True if it succeeds, false otherwise</returns>
-        public override bool Write(EndianBinaryWriter writer)
-        {
-            writer.Write(Header, 0, Header.Length);
-            return true;
-        }
+    /// <summary>
+    /// Writes the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer.</param>
+    /// <returns>True if it succeeds, false otherwise</returns>
+    public override bool Write(EndianBinaryWriter writer)
+    {
+        writer.Write(Header, 0, Header.Length);
+        return true;
     }
 }

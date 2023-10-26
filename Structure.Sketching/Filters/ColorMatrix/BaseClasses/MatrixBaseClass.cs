@@ -19,52 +19,51 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using System.Threading.Tasks;
 
-namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses
+namespace Structure.Sketching.Filters.ColorMatrix.BaseClasses;
+
+/// <summary>
+/// Color matrix base class
+/// </summary>
+public abstract class MatrixBaseClass : IFilter
 {
     /// <summary>
-    /// Color matrix base class
+    /// Gets the matrix.
     /// </summary>
-    public abstract class MatrixBaseClass : IFilter
+    /// <value>The matrix.</value>
+    public abstract Matrix5x5 Matrix { get; }
+
+    /// <summary>
+    /// Implements the operator *.
+    /// </summary>
+    /// <param name="value1">The value1.</param>
+    /// <param name="value2">The value2.</param>
+    /// <returns>The result of the operator.</returns>
+    public static MatrixBaseClass operator *(MatrixBaseClass value1, MatrixBaseClass value2)
     {
-        /// <summary>
-        /// Gets the matrix.
-        /// </summary>
-        /// <value>The matrix.</value>
-        public abstract Matrix5x5 Matrix { get; }
+        return new ColorMatrix(value1.Matrix * value2.Matrix);
+    }
 
-        /// <summary>
-        /// Implements the operator *.
-        /// </summary>
-        /// <param name="value1">The value1.</param>
-        /// <param name="value2">The value2.</param>
-        /// <returns>The result of the operator.</returns>
-        public static MatrixBaseClass operator *(MatrixBaseClass value1, MatrixBaseClass value2)
+    /// <summary>
+    /// Applies the specified image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="targetLocation">The target location.</param>
+    /// <returns>The image</returns>
+    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    {
+        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, (y, _) =>
         {
-            return new ColorMatrix(value1.Matrix * value2.Matrix);
-        }
-
-        /// <summary>
-        /// Applies the specified image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <param name="targetLocation">The target location.</param>
-        /// <returns>The image</returns>
-        public unsafe Image Apply(Image image, Rectangle targetLocation = default)
-        {
-            targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-            Parallel.For(targetLocation.Bottom, targetLocation.Top, (y, _) =>
+            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                Color* pointer2 = pointer;
+                for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    Color* pointer2 = pointer;
-                    for (int x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        *pointer2 = Matrix * *pointer2;
-                        ++pointer2;
-                    }
+                    *pointer2 = Matrix * *pointer2;
+                    ++pointer2;
                 }
-            });
-            return image;
-        }
+            }
+        });
+        return image;
     }
 }

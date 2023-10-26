@@ -14,38 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses
+namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
+
+/// <summary>
+/// Huffman spec data holder
+/// </summary>
+public class HuffmanSpec
 {
     /// <summary>
-    /// Huffman spec data holder
+    /// Initializes a new instance of the <see cref="HuffmanSpec" /> class.
     /// </summary>
-    public class HuffmanSpec
+    /// <param name="count">The count.</param>
+    /// <param name="values">The values.</param>
+    public HuffmanSpec(byte[] count, byte[] values)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HuffmanSpec" /> class.
-        /// </summary>
-        /// <param name="count">The count.</param>
-        /// <param name="values">The values.</param>
-        public HuffmanSpec(byte[] count, byte[] values)
-        {
-            Count = count;
-            Values = values;
-        }
-
-        /// <summary>
-        /// Gets the count.
-        /// </summary>
-        /// <value>
-        /// The count.
-        /// </value>
-        public byte[] Count { get; private set; }
-
-        /// <summary>
-        /// Gets the values.
-        /// </summary>
-        /// <value>
-        /// The values.
-        /// </value>
-        public byte[] Values { get; private set; }
+        Count = count;
+        Values = values;
     }
+
+    /// <summary>
+    /// Gets the count.
+    /// </summary>
+    /// <value>
+    /// The count.
+    /// </value>
+    public byte[] Count { get; private set; }
+
+    /// <summary>
+    /// Gets the values.
+    /// </summary>
+    /// <value>
+    /// The values.
+    /// </value>
+    public byte[] Values { get; private set; }
 }
