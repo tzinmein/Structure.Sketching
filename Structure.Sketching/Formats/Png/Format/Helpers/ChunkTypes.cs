@@ -142,8 +142,7 @@ public class ChunkTypes
     /// </returns>
     public static implicit operator ChunkTypes(string value)
     {
-        if (string.IsNullOrEmpty(value)) return new ChunkTypes(string.Empty);
-        return new ChunkTypes(value);
+        return string.IsNullOrEmpty(value) ? new ChunkTypes(string.Empty) : new ChunkTypes(value);
     }
 
     /// <summary>
@@ -155,8 +154,7 @@ public class ChunkTypes
     /// </returns>
     public static implicit operator string(ChunkTypes value)
     {
-        if (value == null) return string.Empty;
-        return value.Value;
+        return value == null ? string.Empty : value.Value;
     }
 
     /// <summary>
@@ -196,9 +194,7 @@ public class ChunkTypes
     /// </returns>
     public override bool Equals(object obj)
     {
-        if (!(obj is ChunkTypes value2))
-            return false;
-        return this == value2;
+        return obj is ChunkTypes value2 && this == value2;
     }
 
     /// <summary>

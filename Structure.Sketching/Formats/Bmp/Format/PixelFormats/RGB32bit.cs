@@ -52,8 +52,7 @@ public class Rgb32Bit : PixelFormatBase
             if (sourceY >= height)
                 sourceY = height - 1;
             var sourceRowOffset = sourceY * (width * (int)Bpp + alignment);
-            var destinationY = y;
-            var destinationRowOffset = destinationY * width * 4;
+            var destinationRowOffset = y * width * 4;
             for (var x = 0; x < width; ++x)
             {
                 var sourceX = x * (int)Bpp;
@@ -90,8 +89,7 @@ public class Rgb32Bit : PixelFormatBase
             if (sourceY >= height)
                 sourceY = height - 1;
             var sourceRowOffset = sourceY * width * 4;
-            var destinationY = y;
-            var destinationRowOffset = destinationY * (width * (int)Bpp + alignment);
+            var destinationRowOffset = y * (width * (int)Bpp + alignment);
             for (var x = 0; x < width; ++x)
             {
                 var sourceX = x * 4;

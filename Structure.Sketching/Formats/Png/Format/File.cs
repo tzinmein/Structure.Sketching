@@ -218,7 +218,7 @@ public class File : FileBase
     /// </summary>
     /// <param name="stream">The stream.</param>
     /// <returns>A list of chunks from the stream</returns>
-    private IEnumerable<Chunk> ReadChunks(Stream stream)
+    private static IEnumerable<Chunk> ReadChunks(Stream stream)
     {
         var results = new List<Chunk>();
         while (true)

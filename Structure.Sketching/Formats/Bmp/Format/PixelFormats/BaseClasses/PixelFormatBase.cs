@@ -58,84 +58,87 @@ public abstract class PixelFormatBase : IPixelFormat
     /// <returns>The byte array of the data</returns>
     public byte[] Read(Header header, Stream stream)
     {
-        if (header.Compression == Compression.Rgb
-            || header.Compression == Compression.Bitfields)
+        switch (header.Compression)
         {
-            var width = header.Width;
-            var height = header.Height;
-            var dataWidth = width;
-            var alignment = (int)(4 - width * Bpp % 4) % 4;
-            var size = (int)(dataWidth * Bpp + alignment) * height;
-            if (size < header.ImageSize)
-                size = header.ImageSize;
-            var data = new byte[size];
-            stream.Read(data, 0, size);
-            return data;
-        }
-        if (header.Compression == Compression.Rle8)
-        {
-            var width = header.Width;
-            var height = header.Height;
-            var alignment = (int)(4 - width * Bpp % 4) % 4;
-            var tempData = new byte[2048];
-            using (var memStream = new MemoryStream())
+            case Compression.Rgb or Compression.Bitfields:
             {
-                var length = 0;
-                while ((length = stream.Read(tempData, 0, 2048)) > 0)
-                {
-                    memStream.Write(tempData, 0, length);
-                }
-                tempData = memStream.ToArray();
+                var width = header.Width;
+                var height = header.Height;
+                var alignment = (int)(4 - width * Bpp % 4) % 4;
+                var size = (int)(width * Bpp + alignment) * height;
+                if (size < header.ImageSize)
+                    size = header.ImageSize;
+                var data = new byte[size];
+                stream.Read(data, 0, size);
+                return data;
             }
-            using (var memStream = new MemoryStream())
+            case Compression.Rle8:
             {
-                for (var x = 0; x < tempData.Length;)
+                var width = header.Width;
+                var alignment = (int)(4 - width * Bpp % 4) % 4;
+                var tempData = new byte[2048];
+                using (var memStream = new MemoryStream())
                 {
-                    if (tempData[x] == 0)
+                    int length;
+                    while ((length = stream.Read(tempData, 0, 2048)) > 0)
                     {
-                        ++x;
-                        switch (tempData[x])
+                        memStream.Write(tempData, 0, length);
+                    }
+                    tempData = memStream.ToArray();
+                }
+                using (var memStream = new MemoryStream())
+                {
+                    for (var x = 0; x < tempData.Length;)
+                    {
+                        if (tempData[x] == 0)
                         {
-                            case 0:
-                                for (var y = 0; y < alignment; ++y)
-                                {
-                                    memStream.WriteByte(0);
-                                }
-                                ++x;
-                                break;
+                            ++x;
+                            switch (tempData[x])
+                            {
+                                case 0:
+                                    for (var y = 0; y < alignment; ++y)
+                                    {
+                                        memStream.WriteByte(0);
+                                    }
+                                    ++x;
+                                    break;
 
-                            case 1:
-                                return memStream.ToArray();
+                                case 1:
+                                    return memStream.ToArray();
 
-                            case 2:
-                                break;
+                                case 2:
+                                    break;
 
-                            default:
-                                int runLength = tempData[x];
-                                ++x;
-                                var absoluteAlignment = (2 - runLength % 2) % 2;
-                                for (var y = 0; y < runLength; ++y, ++x)
-                                {
-                                    memStream.WriteByte(tempData[x]);
-                                }
-                                x += absoluteAlignment;
-                                break;
+                                default:
+                                    int runLength = tempData[x];
+                                    ++x;
+                                    var absoluteAlignment = (2 - runLength % 2) % 2;
+                                    for (var y = 0; y < runLength; ++y, ++x)
+                                    {
+                                        memStream.WriteByte(tempData[x]);
+                                    }
+                                    x += absoluteAlignment;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            int runLength = tempData[x];
+                            ++x;
+                            var value = tempData[x];
+                            ++x;
+                            for (var y = 0; y < runLength; ++y)
+                            {
+                                memStream.WriteByte(value);
+                            }
                         }
                     }
-                    else
-                    {
-                        int runLength = tempData[x];
-                        ++x;
-                        var value = tempData[x];
-                        ++x;
-                        for (var y = 0; y < runLength; ++y)
-                        {
-                            memStream.WriteByte(value);
-                        }
-                    }
                 }
+
+                break;
             }
         }
+
         return Array.Empty<byte>();
     }
 }

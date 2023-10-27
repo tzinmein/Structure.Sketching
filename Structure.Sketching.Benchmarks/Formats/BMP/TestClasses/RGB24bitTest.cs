@@ -33,8 +33,7 @@ public unsafe class Rgb24BitTest : PixelFormatBase
             if (sourceY >= height)
                 sourceY = height - 1;
             var sourceRowOffset = sourceY * (width * (int)Bpp + alignment);
-            var destinationY = y;
-            var destinationRowOffset = destinationY * width * 4;
+            var destinationRowOffset = y * width * 4;
             fixed (byte* dataFixed = &data[sourceRowOffset])
             fixed (byte* returnValueFixed = &returnValue[destinationRowOffset])
             {
@@ -77,8 +76,7 @@ public unsafe class Rgb24BitTest : PixelFormatBase
             if (sourceY >= height)
                 sourceY = height - 1;
             var sourceRowOffset = sourceY * width * 4;
-            var destinationY = y;
-            var destinationRowOffset = destinationY * (width * (int)Bpp + alignment);
+            var destinationRowOffset = y * (width * (int)Bpp + alignment);
             fixed (byte* dataFixed = &data[sourceRowOffset])
             fixed (byte* returnValueFixed = &returnValue[destinationRowOffset])
             {

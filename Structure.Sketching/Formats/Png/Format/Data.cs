@@ -21,10 +21,10 @@ using Structure.Sketching.Formats.Png.Format.Enums;
 using Structure.Sketching.Formats.Png.Format.Filters;
 using Structure.Sketching.Formats.Png.Format.Filters.Interfaces;
 using Structure.Sketching.Formats.Png.Format.Helpers;
-using Structure.Sketching.Formats.Png.Format.Helpers.ZLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 
 namespace Structure.Sketching.Formats.Png.Format;
@@ -269,7 +269,7 @@ public class Data
         );
 
         using var tempMemoryStream = new MemoryStream();
-        using (var tempDeflateStream = new ZlibDeflateStream(tempMemoryStream, 6))
+        using (var tempDeflateStream = new ZLibStream(tempMemoryStream, CompressionMode.Compress))
         {
             tempDeflateStream.Write(data, 0, data.Length);
         }
@@ -285,7 +285,7 @@ public class Data
     /// <param name="colorTypeInformation">The color type information.</param>
     /// <param name="header">The header.</param>
     private void ReadScanlines(
-        MemoryStream dataStream,
+        Stream dataStream,
         Color[] pixels,
         IColorReader colorReader,
         ColorTypeInformation colorTypeInformation,
@@ -304,7 +304,7 @@ public class Data
             column = -1,
             row = 0;
 
-        using var decompressedStream = new InflateStream(dataStream);
+        using var decompressedStream = new ZLibStream(dataStream, CompressionMode.Decompress);
         using var stream = new MemoryStream();
         decompressedStream.CopyTo(stream);
         stream.Flush();
@@ -353,21 +353,21 @@ public class Data
                 }
             }
         }
-        //using (InflateStream CompressedStream = new InflateStream(dataStream))
+        //using (var compressedStream = new ZLibStream(dataStream, CompressionMode.Decompress))
         //{
         //    using (MemoryStream DecompressedStream = new MemoryStream())
         //    {
-        //        CompressedStream.CopyTo(DecompressedStream);
+        //        compressedStream.CopyTo(DecompressedStream);
         //        DecompressedStream.Flush();
         //        byte[] DecompressedArray = DecompressedStream.ToArray();
-        //        for (int y = 0, Column = 0; y < header.Height; ++y, Column += (ScanlineLength + 1))
+        //        for (int y = 0, Column = 0; y < header.Height; ++y, Column += (scanLineLength + 1))
         //        {
-        //            Array.Copy(DecompressedArray, Column + 1, CurrentScanline, 0, ScanlineLength);
+        //            Array.Copy(DecompressedArray, Column + 1, currentScanLine, 0, scanLineLength);
         //            if (DecompressedArray[Column] < 0)
         //                break;
-        //            byte[] Result = Filters[(FilterType)DecompressedArray[Column]].Decode(CurrentScanline, LastScanline, ScanlineStep);
+        //            byte[] Result = Filters[(FilterType)DecompressedArray[Column]].Decode(currentScanLine, lastScanLine, scanLineStep);
         //            colorReader.ReadScanline(Result, pixels, header, y);
-        //            Array.Copy(CurrentScanline, LastScanline, ScanlineLength);
+        //            Array.Copy(currentScanLine, lastScanLine, scanLineStep);
         //        }
         //    }
         //}

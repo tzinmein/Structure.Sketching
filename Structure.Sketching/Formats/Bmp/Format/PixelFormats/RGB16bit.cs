@@ -94,8 +94,7 @@ public class Rgb16Bit : PixelFormatBase
             if (sourceY >= height)
                 sourceY = height - 1;
             var sourceRowOffset = sourceY * width * 4;
-            var destinationY = y;
-            var destinationRowOffset = destinationY * (width * (int)Bpp + alignment);
+            var destinationRowOffset = y * (width * (int)Bpp + alignment);
             for (var x = 0; x < width; ++x)
             {
                 var sourceX = x * 4;

@@ -80,9 +80,9 @@ public class SinWave : IFilter
                 {
                     double value1 = 0;
                     double value2 = 0;
-                    if (Direction == Direction.RightToLeft || Direction == Direction.LeftToRight)
+                    if (Direction is Direction.RightToLeft or Direction.LeftToRight)
                         value1 = System.Math.Sin(x * Frequency * System.Math.PI / 180.0d) * Amplitude;
-                    if (Direction == Direction.BottomToTop || Direction == Direction.TopToBottom)
+                    if (Direction is Direction.BottomToTop or Direction.TopToBottom)
                         value2 = System.Math.Sin(y * Frequency * System.Math.PI / 180.0d) * Amplitude;
                     value1 = y - (int)value1;
                     value2 = x - (int)value2;
