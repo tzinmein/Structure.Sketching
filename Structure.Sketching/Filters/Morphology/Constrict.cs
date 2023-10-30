@@ -32,17 +32,17 @@ public class Constrict : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="Constrict"/> class.
     /// </summary>
-    /// <param name="apetureRadius">The apeture radius.</param>
-    public Constrict(int apetureRadius)
+    /// <param name="apertureRadius">The aperture radius.</param>
+    public Constrict(int apertureRadius)
     {
-        ApetureRadius = apetureRadius;
+        ApertureRadius = apertureRadius;
     }
 
     /// <summary>
-    /// Gets or sets the apeture radius.
+    /// Gets or sets the aperture radius.
     /// </summary>
-    /// <value>The apeture radius.</value>
-    public int ApetureRadius { get; set; }
+    /// <value>The aperture radius.</value>
+    public int ApertureRadius { get; set; }
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -55,8 +55,8 @@ public class Constrict : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
-        var apetureMin = -ApetureRadius;
-        var apetureMax = ApetureRadius;
+        var apertureMin = -ApertureRadius;
+        var apertureMax = ApertureRadius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
             fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
@@ -67,13 +67,13 @@ public class Constrict : IFilter
                     var rValue = byte.MaxValue;
                     var gValue = byte.MaxValue;
                     var bValue = byte.MaxValue;
-                    for (var y2 = apetureMin; y2 < apetureMax; ++y2)
+                    for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                     {
                         var tempY = y + y2;
-                        var tempX = x + apetureMin;
+                        var tempX = x + apertureMin;
                         if (tempY >= 0 && tempY < image.Height)
                         {
-                            var length = ApetureRadius * 2;
+                            var length = ApertureRadius * 2;
                             if (tempX < 0)
                             {
                                 length += tempX;

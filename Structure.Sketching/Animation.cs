@@ -108,7 +108,7 @@ public class Animation : IList<Image>
     /// <value>
     /// The frames.
     /// </value>
-    private List<Image> Frames { get; set; }
+    private List<Image> Frames { get; }
 
     /// <summary>
     /// Gets or sets the <see cref="Image"/> at the specified index.
@@ -120,15 +120,9 @@ public class Animation : IList<Image>
     /// <returns>The image at the index specified</returns>
     public Image this[int index]
     {
-        get
-        {
-            return ((IList<Image>)Frames)[index];
-        }
+        get => ((IList<Image>)Frames)[index];
 
-        set
-        {
-            ((IList<Image>)Frames)[index] = value;
-        }
+        set => ((IList<Image>)Frames)[index] = value;
     }
 
     /// <summary>

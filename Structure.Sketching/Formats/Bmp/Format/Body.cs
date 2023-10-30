@@ -56,7 +56,7 @@ public class Body
     /// <summary>
     /// The pixel formats
     /// </summary>
-    private static readonly Dictionary<int, IPixelFormat> PixelFormats = new Dictionary<int, IPixelFormat>
+    private static readonly Dictionary<int, IPixelFormat> PixelFormats = new()
     {
         [32] = new Rgb32Bit(),
         [24] = new Rgb24Bit(),

@@ -55,7 +55,7 @@ public class File : FileBase
     /// </value>
     public StartOfFrame SofSegment { get; private set; }
 
-    private Image _returnValue = new Image(1, 1);
+    private Image _returnValue = new(1, 1);
 
     /// <summary>
     /// Decodes the specified stream.
@@ -141,18 +141,18 @@ public class File : FileBase
         while (true)
         {
             var tempSegment = SegmentBase.Read(bytes, Segments);
-            if (tempSegment != null)
-            {
-                tempSegment.Setup(Segments);
-                if (!Segments.Contains(tempSegment))
-                    Segments.Add(tempSegment);
-                if (tempSegment.Type == SegmentTypes.EndOfImage)
-                    break;
-            }
+            if (tempSegment == null)
+                continue;
+            tempSegment.Setup(Segments);
+            if (!Segments.Contains(tempSegment))
+                Segments.Add(tempSegment);
+            if (tempSegment.Type == SegmentTypes.EndOfImage)
+                break;
         }
+
         var startOfScanSegment = Segments.OfType<StartOfScan>().FirstOrDefault();
-        if (startOfScanSegment == null)
-            throw new ImageException("No scan information found.");
-        return startOfScanSegment.Convert(_returnValue, Segments);
+        return startOfScanSegment == null
+            ? throw new ImageException("No scan information found.")
+            : startOfScanSegment.Convert(_returnValue, Segments);
     }
 }

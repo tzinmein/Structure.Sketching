@@ -134,9 +134,10 @@ public class Node
         {
             // Go to the next level down in the tree
             var shift = 7 - level;
-            var index = ((pixel.Red & Mask[level]) >> (shift - 2)) |
-                        ((pixel.Green & Mask[level]) >> (shift - 1)) |
-                        ((pixel.Blue & Mask[level]) >> shift);
+            var index =
+                ((pixel.Red & Mask[level]) >> (shift - 2))
+                | ((pixel.Green & Mask[level]) >> (shift - 1))
+                | ((pixel.Blue & Mask[level]) >> shift);
 
             var child = _children[index];
 
@@ -201,21 +202,20 @@ public class Node
     {
         var index = _paletteIndex;
 
-        if (!_leaf)
-        {
-            var shift = 7 - level;
-            var pixelIndex = ((pixel.Red & Mask[level]) >> (shift - 2)) |
-                             ((pixel.Green & Mask[level]) >> (shift - 1)) |
-                             ((pixel.Blue & Mask[level]) >> shift);
+        if (_leaf) return index;
+        var shift = 7 - level;
+        var pixelIndex =
+            ((pixel.Red & Mask[level]) >> (shift - 2))
+            | ((pixel.Green & Mask[level]) >> (shift - 1))
+            | ((pixel.Blue & Mask[level]) >> shift);
 
-            if (_children[pixelIndex] != null)
-            {
-                index = _children[pixelIndex].GetPaletteIndex(pixel, level + 1);
-            }
-            else
-            {
-                throw new Exception("Didn't expect this!");
-            }
+        if (_children[pixelIndex] != null)
+        {
+            index = _children[pixelIndex].GetPaletteIndex(pixel, level + 1);
+        }
+        else
+        {
+            throw new Exception("Didn't expect this!");
         }
 
         return index;
@@ -247,15 +247,13 @@ public class Node
         // Loop through all children and add their information to this node
         for (var index = 0; index < 8; index++)
         {
-            if (_children[index] != null)
-            {
-                _red += _children[index]._red;
-                _green += _children[index]._green;
-                _blue += _children[index]._blue;
-                _pixelCount += _children[index]._pixelCount;
-                ++childNodes;
-                _children[index] = null;
-            }
+            if (_children[index] == null) continue;
+            _red += _children[index]._red;
+            _green += _children[index]._green;
+            _blue += _children[index]._blue;
+            _pixelCount += _children[index]._pixelCount;
+            ++childNodes;
+            _children[index] = null;
         }
 
         // Now change this to a leaf node

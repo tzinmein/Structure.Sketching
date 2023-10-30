@@ -32,26 +32,26 @@ public class Kuwahara : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="Kuwahara"/> class.
     /// </summary>
-    /// <param name="apetureRadius">The apeture radius.</param>
-    public Kuwahara(int apetureRadius)
+    /// <param name="apertureRadius">The aperture radius.</param>
+    public Kuwahara(int apertureRadius)
     {
-        ApetureRadius = apetureRadius;
-        _apetureMinX = new[] { -ApetureRadius, 0, -ApetureRadius, 0 };
-        _apetureMaxX = new[] { 0, ApetureRadius, 0, ApetureRadius };
-        _apetureMinY = new[] { -ApetureRadius, -ApetureRadius, 0, 0 };
-        _apetureMaxY = new[] { 0, 0, ApetureRadius, ApetureRadius };
+        ApertureRadius = apertureRadius;
+        _apertureMinX = new[] { -ApertureRadius, 0, -ApertureRadius, 0 };
+        _apertureMaxX = new[] { 0, ApertureRadius, 0, ApertureRadius };
+        _apertureMinY = new[] { -ApertureRadius, -ApertureRadius, 0, 0 };
+        _apertureMaxY = new[] { 0, 0, ApertureRadius, ApertureRadius };
     }
 
     /// <summary>
-    /// Gets or sets the apeture radius.
+    /// Gets or sets the aperture radius.
     /// </summary>
-    /// <value>The apeture radius.</value>
-    public int ApetureRadius { get; set; }
+    /// <value>The aperture radius.</value>
+    public int ApertureRadius { get; set; }
 
-    private readonly int[] _apetureMaxX;
-    private readonly int[] _apetureMaxY;
-    private readonly int[] _apetureMinX;
-    private readonly int[] _apetureMinY;
+    private readonly int[] _apertureMaxX;
+    private readonly int[] _apertureMaxY;
+    private readonly int[] _apertureMinX;
+    private readonly int[] _apertureMinY;
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -61,14 +61,15 @@ public class Kuwahara : IFilter
     /// <returns>The image</returns>
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation = targetLocation == default
+            ? new Rectangle(0, 0, image.Width, image.Height)
+            : targetLocation.Clamp(image);
         var result = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, result, result.Length);
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
             fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                var sourcePointer = pointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     uint[] rValues = { 0, 0, 0, 0 };
@@ -84,38 +85,34 @@ public class Kuwahara : IFilter
 
                     for (var i = 0; i < 4; ++i)
                     {
-                        for (var x2 = _apetureMinX[i]; x2 < _apetureMaxX[i]; ++x2)
+                        for (var x2 = _apertureMinX[i]; x2 < _apertureMaxX[i]; ++x2)
                         {
                             var tempX = x + x2;
-                            if (tempX >= 0 && tempX < image.Width)
+                            if (tempX < 0 || tempX >= image.Width) continue;
+                            for (var y2 = _apertureMinY[i]; y2 < _apertureMaxY[i]; ++y2)
                             {
-                                for (var y2 = _apetureMinY[i]; y2 < _apetureMaxY[i]; ++y2)
-                                {
-                                    var tempY = y + y2;
-                                    if (tempY >= 0 && tempY < image.Height)
-                                    {
-                                        rValues[i] += image.Pixels[tempY * image.Width + tempX].Red;
-                                        gValues[i] += image.Pixels[tempY * image.Width + tempX].Green;
-                                        bValues[i] += image.Pixels[tempY * image.Width + tempX].Blue;
+                                var tempY = y + y2;
+                                if (tempY < 0 || tempY >= image.Height) continue;
+                                rValues[i] += image.Pixels[tempY * image.Width + tempX].Red;
+                                gValues[i] += image.Pixels[tempY * image.Width + tempX].Green;
+                                bValues[i] += image.Pixels[tempY * image.Width + tempX].Blue;
 
-                                        if (image.Pixels[tempY * image.Width + tempX].Red > maxRValue[i])
-                                            maxRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
-                                        else if (image.Pixels[tempY * image.Width + tempX].Red < minRValue[i])
-                                            minRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
+                                if (image.Pixels[tempY * image.Width + tempX].Red > maxRValue[i])
+                                    maxRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
+                                else if (image.Pixels[tempY * image.Width + tempX].Red < minRValue[i])
+                                    minRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
 
-                                        if (image.Pixels[tempY * image.Width + tempX].Green > maxGValue[i])
-                                            maxGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
-                                        else if (image.Pixels[tempY * image.Width + tempX].Green < minGValue[i])
-                                            minGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
+                                if (image.Pixels[tempY * image.Width + tempX].Green > maxGValue[i])
+                                    maxGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
+                                else if (image.Pixels[tempY * image.Width + tempX].Green < minGValue[i])
+                                    minGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
 
-                                        if (image.Pixels[tempY * image.Width + tempX].Blue > maxBValue[i])
-                                            maxBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
-                                        else if (image.Pixels[tempY * image.Width + tempX].Blue < minBValue[i])
-                                            minBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
+                                if (image.Pixels[tempY * image.Width + tempX].Blue > maxBValue[i])
+                                    maxBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
+                                else if (image.Pixels[tempY * image.Width + tempX].Blue < minBValue[i])
+                                    minBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
 
-                                        ++numPixels[i];
-                                    }
-                                }
+                                ++numPixels[i];
                             }
                         }
                     }
@@ -124,16 +121,16 @@ public class Kuwahara : IFilter
                     var minDifference = uint.MaxValue;
                     for (var i = 0; i < 4; ++i)
                     {
-                        var currentDifference = maxRValue[i] - minRValue[i] + (maxGValue[i] - minGValue[i]) + (maxBValue[i] - minBValue[i]);
-                        if (currentDifference < minDifference && numPixels[i] > 0)
-                        {
-                            j = i;
-                            minDifference = currentDifference;
-                        }
+                        var currentDifference = maxRValue[i] - minRValue[i] + (maxGValue[i] - minGValue[i]) +
+                                                (maxBValue[i] - minBValue[i]);
+                        if (currentDifference >= minDifference || numPixels[i] <= 0) continue;
+                        j = i;
+                        minDifference = currentDifference;
                     }
-                    rValues[j] = rValues[j] / numPixels[j];
-                    gValues[j] = gValues[j] / numPixels[j];
-                    bValues[j] = bValues[j] / numPixels[j];
+
+                    rValues[j] /= numPixels[j];
+                    gValues[j] /= numPixels[j];
+                    bValues[j] /= numPixels[j];
 
                     result[y * image.Width + x].Red = (byte)rValues[j];
                     result[y * image.Width + x].Green = (byte)gValues[j];

@@ -30,7 +30,7 @@ public class Deuteranopia : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         .625f, .7f, 0f, 0f, 0f,
         .375f, .3f, .3f, 0f, 0f,
         0f, 0f, .7f, 0f, 0f,

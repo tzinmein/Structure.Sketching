@@ -69,10 +69,10 @@ public class DefineHuffmanTable : SegmentBase
     private readonly HuffmanSpec[] _theHuffmanSpec =
     {
         // Luminance DC.
-        new HuffmanSpec(
+        new(
             new byte[] { 0, 1, 5, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
             new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }),
-        new HuffmanSpec(
+        new(
             new byte[] { 0, 2, 1, 3, 3, 2, 4, 3, 5, 5, 4, 4, 0, 0, 1, 125 },
             new byte[]
             {
@@ -98,12 +98,12 @@ public class DefineHuffmanTable : SegmentBase
                 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8,
                 0xf9, 0xfa
             }),
-        new HuffmanSpec(
+        new(
             new byte[] { 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
             new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }),
 
         // Chrominance AC.
-        new HuffmanSpec(
+        new(
             new byte[] { 0, 2, 1, 2, 4, 4, 3, 4, 7, 5, 4, 4, 0, 1, 2, 119 },
             new byte[]
             {
@@ -193,7 +193,7 @@ public class DefineHuffmanTable : SegmentBase
                 for (var j = 0; j < ncodes[i]; j++)
                 {
                     var base2 = (byte)(code << (7 - i));
-                    var lutValue = (ushort)(((ushort)h.DecodedValues[x] << 8) | (2 + i));
+                    var lutValue = (ushort)((h.DecodedValues[x] << 8) | (2 + i));
                     for (var k = 0; k < 1 << (7 - i); k++)
                         h.LookUpTable[base2 | k] = lutValue;
                     code++;

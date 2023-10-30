@@ -30,7 +30,7 @@ public class Protanomaly : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         .817f, .333f, 0f, 0f, 0f,
         .183f, .667f, .125f, 0f, 0f,
         0f, 0f, .875f, 0f, 0f,

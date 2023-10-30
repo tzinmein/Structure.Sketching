@@ -87,8 +87,10 @@ public abstract class ResamplingFilterBase : IResamplingFilter
                 left = 0;
             if (right >= sourceSize)
                 right = sourceSize - 1;
-            result[x] = new Weights();
-            result[x].Values = new double[(right - left) + 1];
+            result[x] = new Weights
+            {
+                Values = new double[(right - left) + 1]
+            };
             for (int y = left, count = 0; y <= right; ++y, ++count)
             {
                 result[x].Values[count] = scale < 1f ?

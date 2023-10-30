@@ -30,7 +30,7 @@ public class Protanopia : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         .567f, .558f, 0f, 0f, 0f,
         .433f, .442f, .242f, 0f, 0f,
         0f, 0f, .758f, 0f, 0f,

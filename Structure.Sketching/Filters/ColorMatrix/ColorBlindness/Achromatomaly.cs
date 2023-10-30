@@ -30,7 +30,7 @@ public class Achromatomaly : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         .618f, .163f, .163f, 0f, 0f,
         .320f, .775f, .320f, 0f, 0f,
         .062f, .062f, .516f, 0f, 0f,

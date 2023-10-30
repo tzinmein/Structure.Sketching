@@ -91,7 +91,6 @@ public abstract class Convolution2DBaseClass : IFilter
                     float weightY = 0;
                     var xCurrent = -Width >> 1;
                     var yCurrent = -Height >> 1;
-                    var start = 0;
                     fixed (float* xMatrixPointer = &XMatrix[0])
                     {
                         fixed (float* yMatrixPointer = &YMatrix[0])
@@ -110,7 +109,7 @@ public abstract class Convolution2DBaseClass : IFilter
                                 {
                                     if (*xMatrixValue != 0 || *yMatrixValue != 0)
                                     {
-                                        start = (yCurrent + y) * image.Width + x + xCurrent;
+                                        var start = (yCurrent + y) * image.Width + x + xCurrent;
                                         var tempPixel = tempPixels[start];
                                         xValue += new Vector4(*xMatrixValue * tempPixel.Red,
                                             *xMatrixValue * tempPixel.Green,

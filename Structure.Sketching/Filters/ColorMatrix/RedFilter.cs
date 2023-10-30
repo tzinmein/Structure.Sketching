@@ -32,7 +32,7 @@ public class RedFilter : MatrixBaseClass
     /// <value>
     /// The matrix.
     /// </value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         1f, 0f, 0f, 0f, 0f,
         0f, 0f, 0f, 0f, 0f,
         0f, 0f, 0f, 0f, 0f,

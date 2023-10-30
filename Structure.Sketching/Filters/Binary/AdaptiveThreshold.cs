@@ -35,23 +35,23 @@ public class AdaptiveThreshold : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="AdaptiveThreshold" /> class.
     /// </summary>
-    /// <param name="apetureRadius">The apeture radius.</param>
+    /// <param name="apertureRadius">The aperture radius.</param>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <param name="threshold">The threshold.</param>
-    public AdaptiveThreshold(int apetureRadius, Color color1, Color color2, float threshold)
+    public AdaptiveThreshold(int apertureRadius, Color color1, Color color2, float threshold)
     {
         Threshold = threshold;
         Color2 = color2;
         Color1 = color1;
-        ApetureRadius = apetureRadius;
+        ApertureRadius = apertureRadius;
     }
 
     /// <summary>
-    /// Gets or sets the apeture radius.
+    /// Gets or sets the aperture radius.
     /// </summary>
-    /// <value>The apeture radius.</value>
-    public int ApetureRadius { get; set; }
+    /// <value>The aperture radius.</value>
+    public int ApertureRadius { get; set; }
 
     /// <summary>
     /// Gets or sets the color1.
@@ -85,26 +85,32 @@ public class AdaptiveThreshold : IFilter
     /// <returns>The image</returns>
     public unsafe Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         new Greyscale709().Apply(image, targetLocation);
         var tempValues = new Color[image.Width * image.Height];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
-        var apetureMin = -ApetureRadius;
-        var apetureMax = ApetureRadius;
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
+        var apertureMin = -ApertureRadius;
+        var apertureMax = ApertureRadius;
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
-                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
+                fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
                 {
-                    var rValues = new List<byte>();
-                    for (var x2 = apetureMin; x2 < apetureMax; ++x2)
+                    var targetPointer2 = targetPointer;
+                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                     {
-                        var tempX = x + x2;
-                        if (tempX >= targetLocation.Left && tempX < targetLocation.Right)
+                        var rValues = new List<byte>();
+                        for (var x2 = apertureMin; x2 < apertureMax; ++x2)
                         {
-                            for (var y2 = apetureMin; y2 < apetureMax; ++y2)
+                            var tempX = x + x2;
+                            if (tempX < targetLocation.Left || tempX >= targetLocation.Right)
+                                continue;
+                            for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                             {
                                 var tempY = y + y2;
                                 if (tempY >= targetLocation.Bottom && tempY < targetLocation.Top)
@@ -113,12 +119,13 @@ public class AdaptiveThreshold : IFilter
                                 }
                             }
                         }
+                        *targetPointer2 =
+                            rValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
+                        ++targetPointer2;
                     }
-                    *targetPointer2 = rValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
-                    ++targetPointer2;
                 }
             }
-        });
+        );
         return image.ReCreate(image.Width, image.Height, tempValues);
     }
 }

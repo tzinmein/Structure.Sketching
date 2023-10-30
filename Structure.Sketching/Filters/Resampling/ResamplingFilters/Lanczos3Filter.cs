@@ -46,11 +46,8 @@ public class Lanczos3Filter : ResamplingFilterBase
 
     private double Sin(double value)
     {
-        if (value != 0)
-        {
-            value *= Math.PI;
-            return Math.Sin(value) / value;
-        }
-        return 1;
+        if (value == 0) return 1;
+        value *= Math.PI;
+        return Math.Sin(value) / value;
     }
 }

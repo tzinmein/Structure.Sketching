@@ -220,11 +220,9 @@ public partial class Image
         {
             for (var x = 0; x < tempImage.Width; ++x)
             {
-                if (showLine)
-                {
-                    var rValue = tempImage.Pixels[y * tempImage.Width + x].Red / 255f;
-                    builder.Append(AsciiCharacters[(int)(rValue * AsciiCharacters.Length)]);
-                }
+                if (!showLine) continue;
+                var rValue = tempImage.Pixels[y * tempImage.Width + x].Red / 255f;
+                builder.Append(AsciiCharacters[(int)(rValue * AsciiCharacters.Length)]);
             }
             if (showLine)
             {
@@ -247,11 +245,8 @@ public partial class Image
     public string ToString(FileFormats desiredFormat)
     {
         using var stream = new MemoryStream();
-        if (Save(stream, desiredFormat))
-        {
-            var tempArray = stream.ToArray();
-            return Convert.ToBase64String(tempArray, 0, tempArray.Length);
-        }
-        return string.Empty;
+        if (!Save(stream, desiredFormat)) return string.Empty;
+        var tempArray = stream.ToArray();
+        return Convert.ToBase64String(tempArray, 0, tempArray.Length);
     }
 }

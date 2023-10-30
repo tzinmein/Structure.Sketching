@@ -1,5 +1,4 @@
 ﻿/*
-Copyright 2016 James Craig
 Copyright 2023 Ho Tzin Mein
 
 Licensed under the Apache License, Version 2.0 (the "License");

@@ -35,46 +35,40 @@ public class ConvolutionFilter : ConvolutionBaseClass
     /// <param name="offset">The offset.</param>
     public ConvolutionFilter(float[] matrix, int width, int height, bool absolute, float offset)
     {
-        _matrix = matrix;
-        _width = width;
-        _height = height;
-        _absolute = absolute;
-        _offset = offset;
+        Matrix = matrix;
+        Width = width;
+        Height = height;
+        Absolute = absolute;
+        Offset = offset;
     }
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="ConvolutionBaseClass"/> is absolute.
     /// </summary>
     /// <value><c>true</c> if absolute; otherwise, <c>false</c>.</value>
-    public override bool Absolute => _absolute;
+    public override bool Absolute { get; }
 
     /// <summary>
     /// Gets the height.
     /// </summary>
     /// <value>The height.</value>
-    public override int Height => _height;
+    public override int Height { get; }
 
     /// <summary>
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override float[] Matrix => _matrix;
+    public override float[] Matrix { get; }
 
     /// <summary>
     /// Gets the offset.
     /// </summary>
     /// <value>The offset.</value>
-    public override float Offset => _offset;
+    public override float Offset { get; }
 
     /// <summary>
     /// Gets the width.
     /// </summary>
     /// <value>The width.</value>
-    public override int Width => _width;
-
-    private readonly bool _absolute;
-    private readonly int _height;
-    private readonly float[] _matrix;
-    private readonly float _offset;
-    private readonly int _width;
+    public override int Width { get; }
 }

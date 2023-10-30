@@ -34,17 +34,17 @@ public class Median : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="Median"/> class.
     /// </summary>
-    /// <param name="apetureRadius">The apeture radius.</param>
-    public Median(int apetureRadius)
+    /// <param name="apertureRadius">The aperture radius.</param>
+    public Median(int apertureRadius)
     {
-        ApetureRadius = apetureRadius;
+        ApertureRadius = apertureRadius;
     }
 
     /// <summary>
-    /// Gets or sets the apeture radius.
+    /// Gets or sets the aperture radius.
     /// </summary>
-    /// <value>The apeture radius.</value>
-    public int ApetureRadius { get; set; }
+    /// <value>The aperture radius.</value>
+    public int ApertureRadius { get; set; }
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -57,33 +57,28 @@ public class Median : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
-        var apetureMin = -ApetureRadius;
-        var apetureMax = ApetureRadius;
+        var apertureMin = -ApertureRadius;
+        var apertureMax = ApertureRadius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
             fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var rValues = new List<byte>();
                     var gValues = new List<byte>();
                     var bValues = new List<byte>();
-                    for (var x2 = apetureMin; x2 < apetureMax; ++x2)
+                    for (var x2 = apertureMin; x2 < apertureMax; ++x2)
                     {
                         var tempX = x + x2;
-                        if (tempX >= targetLocation.Left && tempX < targetLocation.Right)
+                        if (tempX < targetLocation.Left || tempX >= targetLocation.Right) continue;
+                        for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                         {
-                            for (var y2 = apetureMin; y2 < apetureMax; ++y2)
-                            {
-                                var tempY = y + y2;
-                                if (tempY >= targetLocation.Bottom && tempY < targetLocation.Top)
-                                {
-                                    rValues.Add(image.Pixels[tempY * image.Width + tempX].Red);
-                                    gValues.Add(image.Pixels[tempY * image.Width + tempX].Green);
-                                    bValues.Add(image.Pixels[tempY * image.Width + tempX].Blue);
-                                }
-                            }
+                            var tempY = y + y2;
+                            if (tempY < targetLocation.Bottom || tempY >= targetLocation.Top) continue;
+                            rValues.Add(image.Pixels[tempY * image.Width + tempX].Red);
+                            gValues.Add(image.Pixels[tempY * image.Width + tempX].Green);
+                            bValues.Add(image.Pixels[tempY * image.Width + tempX].Blue);
                         }
                     }
                     tempValues[y * image.Width + x].Red = rValues.OrderBy(_ => _).ElementAt(rValues.Count / 2);

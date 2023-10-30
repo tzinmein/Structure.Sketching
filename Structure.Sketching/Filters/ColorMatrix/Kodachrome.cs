@@ -32,7 +32,7 @@ public class Kodachrome : MatrixBaseClass
     /// <value>
     /// The matrix.
     /// </value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         0.6997023f, 0f, 0f, 0f, 0f,
         0f, 0.4609577f, 0f, 0f, 0f,
         0f, 0f, 0.397218f, 0f, 0f,

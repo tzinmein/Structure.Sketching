@@ -32,44 +32,13 @@ public class SobelEmboss : ConvolutionBaseClass
     /// <param name="direction">The direction.</param>
     public SobelEmboss(Direction direction = Direction.LeftToRight)
     {
-        switch (direction)
+        Matrix = direction switch
         {
-            case Direction.TopToBottom:
-                _matrix = new float[]
-                {
-                    1, 2, 1,
-                    0, 0, 0,
-                    -1, -2, -1
-                };
-                break;
-
-            case Direction.BottomToTop:
-                _matrix = new float[]
-                {
-                    -1, -2, -1,
-                    0, 0, 0,
-                    1, 2, 1
-                };
-                break;
-
-            case Direction.LeftToRight:
-                _matrix = new float[]
-                {
-                    -1, 0, 1,
-                    -2, 0, 2,
-                    -1, 0, 1
-                };
-                break;
-
-            default:
-                _matrix = new float[]
-                {
-                    1, 0, -1,
-                    2, 0, -2,
-                    1, 0, -1
-                };
-                break;
-        }
+            Direction.TopToBottom => new float[] { 1, 2, 1, 0, 0, 0, -1, -2, -1 },
+            Direction.BottomToTop => new float[] { -1, -2, -1, 0, 0, 0, 1, 2, 1 },
+            Direction.LeftToRight => new float[] { -1, 0, 1, -2, 0, 2, -1, 0, 1 },
+            _ => new float[] { 1, 0, -1, 2, 0, -2, 1, 0, -1 }
+        };
     }
 
     /// <summary>
@@ -88,7 +57,7 @@ public class SobelEmboss : ConvolutionBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override float[] Matrix => _matrix;
+    public override float[] Matrix { get; }
 
     /// <summary>
     /// Gets the offset.
@@ -101,6 +70,4 @@ public class SobelEmboss : ConvolutionBaseClass
     /// </summary>
     /// <value>The width.</value>
     public override int Width => 3;
-
-    private readonly float[] _matrix;
 }

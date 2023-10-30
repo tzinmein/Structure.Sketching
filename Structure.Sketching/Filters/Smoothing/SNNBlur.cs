@@ -32,17 +32,17 @@ public class SnnBlur : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="SnnBlur"/> class.
     /// </summary>
-    /// <param name="apetureRadius">The apeture radius.</param>
-    public SnnBlur(int apetureRadius)
+    /// <param name="apertureRadius">The aperture radius.</param>
+    public SnnBlur(int apertureRadius)
     {
-        ApetureRadius = apetureRadius;
+        ApertureRadius = apertureRadius;
     }
 
     /// <summary>
-    /// Gets or sets the apeture radius.
+    /// Gets or sets the aperture radius.
     /// </summary>
-    /// <value>The apeture radius.</value>
-    public int ApetureRadius { get; set; }
+    /// <value>The aperture radius.</value>
+    public int ApertureRadius { get; set; }
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -55,8 +55,8 @@ public class SnnBlur : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
-        var apetureMin = -ApetureRadius;
-        var apetureMax = ApetureRadius;
+        var apertureMin = -ApertureRadius;
+        var apertureMax = ApertureRadius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
             fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
@@ -68,36 +68,34 @@ public class SnnBlur : IFilter
                     uint gValue = 0;
                     uint bValue = 0;
                     var numPixels = 0;
-                    for (var x2 = apetureMin; x2 < apetureMax; ++x2)
+                    for (var x2 = apertureMin; x2 < apertureMax; ++x2)
                     {
                         var tempX1 = x + x2;
                         var tempX2 = x - x2;
-                        if (tempX1 >= targetLocation.Left && tempX1 < targetLocation.Right && tempX2 >= targetLocation.Left && tempX2 < targetLocation.Right)
+                        if (tempX1 < targetLocation.Left || tempX1 >= targetLocation.Right ||
+                            tempX2 < targetLocation.Left || tempX2 >= targetLocation.Right) continue;
+                        for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                         {
-                            for (var y2 = apetureMin; y2 < apetureMax; ++y2)
+                            var tempY1 = y + y2;
+                            var tempY2 = y - y2;
+                            if (tempY1 < targetLocation.Bottom || tempY1 >= targetLocation.Top ||
+                                tempY2 < targetLocation.Bottom || tempY2 >= targetLocation.Top) continue;
+                            var tempValue1 = image.Pixels[y * image.Width + x];
+                            var tempValue2 = image.Pixels[tempY1 * image.Width + tempX1];
+                            var tempValue3 = image.Pixels[tempY2 * image.Width + tempX2];
+                            if (Distance.Euclidean(tempValue1, tempValue2) < Distance.Euclidean(tempValue1, tempValue3))
                             {
-                                var tempY1 = y + y2;
-                                var tempY2 = y - y2;
-                                if (tempY1 >= targetLocation.Bottom && tempY1 < targetLocation.Top && tempY2 >= targetLocation.Bottom && tempY2 < targetLocation.Top)
-                                {
-                                    var tempValue1 = image.Pixels[y * image.Width + x];
-                                    var tempValue2 = image.Pixels[tempY1 * image.Width + tempX1];
-                                    var tempValue3 = image.Pixels[tempY2 * image.Width + tempX2];
-                                    if (Distance.Euclidean(tempValue1, tempValue2) < Distance.Euclidean(tempValue1, tempValue3))
-                                    {
-                                        rValue += tempValue2.Red;
-                                        gValue += tempValue2.Green;
-                                        bValue += tempValue2.Blue;
-                                    }
-                                    else
-                                    {
-                                        rValue += tempValue3.Red;
-                                        gValue += tempValue3.Green;
-                                        bValue += tempValue3.Blue;
-                                    }
-                                    ++numPixels;
-                                }
+                                rValue += tempValue2.Red;
+                                gValue += tempValue2.Green;
+                                bValue += tempValue2.Blue;
                             }
+                            else
+                            {
+                                rValue += tempValue3.Red;
+                                gValue += tempValue3.Green;
+                                bValue += tempValue3.Blue;
+                            }
+                            ++numPixels;
                         }
                     }
                     tempValues[y * image.Width + x].Red = (byte)(rValue / numPixels);

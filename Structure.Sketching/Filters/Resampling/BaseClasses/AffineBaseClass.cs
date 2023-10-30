@@ -18,7 +18,6 @@ limitations under the License.
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.Enums;
-using Structure.Sketching.Filters.Resampling.ResamplingFilters;
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
 using Structure.Sketching.Numerics;
 using System;
@@ -44,27 +43,7 @@ public abstract class AffineBaseClass : IFilter
     {
         Width = width;
         Height = height;
-        ResamplingFilter = new Dictionary<ResamplingFiltersAvailable, IResamplingFilter>
-        {
-            { ResamplingFiltersAvailable.Bell, new BellFilter() },
-            { ResamplingFiltersAvailable.CatmullRom, new CatmullRomFilter() },
-            { ResamplingFiltersAvailable.Cosine, new CosineFilter() },
-            { ResamplingFiltersAvailable.CubicBSpline, new CubicBSplineFilter() },
-            { ResamplingFiltersAvailable.CubicConvolution, new CubicConvolutionFilter() },
-            { ResamplingFiltersAvailable.Hermite, new HermiteFilter() },
-            { ResamplingFiltersAvailable.Lanczos3, new Lanczos3Filter() },
-            { ResamplingFiltersAvailable.Lanczos8, new Lanczos8Filter() },
-            { ResamplingFiltersAvailable.Mitchell, new MitchellFilter() },
-            { ResamplingFiltersAvailable.Quadratic, new QuadraticFilter() },
-            { ResamplingFiltersAvailable.QuadraticBSpline, new QuadraticBSplineFilter() },
-            { ResamplingFiltersAvailable.Triangle, new TriangleFilter() },
-            { ResamplingFiltersAvailable.Bilinear, new BilinearFilter() },
-            { ResamplingFiltersAvailable.NearestNeighbor, new NearestNeighborFilter() },
-            { ResamplingFiltersAvailable.Robidoux, new RobidouxFilter() },
-            { ResamplingFiltersAvailable.RobidouxSharp, new RobidouxSharpFilter() },
-            { ResamplingFiltersAvailable.RobidouxSoft, new RobidouxSoftFilter() },
-            { ResamplingFiltersAvailable.Bicubic, new BicubicFilter() }
-        };
+        ResamplingFilter = FilterList.Filters;
         Filter = ResamplingFilter[filter];
     }
 

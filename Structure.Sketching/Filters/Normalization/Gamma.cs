@@ -49,7 +49,7 @@ public class Gamma : IFilter
     /// <value>The value.</value>
     public float Value { get; set; }
 
-    private int[] Ramp { get; set; }
+    private int[] Ramp { get; }
 
     /// <summary>
     /// Applies the filter to the specified image.

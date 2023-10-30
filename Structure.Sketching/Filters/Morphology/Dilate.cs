@@ -32,17 +32,17 @@ public class Dilate : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="Dilate"/> class.
     /// </summary>
-    /// <param name="apetureRadius">The apeture radius.</param>
-    public Dilate(int apetureRadius)
+    /// <param name="apertureRadius">The aperture radius.</param>
+    public Dilate(int apertureRadius)
     {
-        ApetureRadius = apetureRadius;
+        ApertureRadius = apertureRadius;
     }
 
     /// <summary>
-    /// Gets or sets the apeture radius.
+    /// Gets or sets the aperture radius.
     /// </summary>
-    /// <value>The apeture radius.</value>
-    public int ApetureRadius { get; set; }
+    /// <value>The aperture radius.</value>
+    public int ApertureRadius { get; set; }
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -55,8 +55,8 @@ public class Dilate : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
-        var apetureMin = -ApetureRadius;
-        var apetureMax = ApetureRadius;
+        var apertureMin = -ApertureRadius;
+        var apertureMax = ApertureRadius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
             fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
@@ -67,35 +67,33 @@ public class Dilate : IFilter
                     byte rValue = 0;
                     byte gValue = 0;
                     byte bValue = 0;
-                    for (var y2 = apetureMin; y2 < apetureMax; ++y2)
+                    for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                     {
                         var tempY = y + y2;
-                        var tempX = x + apetureMin;
-                        if (tempY >= 0 && tempY < image.Height)
+                        var tempX = x + apertureMin;
+                        if (tempY < 0 || tempY >= image.Height) continue;
+                        var length = ApertureRadius * 2;
+                        if (tempX < 0)
                         {
-                            var length = ApetureRadius * 2;
-                            if (tempX < 0)
+                            length += tempX;
+                            tempX = 0;
+                        }
+                        var start = tempY * image.Width + tempX;
+                        fixed (Color* imagePointer = &tempValues[start])
+                        {
+                            var imagePointer2 = imagePointer;
+                            for (var x2 = 0; x2 < length; ++x2)
                             {
-                                length += tempX;
-                                tempX = 0;
-                            }
-                            var start = tempY * image.Width + tempX;
-                            fixed (Color* imagePointer = &tempValues[start])
-                            {
-                                var imagePointer2 = imagePointer;
-                                for (var x2 = 0; x2 < length; ++x2)
-                                {
-                                    if (tempX >= image.Width)
-                                        break;
-                                    var tempR = (*imagePointer2).Red;
-                                    var tempG = (*imagePointer2).Green;
-                                    var tempB = (*imagePointer2).Blue;
-                                    ++imagePointer2;
-                                    rValue = rValue > tempR ? rValue : tempR;
-                                    gValue = gValue > tempG ? gValue : tempG;
-                                    bValue = bValue > tempB ? bValue : tempB;
-                                    ++tempX;
-                                }
+                                if (tempX >= image.Width)
+                                    break;
+                                var tempR = (*imagePointer2).Red;
+                                var tempG = (*imagePointer2).Green;
+                                var tempB = (*imagePointer2).Blue;
+                                ++imagePointer2;
+                                rValue = rValue > tempR ? rValue : tempR;
+                                gValue = gValue > tempG ? gValue : tempG;
+                                bValue = bValue > tempB ? bValue : tempB;
+                                ++tempX;
                             }
                         }
                     }

@@ -52,7 +52,7 @@ public class AdaptiveEqualize : IFilter
     /// Gets or sets the histogram.
     /// </summary>
     /// <value>The histogram.</value>
-    private Func<IHistogram> Histogram { get; set; }
+    private Func<IHistogram> Histogram { get; }
 
     /// <summary>
     /// Applies the filter to the specified image.
@@ -65,8 +65,8 @@ public class AdaptiveEqualize : IFilter
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
-        var apetureMin = -Radius;
-        var apetureMax = Radius;
+        var apertureMin = -Radius;
+        var apertureMax = Radius;
         Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
         {
             fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
@@ -75,30 +75,28 @@ public class AdaptiveEqualize : IFilter
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var colorList = new List<Color>();
-                    for (var y2 = apetureMin; y2 < apetureMax; ++y2)
+                    for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                     {
                         var tempY = y + y2;
-                        var tempX = x + apetureMin;
-                        if (tempY >= 0 && tempY < image.Height)
+                        var tempX = x + apertureMin;
+                        if (tempY < 0 || tempY >= image.Height) continue;
+                        var length = Radius * 2;
+                        if (tempX < 0)
                         {
-                            var length = Radius * 2;
-                            if (tempX < 0)
+                            length += tempX;
+                            tempX = 0;
+                        }
+                        var start = tempY * image.Width + tempX;
+                        fixed (Color* imagePointer = &tempValues[start])
+                        {
+                            var imagePointer2 = imagePointer;
+                            for (var x2 = 0; x2 < length; ++x2)
                             {
-                                length += tempX;
-                                tempX = 0;
-                            }
-                            var start = tempY * image.Width + tempX;
-                            fixed (Color* imagePointer = &tempValues[start])
-                            {
-                                var imagePointer2 = imagePointer;
-                                for (var x2 = 0; x2 < length; ++x2)
-                                {
-                                    if (tempX >= image.Width)
-                                        break;
-                                    colorList.Add(*imagePointer2);
-                                    ++imagePointer2;
-                                    ++tempX;
-                                }
+                                if (tempX >= image.Width)
+                                    break;
+                                colorList.Add(*imagePointer2);
+                                ++imagePointer2;
+                                ++tempX;
                             }
                         }
                     }

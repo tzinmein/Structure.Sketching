@@ -38,18 +38,15 @@ public class BicubicFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        var a = -0.5f;
+        const float a = -0.5f;
 
         if (value < 0) value = -value;
 
-        if (value <= 1)
+        return value switch
         {
-            return (1.5f * value - 2.5f) * value * value + 1;
-        }
-        else if (value < 2)
-        {
-            return ((a * value + 2.5f) * value - 4) * value + 2;
-        }
-        return 0;
+            <= 1 => (1.5f * value - 2.5f) * value * value + 1,
+            < 2 => ((a * value + 2.5f) * value - 4) * value + 2,
+            _ => 0
+        };
     }
 }

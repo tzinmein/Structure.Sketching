@@ -40,6 +40,8 @@ public class ResamplingFilters : FilterTestBaseClass
         {"Resize-Bilinear-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.Bilinear),default },
         {"Resize-NearestNeighbor-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.NearestNeighbor),default },
         {"Resize-NearestNeighbor-100x100",new Resize(100,100,ResamplingFiltersAvailable.NearestNeighbor) ,default},
+        {"Resize-Box-100x100",new Resize(100,100,ResamplingFiltersAvailable.Box),default },
+        {"Resize-Box-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.Box),default },
         {"Resize-Robidoux-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.Robidoux),default },
         {"Resize-Robidoux-100x100",new Resize(100,100,ResamplingFiltersAvailable.Robidoux),default },
         {"Resize-RobidouxSharp-2000x2000",new Resize(2000,2000,ResamplingFiltersAvailable.RobidouxSharp) ,default},

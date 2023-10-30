@@ -34,12 +34,21 @@ public static class PerlinNoise
     /// <param name="minRgbValue">MinRGBValue</param>
     /// <param name="frequency">Frequency</param>
     /// <param name="amplitude">Amplitude</param>
-    /// <param name="persistance">Persistance</param>
+    /// <param name="persistence">Persistence</param>
     /// <param name="octaves">Octaves</param>
     /// <param name="seed">Random seed</param>
     /// <returns>An image containing perlin noise</returns>
-    public static Image Generate(int width, int height, float maxRgbValue, float minRgbValue,
-        float frequency, float amplitude, float persistance, int octaves, int seed)
+    public static Image Generate(
+        int width,
+        int height,
+        float maxRgbValue,
+        float minRgbValue,
+        float frequency,
+        float amplitude,
+        float persistence,
+        int octaves,
+        int seed
+    )
     {
         var returnValue = new Image(width, height, new Color[width * height]);
         var noise = GenerateNoise(seed, width, height);
@@ -47,7 +56,17 @@ public static class PerlinNoise
         {
             for (var y = 0; y < height; ++y)
             {
-                var value = GetValue(x, y, width, height, frequency, amplitude, persistance, octaves, noise);
+                var value = GetValue(
+                    x,
+                    y,
+                    width,
+                    height,
+                    frequency,
+                    amplitude,
+                    persistence,
+                    octaves,
+                    noise
+                );
                 value = value * 0.5f + 0.5f;
                 value *= 255;
                 var rgbValue = (byte)value.Clamp(minRgbValue, maxRgbValue);
@@ -57,6 +76,7 @@ public static class PerlinNoise
                 returnValue.Pixels[y * width + x].Alpha = 255;
             }
         }
+
         return returnValue;
     }
 
@@ -71,6 +91,7 @@ public static class PerlinNoise
                 noise[x, y] = ((float)randomGenerator.NextDouble() - 0.5f) * 2.0f;
             }
         }
+
         return noise;
     }
 
@@ -94,18 +115,29 @@ public static class PerlinNoise
         return finalValue;
     }
 
-    private static float GetValue(int x, int y, int width, int height, float frequency, float amplitude,
-        float persistance, int octaves, float[,] noise)
+    private static float GetValue(
+        int x,
+        int y,
+        int width,
+        int height,
+        float frequency,
+        float amplitude,
+        float persistence,
+        int octaves,
+        float[,] noise
+    )
     {
         if (noise == null)
             return 0.0f;
         var finalValue = 0.0f;
         for (var i = 0; i < octaves; ++i)
         {
-            finalValue += GetSmoothNoise(x * frequency, y * frequency, width, height, noise) * amplitude;
+            finalValue +=
+                GetSmoothNoise(x * frequency, y * frequency, width, height, noise) * amplitude;
             frequency *= 2.0f;
-            amplitude *= persistance;
+            amplitude *= persistence;
         }
+
         finalValue = finalValue.Clamp(-1.0f, 1.0f);
         return finalValue;
     }

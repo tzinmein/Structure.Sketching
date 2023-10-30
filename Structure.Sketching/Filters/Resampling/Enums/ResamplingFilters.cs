@@ -110,5 +110,10 @@ public enum ResamplingFiltersAvailable
     /// <summary>
     /// The bicubic
     /// </summary>
-    Bicubic
+    Bicubic,
+
+    /// <summary>
+    /// The box
+    /// </summary>
+    Box
 }

@@ -1,4 +1,5 @@
-﻿using Structure.Sketching.Colors;
+﻿using System.Collections.Generic;
+using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 
 /*
@@ -58,7 +59,7 @@ public class StretchContrast : IFilter
         return image;
     }
 
-    private void GetMinMaxPixel(byte[] minValue, byte[] maxValue, Image image)
+    private void GetMinMaxPixel(IList<byte> minValue, IList<byte> maxValue, Image image)
     {
         minValue[0] = minValue[1] = minValue[2] = 255;
         maxValue[0] = maxValue[1] = maxValue[2] = 0;

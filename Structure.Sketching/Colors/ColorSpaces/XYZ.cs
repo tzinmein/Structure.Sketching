@@ -44,7 +44,7 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
     /// Gets the white reference.
     /// </summary>
     /// <value>The white reference.</value>
-    public static Xyz WhiteReference => new Xyz(95.047, 100, 108.883);
+    public static Xyz WhiteReference => new(95.047, 100, 108.883);
 
     /// <summary>
     /// Gets or sets the x.
@@ -84,7 +84,7 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
         var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
         var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
 
-        return new Colors.Color(ToRgb(r > 0.0031308 ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055 : 12.92 * r),
+        return new Color(ToRgb(r > 0.0031308 ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055 : 12.92 * r),
             ToRgb(g > 0.0031308 ? 1.055 * Math.Pow(g, 1 / 2.4) - 0.055 : 12.92 * g),
             ToRgb(b > 0.0031308 ? 1.055 * Math.Pow(b, 1 / 2.4) - 0.055 : 12.92 * b));
     }

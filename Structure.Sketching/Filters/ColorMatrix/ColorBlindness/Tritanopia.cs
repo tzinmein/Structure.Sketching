@@ -30,7 +30,7 @@ public class Tritanopia : MatrixBaseClass
     /// Gets the matrix.
     /// </summary>
     /// <value>The matrix.</value>
-    public override Matrix5X5 Matrix => new Matrix5X5(
+    public override Matrix5X5 Matrix => new(
         .95f, 0f, 0f, 0f, 0f,
         .05f, .433f, .475f, 0f, 0f,
         0f, .567f, .525f, 0f, 0f,
