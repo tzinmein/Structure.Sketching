@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -38,9 +39,12 @@ public class QuadraticFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
-        if (value <= 0.5) return -2 * value * value + 1;
-        if (value <= 1.5) return value * value - 2.5 * value + 1.5;
-        return 0;
+        value = Math.Abs(value);
+        return value switch
+        {
+            <= 0.5 => -2 * value * value + 1,
+            <= 1.5 => value * value - 2.5 * value + 1.5,
+            _ => 0
+        };
     }
 }

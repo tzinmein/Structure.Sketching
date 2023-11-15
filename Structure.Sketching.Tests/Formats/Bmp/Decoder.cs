@@ -15,49 +15,49 @@ public class Decoder : FormatTestBase
 
     public static readonly TheoryData<string> InputFileNames = new()
     {
-        {"Car.bmp"},
-        {"Test24.bmp"},
-        {"EncodingTest.bmp"},
-        {"Test8.bmp" },
-        {"Test4.bmp" },
-        {"Test16.bmp" },
-        {"Test32.bmp" },
-        {"TestRLE8.bmp" },
-        {"Test1.bmp" }
+        "Car.bmp",
+        "Test24.bmp",
+        "EncodingTest.bmp",
+        "Test8.bmp",
+        "Test4.bmp",
+        "Test16.bmp",
+        "Test32.bmp",
+        "TestRLE8.bmp",
+        "Test1.bmp"
     };
 
     [Fact]
     public void CanDecodeByteArray()
     {
-        Assert.True(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode(BitConverter.GetBytes((int)19778)));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode(BitConverter.GetBytes((int)19777)));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode(BitConverter.GetBytes((int)19779)));
+        Assert.True(new Sketching.Formats.Bmp.Decoder().CanDecode(BitConverter.GetBytes(19778)));
+        Assert.False(new Sketching.Formats.Bmp.Decoder().CanDecode(BitConverter.GetBytes(19777)));
+        Assert.False(new Sketching.Formats.Bmp.Decoder().CanDecode(BitConverter.GetBytes(19779)));
     }
 
     [Fact]
     public void CanDecodeFileName()
     {
-        Assert.True(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode("test.bmp"));
-        Assert.True(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode("test.dib"));
-        Assert.True(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode("TEST.BMP"));
-        Assert.True(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode("TEST.DIB"));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode("test.jpg"));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode("BMP.jpg"));
+        Assert.True(new Sketching.Formats.Bmp.Decoder().CanDecode("test.bmp"));
+        Assert.True(new Sketching.Formats.Bmp.Decoder().CanDecode("test.dib"));
+        Assert.True(new Sketching.Formats.Bmp.Decoder().CanDecode("TEST.BMP"));
+        Assert.True(new Sketching.Formats.Bmp.Decoder().CanDecode("TEST.DIB"));
+        Assert.False(new Sketching.Formats.Bmp.Decoder().CanDecode("test.jpg"));
+        Assert.False(new Sketching.Formats.Bmp.Decoder().CanDecode("BMP.jpg"));
     }
 
     [Fact]
     public void CanDecodeStream()
     {
-        Assert.True(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19778))));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19777))));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19779))));
+        Assert.True(new Sketching.Formats.Bmp.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19778))));
+        Assert.False(new Sketching.Formats.Bmp.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19777))));
+        Assert.False(new Sketching.Formats.Bmp.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19779))));
     }
 
     [Fact]
     public void Decode()
     {
         using var tempFile = File.OpenRead("./TestImages/Formats/Bmp/EncodingTest.bmp");
-        var tempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
+        var tempDecoder = new Sketching.Formats.Bmp.Decoder();
         var tempImage = tempDecoder.Decode(tempFile);
         Assert.Equal(1760, tempImage.Pixels.Length);
         Assert.Equal(44, tempImage.Width);

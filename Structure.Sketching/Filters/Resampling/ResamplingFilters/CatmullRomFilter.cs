@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -38,10 +39,13 @@ public class CatmullRomFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
+        value = Math.Abs(value);
         var temp = value * value;
-        if (value <= 1) return 1.5 * temp * value - 2.5 * temp + 1;
-        if (value <= 2) return -0.5 * temp * value + 2.5 * temp - 4 * value + 2;
-        return 0;
+        return value switch
+        {
+            <= 1 => 1.5 * temp * value - 2.5 * temp + 1,
+            <= 2 => -0.5 * temp * value + 2.5 * temp - 4 * value + 2,
+            _ => 0
+        };
     }
 }

@@ -14,24 +14,24 @@ public class Encoder : FormatTestBase
 
     public static readonly TheoryData<string> InputFileNames = new()
     {
-        {"Car.bmp"},
-        {"Test24.bmp"},
-        {"EncodingTest.bmp"},
-        {"Test8.bmp" },
-        {"Test4.bmp" },
-        {"Test16.bmp" },
-        {"Test32.bmp" },
-        {"TestRLE8.bmp" },
-        {"Test1.bmp" }
+        "Car.bmp",
+        "Test24.bmp",
+        "EncodingTest.bmp",
+        "Test8.bmp",
+        "Test4.bmp",
+        "Test16.bmp",
+        "Test32.bmp",
+        "TestRLE8.bmp",
+        "Test1.bmp"
     };
 
     [Fact]
     public void CanEncode()
     {
-        Assert.True(new Structure.Sketching.Formats.Bmp.Encoder().CanEncode("ASDF.bmp"));
-        Assert.True(new Structure.Sketching.Formats.Bmp.Encoder().CanEncode("ASDF.dib"));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Encoder().CanEncode("ASDF.jpg"));
-        Assert.False(new Structure.Sketching.Formats.Bmp.Encoder().CanEncode("bmp.gif"));
+        Assert.True(new Sketching.Formats.Bmp.Encoder().CanEncode("ASDF.bmp"));
+        Assert.True(new Sketching.Formats.Bmp.Encoder().CanEncode("ASDF.dib"));
+        Assert.False(new Sketching.Formats.Bmp.Encoder().CanEncode("ASDF.jpg"));
+        Assert.False(new Sketching.Formats.Bmp.Encoder().CanEncode("bmp.gif"));
     }
 
     [Theory]
@@ -40,9 +40,9 @@ public class Encoder : FormatTestBase
     {
         using (var tempFile = File.OpenRead(InputDirectory + fileName))
         {
-            var tempDecoder = new Structure.Sketching.Formats.Bmp.Decoder();
+            var tempDecoder = new Sketching.Formats.Bmp.Decoder();
             var tempImage = tempDecoder.Decode(tempFile);
-            var tempEncoder = new Structure.Sketching.Formats.Bmp.Encoder();
+            var tempEncoder = new Sketching.Formats.Bmp.Encoder();
             using var tempFile2 = File.OpenWrite(OutputDirectory + fileName);
             tempEncoder.Encode(new BinaryWriter(tempFile2), tempImage);
         }

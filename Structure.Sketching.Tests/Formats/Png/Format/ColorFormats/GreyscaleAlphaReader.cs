@@ -22,7 +22,7 @@ public class GreyscaleAlphaReader
             new Color(7, 7, 7, 8),
             new Color(9, 9, 9, 0)
         };
-        var testObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.GreyscaleAlphaReader();
+        var testObject = new Sketching.Formats.Png.Format.ColorFormats.GreyscaleAlphaReader();
         testObject.ReadScanline(data, result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 4, 0, 0, 0), 0);
         Assert.Equal(expectedResult, result);
     }

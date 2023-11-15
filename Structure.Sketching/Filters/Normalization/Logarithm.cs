@@ -62,7 +62,7 @@ public class Logarithm : IFilter
 
     private Color GetMaxValue(Image image, Rectangle targetLocation)
     {
-        var returnValue = new Color(0, 0, 0, 255);
+        var returnValue = new Color(0);
         for (var y = targetLocation.Bottom; y < targetLocation.Top; ++y)
         {
             for (var x = targetLocation.Left; x < targetLocation.Right; ++x)

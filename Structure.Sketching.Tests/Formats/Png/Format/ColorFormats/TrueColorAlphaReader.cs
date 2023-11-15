@@ -22,7 +22,7 @@ public class TrueColorAlphaReader
             new Color(3, 4, 5, 6),
             new Color(7, 8, 9, 0)
         };
-        var testObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.TrueColorAlphaReader();
+        var testObject = new Sketching.Formats.Png.Format.ColorFormats.TrueColorAlphaReader();
         testObject.ReadScanline(data, result, new Sketching.Formats.Png.Format.Header(10, 1, 8, 6, 0, 0, 0), 0);
         Assert.Equal(expectedResult, result);
     }

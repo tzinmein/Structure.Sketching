@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -43,15 +44,17 @@ public class MitchellFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
+        value = Math.Abs(value);
         var temp = value * value;
         switch (value)
         {
             case < 1:
-                value = (12 - 9 * OneThird - 6 * OneThird) * (value * temp) + (-18 + 12 * OneThird + 6 * OneThird) * temp + (6 - 2 * OneThird);
+                value = (12 - 9 * OneThird - 6 * OneThird) * (value * temp) + (-18 + 12 * OneThird + 6 * OneThird) * temp +
+                        (6 - 2 * OneThird);
                 return value / 6;
             case < 2:
-                value = (-OneThird - 6 * OneThird) * (value * temp) + (6 * OneThird + 30 * OneThird) * temp + (-12 * OneThird - 48 * OneThird) * value + (8 * OneThird + 24 * OneThird);
+                value = (-OneThird - 6 * OneThird) * (value * temp) + (6 * OneThird + 30 * OneThird) * temp +
+                        (-12 * OneThird - 48 * OneThird) * value + (8 * OneThird + 24 * OneThird);
                 return value / 6;
             default:
                 return 0;

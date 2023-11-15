@@ -195,7 +195,7 @@ public class Matrix5X5Tests
             1, 3, 8, 3, 4,
             5, 7, 8, 2, 5
         );
-        float value = 2;
+        const float value = 2;
         var result = new Matrix5X5(
             2, 4, 6, 8, 12,
             12, 2, 10, 6, 16,

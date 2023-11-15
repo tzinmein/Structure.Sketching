@@ -20,7 +20,6 @@ using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -42,9 +41,7 @@ public class Resize : IFilter
     {
         Height = height;
         Width = width;
-        ResamplingFilter = FilterList.Filters;
-        Filter = ResamplingFilter[filter];
-        FilterKey = filter;
+        Filter = FilterList.Filters[filter];
     }
 
     /// <summary>
@@ -66,18 +63,6 @@ public class Resize : IFilter
     public int Width { get; set; }
 
     /// <summary>
-    /// Gets or sets the filter key.
-    /// </summary>
-    /// <value>The filter key.</value>
-    private ResamplingFiltersAvailable FilterKey { get; set; }
-
-    /// <summary>
-    /// Gets or sets the resampling filter dictionary.
-    /// </summary>
-    /// <value>The resampling filter.</value>
-    private Dictionary<ResamplingFiltersAvailable, IResamplingFilter> ResamplingFilter { get; set; }
-
-    /// <summary>
     /// Applies the resizing filter to the specified image.
     /// </summary>
     /// <param name="image">The image to resize.</param>
@@ -94,9 +79,8 @@ public class Resize : IFilter
     /// Gets the matrix.
     /// </summary>
     /// <param name="image">The image.</param>
-    /// <param name="targetLocation">The target location.</param>
     /// <returns>The transformation matrix</returns>
-    protected Matrix3x2 GetMatrix(Image image, Rectangle targetLocation)
+    protected Matrix3x2 GetMatrix(Image image)
     {
         var xScale = (float)image.Width / Width;
         var yScale = (float)image.Height / Height;
@@ -106,9 +90,8 @@ public class Resize : IFilter
     private unsafe Color[] Sample(Image image)
     {
         Filter.Precompute(image.Width, image.Height, Width, Height);
-        var targetLocation = new Rectangle(0, 0, image.Width, image.Height);
         var output = new Color[Width * Height];
-        var transformationMatrix = GetMatrix(image, targetLocation);
+        var transformationMatrix = GetMatrix(image);
         double tempWidth = Width < 0 ? image.Width : Width;
         double tempHeight = Height < 0 ? image.Width : Height;
         var xScale = tempWidth / image.Width;

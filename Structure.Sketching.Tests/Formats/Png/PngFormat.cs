@@ -15,11 +15,11 @@ public class PngFormat : FormatTestBase
 
     public static readonly TheoryData<string> InputFileNames = new()
     {
-        { "splash.png" },
-        { "48bit.png" },
-        { "blur.png" },
-        { "indexed.png" },
-        { "splashbw.png" }
+        "splash.png",
+        "48bit.png",
+        "blur.png",
+        "indexed.png",
+        "splashbw.png"
     };
 
     [Fact]
@@ -36,20 +36,20 @@ public class PngFormat : FormatTestBase
             0x1A,
             0x0A
         };
-        Assert.True(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(header));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(BitConverter.GetBytes((int)19777)));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(BitConverter.GetBytes((int)19779)));
+        Assert.True(new Sketching.Formats.Png.PngFormat().CanDecode(header));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanDecode(BitConverter.GetBytes(19777)));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanDecode(BitConverter.GetBytes(19779)));
     }
 
     [Fact]
     public void CanDecodeFileName()
     {
-        Assert.True(new Structure.Sketching.Formats.Png.PngFormat().CanDecode("test.png"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode("test.dib"));
-        Assert.True(new Structure.Sketching.Formats.Png.PngFormat().CanDecode("TEST.PNG"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode("TEST.DIB"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode("test.jpg"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanDecode("PNG.jpg"));
+        Assert.True(new Sketching.Formats.Png.PngFormat().CanDecode("test.png"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanDecode("test.dib"));
+        Assert.True(new Sketching.Formats.Png.PngFormat().CanDecode("TEST.PNG"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanDecode("TEST.DIB"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanDecode("test.jpg"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanDecode("PNG.jpg"));
     }
 
     [Fact]
@@ -66,29 +66,29 @@ public class PngFormat : FormatTestBase
             0x1A,
             0x0A
         };
-        Assert.True(new Structure.Sketching.Formats.Png.PngFormat().CanDecode(new MemoryStream(header)));
+        Assert.True(new Sketching.Formats.Png.PngFormat().CanDecode(new MemoryStream(header)));
         Assert.False(
-            new Structure.Sketching.Formats.Png.PngFormat().CanDecode(
-                new MemoryStream(BitConverter.GetBytes((int)19777))));
+            new Sketching.Formats.Png.PngFormat().CanDecode(
+                new MemoryStream(BitConverter.GetBytes(19777))));
         Assert.False(
-            new Structure.Sketching.Formats.Png.PngFormat().CanDecode(
-                new MemoryStream(BitConverter.GetBytes((int)19779))));
+            new Sketching.Formats.Png.PngFormat().CanDecode(
+                new MemoryStream(BitConverter.GetBytes(19779))));
     }
 
     [Fact]
     public void CanEncode()
     {
-        Assert.True(new Structure.Sketching.Formats.Png.PngFormat().CanEncode("ASDF.png"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanEncode("ASDF.bmp"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanEncode("ASDF.jpg"));
-        Assert.False(new Structure.Sketching.Formats.Png.PngFormat().CanEncode("bmp.gif"));
+        Assert.True(new Sketching.Formats.Png.PngFormat().CanEncode("ASDF.png"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanEncode("ASDF.bmp"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanEncode("ASDF.jpg"));
+        Assert.False(new Sketching.Formats.Png.PngFormat().CanEncode("bmp.gif"));
     }
 
     [Fact]
     public void Decode()
     {
         using var tempFile = File.OpenRead("./TestImages/Formats/Png/splash.png");
-        var imageFormat = new Structure.Sketching.Formats.Png.PngFormat();
+        var imageFormat = new Sketching.Formats.Png.PngFormat();
         var tempImage = imageFormat.Decode(tempFile);
         Assert.Equal(241500, tempImage.Pixels.Length);
         Assert.Equal(500, tempImage.Width);

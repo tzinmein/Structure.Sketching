@@ -65,7 +65,6 @@ public class Pointillism : IFilter
             var maxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
             fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; x += pointSize2)
                 {
                     uint rValue = 0;

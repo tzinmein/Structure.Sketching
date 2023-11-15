@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -41,12 +42,14 @@ public class RobidouxSharpFilter : ResamplingFilterBase
         const float b = 0.26201451F;
         const float c = 0.36899274F;
 
-        if (value < 0) value = -value;
+        value = Math.Abs(value);
         var temp = value * value;
-        if (value < 1)
-            return ((12 - 9 * b - 6 * c) * (value * temp) + (-18 + 12 * b + 6 * c) * temp + (6 - 2 * b)) / 6;
-        if (value < 2)
-            return ((-b - 6 * c) * (value * temp) + (6 * b + 30 * c) * temp + (-12 * b - 48 * c) * value + (8 * b + 24 * c)) / 6;
-        return 0;
+        return value switch
+        {
+            < 1 => ((12 - 9 * b - 6 * c) * (value * temp) + (-18 + 12 * b + 6 * c) * temp + (6 - 2 * b)) / 6,
+            < 2 => ((-b - 6 * c) * (value * temp) + (6 * b + 30 * c) * temp + (-12 * b - 48 * c) * value +
+                    (8 * b + 24 * c)) / 6,
+            _ => 0
+        };
     }
 }

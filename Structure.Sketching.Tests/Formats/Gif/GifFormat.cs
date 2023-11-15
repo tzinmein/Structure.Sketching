@@ -14,8 +14,8 @@ public class GifFormat : FormatTestBase
 
     public static readonly TheoryData<string> InputFileNames = new()
     {
-        {"giphy.gif"},
-        {"rings.gif"}
+        "giphy.gif",
+        "rings.gif"
     };
 
     [Theory]

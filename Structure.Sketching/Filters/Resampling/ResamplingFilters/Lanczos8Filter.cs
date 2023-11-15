@@ -39,7 +39,7 @@ public class Lanczos8Filter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
+        value = Math.Abs(value);
         if (value < 8) return Sin(value) * Sin(value / 8f);
         return 0;
     }

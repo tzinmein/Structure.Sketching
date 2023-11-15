@@ -7,7 +7,7 @@ public class Data
     [Fact]
     public void Create()
     {
-        var testObject = new Structure.Sketching.Formats.Png.Format.Data(new byte[1000]);
+        var testObject = new Sketching.Formats.Png.Format.Data(new byte[1000]);
         Assert.Equal(new byte[1000], testObject.ImageData);
         Assert.Equal(1000, testObject.ImageData.Length);
     }
@@ -15,7 +15,7 @@ public class Data
     [Fact]
     public void CreateFromChunk()
     {
-        Structure.Sketching.Formats.Png.Format.Data testObject = new Sketching.Formats.Png.Format.Helpers.Chunk(1, "", new byte[1000], 12);
+        Sketching.Formats.Png.Format.Data testObject = new Sketching.Formats.Png.Format.Helpers.Chunk(1, "", new byte[1000], 12);
         Assert.Equal(new byte[1000], testObject.ImageData);
         Assert.Equal(1000, testObject.ImageData.Length);
     }

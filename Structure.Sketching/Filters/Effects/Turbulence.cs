@@ -79,7 +79,6 @@ public class Turbulence : IFilter
         {
             fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var xDistortion = x + xNoise.Pixels[y * image.Width + x].Red * Power;

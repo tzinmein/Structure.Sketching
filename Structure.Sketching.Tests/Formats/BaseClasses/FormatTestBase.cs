@@ -28,7 +28,7 @@ public abstract class FormatTestBase
         using var expectedStream = File.OpenRead(ExpectedDirectory + fileName);
         using var outputStream = File.OpenRead(OutputDirectory + fileName);
 
-        var imageFormat = new Structure.Sketching.Formats.Png.PngFormat();
+        var imageFormat = new Sketching.Formats.Png.PngFormat();
         var expectedImage = imageFormat.Decode(expectedStream);
         var outputImage = imageFormat.Decode(outputStream);
 

@@ -14,11 +14,11 @@ public class JpegFormat : FormatTestBase
 
     public static readonly TheoryData<string> InputFileNames = new()
     {
-        {"Calliphora.jpg"},
-        {"Floorplan.jpeg"},
-        {"gamma_dalai_lama_gray.jpg"},
-        {"rgb.jpg"},
-        {"maltese_puppy-wide.jpg"}
+        "Calliphora.jpg",
+        "Floorplan.jpeg",
+        "gamma_dalai_lama_gray.jpg",
+        "rgb.jpg",
+        "maltese_puppy-wide.jpg"
     };
 
     [Theory]

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -40,7 +41,7 @@ public class BicubicFilter : ResamplingFilterBase
     {
         const float a = -0.5f;
 
-        if (value < 0) value = -value;
+        value = Math.Abs(value);
 
         return value switch
         {

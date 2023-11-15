@@ -15,11 +15,11 @@ public class Decoder : FormatTestBase
 
     public static readonly TheoryData<string> InputFileNames = new()
     {
-        {"splash.png"},
-        {"48bit.png"},
-        {"blur.png"},
-        {"indexed.png"},
-        {"splashbw.png"}
+        "splash.png",
+        "48bit.png",
+        "blur.png",
+        "indexed.png",
+        "splashbw.png"
     };
 
     [Fact]
@@ -35,20 +35,20 @@ public class Decoder : FormatTestBase
             0x1A,
             0x0A
         };
-        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode(header));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes((int)19777)));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes((int)19779)));
+        Assert.True(new Sketching.Formats.Png.Decoder().CanDecode(header));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes(19777)));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes(19779)));
     }
 
     [Fact]
     public void CanDecodeFileName()
     {
-        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode("test.png"));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode("test.dib"));
-        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode("TEST.PNG"));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode("TEST.DIB"));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode("test.jpg"));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode("PNG.jpg"));
+        Assert.True(new Sketching.Formats.Png.Decoder().CanDecode("test.png"));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode("test.dib"));
+        Assert.True(new Sketching.Formats.Png.Decoder().CanDecode("TEST.PNG"));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode("TEST.DIB"));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode("test.jpg"));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode("PNG.jpg"));
     }
 
     [Fact]
@@ -64,16 +64,16 @@ public class Decoder : FormatTestBase
             0x1A,
             0x0A
         };
-        Assert.True(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(header)));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19777))));
-        Assert.False(new Structure.Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes((int)19779))));
+        Assert.True(new Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(header)));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19777))));
+        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19779))));
     }
 
     [Fact]
     public void Decode()
     {
         using var tempFile = File.OpenRead("./TestImages/Formats/Png/splash.png");
-        var tempDecoder = new Structure.Sketching.Formats.Png.Decoder();
+        var tempDecoder = new Sketching.Formats.Png.Decoder();
         var tempImage = tempDecoder.Decode(tempFile);
         Assert.Equal(241500, tempImage.Pixels.Length);
         Assert.Equal(500, tempImage.Width);

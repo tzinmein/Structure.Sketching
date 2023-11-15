@@ -7,7 +7,7 @@ public class ColorTypeInformation
     [Fact]
     public void Create()
     {
-        var testObject = new Structure.Sketching.Formats.Png.Format.ColorFormats.ColorTypeInformation(1, new[] { 1 }, (x, y) => null);
+        var testObject = new Sketching.Formats.Png.Format.ColorFormats.ColorTypeInformation(1, new[] { 1 }, (_, _) => null);
         Assert.Equal(1, testObject.ScanlineFactor);
         Assert.Single(testObject.SupportedBitDepths);
         Assert.Equal(1, testObject.SupportedBitDepths[0]);

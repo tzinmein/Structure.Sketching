@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -38,8 +39,12 @@ public class BilinearFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        value = value < 0 ? -value : value;
-        if (value <= 0.5) return 1;
-        return 0;
+        value = Math.Abs(value);
+
+        return value switch
+        {
+            <= 0.5 => 1,
+            _ => 0
+        };
     }
 }

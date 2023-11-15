@@ -39,9 +39,12 @@ public class BellFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
-        if (value < 0.5) return 0.75 - value * value;
-        if (value < 1.5) return 0.5 * Math.Pow(value - 1.5, 2);
-        return 0;
+        value = Math.Abs(value);
+        return value switch
+        {
+            < 0.5 => 0.75 - value * value,
+            < 1.5 => 0.5 * Math.Pow(value - 1.5, 2),
+            _ => 0
+        };
     }
 }

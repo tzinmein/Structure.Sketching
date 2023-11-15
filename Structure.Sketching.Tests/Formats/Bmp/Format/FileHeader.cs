@@ -10,7 +10,7 @@ public class FileHeader
     [Fact]
     public void CreateByteArray()
     {
-        var data = new[] { BitConverter.GetBytes((short)19778), BitConverter.GetBytes((int)1000), BitConverter.GetBytes((int)0), BitConverter.GetBytes((int)54) }.SelectMany(x => x).ToArray();
+        var data = new[] { BitConverter.GetBytes((short)19778), BitConverter.GetBytes(1000), BitConverter.GetBytes(0), BitConverter.GetBytes(54) }.SelectMany(x => x).ToArray();
         var testFileHeader = new Sketching.Formats.Bmp.Format.FileHeader(data);
         Assert.Equal(1000, testFileHeader.FileSize);
         Assert.Equal(54, testFileHeader.Offset);
@@ -31,7 +31,7 @@ public class FileHeader
     [Fact]
     public void Read()
     {
-        var data = new[] { BitConverter.GetBytes((short)19778), BitConverter.GetBytes((int)1000), BitConverter.GetBytes((int)0), BitConverter.GetBytes((int)54) }.SelectMany(x => x).ToArray();
+        var data = new[] { BitConverter.GetBytes((short)19778), BitConverter.GetBytes(1000), BitConverter.GetBytes(0), BitConverter.GetBytes(54) }.SelectMany(x => x).ToArray();
         using var stream = new MemoryStream(data);
         var testFileHeader = Sketching.Formats.Bmp.Format.FileHeader.Read(stream);
         Assert.Equal(1000, testFileHeader.FileSize);

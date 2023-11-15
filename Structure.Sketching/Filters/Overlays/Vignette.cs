@@ -47,19 +47,19 @@ public class Vignette : IFilter
     /// Gets or sets the color.
     /// </summary>
     /// <value>The color.</value>
-    public Color Color { get; private set; }
+    public Color Color { get; }
 
     /// <summary>
     /// Gets the x radius.
     /// </summary>
     /// <value>The x radius.</value>
-    public float XRadius { get; private set; }
+    public float XRadius { get; }
 
     /// <summary>
     /// Gets the y radius.
     /// </summary>
     /// <value>The y radius.</value>
-    public float YRadius { get; private set; }
+    public float YRadius { get; }
 
     /// <summary>
     /// Applies the specified image.
@@ -86,7 +86,7 @@ public class Vignette : IFilter
                     var result = Vector4.Lerp(Color, sourceColor, 1 - .9f * (distance / maxDistance));
                     var tempAlpha = result.W;
                     result = sourceColor * (1 - tempAlpha) + result * sourceColor * tempAlpha;
-                    *pointer2 = (Color)result;
+                    *pointer2 = result;
                     ++pointer2;
                 }
             }

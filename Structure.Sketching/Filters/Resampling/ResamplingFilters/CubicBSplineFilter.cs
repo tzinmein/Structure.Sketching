@@ -39,17 +39,19 @@ public class CubicBSplineFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
-        if (value < 1)
+        value = Math.Abs(value);
+        switch (value)
         {
-            var temp = value * value;
-            return 0.5 * temp * value - temp + 2f / 3f;
+            case < 1:
+            {
+                var temp = value * value;
+                return 0.5 * temp * value - temp + 2f / 3f;
+            }
+            case < 2:
+                value = 2f - value;
+                return Math.Pow(value, 3) / 6f;
+            default:
+                return 0;
         }
-        if (value < 2)
-        {
-            value = 2f - value;
-            return Math.Pow(value, 3) / 6f;
-        }
-        return 0;
     }
 }

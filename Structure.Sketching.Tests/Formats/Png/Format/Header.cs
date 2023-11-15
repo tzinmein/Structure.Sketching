@@ -7,7 +7,7 @@ public class Header
     [Fact]
     public void Create()
     {
-        var testObject = new Structure.Sketching.Formats.Png.Format.Header(100, 101, 8, 6, 8, 7, 7);
+        var testObject = new Sketching.Formats.Png.Format.Header(100, 101, 8, 6, 8, 7, 7);
         Assert.Equal(8, testObject.BitDepth);
         Assert.Equal(6, (byte)testObject.ColorType);
         Assert.Equal(8, testObject.CompressionMethod);
@@ -21,7 +21,7 @@ public class Header
     public void CreateFromChunk()
     {
         byte[] data = { 0, 0, 0, 100, 0, 0, 0, 101, 8, 6, 8, 7, 7 };
-        Structure.Sketching.Formats.Png.Format.Header testObject = new Sketching.Formats.Png.Format.Helpers.Chunk(12, "ASDF", data, 12);
+        Sketching.Formats.Png.Format.Header testObject = new Sketching.Formats.Png.Format.Helpers.Chunk(12, "ASDF", data, 12);
         Assert.Equal(8, testObject.BitDepth);
         Assert.Equal(6, (byte)testObject.ColorType);
         Assert.Equal(8, testObject.CompressionMethod);

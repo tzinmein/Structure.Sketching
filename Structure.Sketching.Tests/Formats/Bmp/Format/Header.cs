@@ -13,17 +13,17 @@ public class Header
     {
         var data = new[]
         {
-            BitConverter.GetBytes((int)200),
-            BitConverter.GetBytes((int)44),
-            BitConverter.GetBytes((int)40),
+            BitConverter.GetBytes(200),
+            BitConverter.GetBytes(44),
+            BitConverter.GetBytes(40),
             BitConverter.GetBytes((short)1),
             BitConverter.GetBytes((short)24),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)1000),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)0)
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(1000),
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(0)
         }.SelectMany(x => x).ToArray();
         var testFileHeader = new Sketching.Formats.Bmp.Format.Header(data);
         Assert.Equal(24, testFileHeader.Bpp);
@@ -59,17 +59,17 @@ public class Header
     {
         var data = new[]
         {
-            BitConverter.GetBytes((int)200),
-            BitConverter.GetBytes((int)44),
-            BitConverter.GetBytes((int)40),
+            BitConverter.GetBytes(200),
+            BitConverter.GetBytes(44),
+            BitConverter.GetBytes(40),
             BitConverter.GetBytes((short)1),
             BitConverter.GetBytes((short)24),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)1000),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)0),
-            BitConverter.GetBytes((int)0)
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(1000),
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(0),
+            BitConverter.GetBytes(0)
         }.SelectMany(x => x).ToArray();
         using var stream = new MemoryStream(data);
         var testFileHeader = Sketching.Formats.Bmp.Format.Header.Read(stream);

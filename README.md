@@ -37,6 +37,7 @@ There are also a number of filters within the library for a number of different 
   - Bell
   - Bicubic
   - Bilinear
+  - Box
   - Catmull Rom
   - Cosine
   - Cubic B Spline
@@ -89,7 +90,15 @@ There are also a number of filters within the library for a number of different 
 - Saturation
 - Sepia Tone
 - Temperature
-- Color blindness filters including: Achromatomaly, Achromatopsia, Deuteranomaly, Deuteranopia, Protanomaly, Protanopia, Tritanomaly, and Tritanopia
+- Color blindness filters including:
+	- Achromatomaly
+	- Achromatopsia
+	- Deuteranomaly
+	- Deuteranopia
+	- Protanomaly
+	- Protanopia
+	- Tritanomaly
+	- Tritanopia
 - Adaptive Threshold
 - Non Maximal Suppression
 - Threshold

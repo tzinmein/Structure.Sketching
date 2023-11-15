@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using System;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
@@ -38,11 +39,14 @@ public class CubicConvolutionFilter : ResamplingFilterBase
     /// <returns>The new value based on the input.</returns>
     public override double GetValue(double value)
     {
-        if (value < 0) value = -value;
+        value = Math.Abs(value);
         var temp = value * value;
-        if (value <= 1) return 4f / 3f * temp * value - 7f / 3f * temp + 1;
-        if (value <= 2) return -(7f / 12f) * temp * value + 3 * temp - 59f / 12f * value + 2.5;
-        if (value <= 3) return 1f / 12f * temp * value - 2f / 3f * temp + 1.75 * value - 1.5;
-        return 0;
+        return value switch
+        {
+            <= 1 => 4f / 3f * temp * value - 7f / 3f * temp + 1,
+            <= 2 => -(7f / 12f) * temp * value + 3 * temp - 59f / 12f * value + 2.5,
+            <= 3 => 1f / 12f * temp * value - 2f / 3f * temp + 1.75 * value - 1.5,
+            _ => 0
+        };
     }
 }

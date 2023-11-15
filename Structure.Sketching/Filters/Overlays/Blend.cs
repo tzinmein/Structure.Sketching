@@ -54,13 +54,13 @@ public class Blend : IFilter
     /// Gets or sets the image.;
     /// </summary>
     /// <value>The image.</value>
-    public Image Image { get; private set; }
+    public Image Image { get; }
 
     /// <summary>
     /// Gets or sets the source location.
     /// </summary>
     /// <value>The source location.</value>
-    public Rectangle SourceLocation { get; private set; }
+    public Rectangle SourceLocation { get; }
 
     /// <summary>
     /// Applies the specified image.
