@@ -75,7 +75,7 @@ public abstract class ResamplingFilterBase : IResamplingFilter
 
     private Weights[] PrecomputeWeights(int destinationSize, int sourceSize)
     {
-        var scale = (double)destinationSize / (double)sourceSize;
+        var scale = destinationSize / (double)sourceSize;
         var radius = scale < 1f ? (FilterRadius / scale) : FilterRadius;
         var result = new Weights[sourceSize];
 

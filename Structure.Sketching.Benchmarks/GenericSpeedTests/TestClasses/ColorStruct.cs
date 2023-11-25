@@ -1,7 +1,6 @@
 ﻿using Structure.Sketching.ExtensionMethods;
 using System;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses;
@@ -39,9 +38,7 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="blue">The blue.</param>
     /// <param name="alpha">The alpha.</param>
     public ColorStruct(byte red, byte green = 0, byte blue = 0, byte alpha = 255)
-        : this(new[] { red, green, blue, alpha })
-    {
-    }
+        : this(new[] { red, green, blue, alpha }) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ColorStruct"/> struct.
@@ -53,24 +50,26 @@ public struct ColorStruct : IEquatable<ColorStruct>
         hex = hex.StartsWith("#", StringComparison.Ordinal) ? hex[1..] : hex;
         if (hex.Length == 3)
         {
-            hex = "FF"
-                  + char.ToString(hex[0])
-                  + char.ToString(hex[0])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[2])
-                  + char.ToString(hex[2]);
+            hex =
+                "FF"
+                + char.ToString(hex[0])
+                + char.ToString(hex[0])
+                + char.ToString(hex[1])
+                + char.ToString(hex[1])
+                + char.ToString(hex[2])
+                + char.ToString(hex[2]);
         }
         if (hex.Length == 4)
         {
-            hex = char.ToString(hex[0])
-                  + char.ToString(hex[0])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[1])
-                  + char.ToString(hex[2])
-                  + char.ToString(hex[2])
-                  + char.ToString(hex[3])
-                  + char.ToString(hex[3]);
+            hex =
+                char.ToString(hex[0])
+                + char.ToString(hex[0])
+                + char.ToString(hex[1])
+                + char.ToString(hex[1])
+                + char.ToString(hex[2])
+                + char.ToString(hex[2])
+                + char.ToString(hex[3])
+                + char.ToString(hex[3]);
         }
         if (hex.Length == 6)
         {
@@ -136,7 +135,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The average color</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct Average(ColorStruct color1, ColorStruct color2)
     {
         return (color1 + color2) / (byte)2;
@@ -147,7 +145,7 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator byte[] (ColorStruct color)
+    public static implicit operator byte[](ColorStruct color)
     {
         return new[] { color.Red, color.Green, color.Blue, color.Alpha };
     }
@@ -199,7 +197,12 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <returns>The result of the conversion.</returns>
     public static implicit operator Vector4(ColorStruct color)
     {
-        return new Vector4(color.Red / 255f, color.Green / 255f, color.Blue / 255f, color.Alpha / 255f);
+        return new Vector4(
+            color.Red / 255f,
+            color.Green / 255f,
+            color.Blue / 255f,
+            color.Alpha / 255f
+        );
     }
 
     /// <summary>
@@ -208,10 +211,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator -(ColorStruct color1, ColorStruct color2)
     {
-        return new ColorStruct((byte)(color1.Red - color2.Red), (byte)(color1.Green - color2.Green), (byte)(color1.Blue - color2.Blue), (byte)(color1.Alpha - color2.Alpha));
+        return new ColorStruct(
+            (byte)(color1.Red - color2.Red),
+            (byte)(color1.Green - color2.Green),
+            (byte)(color1.Blue - color2.Blue),
+            (byte)(color1.Alpha - color2.Alpha)
+        );
     }
 
     /// <summary>
@@ -220,10 +227,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator -(ColorStruct color1, byte factor)
     {
-        return new ColorStruct((byte)(color1.Red - factor), (byte)(color1.Green - factor), (byte)(color1.Blue - factor), (byte)(color1.Alpha - factor));
+        return new ColorStruct(
+            (byte)(color1.Red - factor),
+            (byte)(color1.Green - factor),
+            (byte)(color1.Blue - factor),
+            (byte)(color1.Alpha - factor)
+        );
     }
 
     /// <summary>
@@ -232,10 +243,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator -(byte factor, ColorStruct color1)
     {
-        return new ColorStruct((byte)(factor - color1.Red), (byte)(factor - color1.Green), (byte)(factor - color1.Blue), (byte)(factor - color1.Alpha));
+        return new ColorStruct(
+            (byte)(factor - color1.Red),
+            (byte)(factor - color1.Green),
+            (byte)(factor - color1.Blue),
+            (byte)(factor - color1.Alpha)
+        );
     }
 
     /// <summary>
@@ -243,7 +258,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator !(ColorStruct color)
     {
         return (byte)255 - color;
@@ -255,7 +269,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(ColorStruct color1, ColorStruct color2)
     {
         return !(color1 == color2);
@@ -267,10 +280,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator %(ColorStruct color1, byte factor)
     {
-        return new ColorStruct((byte)(color1.Red % factor), (byte)(color1.Green % factor), (byte)(color1.Blue % factor), (byte)(color1.Alpha % factor));
+        return new ColorStruct(
+            (byte)(color1.Red % factor),
+            (byte)(color1.Green % factor),
+            (byte)(color1.Blue % factor),
+            (byte)(color1.Alpha % factor)
+        );
     }
 
     /// <summary>
@@ -279,10 +296,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator %(ColorStruct color1, ColorStruct color2)
     {
-        return new ColorStruct((byte)(color1.Red % color2.Red), (byte)(color1.Green % color2.Green), (byte)(color1.Blue % color2.Blue), (byte)(color1.Alpha % color2.Alpha));
+        return new ColorStruct(
+            (byte)(color1.Red % color2.Red),
+            (byte)(color1.Green % color2.Green),
+            (byte)(color1.Blue % color2.Blue),
+            (byte)(color1.Alpha % color2.Alpha)
+        );
     }
 
     /// <summary>
@@ -291,10 +312,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator *(ColorStruct color1, ColorStruct color2)
     {
-        return new ColorStruct((byte)(color1.Red * color2.Red), (byte)(color1.Green * color2.Green), (byte)(color1.Blue * color2.Blue), (byte)(color1.Alpha * color2.Alpha));
+        return new ColorStruct(
+            (byte)(color1.Red * color2.Red),
+            (byte)(color1.Green * color2.Green),
+            (byte)(color1.Blue * color2.Blue),
+            (byte)(color1.Alpha * color2.Alpha)
+        );
     }
 
     /// <summary>
@@ -303,10 +328,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator *(ColorStruct color1, float factor)
     {
-        return new ColorStruct((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
+        return new ColorStruct(
+            (byte)(color1.Red * factor),
+            (byte)(color1.Green * factor),
+            (byte)(color1.Blue * factor),
+            (byte)(color1.Alpha * factor)
+        );
     }
 
     /// <summary>
@@ -315,7 +344,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="factor">The factor.</param>
     /// <param name="color1">The color1.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator *(float factor, ColorStruct color1)
     {
         return color1 * factor;
@@ -327,10 +355,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator *(ColorStruct color1, byte factor)
     {
-        return new ColorStruct((byte)(color1.Red * factor), (byte)(color1.Green * factor), (byte)(color1.Blue * factor), (byte)(color1.Alpha * factor));
+        return new ColorStruct(
+            (byte)(color1.Red * factor),
+            (byte)(color1.Green * factor),
+            (byte)(color1.Blue * factor),
+            (byte)(color1.Alpha * factor)
+        );
     }
 
     /// <summary>
@@ -339,7 +371,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="factor">The factor.</param>
     /// <param name="color1">The color1.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator *(byte factor, ColorStruct color1)
     {
         return color1 * factor;
@@ -351,10 +382,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator /(ColorStruct color1, ColorStruct color2)
     {
-        return new ColorStruct((byte)(color1.Red / color2.Red), (byte)(color1.Green / color2.Green), (byte)(color1.Blue / color2.Blue), (byte)(color1.Alpha / color2.Alpha));
+        return new ColorStruct(
+            (byte)(color1.Red / color2.Red),
+            (byte)(color1.Green / color2.Green),
+            (byte)(color1.Blue / color2.Blue),
+            (byte)(color1.Alpha / color2.Alpha)
+        );
     }
 
     /// <summary>
@@ -363,10 +398,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator /(ColorStruct color1, byte factor)
     {
-        return new ColorStruct((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
+        return new ColorStruct(
+            (byte)(color1.Red / factor),
+            (byte)(color1.Green / factor),
+            (byte)(color1.Blue / factor),
+            (byte)(color1.Alpha / factor)
+        );
     }
 
     /// <summary>
@@ -375,10 +414,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator /(ColorStruct color1, float factor)
     {
-        return new ColorStruct((byte)(color1.Red / factor), (byte)(color1.Green / factor), (byte)(color1.Blue / factor), (byte)(color1.Alpha / factor));
+        return new ColorStruct(
+            (byte)(color1.Red / factor),
+            (byte)(color1.Green / factor),
+            (byte)(color1.Blue / factor),
+            (byte)(color1.Alpha / factor)
+        );
     }
 
     /// <summary>
@@ -387,10 +430,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator +(ColorStruct color1, ColorStruct color2)
     {
-        return new ColorStruct((byte)(color1.Red + color2.Red), (byte)(color1.Green + color2.Green), (byte)(color1.Blue + color2.Blue), (byte)(color1.Alpha + color2.Alpha));
+        return new ColorStruct(
+            (byte)(color1.Red + color2.Red),
+            (byte)(color1.Green + color2.Green),
+            (byte)(color1.Blue + color2.Blue),
+            (byte)(color1.Alpha + color2.Alpha)
+        );
     }
 
     /// <summary>
@@ -399,10 +446,14 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator +(ColorStruct color1, byte factor)
     {
-        return new ColorStruct((byte)(color1.Red + factor), (byte)(color1.Green + factor), (byte)(color1.Blue + factor), (byte)(color1.Alpha + factor));
+        return new ColorStruct(
+            (byte)(color1.Red + factor),
+            (byte)(color1.Green + factor),
+            (byte)(color1.Blue + factor),
+            (byte)(color1.Alpha + factor)
+        );
     }
 
     /// <summary>
@@ -411,7 +462,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ColorStruct operator +(byte factor, ColorStruct color1)
     {
         return color1 + factor;
@@ -423,7 +473,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(ColorStruct color1, ColorStruct color2)
     {
         return color1.Equals(color2);
@@ -435,7 +484,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <param name="min">The minimum.</param>
     /// <param name="max">The maximum.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ColorStruct Clamp(byte min = 0, byte max = 255)
     {
         Red = Red.Clamp(min, max);
@@ -452,13 +500,12 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <returns>
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Equals(ColorStruct other)
     {
         return other.Alpha == Alpha
-               && other.Red == Red
-               && other.Green == Green
-               && other.Blue == Blue;
+            && other.Red == Red
+            && other.Green == Green
+            && other.Blue == Blue;
     }
 
     /// <summary>
@@ -468,7 +515,6 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
         return obj is ColorStruct @struct && Equals(@struct);
@@ -497,10 +543,12 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <returns>The resulting value</returns>
     public readonly ColorStruct Lerp(ColorStruct color, float amount)
     {
-        return new ColorStruct(Red.Lerp(color.Red, amount),
+        return new ColorStruct(
+            Red.Lerp(color.Red, amount),
             Green.Lerp(color.Green, amount),
             Blue.Lerp(color.Blue, amount),
-            Alpha.Lerp(color.Alpha, amount));
+            Alpha.Lerp(color.Alpha, amount)
+        );
     }
 
     /// <summary>

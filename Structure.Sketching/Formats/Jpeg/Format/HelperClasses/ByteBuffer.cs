@@ -127,7 +127,7 @@ public class ByteBuffer
         while (true)
         {
             var c = ReadByteStuffedByte();
-            Bits.Accumulator = (Bits.Accumulator << 8) | (uint)c;
+            Bits.Accumulator = (Bits.Accumulator << 8) | c;
             Bits.NumberOfUnreadBits += 8;
             if (Bits.Mask == 0)
                 Bits.Mask = 1 << 7;

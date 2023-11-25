@@ -143,8 +143,7 @@ public struct Cieluv : IEquatable<Cieluv>, IColorSpace
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(Cieluv color1, Cieluv color2)
+        public static bool operator !=(Cieluv color1, Cieluv color2)
     {
         return !(color1 == color2);
     }
@@ -155,8 +154,7 @@ public struct Cieluv : IEquatable<Cieluv>, IColorSpace
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(Cieluv color1, Cieluv color2)
+        public static bool operator ==(Cieluv color1, Cieluv color2)
     {
         return color1.Equals(color2);
     }
@@ -168,8 +166,7 @@ public struct Cieluv : IEquatable<Cieluv>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
     {
         return obj is Cieluv cieluv && Equals(cieluv);
     }
@@ -181,8 +178,7 @@ public struct Cieluv : IEquatable<Cieluv>, IColorSpace
     /// <returns>
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(Cieluv other)
+        public readonly bool Equals(Cieluv other)
     {
         return Math.Abs(other.L - L) < Epsilon
                && Math.Abs(other.U - U) < Epsilon

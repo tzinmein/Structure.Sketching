@@ -162,7 +162,7 @@ public class DefineQuantizationTable : SegmentBase
                     Bytes.ReadFull(TempData, 0, 2 * Block.BlockSize);
 
                     for (var i = 0; i < Block.BlockSize; i++)
-                        Quant[tq][i] = ((int)TempData[2 * i] << 8) | (int)TempData[2 * i + 1];
+                        Quant[tq][i] = (TempData[2 * i] << 8) | TempData[2 * i + 1];
                     break;
 
                 default:

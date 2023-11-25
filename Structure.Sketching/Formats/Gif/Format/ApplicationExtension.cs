@@ -96,7 +96,7 @@ public class ApplicationExtension : SectionBase
             writer.Write((byte)3);
             writer.Write((byte)1);
 
-            RepeatCount = (ushort)(Math.Max((ushort)0, RepeatCount) - 1);
+            RepeatCount = (ushort)(Math.Max(0, RepeatCount) - 1);
 
             writer.Write(RepeatCount);
 

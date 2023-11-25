@@ -311,7 +311,7 @@ public class Header
         if (mask != 0)
         {
             mask >>= offset;
-            return 255d / (double)mask;
+            return 255d / mask;
         }
         return 1;
     }

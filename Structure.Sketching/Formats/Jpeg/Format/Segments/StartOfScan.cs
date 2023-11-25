@@ -247,10 +247,10 @@ public class StartOfScan : SegmentBase
 
         if (startOfFrameSegment.Progressive)
         {
-            zigStart = (int)TempData[1 + 2 * lnComp];
-            zigEnd = (int)TempData[2 + 2 * lnComp];
-            ah = (int)(TempData[3 + 2 * lnComp] >> 4);
-            al = (int)(TempData[3 + 2 * lnComp] & 0x0f);
+            zigStart = TempData[1 + 2 * lnComp];
+            zigEnd = TempData[2 + 2 * lnComp];
+            ah = TempData[3 + 2 * lnComp] >> 4;
+            al = TempData[3 + 2 * lnComp] & 0x0f;
 
             if ((zigStart == 0 && zigEnd != 0) || zigStart > zigEnd || zigEnd >= Block.BlockSize)
             {
@@ -571,7 +571,7 @@ public class StartOfScan : SegmentBase
             for (var x = 0; x < Image.Width; x += 8)
             {
                 ToYCbCr(x, y, b, cb, cr);
-                prevDcy = WriteBlock(b, (QuantIndex)0, prevDcy, writer);
+                prevDcy = WriteBlock(b, 0, prevDcy, writer);
                 prevDcCb = WriteBlock(cb, (QuantIndex)1, prevDcCb, writer);
                 prevDcCr = WriteBlock(cr, (QuantIndex)1, prevDcCr, writer);
             }

@@ -88,7 +88,7 @@ public class OctreeQuantizer : QuantizerBase
                 for (var x = 0; x < image.Width; x++)
                 {
                     var tempOffset = y * image.Width + x;
-                    quantizedPixels[tempOffset] = QuantizePixel((Bgra)image.Pixels[tempOffset]);
+                    quantizedPixels[tempOffset] = QuantizePixel(image.Pixels[tempOffset]);
                 }
             }
         );

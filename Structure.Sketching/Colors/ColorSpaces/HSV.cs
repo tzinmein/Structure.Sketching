@@ -127,8 +127,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(Hsv left, Hsv right)
+        public static bool operator !=(Hsv left, Hsv right)
     {
         return !(left == right);
     }
@@ -139,8 +138,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(Hsv left, Hsv right)
+        public static bool operator ==(Hsv left, Hsv right)
     {
         return left.Equals(right);
     }
@@ -152,8 +150,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
     {
         return obj is Hsv hsv && Equals(hsv);
     }
@@ -163,8 +160,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// </summary>
     /// <param name="other">The other HSV color.</param>
     /// <returns>True if they are, false otherwise</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(Hsv other)
+        public readonly bool Equals(Hsv other)
     {
         return Math.Abs(other.Hue - Hue) < Epsilon
                && Math.Abs(other.Saturation - Saturation) < Epsilon

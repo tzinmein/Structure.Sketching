@@ -111,7 +111,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <returns>The result of the conversion.</returns>
     public static implicit operator Bgra(Color color)
     {
-        return new Bgra((byte)color.Blue, (byte)color.Green, (byte)color.Red, (byte)color.Alpha);
+        return new Bgra(color.Blue, color.Green, color.Red, color.Alpha);
     }
 
     /// <summary>
@@ -140,8 +140,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(Bgra left, Bgra right)
+        public static bool operator !=(Bgra left, Bgra right)
     {
         return !(left == right);
     }
@@ -152,8 +151,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(Bgra left, Bgra right)
+        public static bool operator ==(Bgra left, Bgra right)
     {
         return left.Equals(right);
     }
@@ -165,8 +163,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
     {
         return obj is Bgra bgra && Equals(bgra);
     }
@@ -176,8 +173,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// </summary>
     /// <param name="other">The other Bgra color.</param>
     /// <returns>True if they are, false otherwise</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(Bgra other)
+        public readonly bool Equals(Bgra other)
     {
         return other._b == _b
                && other._g == _g

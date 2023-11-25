@@ -135,7 +135,7 @@ public abstract class SegmentBase
     {
         var tempLength = new byte[2];
         stream.ReadFull(tempLength, 0, 2);
-        var segmentLength = ((int)tempLength[0] << 8) + (int)tempLength[1] - 2;
+        var segmentLength = (tempLength[0] << 8) + tempLength[1] - 2;
         if (segmentLength < 0)
             throw new ImageException("short segment length");
         return segmentLength;

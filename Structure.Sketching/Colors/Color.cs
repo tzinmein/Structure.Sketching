@@ -19,7 +19,6 @@ using Structure.Sketching.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Structure.Sketching.Colors;
@@ -149,10 +148,9 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The average color</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color Average(Color color1, Color color2)
     {
-        return (color1 + color2) / (byte)2;
+        return (color1 + color2) / 2;
     }
 
     /// <summary>
@@ -232,7 +230,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator -(Color color1, Color color2)
     {
         return new Color(
@@ -248,7 +245,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Subtract(Color color)
     {
         Red = (byte)(Red - color.Red).Clamp(0, 255);
@@ -263,7 +259,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Subtract(byte factor)
     {
         Red = (byte)(Red - factor).Clamp(0, 255);
@@ -278,7 +273,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Add(Color color)
     {
         Red = (byte)(Red + color.Red).Clamp(0, 255);
@@ -293,7 +287,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Add(byte factor)
     {
         Red = (byte)(Red + factor).Clamp(0, 255);
@@ -307,7 +300,6 @@ public partial struct Color : IEquatable<Color>
     /// Nots this instance.
     /// </summary>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Not()
     {
         IntData = uint.MaxValue - IntData;
@@ -319,7 +311,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Modulo(byte factor)
     {
         if (factor == 0)
@@ -337,7 +328,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Modulo(Color color)
     {
         Red = color.Red == 0 ? Red : (byte)(Red / 255f % (color.Red / 255f) * 255f);
@@ -352,7 +342,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Multiply(Color color)
     {
         Red = (byte)(Red / 255f * (color.Red / 255f) * 255f).Clamp(0, 255);
@@ -367,7 +356,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Multiply(float factor)
     {
         Red = (byte)(Red * factor).Clamp(0, 255);
@@ -382,7 +370,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Multiply(byte factor)
     {
         var scaledFactor = factor / 255f;
@@ -398,7 +385,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color And(Color color)
     {
         IntData &= color.IntData;
@@ -410,7 +396,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Or(Color color)
     {
         IntData |= color.IntData;
@@ -422,7 +407,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color XOr(Color color)
     {
         IntData ^= color.IntData;
@@ -435,7 +419,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator -(Color color1, byte factor)
     {
         return new Color(
@@ -452,7 +435,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator -(byte factor, Color color1)
     {
         return new Color(
@@ -468,7 +450,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator !(Color color)
     {
         return new Color(uint.MaxValue - color.IntData);
@@ -480,7 +461,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Color color1, Color color2)
     {
         return !(color1 == color2);
@@ -492,7 +472,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator %(Color color1, byte factor)
     {
         if (factor == 0)
@@ -512,7 +491,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator %(Color color1, Color color2)
     {
         return new Color(
@@ -535,7 +513,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(Color color1, Color color2)
     {
         return new Color(
@@ -552,7 +529,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(Color color1, float factor)
     {
         return new Color(
@@ -569,7 +545,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="factor">The factor.</param>
     /// <param name="color1">The color1.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(float factor, Color color1)
     {
         return color1 * factor;
@@ -581,7 +556,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(Color color1, byte factor)
     {
         var scaledFactor = factor / 255f;
@@ -599,7 +573,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="factor">The factor.</param>
     /// <param name="color1">The color1.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator *(byte factor, Color color1)
     {
         return color1 * factor;
@@ -611,7 +584,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator &(Color color1, Color color2)
     {
         return new Color(color1.IntData & color2.IntData);
@@ -623,7 +595,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator |(Color color1, Color color2)
     {
         return new Color(color1.IntData | color2.IntData);
@@ -635,7 +606,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator ^(Color color1, Color color2)
     {
         return new Color(color1.IntData ^ color2.IntData);
@@ -647,7 +617,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator /(Color color1, Color color2)
     {
         return new Color(
@@ -669,7 +638,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="color">The color.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Divide(Color color)
     {
         Red = color.Red == 0 ? Red : (byte)(Red / 255f / (color.Red / 255f) * 255f).Clamp(0, 255);
@@ -691,7 +659,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Divide(byte factor)
     {
         if (factor == 0)
@@ -709,7 +676,6 @@ public partial struct Color : IEquatable<Color>
     /// </summary>
     /// <param name="factor">The factor.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Divide(float factor)
     {
         if (Math.Abs(factor) < EPSILON)
@@ -727,7 +693,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator /(Color color1, byte factor)
     {
         if (factor == 0)
@@ -747,7 +712,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator /(Color color1, float factor)
     {
         if (Math.Abs(factor) < EPSILON)
@@ -768,7 +732,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator +(Color color1, Color color2)
     {
         return new Color(
@@ -785,7 +748,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator +(Color color1, byte factor)
     {
         return new Color(
@@ -802,7 +764,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="factor">The factor.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color operator +(byte factor, Color color1)
     {
         return color1 + factor;
@@ -814,7 +775,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Color color1, Color color2)
     {
         return color1.Equals(color2);
@@ -826,7 +786,6 @@ public partial struct Color : IEquatable<Color>
     /// <param name="min">The minimum.</param>
     /// <param name="max">The maximum.</param>
     /// <returns>This</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Color Clamp(byte min = 0, byte max = 255)
     {
         Red = Red.Clamp(min, max);
@@ -843,7 +802,6 @@ public partial struct Color : IEquatable<Color>
     /// <returns>
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Equals(Color other)
     {
         return other.IntData == IntData;
@@ -856,7 +814,6 @@ public partial struct Color : IEquatable<Color>
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly override bool Equals(object obj)
     {
         return obj is Color color && Equals(color);

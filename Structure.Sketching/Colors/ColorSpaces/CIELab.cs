@@ -140,8 +140,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(CieLab left, CieLab right)
+        public static bool operator !=(CieLab left, CieLab right)
     {
         return !(left == right);
     }
@@ -152,8 +151,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(CieLab left, CieLab right)
+        public static bool operator ==(CieLab left, CieLab right)
     {
         return left.Equals(right);
     }
@@ -165,8 +163,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
     {
         return obj is CieLab lab && Equals(lab);
     }
@@ -176,8 +173,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// </summary>
     /// <param name="other">The other CIELab color.</param>
     /// <returns>True if they are, false otherwise</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(CieLab other)
+        public readonly bool Equals(CieLab other)
     {
         return Math.Abs(other.L - L) < Epsilon
                && Math.Abs(other.A - A) < Epsilon

@@ -52,7 +52,7 @@ public class DefineRestartInterval : SegmentBase
     {
         Length = GetLength(Bytes);
         Bytes.ReadFull(TempData, 0, 2);
-        RestartInterval = ((int)TempData[0] << 8) + (int)TempData[1];
+        RestartInterval = (TempData[0] << 8) + TempData[1];
     }
 
     /// <summary>

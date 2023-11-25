@@ -293,8 +293,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// </summary>
     /// <param name="value">The source matrix.</param>
     /// <returns>The negated matrix.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Matrix5X5 operator -(Matrix5X5 value)
+        public static Matrix5X5 operator -(Matrix5X5 value)
     {
         Matrix5X5 m;
 
@@ -333,8 +332,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The first source matrix.</param>
     /// <param name="value2">The second source matrix.</param>
     /// <returns>The result of the subtraction.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Matrix5X5 operator -(Matrix5X5 value1, Matrix5X5 value2)
+        public static Matrix5X5 operator -(Matrix5X5 value1, Matrix5X5 value2)
     {
         Matrix5X5 m;
 
@@ -373,8 +371,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The first matrix to compare.</param>
     /// <param name="value2">The second matrix to compare.</param>
     /// <returns>True if the given matrices are not equal; False if they are equal.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(Matrix5X5 value1, Matrix5X5 value2)
+        public static bool operator !=(Matrix5X5 value1, Matrix5X5 value2)
     {
         return value1.M11 != value2.M11 || value1.M12 != value2.M12 || value1.M13 != value2.M13 || value1.M14 != value2.M14 || value1.M15 != value2.M15 ||
                value1.M21 != value2.M21 || value1.M22 != value2.M22 || value1.M23 != value2.M23 || value1.M24 != value2.M24 || value1.M25 != value2.M25 ||
@@ -389,8 +386,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The first source matrix.</param>
     /// <param name="value2">The second source matrix.</param>
     /// <returns>The result of the multiplication.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Matrix5X5 operator *(Matrix5X5 value1, Matrix5X5 value2)
+        public static Matrix5X5 operator *(Matrix5X5 value1, Matrix5X5 value2)
     {
         Matrix5X5 m;
 
@@ -438,8 +434,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The source matrix.</param>
     /// <param name="value2">The scaling factor.</param>
     /// <returns>The scaled matrix.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Matrix5X5 operator *(Matrix5X5 value1, float value2)
+        public static Matrix5X5 operator *(Matrix5X5 value1, float value2)
     {
         Matrix5X5 m;
 
@@ -477,8 +472,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The source matrix</param>
     /// <param name="value2">The vector</param>
     /// <returns>The resulting vector</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Color operator *(Matrix5X5 value1, Color value2)
+        public static Color operator *(Matrix5X5 value1, Color value2)
     {
         var r = value2.Red / 255f;
         var g = value2.Green / 255f;
@@ -496,8 +490,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The first source matrix.</param>
     /// <param name="value2">The second source matrix.</param>
     /// <returns>The resulting matrix.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Matrix5X5 operator +(Matrix5X5 value1, Matrix5X5 value2)
+        public static Matrix5X5 operator +(Matrix5X5 value1, Matrix5X5 value2)
     {
         Matrix5X5 m;
 
@@ -536,8 +529,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// <param name="value1">The first matrix to compare.</param>
     /// <param name="value2">The second matrix to compare.</param>
     /// <returns>True if the given matrices are equal; False otherwise.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(Matrix5X5 value1, Matrix5X5 value2)
+        public static bool operator ==(Matrix5X5 value1, Matrix5X5 value2)
     {
         return value1.M11 == value2.M11 && value1.M22 == value2.M22 && value1.M33 == value2.M33 && value1.M44 == value2.M44 && value1.M55 == value2.M55 && // Check diagonal element first for early out.
                value1.M12 == value2.M12 && value1.M13 == value2.M13 && value1.M14 == value2.M14 && value1.M15 == value2.M15 &&
@@ -552,8 +544,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// </summary>
     /// <param name="other">The matrix to compare this instance to.</param>
     /// <returns>True if the matrices are equal; False otherwise.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(Matrix5X5 other)
+        public readonly bool Equals(Matrix5X5 other)
     {
         return this == other;
     }
@@ -564,8 +555,7 @@ public struct Matrix5X5 : IEquatable<Matrix5X5>
     /// </summary>
     /// <param name="obj">The Object to compare against.</param>
     /// <returns>True if the Object is equal to this matrix; False otherwise.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
     {
         if (obj is Matrix5X5 x5)
         {

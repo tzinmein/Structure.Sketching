@@ -84,8 +84,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=(Rectangle left, Rectangle right)
+        public static bool operator !=(Rectangle left, Rectangle right)
     {
         return !(left == right);
     }
@@ -96,8 +95,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==(Rectangle left, Rectangle right)
+        public static bool operator ==(Rectangle left, Rectangle right)
     {
         return left.Equals(right);
     }
@@ -107,8 +105,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// </summary>
     /// <param name="image">The image.</param>
     /// <returns>The resulting clamped rectangle</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Rectangle Clamp(Image image)
+        public Rectangle Clamp(Image image)
     {
         Data = new Vector4(Data.X < 0 ? 0 : Data.X,
             Data.Y < 0 ? 0 : Data.Y,
@@ -122,8 +119,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// </summary>
     /// <param name="image">The image.</param>
     /// <returns>The resulting clamped rectangle</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Rectangle Clamp(Rectangle image)
+        public Rectangle Clamp(Rectangle image)
     {
         Data = new Vector4(Data.X < image.Left ? image.Left : Data.X,
             Data.Y < image.Bottom ? image.Bottom : Data.Y,
@@ -138,8 +134,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// <param name="x">The x.</param>
     /// <param name="y">The y.</param>
     /// <returns>True if it does, false otherwise</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Contains(int x, int y)
+        public readonly bool Contains(int x, int y)
     {
         return Left <= x
                && Right > x
@@ -154,8 +149,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// <returns>
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Equals(Rectangle other)
+        public readonly bool Equals(Rectangle other)
     {
         return other.Data == Data;
     }
@@ -167,8 +161,7 @@ public struct Rectangle : IEquatable<Rectangle>
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly override bool Equals(object obj)
+        public readonly override bool Equals(object obj)
     {
         return obj is Rectangle rectangle && Equals(rectangle);
     }
