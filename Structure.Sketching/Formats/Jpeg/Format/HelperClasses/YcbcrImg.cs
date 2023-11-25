@@ -156,7 +156,7 @@ public class YcbcrImg
     /// </summary>
     /// <param name="segments">The segments.</param>
     /// <returns>True if it is, false otherwise</returns>
-    public bool IsRgb(IEnumerable<SegmentBase> segments)
+    public static bool IsRgb(IEnumerable<SegmentBase> segments)
     {
         var application0Segment = segments.OfType<Application0>().FirstOrDefault() ?? new Application0(null);
         var application14Segment = segments.OfType<Application14>().FirstOrDefault() ?? new Application14(null);

@@ -6,7 +6,7 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests;
 public class FileReader
 {
     [Benchmark(Description = "File.Read")]
-    public void FileRead()
+    public static void FileRead()
     {
         using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
         var data = new byte[testStream.Length];
@@ -14,7 +14,7 @@ public class FileReader
     }
 
     [Benchmark(Description = "File.Read in loop, 1024")]
-    public void FileReadLoop1024()
+    public static void FileReadLoop1024()
     {
         var data = new byte[1024];
         using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
@@ -22,7 +22,7 @@ public class FileReader
     }
 
     [Benchmark(Description = "File.Read in loop, 2048")]
-    public void FileReadLoop2048()
+    public static void FileReadLoop2048()
     {
         var data = new byte[2048];
         using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
@@ -30,7 +30,7 @@ public class FileReader
     }
 
     [Benchmark(Baseline = true, Description = "File.Read in loop, 4096")]
-    public void FileReadLoop4096()
+    public static void FileReadLoop4096()
     {
         var data = new byte[4096];
         using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
@@ -38,7 +38,7 @@ public class FileReader
     }
 
     [Benchmark(Description = "File.ReadAllBytes")]
-    public void ReadAllBytes()
+    public static void ReadAllBytes()
     {
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
         var data = File.ReadAllBytes("../../../../TestImage/BitmapFilter.bmp");

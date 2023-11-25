@@ -21,7 +21,7 @@ public abstract class TestBaseClass
         return ReadBinary(outputStream).SequenceEqual(ReadBinary(expectedStream));
     }
 
-    protected byte[] ReadBinary(FileStream stream)
+    protected static byte[] ReadBinary(FileStream stream)
     {
         var buffer = new byte[1024];
         using MemoryStream temp = new();

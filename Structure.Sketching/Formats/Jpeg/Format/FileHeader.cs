@@ -34,7 +34,7 @@ public class FileHeader
     /// Gets the file type, 0xFF and 0xD8
     /// </summary>
     /// <value>The file type.</value>
-    public byte[] Type => new byte[] { 0xFF, 0xD8 };
+    public static byte[] Type => new byte[] { 0xFF, 0xD8 };
 
     /// <summary>
     /// Reads the header information from the specified stream.

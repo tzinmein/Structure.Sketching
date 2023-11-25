@@ -6,14 +6,14 @@ namespace Structure.Sketching.Benchmarks.Formats.BMP;
 public class DecodeTests
 {
     [Benchmark(Baseline = true, Description = "FileStream reading")]
-    public void FileStreamReading()
+    public static void FileStreamReading()
     {
         using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
         new Structure.Sketching.Formats.Bmp.BmpFormat().Decode(testStream);
     }
 
     [Benchmark(Description = "MemoryStream reading")]
-    public void MemoryStreamReading()
+    public static void MemoryStreamReading()
     {
         using var testStream = File.Open("../../../../TestImage/BitmapFilter.bmp", FileMode.Open);
         var data = new byte[testStream.Length];

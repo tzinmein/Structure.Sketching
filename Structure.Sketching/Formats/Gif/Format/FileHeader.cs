@@ -33,7 +33,7 @@ public class FileHeader : SectionBase
     /// <value>
     /// The header.
     /// </value>
-    public byte[] Header => new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 };
+    public static byte[] Header => new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 };
 
     /// <summary>
     /// Gets the size.

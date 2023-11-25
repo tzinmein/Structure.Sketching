@@ -10,8 +10,8 @@ public class Crop
     [Params(10, 100, 1000, 5000)]
     public int Count { get; set; }
 
-    private int Height => 8000;
-    private int Width => 8000;
+    private static int Height => 8000;
+    private static int Width => 8000;
 
     [Benchmark(Description = "Structure.Sketching Crop")]
     public void CropStructureSketching()

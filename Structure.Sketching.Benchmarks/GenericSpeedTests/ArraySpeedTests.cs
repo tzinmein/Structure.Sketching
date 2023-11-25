@@ -7,7 +7,7 @@ namespace Structure.Sketching.Benchmarks.ArraySpeedTests;
 public class ArraySpeedTests
 {
     [Benchmark(Baseline = true, Description = "Byte array manipulation")]
-    public void ByteArray()
+    public static void ByteArray()
     {
         var testArray = new byte[40000];
         for (var x = 0; x < testArray.Length; ++x)
@@ -17,7 +17,7 @@ public class ArraySpeedTests
     }
 
     [Benchmark(Description = "ColorStruct array manipulation")]
-    public void ColorStructArray()
+    public static void ColorStructArray()
     {
         var testArray = new ColorStruct[10000];
         for (var x = 0; x < testArray.Length; ++x)
@@ -30,7 +30,7 @@ public class ArraySpeedTests
     }
 
     [Benchmark(Description = "ColorStruct array manipulation 2")]
-    public void ColorStructArray2()
+    public static void ColorStructArray2()
     {
         var testArray = new ColorStruct[10000];
         for (var x = 0; x < testArray.Length; ++x)
@@ -40,7 +40,7 @@ public class ArraySpeedTests
     }
 
     [Benchmark(Description = "Float array manipulation")]
-    public void FloatArray()
+    public static void FloatArray()
     {
         var testArray = new float[40000];
         for (var x = 0; x < testArray.Length; ++x)
@@ -50,7 +50,7 @@ public class ArraySpeedTests
     }
 
     [Benchmark(Description = "Unsigned int array manipulation")]
-    public void UIntArray()
+    public static void UIntArray()
     {
         var testArray = new uint[10000];
         for (var x = 0; x < testArray.Length; ++x)
@@ -63,7 +63,7 @@ public class ArraySpeedTests
     }
 
     [Benchmark(Description = "Vector4 array manipulation")]
-    public void Vector4Array()
+    public static void Vector4Array()
     {
         var testArray = new Vector4[10000];
         for (var x = 0; x < testArray.Length; ++x)

@@ -210,7 +210,7 @@ public class Header
     /// Gets the number of planes.
     /// </summary>
     /// <value>The number of planes.</value>
-    public short Planes => 1;
+    public static short Planes => 1;
 
     /// <summary>
     /// Gets or sets the red mask.
@@ -306,7 +306,7 @@ public class Header
     /// <returns>
     /// The multiplier
     /// </returns>
-    private double GetMultiplier(int mask, int offset)
+    private static double GetMultiplier(int mask, int offset)
     {
         if (mask != 0)
         {
@@ -321,7 +321,7 @@ public class Header
     /// </summary>
     /// <param name="mask">The mask.</param>
     /// <returns>The offset</returns>
-    private int GetOffset(int mask)
+    private static int GetOffset(int mask)
     {
         var offset = 0;
         if (mask != 0)

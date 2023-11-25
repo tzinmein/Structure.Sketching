@@ -130,7 +130,7 @@ public class File : FileBase
     /// Loads the image.
     /// </summary>
     /// <param name="image">The image.</param>
-    private void LoadImage(Image image)
+    private static void LoadImage(Image image)
     {
     }
 

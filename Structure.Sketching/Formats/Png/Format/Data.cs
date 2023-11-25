@@ -285,7 +285,7 @@ public class Data
     /// <param name="colorReader">The color reader.</param>
     /// <param name="colorTypeInformation">The color type information.</param>
     /// <param name="header">The header.</param>
-    private void ReadScanlines(
+    private static void ReadScanlines(
         Stream dataStream,
         Color[] pixels,
         IColorReader colorReader,

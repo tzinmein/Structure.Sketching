@@ -44,7 +44,7 @@ public class Lanczos3Filter : ResamplingFilterBase
         return 0;
     }
 
-    private double Sin(double value)
+    private static double Sin(double value)
     {
         if (value == 0) return 1;
         value *= Math.PI;

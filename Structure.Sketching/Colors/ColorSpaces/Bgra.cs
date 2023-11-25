@@ -208,7 +208,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="hash">The existing hash.</param>
     /// <param name="component">The component.</param>
     /// <returns>The resulting hash</returns>
-    private readonly int ComputeHash(int hash, byte component)
+    private static int ComputeHash(int hash, byte component)
     {
         return ((hash << 5) + hash) ^ component.GetHashCode();
     }

@@ -45,7 +45,7 @@ public abstract class FormatTestBase
         return pixelsOk;
     }
 
-    protected byte[] ReadBinary(FileStream stream)
+    protected static byte[] ReadBinary(FileStream stream)
     {
         var buffer = new byte[1024];
         using MemoryStream temp = new();

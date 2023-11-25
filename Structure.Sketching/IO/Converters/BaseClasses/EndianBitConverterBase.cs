@@ -218,7 +218,7 @@ public abstract class EndianBitConverterBase
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>The resulting long.</returns>
-    public long DoubleToLong(double value)
+    public static long DoubleToLong(double value)
     {
         return BitConverter.DoubleToInt64Bits(value);
     }
@@ -228,7 +228,7 @@ public abstract class EndianBitConverterBase
     /// </summary>
     /// <param name="value">Float value</param>
     /// <returns>The integer equivalent.</returns>
-    public int FloatToInt(float value)
+    public static int FloatToInt(float value)
     {
         return new IntFloatUnion(value).IntegerValue;
     }
@@ -255,7 +255,7 @@ public abstract class EndianBitConverterBase
     /// </summary>
     /// <param name="value">if set to <c>true</c> [value].</param>
     /// <returns>Gets the resulting byte array.</returns>
-    public byte[] GetBytes(bool value)
+    public static byte[] GetBytes(bool value)
     {
         return BitConverter.GetBytes(value);
     }
@@ -355,7 +355,7 @@ public abstract class EndianBitConverterBase
     /// </summary>
     /// <param name="value">The integer value</param>
     /// <returns>The float value.</returns>
-    public float IntToFloat(int value)
+    public static float IntToFloat(int value)
     {
         return new IntFloatUnion(value).FloatValue;
     }
@@ -365,7 +365,7 @@ public abstract class EndianBitConverterBase
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>The resulting double.</returns>
-    public double LongToDouble(long value)
+    public static double LongToDouble(long value)
     {
         return BitConverter.Int64BitsToDouble(value);
     }
@@ -377,7 +377,7 @@ public abstract class EndianBitConverterBase
     /// <param name="startIndex">The start index.</param>
     /// <returns>The resulting boolean.</returns>
     /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-    public bool ToBoolean(byte[] value, int startIndex)
+    public static bool ToBoolean(byte[] value, int startIndex)
     {
         value ??= Array.Empty<byte>();
         if (value.Length - 1 < startIndex || startIndex < 0)

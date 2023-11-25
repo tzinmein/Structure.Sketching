@@ -71,7 +71,7 @@ public class Palette
     /// Writes the data to the specified writer.
     /// </summary>
     /// <param name="writer">The writer.</param>
-    public void Write(BinaryWriter writer)
+    public static void Write(BinaryWriter writer)
     {
     }
 }

@@ -6,21 +6,21 @@ namespace Structure.Sketching.Benchmarks.GenericSpeedTests;
 public class Clamp
 {
     [Benchmark(Description = "All Ternary Clamp")]
-    public byte ClampAllTernary()
+    public static byte ClampAllTernary()
     {
         double value = 256;
         return (byte)(value < 0 ? 0 : value > 255 ? 255 : value);
     }
 
     [Benchmark(Baseline = true, Description = "Maths Clamp")]
-    public byte ClampMaths()
+    public static byte ClampMaths()
     {
         double value = 256;
         return (byte)Math.Min(Math.Max(0, value), 255);
     }
 
     [Benchmark(Description = "No Maths Clamp")]
-    public byte ClampNoMaths()
+    public static byte ClampNoMaths()
     {
         double value = 256;
         value = (value > 255) ? 255 : value;
@@ -29,7 +29,7 @@ public class Clamp
     }
 
     [Benchmark(Description = "No Maths Clamp No Ternary")]
-    public byte ClampNoMathsNoTernary()
+    public static byte ClampNoMathsNoTernary()
     {
         double value = 256;
 

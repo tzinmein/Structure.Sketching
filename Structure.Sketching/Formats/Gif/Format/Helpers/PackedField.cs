@@ -23,12 +23,12 @@ namespace Structure.Sketching.Formats.Gif.Format.Helpers;
 /// Packed field
 /// </summary>
 /// <seealso cref="IEquatable{PackedField}" />
-public struct PackedField : IEquatable<PackedField>
+public readonly struct PackedField : IEquatable<PackedField>
 {
     /// <summary>
     /// Gets the byte which represents the data items held in this instance.
     /// </summary>
-    public readonly byte Byte
+    public byte Byte
     {
         get
         {
@@ -97,7 +97,7 @@ public struct PackedField : IEquatable<PackedField>
     }
 
     /// <inheritdoc/>
-    public readonly override bool Equals(object obj)
+    public override bool Equals(object obj)
     {
         var field = obj as PackedField?;
 
@@ -105,7 +105,7 @@ public struct PackedField : IEquatable<PackedField>
     }
 
     /// <inheritdoc/>
-    public readonly bool Equals(PackedField other)
+    public bool Equals(PackedField other)
     {
         return Byte.Equals(other.Byte);
     }
@@ -117,7 +117,7 @@ public struct PackedField : IEquatable<PackedField>
     /// <returns>
     /// The value of the specified bit within the byte.
     /// </returns>
-    public readonly bool GetBit(int index)
+    public bool GetBit(int index)
     {
         if (index is >= 0 and <= 7) return Bits[index];
         var message = $"Index must be between 0 and 7. Supplied index: {index}";
@@ -132,7 +132,7 @@ public struct PackedField : IEquatable<PackedField>
     /// <returns>
     /// The value of the specified bits within the byte.
     /// </returns>
-    public readonly int GetBits(int startIndex, int length)
+    public int GetBits(int startIndex, int length)
     {
         if (startIndex is < 0 or > 7)
         {
@@ -160,7 +160,7 @@ public struct PackedField : IEquatable<PackedField>
     }
 
     /// <inheritdoc/>
-    public readonly override int GetHashCode()
+    public override int GetHashCode()
     {
         return Byte.GetHashCode();
     }
@@ -175,7 +175,7 @@ public struct PackedField : IEquatable<PackedField>
     /// <param name="valueToSet">
     /// The value to set the bit to.
     /// </param>
-    public readonly void SetBit(int index, bool valueToSet)
+    public void SetBit(int index, bool valueToSet)
     {
         if (index is < 0 or > 7)
         {
@@ -194,7 +194,7 @@ public struct PackedField : IEquatable<PackedField>
     /// <param name="startIndex">The zero-based index within the packed fields of the first bit to  set.</param>
     /// <param name="length">The number of bits to set.</param>
     /// <param name="valueToSet">The value to set the bits to.</param>
-    public readonly void SetBits(int startIndex, int length, int valueToSet)
+    public void SetBits(int startIndex, int length, int valueToSet)
     {
         if (startIndex is < 0 or > 7)
         {
@@ -221,7 +221,7 @@ public struct PackedField : IEquatable<PackedField>
     }
 
     /// <inheritdoc/>
-    public readonly override string ToString()
+    public override string ToString()
     {
         return $"PackedField [ Byte={Byte} ]";
     }

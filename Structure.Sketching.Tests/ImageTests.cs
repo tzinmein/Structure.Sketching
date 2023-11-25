@@ -14,7 +14,7 @@ public class ImageTests : FilterTestBaseClass
 
     public override string OutputDirectory => "./TestOutput/Image/";
 
-    public string SecondImage => "./TestImages/Formats/Bmp/Car.bmp";
+    public static string SecondImage => "./TestImages/Formats/Bmp/Car.bmp";
 
     public static readonly TheoryData<string, Func<Image, int, Image>, int> ShiftOperations =
         new() { { "ShiftLeft", (x, y) => x << y, 128 }, { "ShiftRight", (x, y) => x >> y, 128 } };

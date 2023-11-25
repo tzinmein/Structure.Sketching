@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Quantizers.BaseClasses;
-using System;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Quantizers.Octree;
 
@@ -117,7 +117,7 @@ public class OctreeQuantizer : QuantizerBase
     /// </summary>
     /// <param name="colorCount">The color count.</param>
     /// <returns>The bits needed</returns>
-    private int GetBitsNeededForColorDepth(int colorCount)
+    private static int GetBitsNeededForColorDepth(int colorCount)
     {
         return (int)Math.Ceiling(Math.Log(colorCount, 2));
     }

@@ -293,7 +293,7 @@ public class EndianBinaryReader : IDisposable
     public bool ReadBoolean()
     {
         ReadInternal(_buffer, 1);
-        return BitConverter.ToBoolean(_buffer, 0);
+        return EndianBitConverterBase.ToBoolean(_buffer, 0);
     }
 
     /// <summary>

@@ -8,7 +8,7 @@ namespace Structure.Sketching.Benchmarks.Filters;
 public class Resize
 {
     [Benchmark(Description = "Structure.Sketching Resize")]
-    public void CropStructureSketching()
+    public static void CropStructureSketching()
     {
         var testImage = new Sketching.Image(2000, 2000);
         var filter = new Sketching.Filters.Resampling.Resize(400, 400, Sketching.Filters.Resampling.Enums.ResamplingFiltersAvailable.NearestNeighbor);
@@ -17,7 +17,7 @@ public class Resize
 
     [SupportedOSPlatform("windows")]
     [Benchmark(Baseline = true, Description = "System.Drawing Resize")]
-    public void ResizeSystemDrawing()
+    public static void ResizeSystemDrawing()
     {
         using Bitmap source = new(2000, 2000);
         using Bitmap destination = new(400, 400);

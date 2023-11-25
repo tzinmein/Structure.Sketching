@@ -37,7 +37,7 @@ public abstract class ShapeBaseClass : IShape
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>The fractional portion of the number</returns>
-    protected double FractionalPart(double value)
+    protected static double FractionalPart(double value)
     {
         return value - (int)value;
     }
@@ -75,7 +75,7 @@ public abstract class ShapeBaseClass : IShape
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>Rounds the specified value</returns>
-    protected double Round(double value)
+    protected static double Round(double value)
     {
         return (int)(value + 0.5);
     }

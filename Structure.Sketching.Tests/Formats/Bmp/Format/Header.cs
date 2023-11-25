@@ -32,7 +32,7 @@ public class Header
         Assert.Equal(Compression.Rgb, testFileHeader.Compression);
         Assert.Equal(40, testFileHeader.Height);
         Assert.Equal(1000, testFileHeader.ImageSize);
-        Assert.Equal(1, testFileHeader.Planes);
+        Assert.Equal(1, Sketching.Formats.Bmp.Format.Header.Planes);
         Assert.Equal(44, testFileHeader.Width);
         Assert.Equal(0, testFileHeader.Xppm);
         Assert.Equal(0, testFileHeader.Yppm);
@@ -48,7 +48,7 @@ public class Header
         Assert.Equal(Compression.Rgb, testFileHeader.Compression);
         Assert.Equal(40, testFileHeader.Height);
         Assert.Equal(1000, testFileHeader.ImageSize);
-        Assert.Equal(1, testFileHeader.Planes);
+        Assert.Equal(1, Sketching.Formats.Bmp.Format.Header.Planes);
         Assert.Equal(44, testFileHeader.Width);
         Assert.Equal(0, testFileHeader.Xppm);
         Assert.Equal(0, testFileHeader.Yppm);
@@ -79,7 +79,7 @@ public class Header
         Assert.Equal(Compression.Rgb, testFileHeader.Compression);
         Assert.Equal(40, testFileHeader.Height);
         Assert.Equal(1000, testFileHeader.ImageSize);
-        Assert.Equal(1, testFileHeader.Planes);
+        Assert.Equal(1, Sketching.Formats.Bmp.Format.Header.Planes);
         Assert.Equal(44, testFileHeader.Width);
         Assert.Equal(0, testFileHeader.Xppm);
         Assert.Equal(0, testFileHeader.Yppm);

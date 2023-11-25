@@ -183,7 +183,7 @@ public struct Yxy : IEquatable<Yxy>, IColorSpace
     /// <param name="hash">The existing hash.</param>
     /// <param name="component">The component.</param>
     /// <returns>The resulting hash</returns>
-    private readonly int ComputeHash(int hash, double component)
+    private static int ComputeHash(int hash, double component)
     {
         return ((hash << 5) + hash) ^ component.GetHashCode();
     }

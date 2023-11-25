@@ -14,8 +14,8 @@ public class FileHeader
         var testFileHeader = new Sketching.Formats.Bmp.Format.FileHeader(data);
         Assert.Equal(1000, testFileHeader.FileSize);
         Assert.Equal(54, testFileHeader.Offset);
-        Assert.Equal(0, testFileHeader.Reserved);
-        Assert.Equal(19778, testFileHeader.Type);
+        Assert.Equal(0, Sketching.Formats.Bmp.Format.FileHeader.Reserved);
+        Assert.Equal(19778, Sketching.Formats.Bmp.Format.FileHeader.Type);
     }
 
     [Fact]
@@ -24,8 +24,8 @@ public class FileHeader
         var testFileHeader = new Sketching.Formats.Bmp.Format.FileHeader(1000, 54);
         Assert.Equal(1000, testFileHeader.FileSize);
         Assert.Equal(54, testFileHeader.Offset);
-        Assert.Equal(0, testFileHeader.Reserved);
-        Assert.Equal(19778, testFileHeader.Type);
+        Assert.Equal(0, Sketching.Formats.Bmp.Format.FileHeader.Reserved);
+        Assert.Equal(19778, Sketching.Formats.Bmp.Format.FileHeader.Type);
     }
 
     [Fact]
@@ -36,8 +36,8 @@ public class FileHeader
         var testFileHeader = Sketching.Formats.Bmp.Format.FileHeader.Read(stream);
         Assert.Equal(1000, testFileHeader.FileSize);
         Assert.Equal(54, testFileHeader.Offset);
-        Assert.Equal(0, testFileHeader.Reserved);
-        Assert.Equal(19778, testFileHeader.Type);
+        Assert.Equal(0, Sketching.Formats.Bmp.Format.FileHeader.Reserved);
+        Assert.Equal(19778, Sketching.Formats.Bmp.Format.FileHeader.Type);
     }
 
     [Fact]

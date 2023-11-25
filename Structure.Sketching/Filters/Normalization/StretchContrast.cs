@@ -59,7 +59,7 @@ public class StretchContrast : IFilter
         return image;
     }
 
-    private void GetMinMaxPixel(IList<byte> minValue, IList<byte> maxValue, Image image)
+    private static void GetMinMaxPixel(IList<byte> minValue, IList<byte> maxValue, Image image)
     {
         minValue[0] = minValue[1] = minValue[2] = 255;
         maxValue[0] = maxValue[1] = maxValue[2] = 0;
@@ -88,7 +88,7 @@ public class StretchContrast : IFilter
         }
     }
 
-    private byte Map(byte v, byte min, byte max)
+    private static byte Map(byte v, byte min, byte max)
     {
         float tempVal = v - min;
         tempVal /= max - min;

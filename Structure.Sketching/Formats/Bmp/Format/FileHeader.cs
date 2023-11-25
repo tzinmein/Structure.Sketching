@@ -61,7 +61,7 @@ public class FileHeader
     /// Gets the reserved.
     /// </summary>
     /// <value>The reserved.</value>
-    public int Reserved => 0;
+    public static int Reserved => 0;
 
     /// <summary>
     /// Gets the file header size.
@@ -73,7 +73,7 @@ public class FileHeader
     /// Gets the file type, 'BM'
     /// </summary>
     /// <value>The file type.</value>
-    public short Type => 19778;
+    public static short Type => 19778;
 
     /// <summary>
     /// Reads the header information from the specified stream.

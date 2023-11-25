@@ -31,7 +31,7 @@ public class Palette
         var data = new byte[1024];
         var testFileHeader = new Sketching.Formats.Bmp.Format.Palette(256, data);
         using var bWriter = new BinaryWriter(new MemoryStream());
-        testFileHeader.Write(bWriter);
+        Sketching.Formats.Bmp.Format.Palette.Write(bWriter);
         Assert.Equal(0, bWriter.BaseStream.Length);
     }
 }
