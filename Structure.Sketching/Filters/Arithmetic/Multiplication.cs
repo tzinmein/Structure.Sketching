@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Arithmetic;
 
@@ -49,36 +49,42 @@ public class Multiplication : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            if (y >= SecondImage.Height)
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                return;
-            }
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
-            {
-                var outputPointer = pointer;
-                fixed (Color* image2Pointer = &SecondImage.Pixels[(y - targetLocation.Bottom) * SecondImage.Width])
+                if (y >= SecondImage.Height)
                 {
-                    var image2Pointer2 = image2Pointer;
-                    var x2 = 0;
-                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    return;
+                }
+
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
+                {
+                    if (x - targetLocation.Left >= SecondImage.Width)
                     {
-                        if (x2 > SecondImage.Width)
-                        {
-                            break;
-                        }
-                        ++x2;
-                        (*outputPointer).Multiply(*image2Pointer2);
-                        ++outputPointer;
-                        ++image2Pointer2;
+                        break;
                     }
+
+                    image
+                        .Pixels[y * image.Width + x]
+                        .Multiply(
+                            SecondImage.Pixels[
+                                (y - targetLocation.Bottom) * SecondImage.Width
+                                    + (x - targetLocation.Left)
+                            ]
+                        );
                 }
             }
-        });
+        );
+
         return image;
     }
 }

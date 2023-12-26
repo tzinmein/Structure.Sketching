@@ -1,6 +1,6 @@
-﻿using Structure.Sketching.Colors;
+﻿using System;
+using Structure.Sketching.Colors;
 using Structure.Sketching.Numerics.Interfaces;
-using System;
 
 namespace Structure.Sketching.Numerics;
 
@@ -135,27 +135,25 @@ public class RgbHistogram : IHistogram
     /// </summary>
     /// <param name="image">Image to load</param>
     /// <returns>this</returns>
-    public unsafe IHistogram LoadImage(Image image)
+    public IHistogram LoadImage(Image image)
     {
         _width = image.Width;
         _height = image.Height;
         Array.Clear(R, 0, R.Length);
         Array.Clear(G, 0, G.Length);
         Array.Clear(B, 0, B.Length);
-        fixed (Color* targetPointer = &image.Pixels[0])
+
+        for (var x = 0; x < image.Width; ++x)
         {
-            var targetPointer2 = targetPointer;
-            for (var x = 0; x < image.Width; ++x)
+            for (var y = 0; y < image.Height; ++y)
             {
-                for (var y = 0; y < image.Height; ++y)
-                {
-                    ++R[(*targetPointer2).Red];
-                    ++G[(*targetPointer2).Green];
-                    ++B[(*targetPointer2).Blue];
-                    ++targetPointer2;
-                }
+                var pixel = image.Pixels[y * image.Width + x];
+                ++R[pixel.Red];
+                ++G[pixel.Green];
+                ++B[pixel.Blue];
             }
         }
+
         return this;
     }
 

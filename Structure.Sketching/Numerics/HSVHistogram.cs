@@ -1,7 +1,7 @@
-﻿using Structure.Sketching.Colors;
+﻿using System;
+using Structure.Sketching.Colors;
 using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.Numerics.Interfaces;
-using System;
 
 namespace Structure.Sketching.Numerics;
 
@@ -69,7 +69,11 @@ public class HsvHistogram : IHistogram
     public Color EqualizeColor(Color color)
     {
         var tempHsv = (Hsv)color;
-        return new Hsv(tempHsv.Hue, tempHsv.Saturation, V[(int)Math.Round(tempHsv.Value * 100, MidpointRounding.AwayFromZero)]);
+        return new Hsv(
+            tempHsv.Hue,
+            tempHsv.Saturation,
+            V[(int)Math.Round(tempHsv.Value * 100, MidpointRounding.AwayFromZero)]
+        );
     }
 
     /// <summary>
@@ -82,9 +86,9 @@ public class HsvHistogram : IHistogram
         _width = colors.Length;
         _height = 1;
         Array.Clear(V, 0, V.Length);
-        for (var x = 0; x < colors.Length; ++x)
+        foreach (var c in colors)
         {
-            var tempHsv = (Hsv)colors[x];
+            var tempHsv = (Hsv)c;
             ++V[(int)(tempHsv.Value * 100)];
         }
         return this;
@@ -95,27 +99,22 @@ public class HsvHistogram : IHistogram
     /// </summary>
     /// <param name="image">Image to load</param>
     /// <returns>this</returns>
-    public unsafe IHistogram LoadImage(Image image)
+    public IHistogram LoadImage(Image image)
     {
         _width = image.Width;
         _height = image.Height;
         Array.Clear(V, 0, V.Length);
-        fixed (Color* targetPointer = &image.Pixels[0])
+
+        for (var x = 0; x < image.Width; ++x)
         {
-            var targetPointer2 = targetPointer;
-            for (var x = 0; x < image.Width; ++x)
+            for (var y = 0; y < image.Height; ++y)
             {
-                for (var y = 0; y < image.Height; ++y)
-                {
-                    var tempR = (*targetPointer2).Red;
-                    var tempG = (*targetPointer2).Green;
-                    var tempB = (*targetPointer2).Blue;
-                    ++targetPointer2;
-                    var tempHsv = (Hsv)new Color(tempR, tempG, tempB);
-                    ++V[(int)(tempHsv.Value * 100)];
-                }
+                var pixel = image.Pixels[y * image.Width + x];
+                var tempHsv = (Hsv)new Color(pixel.Red, pixel.Green, pixel.Blue);
+                ++V[(int)(tempHsv.Value * 100)];
             }
         }
+
         return this;
     }
 
