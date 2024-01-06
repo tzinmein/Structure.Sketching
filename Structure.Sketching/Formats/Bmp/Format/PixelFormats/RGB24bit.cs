@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses;
 using System.Threading.Tasks;
+using Structure.Sketching.Formats.Bmp.Format.PixelFormats.BaseClasses;
 
 namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats;
 
@@ -24,7 +24,7 @@ namespace Structure.Sketching.Formats.Bmp.Format.PixelFormats;
 /// RGB 24bit pixel format
 /// </summary>
 /// <seealso cref="Structure.Sketching.Formats.Bmp.Format.PixelFormats.Interfaces.IPixelFormat"/>
-public unsafe class Rgb24Bit : PixelFormatBase
+public class Rgb24Bit : PixelFormatBase
 {
     /// <summary>
     /// The bytes per pixel
@@ -45,33 +45,34 @@ public unsafe class Rgb24Bit : PixelFormatBase
         var height = header.Height;
         var alignment = (4 - width * (int)Bpp % 4) % 4;
         var returnValue = new byte[width * height * 4];
-        Parallel.For(0, height, y =>
-        {
-            var sourceY = height - y - 1;
-            if (sourceY < 0)
-                sourceY = 0;
-            if (sourceY >= height)
-                sourceY = height - 1;
-            var sourceRowOffset = sourceY * (width * (int)Bpp + alignment);
-            var destinationRowOffset = y * width * 4;
-            fixed (byte* dataFixed = &data[sourceRowOffset])
-            fixed (byte* returnValueFixed = &returnValue[destinationRowOffset])
+
+        Parallel.For(
+            0,
+            height,
+            y =>
             {
-                var dataFixed2 = dataFixed;
-                var returnValueFixed2 = returnValueFixed;
+                var sourceY = height - y - 1;
+                if (sourceY < 0)
+                    sourceY = 0;
+                if (sourceY >= height)
+                    sourceY = height - 1;
+
+                var sourceRowOffset = sourceY * (width * (int)Bpp + alignment);
+                var destinationRowOffset = y * width * 4;
+
                 for (var x = 0; x < width; ++x)
                 {
-                    *(returnValueFixed2 + 2) = *dataFixed2;
-                    ++dataFixed2;
-                    *(returnValueFixed2 + 1) = *dataFixed2;
-                    ++dataFixed2;
-                    *returnValueFixed2 = *dataFixed2;
-                    ++dataFixed2;
-                    *(returnValueFixed2 + 3) = 255;
-                    returnValueFixed2 += 4;
+                    var dataOffset = sourceRowOffset + x * (int)Bpp;
+                    var returnValueOffset = destinationRowOffset + x * 4;
+
+                    returnValue[returnValueOffset + 2] = data[dataOffset];
+                    returnValue[returnValueOffset + 1] = data[dataOffset + 1];
+                    returnValue[returnValueOffset] = data[dataOffset + 2];
+                    returnValue[returnValueOffset + 3] = 255;
                 }
             }
-        });
+        );
+
         return returnValue;
     }
 
@@ -88,32 +89,33 @@ public unsafe class Rgb24Bit : PixelFormatBase
         var height = header.Height;
         var alignment = (4 - width * (int)Bpp % 4) % 4;
         var returnValue = new byte[(width * (int)Bpp + alignment) * height];
-        Parallel.For(0, height, y =>
-        {
-            var sourceY = height - y - 1;
-            if (sourceY < 0)
-                sourceY = 0;
-            if (sourceY >= height)
-                sourceY = height - 1;
-            var sourceRowOffset = sourceY * width * 4;
-            var destinationRowOffset = y * (width * (int)Bpp + alignment);
-            fixed (byte* dataFixed = &data[sourceRowOffset])
-            fixed (byte* returnValueFixed = &returnValue[destinationRowOffset])
+
+        Parallel.For(
+            0,
+            height,
+            y =>
             {
-                var dataFixed2 = dataFixed;
-                var returnValueFixed2 = returnValueFixed;
+                var sourceY = height - y - 1;
+                if (sourceY < 0)
+                    sourceY = 0;
+                if (sourceY >= height)
+                    sourceY = height - 1;
+
+                var sourceRowOffset = sourceY * width * 4;
+                var destinationRowOffset = y * (width * (int)Bpp + alignment);
+
                 for (var x = 0; x < width; ++x)
                 {
-                    *returnValueFixed2 = *(dataFixed2 + 2);
-                    ++returnValueFixed2;
-                    *returnValueFixed2 = *(dataFixed2 + 1);
-                    ++returnValueFixed2;
-                    *returnValueFixed2 = *dataFixed2;
-                    ++returnValueFixed2;
-                    dataFixed2 += 4;
+                    var dataOffset = sourceRowOffset + x * 4;
+                    var returnValueOffset = destinationRowOffset + x * (int)Bpp;
+
+                    returnValue[returnValueOffset + 2] = data[dataOffset];
+                    returnValue[returnValueOffset + 1] = data[dataOffset + 1];
+                    returnValue[returnValueOffset] = data[dataOffset + 2];
                 }
             }
-        });
+        );
+
         return returnValue;
     }
 }

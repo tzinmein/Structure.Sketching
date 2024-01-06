@@ -17,26 +17,6 @@ public class ArrayCopyTests
         Array.Copy(_source, _destination, Count);
     }
 
-    [Benchmark(Description = "Copy using Unsafe<T>")]
-    public unsafe void CopyUnsafe()
-    {
-        fixed (byte* pinnedDestination = _destination)
-        fixed (byte* pinnedSource = _source)
-        {
-            Unsafe.CopyBlock(pinnedSource, pinnedDestination, (uint)Count);
-        }
-    }
-
-    [Benchmark(Description = "Copy using Buffer.MemoryCopy<T>")]
-    public unsafe void CopyUsingBufferMemoryCopy()
-    {
-        fixed (byte* pinnedDestination = _destination)
-        fixed (byte* pinnedSource = _source)
-        {
-            Buffer.MemoryCopy(pinnedSource, pinnedDestination, Count, Count);
-        }
-    }
-
     [IterationSetup]
     public void SetUp()
     {

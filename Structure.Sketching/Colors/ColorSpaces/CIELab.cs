@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 using Structure.Sketching.ExtensionMethods;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Colors.ColorSpaces;
 
@@ -33,13 +32,13 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// Initializes a new instance of the <see cref="CieLab"/> struct.
     /// </summary>
     /// <param name="lightness">The lightness.</param>
-    /// <param name="aComponent">The a component.</param>
-    /// <param name="bComponent">The b component.</param>
+    /// <param name="aComponent">The A component.</param>
+    /// <param name="bComponent">The B component.</param>
     public CieLab(double lightness, double aComponent, double bComponent)
     {
-        L = lightness.Clamp(0, 100);
-        A = aComponent.Clamp(-100, 100);
-        B = bComponent.Clamp(-100, 100);
+        L = Math.Clamp(lightness, 0, 100);
+        A = Math.Clamp(aComponent, -100, 100);
+        B = Math.Clamp(bComponent, -100, 100);
     }
 
     /// <summary>
@@ -129,9 +128,16 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
         var x3 = x * x * x;
         var z3 = z * z * z;
 
-        return new Xyz(white.X * (x3 > XyzEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
-            white.Y * (color.L > Kappa * XyzEpsilon ? Math.Pow((color.L + 16.0) / 116.0, 3) : color.L / Kappa),
-            white.Z * (z3 > XyzEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787));
+        return new Xyz(
+            white.X * (x3 > XyzEpsilon ? x3 : (x - 16.0 / 116.0) / 7.787),
+            white.Y
+                * (
+                    color.L > Kappa * XyzEpsilon
+                        ? Math.Pow((color.L + 16.0) / 116.0, 3)
+                        : color.L / Kappa
+                ),
+            white.Z * (z3 > XyzEpsilon ? z3 : (z - 16.0 / 116.0) / 7.787)
+        );
     }
 
     /// <summary>
@@ -140,7 +146,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator !=(CieLab left, CieLab right)
+    public static bool operator !=(CieLab left, CieLab right)
     {
         return !(left == right);
     }
@@ -151,7 +157,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator ==(CieLab left, CieLab right)
+    public static bool operator ==(CieLab left, CieLab right)
     {
         return left.Equals(right);
     }
@@ -163,7 +169,7 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-        public readonly override bool Equals(object obj)
+    public readonly override bool Equals(object obj)
     {
         return obj is CieLab lab && Equals(lab);
     }
@@ -173,11 +179,11 @@ public struct CieLab : IEquatable<CieLab>, IColorSpace
     /// </summary>
     /// <param name="other">The other CIELab color.</param>
     /// <returns>True if they are, false otherwise</returns>
-        public readonly bool Equals(CieLab other)
+    public readonly bool Equals(CieLab other)
     {
         return Math.Abs(other.L - L) < Epsilon
-               && Math.Abs(other.A - A) < Epsilon
-               && Math.Abs(other.B - B) < Epsilon;
+            && Math.Abs(other.A - A) < Epsilon
+            && Math.Abs(other.B - B) < Epsilon;
     }
 
     /// <summary>

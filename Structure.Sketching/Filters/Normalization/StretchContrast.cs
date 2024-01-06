@@ -93,6 +93,6 @@ public class StretchContrast : IFilter
         float tempVal = v - min;
         tempVal /= max - min;
         tempVal *= 255;
-        return (byte)tempVal.Clamp(0, 255);
+        return tempVal.ToByte();
     }
 }

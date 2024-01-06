@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
+using System.Threading.Tasks;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Effects;
 
@@ -49,27 +48,45 @@ public class Jitter : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var sourcePointer = pointer;
-                for (var x = 0; x < image.Width; ++x)
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var newX = Random.ThreadSafeNext(-Amount, Amount);
                     var newY = Random.ThreadSafeNext(-Amount, Amount);
                     newX += x;
                     newY += y;
-                    newX = newX < targetLocation.Left ? targetLocation.Left : newX >= targetLocation.Right ? targetLocation.Right - 1 : newX;
-                    newY = newY < targetLocation.Bottom ? targetLocation.Bottom : newY >= targetLocation.Top ? targetLocation.Top - 1 : newY;
-                    image.Pixels[newY * image.Width + newX] = *sourcePointer;
-                    ++sourcePointer;
+                    newX =
+                        newX < targetLocation.Left
+                            ? targetLocation.Left
+                            : newX >= targetLocation.Right
+                                ? targetLocation.Right - 1
+                                : newX;
+                    newY =
+                        newY < targetLocation.Bottom
+                            ? targetLocation.Bottom
+                            : newY >= targetLocation.Top
+                                ? targetLocation.Top - 1
+                                : newY;
+
+                    var sourceIndex = y * image.Width + x;
+                    var destinationIndex = newY * image.Width + newX;
+
+                    image.Pixels[destinationIndex] = image.Pixels[sourceIndex];
                 }
             }
-        });
+        );
+
         return image;
     }
 }

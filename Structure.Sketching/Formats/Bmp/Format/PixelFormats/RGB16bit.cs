@@ -65,10 +65,10 @@ public class Rgb16Bit : PixelFormatBase
                 var a = (int)(header.AlphaMask == 0 ? 255 : ((tempValue & header.AlphaMask) >> header.AlphaOffset) * header.AlphaMultiplier);
 
                 var arrayOffset = (currentY * width + x) * 4;
-                returnValue[arrayOffset] = (byte)r.Clamp(0, 255);
-                returnValue[arrayOffset + 1] = (byte)g.Clamp(0, 255);
-                returnValue[arrayOffset + 2] = (byte)b.Clamp(0, 255);
-                returnValue[arrayOffset + 3] = (byte)a.Clamp(0, 255);
+                returnValue[arrayOffset] = r.ToByte();
+                returnValue[arrayOffset + 1] = g.ToByte();
+                returnValue[arrayOffset + 2] = b.ToByte();
+                returnValue[arrayOffset + 3] = a.ToByte();
             }
         });
         return returnValue;

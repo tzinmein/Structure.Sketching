@@ -1,7 +1,6 @@
-﻿using Structure.Sketching.Colors.ColorSpaces.Interfaces;
+﻿using System;
+using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 using Structure.Sketching.ExtensionMethods;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Colors.ColorSpaces;
 
@@ -75,18 +74,44 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
             switch ((int)b)
             {
                 case 6:
-                case 0: red = color.Value; green = g; blue = e; break;
-                case 1: red = f; green = color.Value; blue = e; break;
-                case 2: red = e; green = color.Value; blue = g; break;
-                case 3: red = e; green = f; blue = color.Value; break;
-                case 4: red = g; green = e; blue = color.Value; break;
-                default: red = color.Value; green = e; blue = f; break;
+                case 0:
+                    red = color.Value;
+                    green = g;
+                    blue = e;
+                    break;
+                case 1:
+                    red = f;
+                    green = color.Value;
+                    blue = e;
+                    break;
+                case 2:
+                    red = e;
+                    green = color.Value;
+                    blue = g;
+                    break;
+                case 3:
+                    red = e;
+                    green = f;
+                    blue = color.Value;
+                    break;
+                case 4:
+                    red = g;
+                    green = e;
+                    blue = color.Value;
+                    break;
+                default:
+                    red = color.Value;
+                    green = e;
+                    blue = f;
+                    break;
             }
         }
 
-        return new Color(((byte)(red * 255)).Clamp(0, 255),
-            ((byte)(green * 255)).Clamp(0, 255),
-            ((byte)(blue * 255)).Clamp(0, 255));
+        return new Color(
+            (red * 255).ToByte(),
+            (green * 255).ToByte(),
+            (blue * 255).ToByte()
+        );
     }
 
     /// <summary>
@@ -107,13 +132,19 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
         else
         {
             double c;
-            if (Math.Abs(color.Red - min) < Epsilon) c = color.Green - color.Blue;
-            else if (Math.Abs(color.Blue - min) < Epsilon) c = color.Red - color.Green;
-            else c = color.Blue - color.Red;
+            if (Math.Abs(color.Red - min) < Epsilon)
+                c = color.Green - color.Blue;
+            else if (Math.Abs(color.Blue - min) < Epsilon)
+                c = color.Red - color.Green;
+            else
+                c = color.Blue - color.Red;
             double d;
-            if (Math.Abs(color.Red - min) < Epsilon) d = 3;
-            else if (Math.Abs(color.Blue - min) < Epsilon) d = 1;
-            else d = 5;
+            if (Math.Abs(color.Red - min) < Epsilon)
+                d = 3;
+            else if (Math.Abs(color.Blue - min) < Epsilon)
+                d = 1;
+            else
+                d = 5;
             hue = 60d * (d - c / (max - min));
             value = max;
         }
@@ -127,7 +158,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator !=(Hsv left, Hsv right)
+    public static bool operator !=(Hsv left, Hsv right)
     {
         return !(left == right);
     }
@@ -138,7 +169,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator ==(Hsv left, Hsv right)
+    public static bool operator ==(Hsv left, Hsv right)
     {
         return left.Equals(right);
     }
@@ -150,7 +181,7 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-        public readonly override bool Equals(object obj)
+    public readonly override bool Equals(object obj)
     {
         return obj is Hsv hsv && Equals(hsv);
     }
@@ -160,11 +191,11 @@ public struct Hsv : IEquatable<Hsv>, IColorSpace
     /// </summary>
     /// <param name="other">The other HSV color.</param>
     /// <returns>True if they are, false otherwise</returns>
-        public readonly bool Equals(Hsv other)
+    public readonly bool Equals(Hsv other)
     {
         return Math.Abs(other.Hue - Hue) < Epsilon
-               && Math.Abs(other.Saturation - Saturation) < Epsilon
-               && Math.Abs(other.Value - Value) < Epsilon;
+            && Math.Abs(other.Saturation - Saturation) < Epsilon
+            && Math.Abs(other.Value - Value) < Epsilon;
     }
 
     /// <summary>

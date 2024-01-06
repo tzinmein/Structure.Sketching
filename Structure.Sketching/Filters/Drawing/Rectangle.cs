@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Drawing.BaseClasses;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Drawing;
 
@@ -60,9 +60,13 @@ public class Rectangle : ShapeBaseClass
     /// <returns></returns>
     public override Image Apply(Image image, Numerics.Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Numerics.Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Numerics.Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         Bounds = Bounds.Clamp(targetLocation);
-        return Fill ? DrawFilledRectangle(image, Bounds)
+        return Fill
+            ? DrawFilledRectangle(image, Bounds)
             : DrawRectangleOutline(image, targetLocation);
     }
 
@@ -72,20 +76,21 @@ public class Rectangle : ShapeBaseClass
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The resulting image</returns>
-    private unsafe Image DrawFilledRectangle(Image image, Numerics.Rectangle targetLocation)
+    private Image DrawFilledRectangle(Image image, Numerics.Rectangle targetLocation)
     {
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    *targetPointer2 = Color;
-                    ++targetPointer2;
+                    var index = y * image.Width + x;
+                    image.Pixels[index] = Color;
                 }
             }
-        });
+        );
+
         return image;
     }
 
@@ -97,10 +102,22 @@ public class Rectangle : ShapeBaseClass
     /// <returns>The resulting image</returns>
     private Image DrawRectangleOutline(Image image, Numerics.Rectangle targetLocation)
     {
-        new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Right, Bounds.Bottom).Apply(image, targetLocation);
-        new Line(Color, Bounds.Left, Bounds.Top, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
-        new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Left, Bounds.Top).Apply(image, targetLocation);
-        new Line(Color, Bounds.Right, Bounds.Bottom, Bounds.Right, Bounds.Top).Apply(image, targetLocation);
+        new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Right, Bounds.Bottom).Apply(
+            image,
+            targetLocation
+        );
+        new Line(Color, Bounds.Left, Bounds.Top, Bounds.Right, Bounds.Top).Apply(
+            image,
+            targetLocation
+        );
+        new Line(Color, Bounds.Left, Bounds.Bottom, Bounds.Left, Bounds.Top).Apply(
+            image,
+            targetLocation
+        );
+        new Line(Color, Bounds.Right, Bounds.Bottom, Bounds.Right, Bounds.Top).Apply(
+            image,
+            targetLocation
+        );
         return image;
     }
 }

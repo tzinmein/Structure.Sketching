@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors.ColorSpaces;
 using Structure.Sketching.Formats.Gif.Format.BaseClasses;
 using Structure.Sketching.IO;
 using Structure.Sketching.Quantizers;

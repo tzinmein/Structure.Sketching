@@ -17,7 +17,6 @@ limitations under the License.
 
 using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Colors.ColorSpaces;
 

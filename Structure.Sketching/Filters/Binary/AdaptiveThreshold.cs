@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
-using Structure.Sketching.Filters.ColorMatrix;
-using Structure.Sketching.Filters.Interfaces;
-using Structure.Sketching.Numerics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Structure.Sketching.Colors;
+using Structure.Sketching.Filters.ColorMatrix;
+using Structure.Sketching.Filters.Interfaces;
+using Structure.Sketching.Numerics;
 
 namespace Structure.Sketching.Filters.Binary;
 
@@ -83,49 +83,53 @@ public class AdaptiveThreshold : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation =
             targetLocation == default
                 ? new Rectangle(0, 0, image.Width, image.Height)
                 : targetLocation.Clamp(image);
         new Greyscale709().Apply(image, targetLocation);
+
         var tempValues = new Color[image.Width * image.Height];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
+
         var apertureMin = -ApertureRadius;
         var apertureMax = ApertureRadius;
+
         Parallel.For(
             targetLocation.Bottom,
             targetLocation.Top,
             y =>
             {
-                fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var targetPointer2 = targetPointer;
-                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
+                    var targetIndex = y * image.Width + x;
+                    var rValues = new List<byte>();
+
+                    for (var x2 = apertureMin; x2 < apertureMax; ++x2)
                     {
-                        var rValues = new List<byte>();
-                        for (var x2 = apertureMin; x2 < apertureMax; ++x2)
+                        var tempX = x + x2;
+                        if (tempX < targetLocation.Left || tempX >= targetLocation.Right)
+                            continue;
+
+                        for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                         {
-                            var tempX = x + x2;
-                            if (tempX < targetLocation.Left || tempX >= targetLocation.Right)
-                                continue;
-                            for (var y2 = apertureMin; y2 < apertureMax; ++y2)
+                            var tempY = y + y2;
+                            if (tempY >= targetLocation.Bottom && tempY < targetLocation.Top)
                             {
-                                var tempY = y + y2;
-                                if (tempY >= targetLocation.Bottom && tempY < targetLocation.Top)
-                                {
-                                    rValues.Add(image.Pixels[tempY * image.Width + tempX].Red);
-                                }
+                                var pixelIndex = tempY * image.Width + tempX;
+                                rValues.Add(image.Pixels[pixelIndex].Red);
                             }
                         }
-                        *targetPointer2 =
-                            rValues.Average(_ => _ / 255f) >= Threshold ? Color1 : Color2;
-                        ++targetPointer2;
                     }
+
+                    tempValues[targetIndex] =
+                        rValues.Average(value => value / 255f) >= Threshold ? Color1 : Color2;
                 }
             }
         );
+
         return image.ReCreate(image.Width, image.Height, tempValues);
     }
 }

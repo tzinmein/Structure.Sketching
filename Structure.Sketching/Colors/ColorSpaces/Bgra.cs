@@ -15,10 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors.ColorSpaces.Interfaces;
-using Structure.Sketching.ExtensionMethods;
 using System;
-using System.Runtime.CompilerServices;
+using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 
 namespace Structure.Sketching.Colors.ColorSpaces;
 
@@ -38,71 +36,35 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="alpha">The alpha.</param>
     public Bgra(byte blue, byte green, byte red, byte alpha = 255)
     {
-        _r = red.Clamp(0, 255);
-        _g = green.Clamp(0, 255);
-        _b = blue.Clamp(0, 255);
-        _a = alpha.Clamp(0, 255);
+        Red = Math.Clamp(red, (byte)0, (byte)255);
+        Green = Math.Clamp(green, (byte)0, (byte)255);
+        Blue = Math.Clamp(blue, (byte)0, (byte)255);
+        Alpha = Math.Clamp(alpha, (byte)0, (byte)255);
     }
 
     /// <summary>
     /// Gets or sets the alpha.
     /// </summary>
     /// <value>The alpha.</value>
-    public byte Alpha
-    {
-        readonly get { return _a; }
-        set { _a = value; }
-    }
+    public byte Alpha { get; set; }
 
     /// <summary>
     /// Gets or sets the blue.
     /// </summary>
     /// <value>The blue.</value>
-    public byte Blue
-    {
-        readonly get { return _b; }
-        set { _b = value; }
-    }
+    public byte Blue { get; set; }
 
     /// <summary>
     /// Gets or sets the green.
     /// </summary>
     /// <value>The green.</value>
-    public byte Green
-    {
-        readonly get { return _g; }
-        set { _g = value; }
-    }
+    public byte Green { get; set; }
 
     /// <summary>
     /// Gets or sets the red.
     /// </summary>
     /// <value>The red.</value>
-    public byte Red
-    {
-        readonly get { return _r; }
-        set { _r = value; }
-    }
-
-    /// <summary>
-    /// alpha component
-    /// </summary>
-    private byte _a;
-
-    /// <summary>
-    /// blue component
-    /// </summary>
-    private byte _b;
-
-    /// <summary>
-    /// green component
-    /// </summary>
-    private byte _g;
-
-    /// <summary>
-    /// red component
-    /// </summary>
-    private byte _r;
+    public byte Red { get; set; }
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="Color"/> to <see cref="Bgra"/>.
@@ -131,7 +93,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <returns>The result of the conversion.</returns>
     public static implicit operator int(Bgra color)
     {
-        return color._r << 16 | color._g << 8 | color._b << 0 | color._a << 24;
+        return color.Red << 16 | color.Green << 8 | color.Blue << 0 | color.Alpha << 24;
     }
 
     /// <summary>
@@ -140,7 +102,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator !=(Bgra left, Bgra right)
+    public static bool operator !=(Bgra left, Bgra right)
     {
         return !(left == right);
     }
@@ -151,7 +113,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <param name="left">The left.</param>
     /// <param name="right">The right.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator ==(Bgra left, Bgra right)
+    public static bool operator ==(Bgra left, Bgra right)
     {
         return left.Equals(right);
     }
@@ -163,7 +125,7 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-        public readonly override bool Equals(object obj)
+    public readonly override bool Equals(object obj)
     {
         return obj is Bgra bgra && Equals(bgra);
     }
@@ -173,12 +135,12 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// </summary>
     /// <param name="other">The other Bgra color.</param>
     /// <returns>True if they are, false otherwise</returns>
-        public readonly bool Equals(Bgra other)
+    public readonly bool Equals(Bgra other)
     {
-        return other._b == _b
-               && other._g == _g
-               && other._r == _r
-               && other._a == _a;
+        return other.Blue == Blue
+            && other.Green == Green
+            && other.Red == Red
+            && other.Alpha == Alpha;
     }
 
     /// <summary>
@@ -190,17 +152,18 @@ public struct Bgra : IEquatable<Bgra>, IColorSpace
     /// </returns>
     public readonly override int GetHashCode()
     {
-        var hash = _b.GetHashCode();
-        hash = ComputeHash(hash, _g);
-        hash = ComputeHash(hash, _r);
-        return ComputeHash(hash, _a);
+        var hash = Blue.GetHashCode();
+        hash = ComputeHash(hash, Green);
+        hash = ComputeHash(hash, Red);
+        return ComputeHash(hash, Alpha);
     }
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents this instance.
     /// </summary>
     /// <returns>A <see cref="string"/> that represents this instance.</returns>
-    public readonly override string ToString() => $"({_b:#0.##},{_g:#0.##},{_r:#0.##},{_a:#0.##})";
+    public readonly override string ToString() =>
+        $"({Blue:#0.##},{Green:#0.##},{Red:#0.##},{Alpha:#0.##})";
 
     /// <summary>
     /// Computes the hash.

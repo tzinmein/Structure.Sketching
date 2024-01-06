@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Resampling;
 
@@ -34,27 +34,29 @@ public class Crop : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var result = new Color[targetLocation.Width * targetLocation.Height];
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &result[(y - targetLocation.Bottom) * targetLocation.Width])
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
-                fixed (Color* sourcePointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var sourcePointer2 = sourcePointer;
-                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        *targetPointer2 = *sourcePointer2;
-                        ++targetPointer2;
-                        ++sourcePointer2;
-                    }
+                    result[
+                        (y - targetLocation.Bottom) * targetLocation.Width
+                            + (x - targetLocation.Left)
+                    ] = image.Pixels[y * image.Width + x];
                 }
             }
-        });
+        );
+
         return image.ReCreate(targetLocation.Width, targetLocation.Height, result);
     }
 }

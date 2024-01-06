@@ -17,6 +17,7 @@ limitations under the License.
 using Structure.Sketching.Filters.ColorMatrix.BaseClasses;
 using Structure.Sketching.Numerics;
 using System;
+using Structure.Sketching.ExtensionMethods;
 
 namespace Structure.Sketching.Filters.ColorMatrix;
 
@@ -52,7 +53,7 @@ public class Temperature : MatrixBaseClass
         {
             // Note: the R-squared value for this approximation is 0.988.
             red = (int)(329.698727446 * Math.Pow(value - 60, -0.1332047592));
-            red = Math.Clamp(red, 0, 255);
+            red = red.ToByte();
         }
 
         // Second: green.
@@ -67,22 +68,22 @@ public class Temperature : MatrixBaseClass
             green = (int)(288.1221695283 * Math.Pow(value - 60, -0.0755148492));
         }
 
-        green = Math.Clamp(green, 0, 255);
+        green = green.ToByte();
 
-        // Third: blue.
-        if (value >= 66)
+        switch (value)
         {
-            blue = 255;
-        }
-        else if (value <= 19)
-        {
-            blue = 0;
-        }
-        else
-        {
-            // Note: the R-squared value for this approximation is 0.998.
-            blue = (int)(138.5177312231 * Math.Log(value - 10) - 305.0447927307);
-            blue = Math.Clamp(blue, 0, 255);
+            // Third: blue.
+            case >= 66:
+                blue = 255;
+                break;
+            case <= 19:
+                blue = 0;
+                break;
+            default:
+                // Note: the R-squared value for this approximation is 0.998.
+                blue = (int)(138.5177312231 * Math.Log(value - 10) - 305.0447927307);
+                blue = blue.ToByte();
+                break;
         }
 
 

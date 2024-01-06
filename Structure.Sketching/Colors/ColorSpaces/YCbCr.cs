@@ -18,7 +18,6 @@ limitations under the License.
 using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 using Structure.Sketching.ExtensionMethods;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Colors.ColorSpaces;
 
@@ -76,9 +75,9 @@ public struct YCbCr : IEquatable<YCbCr>, IColorSpace
         var cb = color.CbChroma - 128;
         var cr = color.CrChroma - 128;
 
-        return new Color((byte)Math.Round(y + 1.402 * cr, MidpointRounding.AwayFromZero).Clamp(0, 255),
-            (byte)Math.Round(y - 0.344136 * cb - 0.714136 * cr, MidpointRounding.AwayFromZero).Clamp(0, 255),
-            (byte)Math.Round(y + 1.772 * cb, MidpointRounding.AwayFromZero).Clamp(0, 255));
+        return new Color(Math.Round(y + 1.402 * cr, MidpointRounding.AwayFromZero).ToByte(),
+            Math.Round(y - 0.344136 * cb - 0.714136 * cr, MidpointRounding.AwayFromZero).ToByte(),
+            Math.Round(y + 1.772 * cb, MidpointRounding.AwayFromZero).ToByte());
     }
 
     /// <summary>

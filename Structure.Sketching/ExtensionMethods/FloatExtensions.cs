@@ -45,21 +45,9 @@ public static class Extensions
     /// <param name="min">The minimum.</param>
     /// <param name="max">The maximum.</param>
     /// <returns>The clamped value.</returns>
-    public static double Clamp(this double value, double min, double max)
-    {
-        return value < min ? min : value > max ? max : value;
-    }
-
-    /// <summary>
-    /// Clamps the value based on the minimum and maximum specified.
-    /// </summary>
-    /// <param name="value">The value.</param>
-    /// <param name="min">The minimum.</param>
-    /// <param name="max">The maximum.</param>
-    /// <returns>The clamped value.</returns>
     public static int Clamp(this int value, int min, int max)
     {
-        return value < min ? min : value > max ? max : value;
+        return Math.Clamp(value, min, max);
     }
 
     /// <summary>

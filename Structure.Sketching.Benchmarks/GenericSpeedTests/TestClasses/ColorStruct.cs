@@ -1,7 +1,7 @@
-﻿using Structure.Sketching.ExtensionMethods;
-using System;
+﻿using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Structure.Sketching.ExtensionMethods;
 
 namespace Structure.Sketching.Benchmarks.GenericSpeedTests.TestClasses;
 
@@ -486,10 +486,10 @@ public struct ColorStruct : IEquatable<ColorStruct>
     /// <returns>This</returns>
     public ColorStruct Clamp(byte min = 0, byte max = 255)
     {
-        Red = Red.Clamp(min, max);
-        Green = Green.Clamp(min, max);
-        Blue = Blue.Clamp(min, max);
-        Alpha = Alpha.Clamp(min, max);
+        Red = Math.Clamp(Red, min, max);
+        Green = Math.Clamp(Green, min, max);
+        Blue = Math.Clamp(Blue, min, max);
+        Alpha = Math.Clamp(Alpha, min, max);
         return this;
     }
 

@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Numerics;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Resampling;
 
@@ -87,7 +87,7 @@ public class Resize : IFilter
         return Matrix3x2.CreateScale(xScale, yScale);
     }
 
-    private unsafe Color[] Sample(Image image)
+    private Color[] Sample(Image image)
     {
         Filter.Precompute(image.Width, image.Height, Width, Height);
         var output = new Color[Width * Height];
@@ -99,11 +99,11 @@ public class Resize : IFilter
         var yRadius = yScale < 1f ? Filter.FilterRadius / yScale : Filter.FilterRadius;
         var xRadius = xScale < 1f ? Filter.FilterRadius / xScale : Filter.FilterRadius;
 
-        Parallel.For(0, Height, y =>
-        {
-            fixed (Color* outputPointer = &output[y * Width])
+        Parallel.For(
+            0,
+            Height,
+            y =>
             {
-                var outputPointer2 = outputPointer;
                 for (var x = 0; x < Width; ++x)
                 {
                     var values = new Vector4(0, 0, 0, 0);
@@ -124,50 +124,52 @@ public class Resize : IFilter
                         left = 0;
                     if (right >= image.Width)
                         right = image.Width - 1;
+
                     for (int i = top, yCount = 0; i <= bottom; ++i, ++yCount)
                     {
-                        fixed (Color* pixelPointer = &image.Pixels[i * image.Width])
+                        for (int j = left, xCount = 0; j <= right; ++j, ++xCount)
                         {
-                            var pixelPointer2 = pixelPointer + left;
-                            for (int j = left, xCount = 0; j <= right; ++j, ++xCount)
-                            {
-                                var tempYWeight = Filter.YWeights[rotatedY].Values[yCount];
-                                var tempXWeight = Filter.XWeights[rotatedX].Values[xCount];
-                                var tempWeight = tempYWeight * tempXWeight;
+                            var tempYWeight = Filter.YWeights[rotatedY].Values[yCount];
+                            var tempXWeight = Filter.XWeights[rotatedX].Values[xCount];
+                            var tempWeight = tempYWeight * tempXWeight;
 
-                                if (yRadius == 0 && xRadius == 0)
-                                    tempWeight = 1;
+                            if (yRadius == 0 && xRadius == 0)
+                                tempWeight = 1;
 
-                                if (tempWeight == 0)
-                                {
-                                    ++pixelPointer2;
-                                    continue;
-                                }
-                                values.X += (*pixelPointer2).Red * (float)tempWeight;
-                                values.Y += (*pixelPointer2).Green * (float)tempWeight;
-                                values.Z += (*pixelPointer2).Blue * (float)tempWeight;
-                                values.W += (*pixelPointer2).Alpha * (float)tempWeight;
-                                ++pixelPointer2;
-                                weight += (float)tempWeight;
-                            }
+                            if (tempWeight == 0)
+                                continue;
+
+                            var pixel = image.Pixels[i * image.Width + j];
+                            values.X += pixel.Red * (float)tempWeight;
+                            values.Y += pixel.Green * (float)tempWeight;
+                            values.Z += pixel.Blue * (float)tempWeight;
+                            values.W += pixel.Alpha * (float)tempWeight;
+                            weight += (float)tempWeight;
                         }
                     }
+
                     if (weight == 0)
                         weight = 1;
+
                     if (weight > 0)
                     {
-                        values = Vector4.Clamp(values, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                        (*outputPointer2).Red = (byte)values.X;
-                        (*outputPointer2).Green = (byte)values.Y;
-                        (*outputPointer2).Blue = (byte)values.Z;
-                        (*outputPointer2).Alpha = (byte)values.W;
-                        ++outputPointer2;
+                        values = Vector4.Clamp(
+                            values,
+                            Vector4.Zero,
+                            new Vector4(255, 255, 255, 255)
+                        );
+                        output[y * Width + x] = new Color
+                        {
+                            Red = (byte)values.X,
+                            Green = (byte)values.Y,
+                            Blue = (byte)values.Z,
+                            Alpha = (byte)values.W
+                        };
                     }
-                    else
-                        ++outputPointer2;
                 }
             }
-        });
+        );
+
         return output;
     }
 }

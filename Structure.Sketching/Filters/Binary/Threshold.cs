@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Binary;
 
@@ -66,22 +66,28 @@ public class Threshold : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         new Greyscale709().Apply(image, targetLocation);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    *targetPointer2 = (*targetPointer2).Red / 255f >= ThresholdValue ? Color1 : Color2;
-                    ++targetPointer2;
+                    var targetIndex = y * image.Width + x;
+                    image.Pixels[targetIndex] =
+                        image.Pixels[targetIndex].Red / 255f >= ThresholdValue ? Color1 : Color2;
                 }
             }
-        });
+        );
+
         return image;
     }
 }

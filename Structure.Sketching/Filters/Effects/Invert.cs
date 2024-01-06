@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
+using System.Threading.Tasks;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Effects;
 
@@ -34,23 +33,28 @@ public class Invert : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    (*targetPointer2).Red = (byte)(255 - (*targetPointer2).Red);
-                    (*targetPointer2).Green = (byte)(255 - (*targetPointer2).Green);
-                    (*targetPointer2).Blue = (byte)(255 - (*targetPointer2).Blue);
-                    ++targetPointer2;
+                    var index = y * image.Width + x;
+                    image.Pixels[index].Red = (byte)(255 - image.Pixels[index].Red);
+                    image.Pixels[index].Green = (byte)(255 - image.Pixels[index].Green);
+                    image.Pixels[index].Blue = (byte)(255 - image.Pixels[index].Blue);
                 }
             }
-        });
+        );
+
         return image;
     }
 }

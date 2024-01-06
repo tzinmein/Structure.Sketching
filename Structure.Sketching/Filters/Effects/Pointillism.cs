@@ -61,8 +61,8 @@ public class Pointillism : IFilter
 
         for (var y = targetLocation.Bottom; y < targetLocation.Top; y += pointSize2)
         {
-            var minY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var maxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var minY = Math.Clamp((y - PointSize), targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = Math.Clamp((y + PointSize), targetLocation.Bottom, targetLocation.Top - 1);
             fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
                 for (var x = targetLocation.Left; x < targetLocation.Right; x += pointSize2)
@@ -70,8 +70,8 @@ public class Pointillism : IFilter
                     uint rValue = 0;
                     uint gValue = 0;
                     uint bValue = 0;
-                    var minX = (x - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var maxX = (x + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var minX = Math.Clamp((x - PointSize), targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = Math.Clamp((x + PointSize), targetLocation.Left, targetLocation.Right - 1);
                     var numberPixels = 0;
                     for (var x2 = minX; x2 < maxX; ++x2)
                     {
@@ -95,8 +95,8 @@ public class Pointillism : IFilter
         }
         for (var y = targetLocation.Bottom + PointSize; y < targetLocation.Top; y += pointSize2)
         {
-            var minY = (y - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var maxY = (y + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var minY = Math.Clamp((y - PointSize), targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = Math.Clamp((y + PointSize), targetLocation.Bottom, targetLocation.Top - 1);
             fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
                 var targetPointer2 = targetPointer;
@@ -105,8 +105,8 @@ public class Pointillism : IFilter
                     uint rValue = 0;
                     uint gValue = 0;
                     uint bValue = 0;
-                    var minX = (x - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var maxX = (x + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var minX = Math.Clamp((x - PointSize), targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = Math.Clamp((x + PointSize), targetLocation.Left, targetLocation.Right - 1);
                     var numberPixels = 0;
                     for (var x2 = minX; x2 < maxX; ++x2)
                     {
@@ -131,8 +131,8 @@ public class Pointillism : IFilter
         for (var y = targetLocation.Bottom; y < targetLocation.Top; y += pointSize2)
         {
             var tempY = y + new Random(y).Next(-PointSize, PointSize);
-            var minY = (tempY - PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
-            var maxY = (tempY + PointSize).Clamp(targetLocation.Bottom, targetLocation.Top - 1);
+            var minY = Math.Clamp((tempY - PointSize), targetLocation.Bottom, targetLocation.Top - 1);
+            var maxY = Math.Clamp((tempY + PointSize), targetLocation.Bottom, targetLocation.Top - 1);
             fixed (Color* targetPointer = &copy[y * image.Width + targetLocation.Left])
             {
                 var targetPointer2 = targetPointer;
@@ -142,8 +142,8 @@ public class Pointillism : IFilter
                     uint gValue = 0;
                     uint bValue = 0;
                     var tempX = x + new Random(x).Next(-PointSize, PointSize);
-                    var minX = (tempX - PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
-                    var maxX = (tempX + PointSize).Clamp(targetLocation.Left, targetLocation.Right - 1);
+                    var minX = Math.Clamp((tempX - PointSize), targetLocation.Left, targetLocation.Right - 1);
+                    var maxX = Math.Clamp((tempX + PointSize), targetLocation.Left, targetLocation.Right - 1);
                     var numberPixels = 0;
                     for (var x2 = minX; x2 < maxX; ++x2)
                     {

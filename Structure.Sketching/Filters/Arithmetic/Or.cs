@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 using System.Threading.Tasks;
-using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 

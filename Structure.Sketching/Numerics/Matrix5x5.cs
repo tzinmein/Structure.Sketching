@@ -19,7 +19,6 @@ using Structure.Sketching.Colors;
 using System;
 using System.Globalization;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Numerics;
 

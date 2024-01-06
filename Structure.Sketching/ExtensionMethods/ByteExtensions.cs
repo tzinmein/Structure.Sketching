@@ -25,18 +25,6 @@ namespace Structure.Sketching.ExtensionMethods;
 public static class ByteExtensions
 {
     /// <summary>
-    /// Clamps the specified value.
-    /// </summary>
-    /// <param name="value">The value.</param>
-    /// <param name="min">The minimum.</param>
-    /// <param name="max">The maximum.</param>
-    /// <returns>The clamped value</returns>
-    public static byte Clamp(this byte value, byte min, byte max)
-    {
-        return value < min ? min : value > max ? max : value;
-    }
-
-    /// <summary>
     /// Expands the array.
     /// </summary>
     /// <param name="bytes">The bytes.</param>
@@ -45,13 +33,13 @@ public static class ByteExtensions
     public static byte[] ExpandArray(this byte[] bytes, int bits)
     {
         bytes ??= Array.Empty<byte>();
-        bits = bits.Clamp(0, int.MaxValue);
-        byte[] result;
+        bits = Math.Clamp(bits, 0, int.MaxValue);
         if (bits >= 8)
         {
             return bytes;
         }
-        result = new byte[bytes.Length * 8 / bits];
+
+        var result = new byte[bytes.Length * 8 / bits];
         var mask = 0xFF >> (8 - bits);
         var offset = 0;
         foreach (var tempByte in bytes)
@@ -62,6 +50,7 @@ public static class ByteExtensions
                 ++offset;
             }
         }
+
         return result;
     }
 
@@ -84,6 +73,26 @@ public static class ByteExtensions
     /// <returns></returns>
     public static byte ToByte(this int value)
     {
-        return (byte)value.Clamp(0, 255);
+        return (byte)Math.Clamp(value, 0, 255);
+    }
+
+    /// <summary>
+    /// Converts a float to a byte value
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns></returns>
+    public static byte ToByte(this float value)
+    {
+        return (byte)Math.Clamp(value, 0, 255);
+    }
+
+    /// <summary>
+    /// Converts a double to a byte value
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns></returns>
+    public static byte ToByte(this double value)
+    {
+        return (byte)Math.Clamp(value, 0, 255);
     }
 }

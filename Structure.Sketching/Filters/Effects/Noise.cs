@@ -15,10 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
+using System;
+using System.Threading.Tasks;
+using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
+using Random = Structure.Sketching.Numerics.Random;
 
 namespace Structure.Sketching.Filters.Effects;
 
@@ -49,29 +51,38 @@ public class Noise : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var outputPointer = pointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var r = (*outputPointer).Red + Random.ThreadSafeNext(-Amount, Amount);
-                    var g = (*outputPointer).Green + Random.ThreadSafeNext(-Amount, Amount);
-                    var b = (*outputPointer).Blue + Random.ThreadSafeNext(-Amount, Amount);
-                    r = r < 0 ? 0 : r > 255 ? 255 : r;
-                    g = g < 0 ? 0 : g > 255 ? 255 : g;
-                    b = b < 0 ? 0 : b > 255 ? 255 : b;
-                    (*outputPointer).Red = (byte)r;
-                    (*outputPointer).Green = (byte)g;
-                    (*outputPointer).Blue = (byte)b;
-                    ++outputPointer;
+                    var outputIndex = y * image.Width + x;
+
+                    var r = image.Pixels[outputIndex].Red + Random.ThreadSafeNext(-Amount, Amount);
+                    var g =
+                        image.Pixels[outputIndex].Green + Random.ThreadSafeNext(-Amount, Amount);
+                    var b = image.Pixels[outputIndex].Blue + Random.ThreadSafeNext(-Amount, Amount);
+
+                    r = r.ToByte();
+                    g = g.ToByte();
+                    b = b.ToByte();
+
+                    image.Pixels[outputIndex].Red = (byte)r;
+                    image.Pixels[outputIndex].Green = (byte)g;
+                    image.Pixels[outputIndex].Blue = (byte)b;
                 }
             }
-        });
+        );
+
         return image;
     }
 }

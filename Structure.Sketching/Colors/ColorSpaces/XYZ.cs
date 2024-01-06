@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Colors.ColorSpaces.Interfaces;
 using Structure.Sketching.ExtensionMethods;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace Structure.Sketching.Colors.ColorSpaces;
 
@@ -84,9 +83,11 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
         var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
         var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
 
-        return new Color(ToRgb(r > 0.0031308 ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055 : 12.92 * r),
+        return new Color(
+            ToRgb(r > 0.0031308 ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055 : 12.92 * r),
             ToRgb(g > 0.0031308 ? 1.055 * Math.Pow(g, 1 / 2.4) - 0.055 : 12.92 * g),
-            ToRgb(b > 0.0031308 ? 1.055 * Math.Pow(b, 1 / 2.4) - 0.055 : 12.92 * b));
+            ToRgb(b > 0.0031308 ? 1.055 * Math.Pow(b, 1 / 2.4) - 0.055 : 12.92 * b)
+        );
     }
 
     /// <summary>
@@ -99,9 +100,11 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
         var r = PivotRgb(color.Red / 255.0);
         var g = PivotRgb(color.Green / 255.0);
         var b = PivotRgb(color.Blue / 255.0);
-        return new Xyz(r * 0.4124 + g * 0.3576 + b * 0.1805,
+        return new Xyz(
+            r * 0.4124 + g * 0.3576 + b * 0.1805,
             r * 0.2126 + g * 0.7152 + b * 0.0722,
-            r * 0.0193 + g * 0.1192 + b * 0.9505);
+            r * 0.0193 + g * 0.1192 + b * 0.9505
+        );
     }
 
     /// <summary>
@@ -110,7 +113,7 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator !=(Xyz color1, Xyz color2)
+    public static bool operator !=(Xyz color1, Xyz color2)
     {
         return !(color1 == color2);
     }
@@ -121,7 +124,7 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
     /// <param name="color1">The color1.</param>
     /// <param name="color2">The color2.</param>
     /// <returns>The result of the operator.</returns>
-        public static bool operator ==(Xyz color1, Xyz color2)
+    public static bool operator ==(Xyz color1, Xyz color2)
     {
         return color1.Equals(color2);
     }
@@ -133,7 +136,7 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-        public readonly override bool Equals(object obj)
+    public readonly override bool Equals(object obj)
     {
         return obj is Xyz xyz && Equals(xyz);
     }
@@ -145,11 +148,11 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
     /// <returns>
     /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
     /// </returns>
-        public readonly bool Equals(Xyz other)
+    public readonly bool Equals(Xyz other)
     {
         return Math.Abs(other.X - X) < Epsilon
-               && Math.Abs(other.Y - Y) < Epsilon
-               && Math.Abs(other.Z - Z) < Epsilon;
+            && Math.Abs(other.Y - Y) < Epsilon
+            && Math.Abs(other.Z - Z) < Epsilon;
     }
 
     /// <summary>
@@ -189,7 +192,7 @@ public struct Xyz : IEquatable<Xyz>, IColorSpace
     /// <returns></returns>
     private static byte ToRgb(double n)
     {
-        return (byte)Math.Round((255.0 * n).Clamp(0, 255), MidpointRounding.AwayFromZero);
+        return (byte)Math.Round(Math.Clamp(255.0 * n, 0, 255), MidpointRounding.AwayFromZero);
     }
 
     /// <summary>
