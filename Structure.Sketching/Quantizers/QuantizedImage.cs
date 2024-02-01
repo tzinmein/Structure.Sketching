@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
-using Structure.Sketching.Colors.ColorSpaces;
 using System;
 using System.Threading.Tasks;
+using Structure.Sketching.Colors;
+using Structure.Sketching.Colors.ColorSpaces;
 
 namespace Structure.Sketching.Quantizers;
 
@@ -35,10 +35,18 @@ public class QuantizedImage
     /// <param name="palette">The palette.</param>
     /// <param name="pixels">The pixels.</param>
     /// <param name="transparentIndex">Index of the transparent.</param>
-    public QuantizedImage(int width, int height, Bgra[] palette, byte[] pixels, int transparentIndex = -1)
+    public QuantizedImage(
+        int width,
+        int height,
+        Bgra[] palette,
+        byte[] pixels,
+        int transparentIndex = -1
+    )
     {
-        if (width <= 0) width = 1;
-        if (height <= 0) height = 1;
+        if (width <= 0)
+            width = 1;
+        if (height <= 0)
+            height = 1;
         Width = width;
         Height = height;
         Palette = palette;
@@ -86,10 +94,14 @@ public class QuantizedImage
         var palletCount = quantizedImage.Palette.Length - 1;
         var pixels = new Color[quantizedImage.Pixels.Length];
 
-        Parallel.For(0, quantizedImage.Pixels.Length, x =>
-        {
-            pixels[x] = quantizedImage.Palette[Math.Min(palletCount, quantizedImage.Pixels[x])];
-        });
+        Parallel.For(
+            0,
+            quantizedImage.Pixels.Length,
+            x =>
+            {
+                pixels[x] = quantizedImage.Palette[Math.Min(palletCount, quantizedImage.Pixels[x])];
+            }
+        );
 
         return new Image(quantizedImage.Width, quantizedImage.Height, pixels);
     }

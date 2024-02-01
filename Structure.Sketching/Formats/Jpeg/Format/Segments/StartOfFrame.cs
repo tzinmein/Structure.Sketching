@@ -20,6 +20,7 @@ using Structure.Sketching.Formats.Jpeg.Format.Enums;
 using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 using System.Collections.Generic;
 using System.IO;
+using Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
 

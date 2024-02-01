@@ -11,7 +11,6 @@ public abstract class FormatTestBase
     }
 
     public abstract string ExpectedDirectory { get; }
-
     public abstract string InputDirectory { get; }
     public abstract string OutputDirectory { get; }
 
@@ -22,7 +21,6 @@ public abstract class FormatTestBase
         return ReadBinary(outputStream).SequenceEqual(ReadBinary(expectedStream));
     }
 
-
     protected bool CheckDecodedPngCorrect(string fileName)
     {
         using var expectedStream = File.OpenRead(ExpectedDirectory + fileName);
@@ -32,8 +30,10 @@ public abstract class FormatTestBase
         var expectedImage = imageFormat.Decode(expectedStream);
         var outputImage = imageFormat.Decode(outputStream);
 
-        var dimensionsOk = outputImage.Width == expectedImage.Width && outputImage.Height == expectedImage.Height;
-        if (!dimensionsOk) return false;
+        var dimensionsOk =
+            outputImage.Width == expectedImage.Width && outputImage.Height == expectedImage.Height;
+        if (!dimensionsOk)
+            return false;
 
         var pixelsOk = true;
         for (var index = 0; index < outputImage.Pixels.Length; index++)

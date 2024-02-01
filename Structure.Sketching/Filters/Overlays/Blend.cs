@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.ColorMatrix;
 using Structure.Sketching.Filters.Interfaces;
@@ -41,7 +42,10 @@ public class Blend : IFilter
         new Alpha(alpha).Apply(image);
         Image = image;
         SourceLocation = sourceLocation;
-        SourceLocation = SourceLocation == default ? new Rectangle(0, 0, Image.Width, Image.Height) : SourceLocation.Clamp(Image);
+        SourceLocation =
+            SourceLocation == default
+                ? new Rectangle(0, 0, Image.Width, Image.Height)
+                : SourceLocation.Clamp(Image);
     }
 
     /// <summary>
@@ -68,27 +72,60 @@ public class Blend : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        for (int y1 = targetLocation.Bottom, y2 = SourceLocation.Bottom; y1 < targetLocation.Top && y2 < SourceLocation.Top; ++y1, ++y2)
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+
+        for (
+            int y1 = targetLocation.Bottom, y2 = SourceLocation.Bottom;
+            y1 < targetLocation.Top && y2 < SourceLocation.Top;
+            ++y1, ++y2
+        )
         {
-            fixed (Color* targetPointer = &image.Pixels[y1 * image.Width + targetLocation.Left])
+            var targetRow = new Color[targetLocation.Width];
+            var sourceRow = new Color[SourceLocation.Width];
+
+            // Copy data from image to targetRow
+            Array.Copy(
+                image.Pixels,
+                y1 * image.Width + targetLocation.Left,
+                targetRow,
+                0,
+                targetLocation.Width
+            );
+
+            // Copy data from Image to sourceRow
+            Array.Copy(
+                Image.Pixels,
+                y2 * Image.Width + SourceLocation.Left,
+                sourceRow,
+                0,
+                SourceLocation.Width
+            );
+
+            for (
+                int x1 = 0, x2 = 0;
+                x1 < targetLocation.Width && x2 < SourceLocation.Width;
+                ++x1, ++x2
+            )
             {
-                fixed (Color* sourcePointer = &Image.Pixels[y2 * Image.Width + SourceLocation.Left])
-                {
-                    var targetPointer2 = targetPointer;
-                    var sourcePointer2 = sourcePointer;
-                    for (int x1 = targetLocation.Left, x2 = SourceLocation.Left; x1 < targetLocation.Right && x2 < SourceLocation.Right; ++x1, ++x2)
-                    {
-                        var tempAlpha = (*sourcePointer2).Alpha / 255f;
-                        *targetPointer2 = *targetPointer2 * (1f - tempAlpha) + *sourcePointer2 * tempAlpha;
-                        ++targetPointer2;
-                        ++sourcePointer2;
-                    }
-                }
+                var tempAlpha = sourceRow[x2].Alpha / 255f;
+                targetRow[x1] = targetRow[x1] * (1f - tempAlpha) + sourceRow[x2] * tempAlpha;
             }
+
+            // Copy the modified row back to the image
+            Array.Copy(
+                targetRow,
+                0,
+                image.Pixels,
+                y1 * image.Width + targetLocation.Left,
+                targetLocation.Width
+            );
         }
+
         return image;
     }
 }

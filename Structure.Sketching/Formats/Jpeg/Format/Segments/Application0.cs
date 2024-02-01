@@ -18,13 +18,14 @@ limitations under the License.
 using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 using System.Collections.Generic;
 using System.IO;
+using Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
 
 /// <summary>
 /// Application 0 segment
 /// </summary>
-/// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase" />
+/// <seealso cref="SegmentBase" />
 public class Application0 : SegmentBase
 {
     /// <summary>

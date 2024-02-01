@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
-using Structure.Sketching.Filters.Interfaces;
-using Structure.Sketching.Numerics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Structure.Sketching.Colors;
+using Structure.Sketching.Filters.Interfaces;
+using Structure.Sketching.Numerics;
 
 namespace Structure.Sketching.Filters.Smoothing;
 
@@ -52,42 +52,58 @@ public class Median : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
         var apertureMin = -ApertureRadius;
         var apertureMax = ApertureRadius;
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &tempValues[y * image.Width + targetLocation.Left])
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var rValues = new List<byte>();
                     var gValues = new List<byte>();
                     var bValues = new List<byte>();
+
                     for (var x2 = apertureMin; x2 < apertureMax; ++x2)
                     {
                         var tempX = x + x2;
-                        if (tempX < targetLocation.Left || tempX >= targetLocation.Right) continue;
+                        if (tempX < targetLocation.Left || tempX >= targetLocation.Right)
+                            continue;
+
                         for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                         {
                             var tempY = y + y2;
-                            if (tempY < targetLocation.Bottom || tempY >= targetLocation.Top) continue;
-                            rValues.Add(image.Pixels[tempY * image.Width + tempX].Red);
-                            gValues.Add(image.Pixels[tempY * image.Width + tempX].Green);
-                            bValues.Add(image.Pixels[tempY * image.Width + tempX].Blue);
+                            if (tempY < targetLocation.Bottom || tempY >= targetLocation.Top)
+                                continue;
+
+                            var index = tempY * image.Width + tempX;
+                            rValues.Add(image.Pixels[index].Red);
+                            gValues.Add(image.Pixels[index].Green);
+                            bValues.Add(image.Pixels[index].Blue);
                         }
                     }
-                    tempValues[y * image.Width + x].Red = rValues.OrderBy(_ => _).ElementAt(rValues.Count / 2);
-                    tempValues[y * image.Width + x].Green = gValues.OrderBy(_ => _).ElementAt(rValues.Count / 2);
-                    tempValues[y * image.Width + x].Blue = bValues.OrderBy(_ => _).ElementAt(rValues.Count / 2);
+
+                    rValues.Sort();
+                    gValues.Sort();
+                    bValues.Sort();
+
+                    tempValues[y * image.Width + x].Red = rValues[rValues.Count / 2];
+                    tempValues[y * image.Width + x].Green = gValues[gValues.Count / 2];
+                    tempValues[y * image.Width + x].Blue = bValues[bValues.Count / 2];
                     tempValues[y * image.Width + x].Alpha = image.Pixels[y * image.Width + x].Alpha;
                 }
             }
-        });
+        );
+
         return image.ReCreate(image.Width, image.Height, tempValues);
     }
 }

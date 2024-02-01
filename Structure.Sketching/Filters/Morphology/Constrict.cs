@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Morphology;
 
@@ -50,62 +50,70 @@ public class Constrict : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var tempValues = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, tempValues, tempValues.Length);
         var apertureMin = -ApertureRadius;
         var apertureMax = ApertureRadius;
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var rValue = byte.MaxValue;
                     var gValue = byte.MaxValue;
                     var bValue = byte.MaxValue;
+
                     for (var y2 = apertureMin; y2 < apertureMax; ++y2)
                     {
                         var tempY = y + y2;
                         var tempX = x + apertureMin;
+
                         if (tempY >= 0 && tempY < image.Height)
                         {
                             var length = ApertureRadius * 2;
+
                             if (tempX < 0)
                             {
                                 length += tempX;
                                 tempX = 0;
                             }
+
                             var start = tempY * image.Width + tempX;
-                            fixed (Color* imagePointer = &tempValues[start])
+
+                            for (var x2 = 0; x2 < length; ++x2)
                             {
-                                var imagePointer2 = imagePointer;
-                                for (var x2 = 0; x2 < length; ++x2)
-                                {
-                                    if (tempX >= image.Width)
-                                        break;
-                                    var tempR = (*imagePointer2).Red;
-                                    var tempG = (*imagePointer2).Green;
-                                    var tempB = (*imagePointer2).Blue;
-                                    ++imagePointer2;
-                                    rValue = rValue < tempR ? rValue : tempR;
-                                    gValue = gValue < tempG ? gValue : tempG;
-                                    bValue = bValue < tempB ? bValue : tempB;
-                                    ++tempX;
-                                }
+                                if (tempX >= image.Width)
+                                    break;
+
+                                var tempR = tempValues[start].Red;
+                                var tempG = tempValues[start].Green;
+                                var tempB = tempValues[start].Blue;
+
+                                ++start;
+
+                                rValue = rValue < tempR ? rValue : tempR;
+                                gValue = gValue < tempG ? gValue : tempG;
+                                bValue = bValue < tempB ? bValue : tempB;
+
+                                ++tempX;
                             }
                         }
                     }
-                    (*targetPointer2).Red = rValue;
-                    (*targetPointer2).Green = gValue;
-                    (*targetPointer2).Blue = bValue;
-                    ++targetPointer2;
+
+                    image.Pixels[y * image.Width + x] = new Color(rValue, gValue, bValue);
                 }
             }
-        });
+        );
+
         return image;
     }
 }

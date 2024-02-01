@@ -15,15 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 using System;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
 /// <summary>
 /// Robidoux sharp filter
 /// </summary>
-/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+/// <seealso cref="IResamplingFilter"/>
 public class RobidouxSharpFilter : ResamplingFilterBase
 {
     /// <summary>

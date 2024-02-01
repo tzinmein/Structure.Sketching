@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
-
 /*
 Copyright 2016 James Craig
 Copyright 2023 Ho Tzin Mein
@@ -21,7 +21,6 @@ limitations under the License.
 
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Normalization;
 
@@ -37,25 +36,43 @@ public class StretchContrast : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var minValue = new byte[3];
         var maxValue = new byte[3];
         GetMinMaxPixel(minValue, maxValue, image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    image.Pixels[y * image.Width + x].Red = Map(image.Pixels[y * image.Width + x].Red, minValue[0], maxValue[0]);
-                    image.Pixels[y * image.Width + x].Green = Map(image.Pixels[y * image.Width + x].Green, minValue[1], maxValue[1]);
-                    image.Pixels[y * image.Width + x].Blue = Map(image.Pixels[y * image.Width + x].Blue, minValue[2], maxValue[2]);
+                    var pixelIndex = y * image.Width + x;
+                    image.Pixels[pixelIndex].Red = Map(
+                        image.Pixels[pixelIndex].Red,
+                        minValue[0],
+                        maxValue[0]
+                    );
+                    image.Pixels[pixelIndex].Green = Map(
+                        image.Pixels[pixelIndex].Green,
+                        minValue[1],
+                        maxValue[1]
+                    );
+                    image.Pixels[pixelIndex].Blue = Map(
+                        image.Pixels[pixelIndex].Blue,
+                        minValue[2],
+                        maxValue[2]
+                    );
                 }
             }
-        });
+        );
+
         return image;
     }
 

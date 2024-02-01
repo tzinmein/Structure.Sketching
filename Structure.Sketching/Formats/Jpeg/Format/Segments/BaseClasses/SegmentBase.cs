@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Exceptions;
-using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Structure.Sketching.Exceptions;
+using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 
-namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
+namespace Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 /// <summary>
 /// Abstract Class that defines an individual segment of the jpeg.

@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.ExtensionMethods;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using Structure.Sketching.Procedural;
-using System;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Effects;
 
@@ -68,16 +68,40 @@ public class Turbulence : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var result = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, result, result.Length);
-        var xNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed);
-        var yNoise = PerlinNoise.Generate(image.Width, image.Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed * 2);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        var xNoise = PerlinNoise.Generate(
+            image.Width,
+            image.Height,
+            255,
+            0,
+            0.0625f,
+            1.0f,
+            0.5f,
+            Roughness,
+            Seed
+        );
+        var yNoise = PerlinNoise.Generate(
+            image.Width,
+            image.Height,
+            255,
+            0,
+            0.0625f,
+            1.0f,
+            0.5f,
+            Roughness,
+            Seed * 2
+        );
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
@@ -91,7 +115,8 @@ public class Turbulence : IFilter
                     result[resultOffset] = image.Pixels[sourceOffset];
                 }
             }
-        });
+        );
+
         return image.ReCreate(image.Width, image.Height, result);
     }
 }

@@ -31,7 +31,7 @@ public class Posterize : IFilter
     /// <summary>
     /// Initializes a new instance of the <see cref="Posterize"/> class.
     /// </summary>
-    /// <param name="divisions">The number of divisions for each channel.</param>
+    /// <param name="divisions">The number of divisions.</param>
     public Posterize(int divisions)
     {
         if (divisions < 1)
@@ -49,7 +49,9 @@ public class Posterize : IFilter
     /// <summary>
     /// Gets or sets the divisions.
     /// </summary>
-    /// <value>The divisions.</value>
+    /// <value>
+    /// The divisions.
+    /// </value>
     public byte[] Divisions { get; set; }
 
     /// <summary>
@@ -57,27 +59,29 @@ public class Posterize : IFilter
     /// </summary>
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
-    /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    /// <returns>The filtered image.</returns>
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
+        Parallel.For(targetLocation.Bottom, targetLocation.Top, (y) =>
         {
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            var rowOffset = y * image.Width;
+            for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
             {
-                var outputPointer = pointer;
-                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
-                {
-                    (*outputPointer).Red = FindValue((*outputPointer).Red);
-                    (*outputPointer).Green = FindValue((*outputPointer).Green);
-                    (*outputPointer).Blue = FindValue((*outputPointer).Blue);
-                    ++outputPointer;
-                }
+                var pixelOffset = rowOffset + x;
+                image.Pixels[pixelOffset].Red = FindValue(image.Pixels[pixelOffset].Red);
+                image.Pixels[pixelOffset].Green = FindValue(image.Pixels[pixelOffset].Green);
+                image.Pixels[pixelOffset].Blue = FindValue(image.Pixels[pixelOffset].Blue);
             }
         });
         return image;
     }
 
+    /// <summary>
+    /// Finds the value.
+    /// </summary>
+    /// <param name="x">The input value.</param>
+    /// <returns>The posterized value.</returns>
     private byte FindValue(byte x)
     {
         if (Divisions.Length == 1)

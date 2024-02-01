@@ -23,7 +23,7 @@ namespace Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 /// <summary>
 /// Resampling filter base class
 /// </summary>
-/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+/// <seealso cref="IResamplingFilter"/>
 public abstract class ResamplingFilterBase : IResamplingFilter
 {
     /// <summary>

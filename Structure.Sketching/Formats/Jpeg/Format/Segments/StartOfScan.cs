@@ -23,13 +23,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
 
 /// <summary>
 /// Start of scan segment
 /// </summary>
-/// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase"/>
+/// <seealso cref="SegmentBase"/>
 public class StartOfScan : SegmentBase
 {
     /// <summary>

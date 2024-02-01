@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
 using Structure.Sketching.Numerics.Interfaces;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Normalization;
 
@@ -50,26 +50,31 @@ public class Equalize : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Histogram.LoadImage(image)
-            .Equalize();
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+        Histogram.LoadImage(image).Equalize();
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var resultColor = Histogram.EqualizeColor(*targetPointer2);
-                    (*targetPointer2).Red = resultColor.Red;
-                    (*targetPointer2).Green = resultColor.Green;
-                    (*targetPointer2).Blue = resultColor.Blue;
-                    ++targetPointer2;
+                    var pixelIndex = y * image.Width + x;
+                    var resultColor = Histogram.EqualizeColor(image.Pixels[pixelIndex]);
+
+                    image.Pixels[pixelIndex].Red = resultColor.Red;
+                    image.Pixels[pixelIndex].Green = resultColor.Green;
+                    image.Pixels[pixelIndex].Blue = resultColor.Blue;
                 }
             }
-        });
+        );
+
         return image;
     }
 }

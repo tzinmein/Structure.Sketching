@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Normalization;
 
@@ -35,28 +35,41 @@ public class Logarithm : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var maxValue = GetMaxValue(image, targetLocation);
-        maxValue = new Color((byte)(255 / Math.Log(1f + maxValue.Red)),
+        maxValue = new Color(
+            (byte)(255 / Math.Log(1f + maxValue.Red)),
             (byte)(255 / Math.Log(1f + maxValue.Green)),
             (byte)(255 / Math.Log(1f + maxValue.Blue)),
-            maxValue.Alpha);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+            maxValue.Alpha
+        );
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    (*targetPointer2).Red = (byte)(maxValue.Red * Math.Log(1f + (*targetPointer2).Red));
-                    (*targetPointer2).Green = (byte)(maxValue.Green * Math.Log(1f + (*targetPointer2).Green));
-                    (*targetPointer2).Blue = (byte)(maxValue.Blue * Math.Log(1f + (*targetPointer2).Blue));
-                    ++targetPointer2;
+                    var pixelIndex = y * image.Width + x;
+                    image.Pixels[pixelIndex].Red = (byte)(
+                        maxValue.Red * Math.Log(1f + image.Pixels[pixelIndex].Red)
+                    );
+                    image.Pixels[pixelIndex].Green = (byte)(
+                        maxValue.Green * Math.Log(1f + image.Pixels[pixelIndex].Green)
+                    );
+                    image.Pixels[pixelIndex].Blue = (byte)(
+                        maxValue.Blue * Math.Log(1f + image.Pixels[pixelIndex].Blue)
+                    );
                 }
             }
-        });
+        );
+
         return image;
     }
 

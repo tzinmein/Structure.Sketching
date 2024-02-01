@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Colors;
-using Structure.Sketching.Filters.Interfaces;
-using Structure.Sketching.Numerics;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using Structure.Sketching.Colors;
+using Structure.Sketching.Filters.Interfaces;
+using Structure.Sketching.Numerics;
 
 namespace Structure.Sketching.Filters.Overlays;
 
@@ -67,30 +67,34 @@ public class Glow : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var tempX = XRadius * image.Width;
         var tempY = YRadius * image.Height;
         var maxDistance = (float)Math.Sqrt(tempX * tempX + tempY * tempY);
 
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var pointer2 = pointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
                     var distance = Vector2.Distance(image.Center, new Vector2(x, y));
-                    var sourceColor = (Vector4)(*pointer2);
+                    var sourceColor = (Vector4)image.Pixels[y * image.Width + x];
                     var result = Vector4.Lerp(Color, sourceColor, .5f * (distance / maxDistance));
                     var tempAlpha = result.W;
                     result = sourceColor * (1 - tempAlpha) + result * sourceColor * tempAlpha;
-                    *pointer2 = result;
-                    ++pointer2;
+
+                    image.Pixels[y * image.Width + x] = result;
                 }
             }
-        });
+        );
+
         return image;
     }
 }

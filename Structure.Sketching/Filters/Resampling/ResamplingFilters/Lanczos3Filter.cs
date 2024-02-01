@@ -15,15 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
 using System;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.BaseClasses;
+using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
 
 namespace Structure.Sketching.Filters.Resampling.ResamplingFilters;
 
 /// <summary>
 /// Lanczos3 filter
 /// </summary>
-/// <seealso cref="Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces.IResamplingFilter"/>
+/// <seealso cref="IResamplingFilter"/>
 public class Lanczos3Filter : ResamplingFilterBase
 {
     /// <summary>
@@ -40,13 +41,15 @@ public class Lanczos3Filter : ResamplingFilterBase
     public override double GetValue(double value)
     {
         value = Math.Abs(value);
-        if (value < 3) return Sin(value) * Sin(value / 3f);
+        if (value < 3)
+            return Sin(value) * Sin(value / 3f);
         return 0;
     }
 
     private static double Sin(double value)
     {
-        if (value == 0) return 1;
+        if (value == 0)
+            return 1;
         value *= Math.PI;
         return Math.Sin(value) / value;
     }

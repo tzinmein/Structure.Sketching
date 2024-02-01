@@ -20,13 +20,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
 
 /// <summary>
 /// Define huffman table segment
 /// </summary>
-/// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase"/>
+/// <seealso cref="SegmentBase"/>
 public class DefineHuffmanTable : SegmentBase
 {
     /// <summary>

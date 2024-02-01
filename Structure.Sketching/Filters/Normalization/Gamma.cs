@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Normalization;
 
@@ -36,11 +36,20 @@ public class Gamma : IFilter
     {
         Value = value;
         Ramp = new int[256];
-        Parallel.For(0, 256, x =>
-        {
-            Ramp[x] = (int)(255.0 * System.Math.Pow(x / 255.0, 1.0 / Value) + 0.5);
-            Ramp[x] = Ramp[x] < 0 ? 0 : Ramp[x] > 255 ? 255 : Ramp[x];
-        });
+        Parallel.For(
+            0,
+            256,
+            x =>
+            {
+                Ramp[x] = (int)(255.0 * System.Math.Pow(x / 255.0, 1.0 / Value) + 0.5);
+                Ramp[x] =
+                    Ramp[x] < 0
+                        ? 0
+                        : Ramp[x] > 255
+                            ? 255
+                            : Ramp[x];
+            }
+        );
     }
 
     /// <summary>
@@ -57,23 +66,28 @@ public class Gamma : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    (*targetPointer2).Red = (byte)Ramp[(*targetPointer2).Red];
-                    (*targetPointer2).Green = (byte)Ramp[(*targetPointer2).Green];
-                    (*targetPointer2).Blue = (byte)Ramp[(*targetPointer2).Blue];
-                    ++targetPointer2;
+                    var pixelIndex = y * image.Width + x;
+                    image.Pixels[pixelIndex].Red = (byte)Ramp[image.Pixels[pixelIndex].Red];
+                    image.Pixels[pixelIndex].Green = (byte)Ramp[image.Pixels[pixelIndex].Green];
+                    image.Pixels[pixelIndex].Blue = (byte)Ramp[image.Pixels[pixelIndex].Blue];
                 }
             }
-        });
+        );
+
         return image;
     }
 }

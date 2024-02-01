@@ -22,6 +22,7 @@ using Structure.Sketching.Formats.Jpeg.Format.Segments;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 

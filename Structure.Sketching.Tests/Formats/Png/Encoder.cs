@@ -1,5 +1,5 @@
-﻿using Structure.Sketching.Tests.Formats.BaseClasses;
-using System.IO;
+﻿using System.IO;
+using Structure.Sketching.Tests.Formats.BaseClasses;
 using Xunit;
 
 namespace Structure.Sketching.Tests.Formats.Png;
@@ -13,14 +13,7 @@ public class Encoder : FormatTestBase
     public override string OutputDirectory => "./TestOutput/Formats/Png/Encoder/";
 
     public static readonly TheoryData<string> InputFileNames =
-        new()
-        {
-            "splash.png",
-            "48bit.png",
-            "blur.png",
-            "indexed.png",
-            "splashbw.png"
-        };
+        new() { "splash.png", "48bit.png", "blur.png", "indexed.png", "splashbw.png" };
 
     [Fact]
     public void CanEncode()

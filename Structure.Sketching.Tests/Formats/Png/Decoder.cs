@@ -1,6 +1,6 @@
-﻿using Structure.Sketching.Tests.Formats.BaseClasses;
-using System;
+﻿using System;
 using System.IO;
+using Structure.Sketching.Tests.Formats.BaseClasses;
 using Xunit;
 
 namespace Structure.Sketching.Tests.Formats.Png;
@@ -13,28 +13,13 @@ public class Decoder : FormatTestBase
 
     public override string OutputDirectory => "./TestOutput/Formats/Png/Decoder/";
 
-    public static readonly TheoryData<string> InputFileNames = new()
-    {
-        "splash.png",
-        "48bit.png",
-        "blur.png",
-        "indexed.png",
-        "splashbw.png"
-    };
+    public static readonly TheoryData<string> InputFileNames =
+        new() { "splash.png", "48bit.png", "blur.png", "indexed.png", "splashbw.png", };
 
     [Fact]
     public void CanDecodeByteArray()
     {
-        byte[] header = {
-            0x89,
-            0x50,
-            0x4E,
-            0x47,
-            0x0D,
-            0x0A,
-            0x1A,
-            0x0A
-        };
+        byte[] header = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
         Assert.True(new Sketching.Formats.Png.Decoder().CanDecode(header));
         Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes(19777)));
         Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(BitConverter.GetBytes(19779)));
@@ -54,19 +39,18 @@ public class Decoder : FormatTestBase
     [Fact]
     public void CanDecodeStream()
     {
-        byte[] header = {
-            0x89,
-            0x50,
-            0x4E,
-            0x47,
-            0x0D,
-            0x0A,
-            0x1A,
-            0x0A
-        };
+        byte[] header = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
         Assert.True(new Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(header)));
-        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19777))));
-        Assert.False(new Sketching.Formats.Png.Decoder().CanDecode(new MemoryStream(BitConverter.GetBytes(19779))));
+        Assert.False(
+            new Sketching.Formats.Png.Decoder().CanDecode(
+                new MemoryStream(BitConverter.GetBytes(19777))
+            )
+        );
+        Assert.False(
+            new Sketching.Formats.Png.Decoder().CanDecode(
+                new MemoryStream(BitConverter.GetBytes(19779))
+            )
+        );
     }
 
     [Fact]

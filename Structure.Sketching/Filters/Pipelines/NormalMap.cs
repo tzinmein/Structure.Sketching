@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Numerics;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Convolution.Enums;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Pipelines;
 
@@ -59,30 +59,47 @@ public class NormalMap : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        var tempImageX = new BumpMap(XDirection == XDirection.LeftToRight ? Direction.LeftToRight : Direction.RightToLeft).Apply(image.Copy(), targetLocation);
-        var tempImageY = new BumpMap(YDirection == YDirection.TopToBottom ? Direction.TopToBottom : Direction.BottomToTop).Apply(image.Copy(), targetLocation);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+        var tempImageX = new BumpMap(
+            XDirection == XDirection.LeftToRight ? Direction.LeftToRight : Direction.RightToLeft
+        ).Apply(image.Copy(), targetLocation);
+        var tempImageY = new BumpMap(
+            YDirection == YDirection.TopToBottom ? Direction.TopToBottom : Direction.BottomToTop
+        ).Apply(image.Copy(), targetLocation);
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var targetPointer2 = targetPointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    var tempVector = new Vector3(tempImageX.Pixels[y * image.Width + x].Red / 255f,
-                        tempImageY.Pixels[y * image.Width + x].Red / 255f,
-                        1f);
+                    var index = y * image.Width + x;
+
+                    var tempVector = new Vector3(
+                        tempImageX.Pixels[index].Red / 255f,
+                        tempImageY.Pixels[index].Red / 255f,
+                        1f
+                    );
+
                     tempVector = Vector3.Normalize(tempVector);
-                    tempVector = new Vector3(tempVector.X + 1.0f, tempVector.Y + 1f, tempVector.Z + 1f);
+                    tempVector = new Vector3(
+                        tempVector.X + 1.0f,
+                        tempVector.Y + 1f,
+                        tempVector.Z + 1f
+                    );
                     tempVector /= 2.0f;
-                    image.Pixels[y * image.Width + x].Red = (byte)(tempVector.X * 255);
-                    image.Pixels[y * image.Width + x].Green = (byte)(tempVector.Y * 255);
-                    image.Pixels[y * image.Width + x].Blue = (byte)(tempVector.Z * 255);
+
+                    image.Pixels[index].Red = (byte)(tempVector.X * 255);
+                    image.Pixels[index].Green = (byte)(tempVector.Y * 255);
+                    image.Pixels[index].Blue = (byte)(tempVector.Z * 255);
                 }
             }
-        });
+        );
         return image;
     }
 }

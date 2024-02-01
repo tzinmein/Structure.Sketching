@@ -34,31 +34,26 @@ public class TrueColorAlphaReader : IColorReader
     /// <param name="pixels">The pixels.</param>
     /// <param name="header">The header.</param>
     /// <param name="row">The row.</param>
-    public unsafe void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
+    public void ReadScanline(byte[] scanline, Color[] pixels, Header header, int row)
     {
         scanline = scanline.ExpandArray(header.BitDepth);
         var bytesPerPixel = header.BitDepth * 4 / 8;
         var bytesPerChannel = header.BitDepth / 8;
 
-        fixed (Color* pixelPointer = &pixels[row * header.Width])
+        int pixelIndex = row * header.Width;
+        int scanlineIndex = 0;
+
+        for (var x = 0; x < scanline.Length; x += bytesPerPixel)
         {
-            var pixelPointer2 = pixelPointer;
-            fixed (byte* scanlinePointer = &scanline[0])
-            {
-                var scanlinePointer2 = scanlinePointer;
-                for (var x = 0; x < scanline.Length; x += bytesPerPixel)
-                {
-                    (*pixelPointer2).Red = *scanlinePointer2;
-                    scanlinePointer2 += bytesPerChannel;
-                    (*pixelPointer2).Green = *scanlinePointer2;
-                    scanlinePointer2 += bytesPerChannel;
-                    (*pixelPointer2).Blue = *scanlinePointer2;
-                    scanlinePointer2 += bytesPerChannel;
-                    (*pixelPointer2).Alpha = *scanlinePointer2;
-                    ++pixelPointer2;
-                    scanlinePointer2 += bytesPerChannel;
-                }
-            }
+            pixels[pixelIndex].Red = scanline[scanlineIndex];
+            scanlineIndex += bytesPerChannel;
+            pixels[pixelIndex].Green = scanline[scanlineIndex];
+            scanlineIndex += bytesPerChannel;
+            pixels[pixelIndex].Blue = scanline[scanlineIndex];
+            scanlineIndex += bytesPerChannel;
+            pixels[pixelIndex].Alpha = scanline[scanlineIndex];
+            pixelIndex++;
+            scanlineIndex += bytesPerChannel;
         }
     }
 }

@@ -15,15 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Filters.Resampling.Enums;
 using Structure.Sketching.Filters.Resampling.ResamplingFilters.Interfaces;
 using Structure.Sketching.Numerics;
-using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Resampling.BaseClasses;
 
@@ -39,7 +39,11 @@ public abstract class AffineBaseClass : IFilter
     /// <param name="width">The new width.</param>
     /// <param name="height">The new height.</param>
     /// <param name="filter">The filter to use (defaults to nearest neighbor).</param>
-    protected AffineBaseClass(int width = -1, int height = -1, ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor)
+    protected AffineBaseClass(
+        int width = -1,
+        int height = -1,
+        ResamplingFiltersAvailable filter = ResamplingFiltersAvailable.NearestNeighbor
+    )
     {
         Width = width;
         Height = height;
@@ -95,10 +99,13 @@ public abstract class AffineBaseClass : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
         Filter.Precompute(image.Width, image.Height, Width, Height);
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var copy = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, copy, copy.Length);
         TransformationMatrix = GetMatrix(image, targetLocation);
@@ -109,12 +116,12 @@ public abstract class AffineBaseClass : IFilter
         YRadius = yScale < 1f ? Filter.FilterRadius / yScale : Filter.FilterRadius;
         XRadius = xScale < 1f ? Filter.FilterRadius / xScale : Filter.FilterRadius;
 
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* outputPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var outputPointer2 = outputPointer;
-                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
+                for (int x = targetLocation.Left; x < targetLocation.Right; x++)
                 {
                     var values = new Vector4(0, 0, 0, 0);
                     float weight = 0;
@@ -122,16 +129,14 @@ public abstract class AffineBaseClass : IFilter
                     var rotated = Vector2.Transform(new Vector2(x, y), TransformationMatrix);
                     var rotatedY = (int)rotated.Y;
                     var rotatedX = (int)rotated.X;
-                    if (rotatedY >= image.Height
+                    if (
+                        rotatedY >= image.Height
                         || rotatedY < 0
                         || rotatedX >= image.Width
-                        || rotatedX < 0)
+                        || rotatedX < 0
+                    )
                     {
-                        (*outputPointer2).Red = 0;
-                        (*outputPointer2).Green = 0;
-                        (*outputPointer2).Blue = 0;
-                        (*outputPointer2).Alpha = 255;
-                        ++outputPointer2;
+                        image.Pixels[y * image.Width + x] = new Color(0, 0, 0, 255);
                         continue;
                     }
                     var left = (int)(rotatedX - XRadius);
@@ -146,50 +151,48 @@ public abstract class AffineBaseClass : IFilter
                         left = 0;
                     if (right >= image.Width)
                         right = image.Width - 1;
-                    for (int i = top, yCount = 0; i <= bottom; ++i, ++yCount)
+                    for (int i = top, yCount = 0; i <= bottom; i++, yCount++)
                     {
-                        fixed (Color* pixelPointer = &copy[i * image.Width])
+                        for (int j = left, xCount = 0; j <= right; j++, xCount++)
                         {
-                            var pixelPointer2 = pixelPointer + left;
-                            for (int j = left, xCount = 0; j <= right; ++j, ++xCount)
-                            {
-                                var tempYWeight = Filter.YWeights[rotatedY].Values[yCount];
-                                var tempXWeight = Filter.XWeights[rotatedX].Values[xCount];
-                                var tempWeight = tempYWeight * tempXWeight;
+                            var tempYWeight = Filter.YWeights[rotatedY].Values[yCount];
+                            var tempXWeight = Filter.XWeights[rotatedX].Values[xCount];
+                            var tempWeight = tempYWeight * tempXWeight;
 
-                                if (YRadius == 0 && XRadius == 0)
-                                    tempWeight = 1;
+                            if (YRadius == 0 && XRadius == 0)
+                                tempWeight = 1;
 
-                                if (tempWeight == 0)
-                                {
-                                    ++pixelPointer2;
-                                    continue;
-                                }
-                                values.X += (*pixelPointer2).Red * (float)tempWeight;
-                                values.Y += (*pixelPointer2).Green * (float)tempWeight;
-                                values.Z += (*pixelPointer2).Blue * (float)tempWeight;
-                                values.W += (*pixelPointer2).Alpha * (float)tempWeight;
-                                ++pixelPointer2;
-                                weight += (float)tempWeight;
-                            }
+                            if (tempWeight == 0)
+                                continue;
+
+                            var pixel = copy[i * image.Width + j];
+                            values.X += pixel.Red * (float)tempWeight;
+                            values.Y += pixel.Green * (float)tempWeight;
+                            values.Z += pixel.Blue * (float)tempWeight;
+                            values.W += pixel.Alpha * (float)tempWeight;
+                            weight += (float)tempWeight;
                         }
                     }
                     if (weight == 0)
                         weight = 1;
                     if (weight > 0)
                     {
-                        values = Vector4.Clamp(values, Vector4.Zero, new Vector4(255, 255, 255, 255));
-                        (*outputPointer2).Red = (byte)values.X;
-                        (*outputPointer2).Green = (byte)values.Y;
-                        (*outputPointer2).Blue = (byte)values.Z;
-                        (*outputPointer2).Alpha = (byte)values.W;
-                        ++outputPointer2;
+                        values = Vector4.Clamp(
+                            values,
+                            Vector4.Zero,
+                            new Vector4(255, 255, 255, 255)
+                        );
+                        image.Pixels[y * image.Width + x] = new Color(
+                            (byte)values.X,
+                            (byte)values.Y,
+                            (byte)values.Z,
+                            (byte)values.W
+                        );
                     }
-                    else
-                        ++outputPointer2;
                 }
             }
-        });
+        );
+
         return image;
     }
 

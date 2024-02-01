@@ -18,13 +18,14 @@ limitations under the License.
 using Structure.Sketching.Formats.Jpeg.Format.HelperClasses;
 using System.Collections.Generic;
 using System.IO;
+using Structure.Sketching.Formats.Jpeg.Format.Segments.BaseClasses;
 
 namespace Structure.Sketching.Formats.Jpeg.Format.Segments;
 
 /// <summary>
 /// Define restart interval
 /// </summary>
-/// <seealso cref="Structure.Sketching.Formats.Jpeg.Format.Segments.SegmentBase" />
+/// <seealso cref="SegmentBase" />
 public class DefineRestartInterval : SegmentBase
 {
     /// <summary>

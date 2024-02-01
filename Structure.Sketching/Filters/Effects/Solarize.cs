@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Effects;
 
@@ -49,30 +49,33 @@ public class Solarize : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default ? new Rectangle(0, 0, image.Width, image.Height) : targetLocation.Clamp(image);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
-                var outputPointer = pointer;
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    if (Distance.Euclidean(*outputPointer, Color.Black) < Threshold)
+                    var pixelIndex = y * image.Width + x;
+                    if (Distance.Euclidean(image.Pixels[pixelIndex], Color.Black) < Threshold)
                     {
-                        (*outputPointer).Red = (byte)(255 - (*outputPointer).Red);
-                        (*outputPointer).Green = (byte)(255 - (*outputPointer).Green);
-                        (*outputPointer).Blue = (byte)(255 - (*outputPointer).Blue);
-                        ++outputPointer;
-                    }
-                    else
-                    {
-                        ++outputPointer;
+                        image.Pixels[pixelIndex] = new Color(
+                            (byte)(255 - image.Pixels[pixelIndex].Red),
+                            (byte)(255 - image.Pixels[pixelIndex].Green),
+                            (byte)(255 - image.Pixels[pixelIndex].Blue),
+                            image.Pixels[pixelIndex].Alpha
+                        );
                     }
                 }
             }
-        });
+        );
+
         return image;
     }
 }

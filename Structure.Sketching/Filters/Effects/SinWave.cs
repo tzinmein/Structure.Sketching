@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Convolution.Enums;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Effects;
 
@@ -67,7 +67,7 @@ public class SinWave : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
         targetLocation =
             targetLocation == default
@@ -75,46 +75,48 @@ public class SinWave : IFilter
                 : targetLocation.Clamp(image);
         var result = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, result, result.Length);
+
         Parallel.For(
             targetLocation.Bottom,
             targetLocation.Top,
             y =>
             {
-                fixed (Color* targetPointer = &image.Pixels[y * image.Width + targetLocation.Left])
+                for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
-                    for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
-                    {
-                        double value1 = 0;
-                        double value2 = 0;
-                        switch (Direction)
-                        {
-                            case Direction.RightToLeft
-                            or Direction.LeftToRight:
-                                value1 = Math.Sin(x * Frequency * Math.PI / 180.0d) * Amplitude;
-                                break;
-                            case Direction.BottomToTop
-                            or Direction.TopToBottom:
-                                value2 = Math.Sin(y * Frequency * Math.PI / 180.0d) * Amplitude;
-                                break;
-                        }
+                    double value1 = 0;
+                    double value2 = 0;
 
-                        value1 = y - (int)value1;
-                        value2 = x - (int)value2;
-                        while (value1 < 0)
-                            value1 += image.Height;
-                        while (value2 < 0)
-                            value2 += image.Width;
-                        while (value1 >= image.Height)
-                            value1 -= image.Height;
-                        while (value2 >= image.Width)
-                            value2 -= image.Width;
-                        result[y * image.Width + x] = image.Pixels[
-                            (int)value1 * image.Width + (int)value2
-                        ];
+                    switch (Direction)
+                    {
+                        case Direction.RightToLeft
+                        or Direction.LeftToRight:
+                            value1 = Math.Sin(x * Frequency * Math.PI / 180.0d) * Amplitude;
+                            break;
+                        case Direction.BottomToTop
+                        or Direction.TopToBottom:
+                            value2 = Math.Sin(y * Frequency * Math.PI / 180.0d) * Amplitude;
+                            break;
                     }
+
+                    value1 = y - (int)value1;
+                    value2 = x - (int)value2;
+
+                    while (value1 < 0)
+                        value1 += image.Height;
+                    while (value2 < 0)
+                        value2 += image.Width;
+                    while (value1 >= image.Height)
+                        value1 -= image.Height;
+                    while (value2 >= image.Width)
+                        value2 -= image.Width;
+
+                    result[y * image.Width + x] = image.Pixels[
+                        (int)value1 * image.Width + (int)value2
+                    ];
                 }
             }
         );
+
         return image.ReCreate(image.Width, image.Height, result);
     }
 }

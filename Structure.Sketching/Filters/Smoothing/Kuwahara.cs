@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Threading.Tasks;
 using Structure.Sketching.Colors;
 using Structure.Sketching.Filters.Interfaces;
 using Structure.Sketching.Numerics;
-using System;
-using System.Threading.Tasks;
 
 namespace Structure.Sketching.Filters.Smoothing;
 
@@ -59,16 +59,18 @@ public class Kuwahara : IFilter
     /// <param name="image">The image.</param>
     /// <param name="targetLocation">The target location.</param>
     /// <returns>The image</returns>
-    public unsafe Image Apply(Image image, Rectangle targetLocation = default)
+    public Image Apply(Image image, Rectangle targetLocation = default)
     {
-        targetLocation = targetLocation == default
-            ? new Rectangle(0, 0, image.Width, image.Height)
-            : targetLocation.Clamp(image);
+        targetLocation =
+            targetLocation == default
+                ? new Rectangle(0, 0, image.Width, image.Height)
+                : targetLocation.Clamp(image);
         var result = new Color[image.Pixels.Length];
         Array.Copy(image.Pixels, result, result.Length);
-        Parallel.For(targetLocation.Bottom, targetLocation.Top, y =>
-        {
-            fixed (Color* pointer = &image.Pixels[y * image.Width + targetLocation.Left])
+        Parallel.For(
+            targetLocation.Bottom,
+            targetLocation.Top,
+            y =>
             {
                 for (var x = targetLocation.Left; x < targetLocation.Right; ++x)
                 {
@@ -88,29 +90,32 @@ public class Kuwahara : IFilter
                         for (var x2 = _apertureMinX[i]; x2 < _apertureMaxX[i]; ++x2)
                         {
                             var tempX = x + x2;
-                            if (tempX < 0 || tempX >= image.Width) continue;
+                            if (tempX < 0 || tempX >= image.Width)
+                                continue;
                             for (var y2 = _apertureMinY[i]; y2 < _apertureMaxY[i]; ++y2)
                             {
                                 var tempY = y + y2;
-                                if (tempY < 0 || tempY >= image.Height) continue;
-                                rValues[i] += image.Pixels[tempY * image.Width + tempX].Red;
-                                gValues[i] += image.Pixels[tempY * image.Width + tempX].Green;
-                                bValues[i] += image.Pixels[tempY * image.Width + tempX].Blue;
+                                if (tempY < 0 || tempY >= image.Height)
+                                    continue;
+                                var index = tempY * image.Width + tempX;
+                                rValues[i] += image.Pixels[index].Red;
+                                gValues[i] += image.Pixels[index].Green;
+                                bValues[i] += image.Pixels[index].Blue;
 
-                                if (image.Pixels[tempY * image.Width + tempX].Red > maxRValue[i])
-                                    maxRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
-                                else if (image.Pixels[tempY * image.Width + tempX].Red < minRValue[i])
-                                    minRValue[i] = image.Pixels[tempY * image.Width + tempX].Red;
+                                if (image.Pixels[index].Red > maxRValue[i])
+                                    maxRValue[i] = image.Pixels[index].Red;
+                                else if (image.Pixels[index].Red < minRValue[i])
+                                    minRValue[i] = image.Pixels[index].Red;
 
-                                if (image.Pixels[tempY * image.Width + tempX].Green > maxGValue[i])
-                                    maxGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
-                                else if (image.Pixels[tempY * image.Width + tempX].Green < minGValue[i])
-                                    minGValue[i] = image.Pixels[tempY * image.Width + tempX].Green;
+                                if (image.Pixels[index].Green > maxGValue[i])
+                                    maxGValue[i] = image.Pixels[index].Green;
+                                else if (image.Pixels[index].Green < minGValue[i])
+                                    minGValue[i] = image.Pixels[index].Green;
 
-                                if (image.Pixels[tempY * image.Width + tempX].Blue > maxBValue[i])
-                                    maxBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
-                                else if (image.Pixels[tempY * image.Width + tempX].Blue < minBValue[i])
-                                    minBValue[i] = image.Pixels[tempY * image.Width + tempX].Blue;
+                                if (image.Pixels[index].Blue > maxBValue[i])
+                                    maxBValue[i] = image.Pixels[index].Blue;
+                                else if (image.Pixels[index].Blue < minBValue[i])
+                                    minBValue[i] = image.Pixels[index].Blue;
 
                                 ++numPixels[i];
                             }
@@ -121,9 +126,13 @@ public class Kuwahara : IFilter
                     var minDifference = uint.MaxValue;
                     for (var i = 0; i < 4; ++i)
                     {
-                        var currentDifference = maxRValue[i] - minRValue[i] + (maxGValue[i] - minGValue[i]) +
-                                                (maxBValue[i] - minBValue[i]);
-                        if (currentDifference >= minDifference || numPixels[i] <= 0) continue;
+                        var currentDifference =
+                            maxRValue[i]
+                            - minRValue[i]
+                            + (maxGValue[i] - minGValue[i])
+                            + (maxBValue[i] - minBValue[i]);
+                        if (currentDifference >= minDifference || numPixels[i] <= 0)
+                            continue;
                         j = i;
                         minDifference = currentDifference;
                     }
@@ -132,12 +141,15 @@ public class Kuwahara : IFilter
                     gValues[j] /= numPixels[j];
                     bValues[j] /= numPixels[j];
 
-                    result[y * image.Width + x].Red = (byte)rValues[j];
-                    result[y * image.Width + x].Green = (byte)gValues[j];
-                    result[y * image.Width + x].Blue = (byte)bValues[j];
+                    result[y * image.Width + x] = new Color(
+                        (byte)rValues[j],
+                        (byte)gValues[j],
+                        (byte)bValues[j]
+                    );
                 }
             }
-        });
+        );
+
         return image.ReCreate(image.Width, image.Height, result);
     }
 }

@@ -1,7 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
-using Structure.Sketching.Benchmarks.Filters.TestClasses;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.Versioning;
+using BenchmarkDotNet.Attributes;
 
 namespace Structure.Sketching.Benchmarks.Filters;
 
@@ -25,7 +24,7 @@ public class Crop
     public void CropStructureSketchingTest()
     {
         var testImage = new Image(Width, Height, new byte[Width * Height * 4]);
-        var testCropFilter = new CropFilter();
+        var testCropFilter = new Sketching.Filters.Resampling.Crop();
         testCropFilter.Apply(testImage, new Numerics.Rectangle(0, 0, Count, Count));
     }
 
