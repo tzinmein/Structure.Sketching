@@ -73,7 +73,7 @@ public abstract class AffineBaseClass : IFilter
     /// Gets or sets the resampling filter dictionary.
     /// </summary>
     /// <value>The resampling filter.</value>
-    private Dictionary<ResamplingFiltersAvailable, IResamplingFilter> ResamplingFilter { get; set; }
+    private Dictionary<ResamplingFiltersAvailable, IResamplingFilter> ResamplingFilter { get; }
 
     /// <summary>
     /// Gets the transformation matrix.

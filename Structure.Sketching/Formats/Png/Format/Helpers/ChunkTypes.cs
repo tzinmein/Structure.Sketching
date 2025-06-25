@@ -37,7 +37,7 @@ public class ChunkTypes
     /// <value>
     /// The value.
     /// </value>
-    public string Value { get; private set; }
+    public string Value { get; }
 
     /// <summary>
     /// The background color

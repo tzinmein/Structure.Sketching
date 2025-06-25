@@ -37,7 +37,7 @@ public class SegmentTypes
     /// <value>
     /// The value.
     /// </value>
-    public byte Value { get; private set; }
+    public byte Value { get; }
 
     /// <summary>
     /// The application 0 tag

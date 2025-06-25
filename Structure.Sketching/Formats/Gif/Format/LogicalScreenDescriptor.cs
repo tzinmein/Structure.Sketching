@@ -75,7 +75,7 @@ public class LogicalScreenDescriptor : SectionBase
     /// <value>
     /// The index of the background color.
     /// </value>
-    public byte BackgroundColorIndex { get; private set; }
+    public byte BackgroundColorIndex { get; }
 
     /// <summary>
     /// Gets a value indicating whether [global color table present].
@@ -83,7 +83,7 @@ public class LogicalScreenDescriptor : SectionBase
     /// <value>
     /// <c>true</c> if [global color table present]; otherwise, <c>false</c>.
     /// </value>
-    public bool GlobalColorTablePresent { get; private set; }
+    public bool GlobalColorTablePresent { get; }
 
     /// <summary>
     /// Gets the size of the global color table.
@@ -91,7 +91,7 @@ public class LogicalScreenDescriptor : SectionBase
     /// <value>
     /// The size of the global color table.
     /// </value>
-    public int GlobalColorTableSize { get; private set; }
+    public int GlobalColorTableSize { get; }
 
     /// <summary>
     /// Gets the height.
@@ -99,7 +99,7 @@ public class LogicalScreenDescriptor : SectionBase
     /// <value>
     /// The height.
     /// </value>
-    public short Height { get; private set; }
+    public short Height { get; }
 
     /// <summary>
     /// Gets the pixel aspect ratio.
@@ -107,7 +107,7 @@ public class LogicalScreenDescriptor : SectionBase
     /// <value>
     /// The pixel aspect ratio.
     /// </value>
-    public byte PixelAspectRatio { get; private set; }
+    public byte PixelAspectRatio { get; }
 
     /// <summary>
     /// Gets the size.
@@ -123,7 +123,7 @@ public class LogicalScreenDescriptor : SectionBase
     /// <value>
     /// The width.
     /// </value>
-    public short Width { get; private set; }
+    public short Width { get; }
 
     /// <summary>
     /// Reads from the specified stream.

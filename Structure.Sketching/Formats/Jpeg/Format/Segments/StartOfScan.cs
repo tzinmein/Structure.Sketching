@@ -67,13 +67,13 @@ public class StartOfScan : SegmentBase
     /// Gets or sets the define huffman table segment.
     /// </summary>
     /// <value>The define huffman table segment.</value>
-    private DefineHuffmanTable DefineHuffmanTableSegment { get; set; }
+    private DefineHuffmanTable DefineHuffmanTableSegment { get; }
 
     /// <summary>
     /// Gets or sets the define quantization table segment.
     /// </summary>
     /// <value>The define quantization table segment.</value>
-    private DefineQuantizationTable DefineQuantizationTableSegment { get; set; }
+    private DefineQuantizationTable DefineQuantizationTableSegment { get; }
 
     /// <summary>
     /// The grey image

@@ -58,19 +58,19 @@ public class QuantizedImage
     /// Gets the height.
     /// </summary>
     /// <value>The height.</value>
-    public int Height { get; private set; }
+    public int Height { get; }
 
     /// <summary>
     /// Gets the palette.
     /// </summary>
     /// <value>The palette.</value>
-    public Bgra[] Palette { get; private set; }
+    public Bgra[] Palette { get; }
 
     /// <summary>
     /// Gets the pixels.
     /// </summary>
     /// <value>The pixels.</value>
-    public byte[] Pixels { get; private set; }
+    public byte[] Pixels { get; }
 
     /// <summary>
     /// Gets the index of the transparent color.
@@ -82,7 +82,7 @@ public class QuantizedImage
     /// Gets the width.
     /// </summary>
     /// <value>The width.</value>
-    public int Width { get; private set; }
+    public int Width { get; }
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="QuantizedImage"/> to <see cref="Image"/>.

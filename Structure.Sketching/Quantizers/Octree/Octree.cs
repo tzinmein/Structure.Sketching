@@ -51,7 +51,7 @@ public class Octree
     /// <value>
     /// The maximum color bits.
     /// </value>
-    public int MaxColorBits { get; private set; }
+    public int MaxColorBits { get; }
 
     /// <summary>
     /// Gets the color of the previous.
@@ -75,7 +75,7 @@ public class Octree
     /// <value>
     /// The reducible nodes.
     /// </value>
-    public Node[] ReducibleNodes { get; private set; }
+    public Node[] ReducibleNodes { get; }
 
     /// <summary>
     /// Gets the root.
@@ -83,7 +83,7 @@ public class Octree
     /// <value>
     /// The root.
     /// </value>
-    public Node Root { get; private set; }
+    public Node Root { get; }
 
     /// <summary>
     /// The mask
@@ -140,7 +140,7 @@ public class Octree
         var palette = new List<Bgra>(Leaves);
         var paletteIndex = 0;
         Root.ConstructPalette(palette, ref paletteIndex);
-        return palette.ToList();
+        return palette;
     }
 
     /// <summary>

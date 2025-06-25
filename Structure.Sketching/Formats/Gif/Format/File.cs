@@ -54,7 +54,7 @@ public class File : FileBase
     /// Gets the bit depth.
     /// </summary>
     /// <value>The bit depth.</value>
-    public int BitDepth { get; private set; }
+    public int BitDepth { get; }
 
     /// <summary>
     /// Gets the color table.
@@ -66,7 +66,7 @@ public class File : FileBase
     /// Gets the frames.
     /// </summary>
     /// <value>The frames.</value>
-    public List<Frame> Frames { get; private set; }
+    public List<Frame> Frames { get; }
 
     /// <summary>
     /// Gets the graphics control extension.

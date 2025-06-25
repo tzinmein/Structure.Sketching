@@ -48,13 +48,13 @@ public class Skew : AffineBaseClass
     /// Gets or sets the x angle.
     /// </summary>
     /// <value>The x angle.</value>
-    public float XAngle { get; private set; }
+    public float XAngle { get; }
 
     /// <summary>
     /// Gets or sets the y angle.
     /// </summary>
     /// <value>The y angle.</value>
-    public float YAngle { get; private set; }
+    public float YAngle { get; }
 
     /// <summary>
     /// Gets the matrix.

@@ -38,7 +38,7 @@ public class File : FileBase
     /// <value>
     /// The header.
     /// </value>
-    public FileHeader Header { get; private set; }
+    public FileHeader Header { get; }
 
     /// <summary>
     /// Gets the segments.
@@ -54,7 +54,7 @@ public class File : FileBase
     /// <value>
     /// The sof segment.
     /// </value>
-    public StartOfFrame SofSegment { get; private set; }
+    public StartOfFrame SofSegment { get; }
 
     private Image _returnValue = new(1, 1);
 

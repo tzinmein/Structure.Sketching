@@ -44,7 +44,7 @@ public class Huffman
     /// <value>
     /// The decoded values.
     /// </value>
-    public byte[] DecodedValues { get; private set; }
+    public byte[] DecodedValues { get; }
 
     /// <summary>
     /// Gets the look up table.
@@ -52,7 +52,7 @@ public class Huffman
     /// <value>
     /// The look up table.
     /// </value>
-    public ushort[] LookUpTable { get; private set; }
+    public ushort[] LookUpTable { get; }
 
     /// <summary>
     /// Gets the maximum code.
@@ -60,7 +60,7 @@ public class Huffman
     /// <value>
     /// The maximum code.
     /// </value>
-    public int[] MaximumCode { get; private set; }
+    public int[] MaximumCode { get; }
 
     /// <summary>
     /// Gets the minimum code.
@@ -68,7 +68,7 @@ public class Huffman
     /// <value>
     /// The minimum code.
     /// </value>
-    public int[] MinimumCode { get; private set; }
+    public int[] MinimumCode { get; }
 
     /// <summary>
     /// Gets the number of codes.
@@ -84,7 +84,7 @@ public class Huffman
     /// <value>
     /// The value indices.
     /// </value>
-    public int[] ValueIndices { get; private set; }
+    public int[] ValueIndices { get; }
 
     /// <summary>
     /// Decodes the byte buffer using the huffman class.

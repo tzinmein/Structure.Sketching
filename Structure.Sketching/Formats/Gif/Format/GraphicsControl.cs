@@ -72,7 +72,7 @@ public class GraphicsControl : SectionBase
     /// <value>
     /// The delay.
     /// </value>
-    public short Delay { get; private set; }
+    public short Delay { get; }
 
     /// <summary>
     /// Gets the disposal method.
@@ -80,7 +80,7 @@ public class GraphicsControl : SectionBase
     /// <value>
     /// The disposal method.
     /// </value>
-    public DisposalMethod DisposalMethod { get; private set; }
+    public DisposalMethod DisposalMethod { get; }
 
     /// <summary>
     /// Gets the size.
@@ -96,7 +96,7 @@ public class GraphicsControl : SectionBase
     /// <value>
     ///   <c>true</c> if [transparency flag]; otherwise, <c>false</c>.
     /// </value>
-    public bool TransparencyFlag { get; private set; }
+    public bool TransparencyFlag { get; }
 
     /// <summary>
     /// Gets the index of the transparency.
@@ -104,7 +104,7 @@ public class GraphicsControl : SectionBase
     /// <value>
     /// The index of the transparency.
     /// </value>
-    public byte TransparencyIndex { get; private set; }
+    public byte TransparencyIndex { get; }
 
     /// <summary>
     /// Reads from the specified stream.

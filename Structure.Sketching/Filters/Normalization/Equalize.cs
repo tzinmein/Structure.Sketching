@@ -42,7 +42,7 @@ public class Equalize : IFilter
     /// Gets or sets the histogram.
     /// </summary>
     /// <value>The histogram.</value>
-    private IHistogram Histogram { get; set; }
+    private IHistogram Histogram { get; }
 
     /// <summary>
     /// Applies the filter to the specified image.

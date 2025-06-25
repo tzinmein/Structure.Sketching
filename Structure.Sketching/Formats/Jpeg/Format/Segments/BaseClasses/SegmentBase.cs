@@ -63,7 +63,7 @@ public abstract class SegmentBase
     /// <value>
     /// The type.
     /// </value>
-    public SegmentTypes Type { get; private set; }
+    public SegmentTypes Type { get; }
 
     /// <summary>
     /// Gets or sets the temporary data.

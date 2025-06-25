@@ -49,13 +49,13 @@ public class FileHeader
     /// Gets the size of the file.
     /// </summary>
     /// <value>The size of the file.</value>
-    public int FileSize { get; private set; }
+    public int FileSize { get; }
 
     /// <summary>
     /// Gets the offset.
     /// </summary>
     /// <value>The offset.</value>
-    public int Offset { get; private set; }
+    public int Offset { get; }
 
     /// <summary>
     /// Gets the reserved.

@@ -72,7 +72,7 @@ public class ImageDescriptor : SectionBase
     /// <value>
     /// The height.
     /// </value>
-    public short Height { get; private set; }
+    public short Height { get; }
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="ImageDescriptor"/> is interlace.
@@ -104,7 +104,7 @@ public class ImageDescriptor : SectionBase
     /// <value>
     /// The size of the local color table.
     /// </value>
-    public int LocalColorTableSize { get; private set; }
+    public int LocalColorTableSize { get; }
 
     /// <summary>
     /// Gets the size.
@@ -128,7 +128,7 @@ public class ImageDescriptor : SectionBase
     /// <value>
     /// The width.
     /// </value>
-    public short Width { get; private set; }
+    public short Width { get; }
 
     /// <summary>
     /// Reads from the specified stream.

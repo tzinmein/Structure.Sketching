@@ -72,7 +72,7 @@ public class ColorTable : SectionBase
     /// <value>
     /// The color table.
     /// </value>
-    public byte[] Data { get; private set; }
+    public byte[] Data { get; }
 
     /// <summary>
     /// Reads from the specified stream.

@@ -150,25 +150,25 @@ public class Header
     /// <value>
     /// The bits per pixel
     /// </value>
-    public short Bpp { get; private set; }
+    public short Bpp { get; }
 
     /// <summary>
     /// Gets the number of important colors.
     /// </summary>
     /// <value>The number of important colors.</value>
-    public int ColorsImportant { get; private set; }
+    public int ColorsImportant { get; }
 
     /// <summary>
     /// Gets the number of colors used.
     /// </summary>
     /// <value>The number of colors used.</value>
-    public int ColorsUsed { get; private set; }
+    public int ColorsUsed { get; }
 
     /// <summary>
     /// Gets or sets the compression.
     /// </summary>
     /// <value>The compression.</value>
-    public Compression Compression { get; private set; }
+    public Compression Compression { get; }
 
     /// <summary>
     /// Gets or sets the green mask.
@@ -198,13 +198,13 @@ public class Header
     /// Gets the height.
     /// </summary>
     /// <value>The height.</value>
-    public int Height { get; private set; }
+    public int Height { get; }
 
     /// <summary>
     /// Gets the size of the image.
     /// </summary>
     /// <value>The size of the image.</value>
-    public int ImageSize { get; private set; }
+    public int ImageSize { get; }
 
     /// <summary>
     /// Gets the number of planes.
@@ -240,25 +240,25 @@ public class Header
     /// Gets the size of the header
     /// </summary>
     /// <value>The size of the header</value>
-    public int Size { get; private set; }
+    public int Size { get; }
 
     /// <summary>
     /// Gets the width.
     /// </summary>
     /// <value>The width.</value>
-    public int Width { get; private set; }
+    public int Width { get; }
 
     /// <summary>
     /// Pels Per Meter in the X direction
     /// </summary>
     /// <value>The XPPM.</value>
-    public int Xppm { get; private set; }
+    public int Xppm { get; }
 
     /// <summary>
     /// Pels Per Meter in the Y direction
     /// </summary>
     /// <value>The yppm.</value>
-    public int Yppm { get; private set; }
+    public int Yppm { get; }
 
     /// <summary>
     /// Reads the header information from the specified stream.

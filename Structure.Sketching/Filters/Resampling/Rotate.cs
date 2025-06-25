@@ -43,7 +43,7 @@ public class Rotate : AffineBaseClass
     /// Gets or sets the angle.
     /// </summary>
     /// <value>The angle.</value>
-    public float Angle { get; private set; }
+    public float Angle { get; }
 
     /// <summary>
     /// Gets the matrix.

@@ -44,13 +44,13 @@ public class Palette
     /// Gets the data inside the palette
     /// </summary>
     /// <value>The data inside the palette</value>
-    public byte[] Data { get; private set; }
+    public byte[] Data { get; }
 
     /// <summary>
     /// Gets or sets the number of colors.
     /// </summary>
     /// <value>The number of colors.</value>
-    public int NumberOfColors { get; private set; }
+    public int NumberOfColors { get; }
 
     /// <summary>
     /// Reads the specified palette information

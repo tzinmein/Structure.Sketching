@@ -45,13 +45,13 @@ public abstract class ProcessingPipelineBaseClass : IFilter
     /// should combine the filters or not.
     /// </summary>
     /// <value><c>true</c> if combine; otherwise, <c>false</c>.</value>
-    public bool Combine { get; private set; }
+    public bool Combine { get; }
 
     /// <summary>
     /// Gets the filters.
     /// </summary>
     /// <value>The filters.</value>
-    public List<IFilter> Filters { get; private set; }
+    public List<IFilter> Filters { get; }
 
     /// <summary>
     /// Adds the filter to the pipeline

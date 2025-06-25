@@ -100,7 +100,7 @@ public class File : FileBase
     /// <value>
     /// The properties.
     /// </value>
-    public List<Property> Properties { get; private set; }
+    public List<Property> Properties { get; }
 
     /// <summary>
     /// Gets or sets the chunk actions.
@@ -108,7 +108,7 @@ public class File : FileBase
     /// <value>
     /// The chunk actions.
     /// </value>
-    private IDictionary<ChunkTypes, Action<Chunk>> ChunkActions { get; set; }
+    private IDictionary<ChunkTypes, Action<Chunk>> ChunkActions { get; }
 
     /// <summary>
     /// Decodes the specified stream.

@@ -57,13 +57,13 @@ public class Manager
     /// <value>
     /// The animation formats.
     /// </value>
-    private List<IAnimationFormat> AnimationFormats { get; set; }
+    private List<IAnimationFormat> AnimationFormats { get; }
 
     /// <summary>
     /// Gets or sets the formats.
     /// </summary>
     /// <value>The formats.</value>
-    private List<IFormat> Formats { get; set; }
+    private List<IFormat> Formats { get; }
 
     /// <summary>
     /// Decodes the specified stream.

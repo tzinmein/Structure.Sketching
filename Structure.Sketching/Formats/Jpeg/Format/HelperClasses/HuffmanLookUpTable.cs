@@ -60,5 +60,5 @@ public class HuffmanLookUpTable
     /// <value>
     /// The values.
     /// </value>
-    public uint[] Values { get; private set; }
+    public uint[] Values { get; }
 }

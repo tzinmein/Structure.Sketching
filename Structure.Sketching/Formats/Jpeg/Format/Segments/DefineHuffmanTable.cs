@@ -51,7 +51,7 @@ public class DefineHuffmanTable : SegmentBase
     /// Gets the huffman codes.
     /// </summary>
     /// <value>The huffman codes.</value>
-    public Huffman[,] HuffmanCodes { get; private set; }
+    public Huffman[,] HuffmanCodes { get; }
 
     /// <summary>
     /// The huffman look up tables

@@ -37,7 +37,7 @@ public class SectionTypes
     /// <value>
     /// The value.
     /// </value>
-    public byte Value { get; private set; }
+    public byte Value { get; }
 
     /// <summary>
     /// The application extension label

@@ -36,7 +36,7 @@ public class Block
     /// <value>
     /// The data.
     /// </value>
-    public int[] Data { get; private set; }
+    public int[] Data { get; }
 
     /// <summary>
     /// Gets or sets the <see cref="int"/> at the specified index.

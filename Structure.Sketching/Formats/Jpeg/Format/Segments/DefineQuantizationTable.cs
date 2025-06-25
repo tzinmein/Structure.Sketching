@@ -79,7 +79,7 @@ public class DefineQuantizationTable : SegmentBase
     /// <value>
     /// The quant.
     /// </value>
-    public Block[] Quant { get; private set; }
+    public Block[] Quant { get; }
 
     private const byte MaximumTq = 3;
 

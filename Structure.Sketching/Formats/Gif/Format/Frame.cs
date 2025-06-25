@@ -70,7 +70,7 @@ public class Frame : SectionBase
     /// <value>
     /// The data.
     /// </value>
-    public byte[] Data { get; private set; }
+    public byte[] Data { get; }
 
     /// <summary>
     /// Gets or sets the descriptor.
@@ -86,7 +86,7 @@ public class Frame : SectionBase
     /// <value>
     /// The graphics control.
     /// </value>
-    public GraphicsControl GraphicsControl { get; private set; }
+    public GraphicsControl GraphicsControl { get; }
 
     /// <summary>
     /// Gets or sets the indices.

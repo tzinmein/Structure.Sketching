@@ -50,7 +50,7 @@ public class Rgb1Bit : PixelFormatBase
     /// Gets or sets the byte masks.
     /// </summary>
     /// <value>The byte masks.</value>
-    private byte[] ByteMasks { get; set; }
+    private byte[] ByteMasks { get; }
 
     /// <summary>
     /// Decodes the specified data.
