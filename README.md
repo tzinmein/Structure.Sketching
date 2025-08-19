@@ -1,7 +1,6 @@
 # Structure.Sketching
 
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/csn8dbhtmujay5v2?svg=true)](https://ci.appveyor.com/project/tzinmein/structure-sketching)
-[![Linux Build Status](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml)
+[![Build Status](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Structure.Sketching is an image processing library targeting the .NET LTS, currently 6.0. It is in beta. The namespaces may be adjusted as it is cleaned up for production, but otherwise it should be fairly safe to use.
