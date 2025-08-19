@@ -3,7 +3,7 @@
 		<Description>Tests for Structure.Sketching</Description>
 		<AssemblyTitle>Structure.Sketching.Tests</AssemblyTitle>
 		<Authors>James Craig</Authors>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<DebugType>portable</DebugType>
 		<AssemblyName>Structure.Sketching.Tests</AssemblyName>
 		<PackageId>Structure.Sketching.Tests</PackageId>
@@ -12,7 +12,7 @@
 		<PackageProjectUrl>https://github.com/JaCraig/Structure.Sketching</PackageProjectUrl>
 		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
 		<RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
-		<RuntimeFrameworkVersion>6.0.0</RuntimeFrameworkVersion>
+		<RuntimeFrameworkVersion>8.0.0</RuntimeFrameworkVersion>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -1008,7 +1008,7 @@
 		<Content Include="ExpectedResults\Filters\BitmapFilter-Unsharp-Partial.bmp">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Content Include="ExpectedResults\Filters\BitmapFilter-Unsharp.bmp">
+			<Content Include="ExpectedResults\Filters\BitmapFilter-Unsharp.bmp">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="ExpectedResults\Filters\BitmapFilter-Vignette.bmp">
@@ -1301,12 +1301,12 @@
 		<ProjectReference Include="..\Structure.Sketching\Structure.Sketching.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="xunit" Version="2.5.2" />
+		<PackageReference Include="xunit" Version="2.9.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
