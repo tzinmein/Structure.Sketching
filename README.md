@@ -1,6 +1,26 @@
 # Structure.Sketching
 
-[![Build Status](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tzinmein/Structure.Sketching/actions/workflows/dotnet.yml)
+## ⚠️ Project Status: Abandoned / Superseded
+
+This repository (`tzinmein/Structure.Sketching`) was originally a fork of  
+[JaCraig/Structure.Sketching](https://github.com/JaCraig/Structure.Sketching).  
+
+The upstream project is **abandoned and defunct**.  
+Active development now continues in a **hard fork** under a new name:  
+
+👉 [**chromafx/chromafx**](https://github.com/chromafx/chromafx)
+
+---
+
+### What this means
+- This repo is **frozen**: no new features, fixes, or support.  
+- Issues and pull requests here are closed.  
+- Please migrate to [chromafx/chromafx](https://github.com/chromafx/chromafx) for the latest updates.  
+
+---
+
+_The original README follows for historical reference._
+
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Structure.Sketching is an image processing library targeting the .NET LTS, currently 8.0. It is in beta. The namespaces may be adjusted as it is cleaned up for production, but otherwise it should be fairly safe to use.
